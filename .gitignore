@@ -1,0 +1,6 @@
+
+### Folders to Ignore ###
+StudyN/bin
+StudyN/obj
+StudyN/.vs
+.vs/
