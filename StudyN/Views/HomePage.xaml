@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
+             x:Class="StudyN.Views.HomePage"
+             Title="{Binding Title}"
+             IconImageSource="charts">
+    <ContentPage.Content>
+        <Grid>
+        <dxc:PieChartView x:Name="chart">
+            <dxc:PieChartView.Series>
+                <dxc:DonutSeries>
+                    <dxc:DonutSeries.Data>
+                        <dxc:PieSeriesDataAdapter DataSource="{Binding Items}"
+                                              LabelDataMember="Text"
+                                              ValueDataMember="Value"/>
+                    </dxc:DonutSeries.Data>
+                </dxc:DonutSeries>
+            </dxc:PieChartView.Series>
+            <dxc:PieChartView.Legend>
+                <dxc:Legend Orientation="TopToBottom"
+                        HorizontalPosition="RightOutside"
+                        VerticalPosition="Center"/>
+            </dxc:PieChartView.Legend>
+        </dxc:PieChartView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

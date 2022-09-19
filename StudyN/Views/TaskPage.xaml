@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
+             Title="{Binding Title}"
+             IconImageSource="grid"
+             x:Class="StudyN.Views.TaskPage">    
+    <ContentPage.Content>
+        <dxg:DataGridView x:Name="grid" ItemsSource="{Binding Items}">
+            <dxg:DataGridView.Columns>
+                <dxg:TextColumn FieldName="Text" Caption="Task" />
+                <dxg:TextColumn FieldName="Description" Caption="Description" />
+                <dxg:DateColumn FieldName="StartTime" Caption="Time" DisplayFormat="h:mm tt" />
+            </dxg:DataGridView.Columns>
+        </dxg:DataGridView>
+    </ContentPage.Content>
+</ContentPage>

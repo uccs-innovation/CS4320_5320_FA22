@@ -1,14 +1,34 @@
-﻿<?xml version = "1.0" encoding = "UTF-8" ?>
-<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MauiApp1"
-             x:Class="MauiApp1.App">
+             xmlns:windows="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;assembly=Microsoft.Maui.Controls"
+             xmlns:local="clr-namespace:StudyN"
+             x:Class="StudyN.App"
+             windows:Application.ImageDirectory="Assets">
     <Application.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
-                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+            <Color x:Key="Primary">#512BD4</Color>
+            <Color x:Key="NormalText">#55575c</Color>
+            <Color x:Key="NormalHeaderText">#55575c</Color>
+            <Color x:Key="NormalLightText">#959aa0</Color>
+            <Color x:Key="TitleTextColor">White</Color>
+            <Color x:Key="NormalBackgroundColor">White</Color>
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{StaticResource Primary}"/>
+                <Setter Property="BarTextColor" Value="White"/>
+            </Style>
+            <Style x:Key="PrimaryButton" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
+                <Setter Property="TextColor" Value="White"/>
+            </Style>
+            <Style x:Key="ShellStyle" TargetType="Element">
+                <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.TitleColor" Value="{StaticResource TitleTextColor}" />
+                <Setter Property="Shell.ForegroundColor" Value="{StaticResource TitleTextColor}" />
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource NormalBackgroundColor}" />
+                <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource NormalText}" />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
