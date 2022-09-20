@@ -1,5 +1,7 @@
 ﻿using DevExpress.Maui.DataGrid;
+using StudyN.Models;
 using StudyN.ViewModels;
+using static AndroidX.Concurrent.Futures.CallbackToFutureAdapter;
 
 namespace StudyN.Views
 {
@@ -11,5 +13,16 @@ namespace StudyN.Views
             InitializeComponent();
         }
 
+        private void CellClicked(object sender, DataGridGestureEventArgs e)
+        {
+            if(e.Item != null && e.FieldName == "Completed")
+            {
+                DataGridView gridView = (DataGridView)sender;
+                gridView.BeginUpdate();
+                CalendarTask task = (CalendarTask)e.Item;
+                task.Completed = !task.Completed;
+                gridView.EndUpdate();
+            }
+        }
     }
 }
