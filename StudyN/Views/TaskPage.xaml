@@ -2,11 +2,12 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
-             Title="{Binding Title}"
+             xmlns:local="clr-namespace:StudyN"
+             Title="Tasks"
              IconImageSource="grid"
              x:Class="StudyN.Views.TaskPage">
     <ContentPage.Content>
-        <dxg:DataGridView x:Name="grid" ItemsSource="{Binding CalendarTasksData}" SortMode="Multiple">
+        <dxg:DataGridView ItemsSource="{Binding CalendarTasks}" >
             <!--Set the Columns to use.-->
             <dxg:DataGridView.Columns>
                 <dxg:CheckBoxColumn FieldName="Completed" Caption=" " Width="15"/>

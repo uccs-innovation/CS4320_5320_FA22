@@ -1,17 +1,18 @@
-﻿using StudyN.ViewModels;
+﻿using DevExpress.Maui.DataGrid;
+using StudyN.ViewModels;
 
 namespace StudyN.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+    //[XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TaskPage : ContentPage
     {
+        TaskDataViewModel viewModel;
         public TaskPage()
         {
             InitializeComponent();
-            BindingContext = ViewModel = new TaskDataViewModel();
+            viewModel = new TaskDataViewModel();
+            BindingContext = viewModel.data;
         }
-
-        TaskDataViewModel ViewModel { get; }
 
     }
 }

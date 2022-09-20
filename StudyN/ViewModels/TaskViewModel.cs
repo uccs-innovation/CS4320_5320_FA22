@@ -6,7 +6,7 @@ namespace StudyN.ViewModels
 {
     public class TaskDataViewModel : INotifyPropertyChanged
     {
-        readonly CalendarTasksData data;
+        public CalendarTasksData data;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public IReadOnlyList<CalendarTask> CalendarTasks { get => data.CalendarTasks; }
