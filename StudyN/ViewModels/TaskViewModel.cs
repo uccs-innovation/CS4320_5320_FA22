@@ -8,7 +8,10 @@ namespace StudyN.ViewModels
         readonly CalendarTasksData data;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public IReadOnlyList<CalendarTask> CalendarTasks { get => data.CalendarTasks; }
+        public IReadOnlyList<CalendarTask> CalendarTasks
+        {
+            get => data.CalendarTasks;
+        }
 
         public TaskDataViewModel()
         {
