@@ -6,12 +6,12 @@ namespace StudyN.Models
     {
         public CalendarTask(string Text)
         {
-            this.Text = Text;
+            this.Name = Text;
         }
 
         public bool Completed { get; set; }
         public int Id { get; set; }
-        public string Text { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
         public DateTime DueDate { get; set; }
         public int TimeNeeded { get; set; }
