@@ -1,25 +1,27 @@
 ﻿using StudyN.Models;
 using System.Collections.ObjectModel;
-
+using System.ComponentModel;
+using static Android.Icu.Text.CaseMap;
 namespace StudyN.ViewModels
 {
-    public class TaskViewModel : BaseViewModel
+    public class TaskDataViewModel : INotifyPropertyChanged
     {
-        public TaskViewModel()
+        readonly Task data;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public IReadOnlyList<Task> Employees { get => data.Tasks; }
+
+        public TaskDataViewModel()
         {
-            Title = "Tasks";
-            Items = new ObservableCollection<Item>();
+            Title = "Tasks"
+            data = new TaskData();
         }
 
-        public ObservableCollection<Item> Items { get; private set; }
-
-        async public void OnAppearing()
+        protected void RaisePropertyChanged(string name)
         {
-            IEnumerable<Item> items = await DataStore.GetItemsAsync(true);
-            Items.Clear();
-            foreach (Item item in items)
+            if (PropertyChanged != null)
             {
-                Items.Add(item);
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
     }

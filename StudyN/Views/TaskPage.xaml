@@ -4,7 +4,7 @@
              xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
              Title="{Binding Title}"
              IconImageSource="grid"
-             x:Class="StudyN.Views.TaskPage">    
+             x:Class="StudyN.Views.TaskPage">
     <ContentPage.Content>
         <dxg:DataGridView x:Name="grid" ItemsSource="{Binding Items}" SortMode="Multiple">
             <!--Set the Columns to use.-->

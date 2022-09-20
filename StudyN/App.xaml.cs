@@ -10,7 +10,7 @@ namespace StudyN
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
+            DependencyService.Register<CalendarDataStore>();
             DependencyService.Register<NavigationService>();
 
             //Routing.RegisterRoute(typeof(ItemDetailPage).FullName, typeof(ItemDetailPage));
