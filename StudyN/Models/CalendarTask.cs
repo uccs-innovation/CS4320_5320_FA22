@@ -15,6 +15,8 @@ namespace StudyN.Models
         public string Description { get; set; }
         public DateTime DueDate { get; set; }
         public int TimeNeeded { get; set; }
+
+        public CalendarTasksData Parent { get; set; }
     }
 
     public class CalendarTasksData
@@ -24,16 +26,18 @@ namespace StudyN.Models
             CalendarTasks.Add(
                 new CalendarTask("HW: Pitch your Application Idea")
                 {
-                    Completed = true,
+                    Parent = this,
+                    Completed = false,
                     Id = 1,
                     Description = "Pitch your appilcation idea...",
                     DueDate = DateTime.Today,
                     TimeNeeded = 3
                 }
-            );
+            ); ;
             CalendarTasks.Add(
                 new CalendarTask("HW: Technology Proof of Concept")
                 {
+                    Parent = this,
                     Completed = false,
                     Id = 2,
                     Description = "Prove your technology works...",
@@ -44,6 +48,7 @@ namespace StudyN.Models
             CalendarTasks.Add(
                 new CalendarTask("HW: Prototype of Key Features")
                 {
+                    Parent = this,
                     Completed = false,
                     Id = 3,
                     Description = "Build a prototype of the feature...",
@@ -53,11 +58,20 @@ namespace StudyN.Models
             );
         }
 
+        public void TaskComplete(CalendarTask task)
+        {
+            task.Completed = !task.Completed;
+            CompletedTasks.Add(task);
+            CalendarTasks.Remove(task);
+        }
+
         public ObservableCollection<CalendarTask> CalendarTasks { get; private set; }
+        private ObservableCollection<CalendarTask> CompletedTasks { get; set; }
 
         public CalendarTasksData()
         {
             CalendarTasks = new ObservableCollection<CalendarTask>();
+            CompletedTasks = new ObservableCollection<CalendarTask>();
             GenerateCalendarTaskss();
         }
     }

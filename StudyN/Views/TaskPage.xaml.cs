@@ -20,7 +20,7 @@ namespace StudyN.Views
                 DataGridView gridView = (DataGridView)sender;
                 gridView.BeginUpdate();
                 CalendarTask task = (CalendarTask)e.Item;
-                task.Completed = !task.Completed;
+                task.Parent.TaskComplete(task);
                 gridView.EndUpdate();
             }
         }

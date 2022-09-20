@@ -10,10 +10,7 @@ namespace StudyN.ViewModels
         private CalendarTasksData data;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public ObservableCollection<CalendarTask> CalendarTasks
-        {
-            get => data.CalendarTasks;
-        }
+        public ObservableCollection<CalendarTask> CalendarTasks { get => data.CalendarTasks; }
 
         public TaskDataViewModel()
         {
