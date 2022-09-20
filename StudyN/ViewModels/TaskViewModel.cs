@@ -1,6 +1,5 @@
-﻿using StudyN.Models;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using StudyN.Models;
 
 namespace StudyN.ViewModels
 {

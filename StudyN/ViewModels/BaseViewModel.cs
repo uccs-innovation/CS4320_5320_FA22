@@ -1,5 +1,4 @@
 ﻿using StudyN.Models;
-using StudyN.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -9,9 +8,6 @@ namespace StudyN.ViewModels
     {
         bool isBusy = false;
         string title = string.Empty;
-
-        public INavigationService Navigation => DependencyService.Get<INavigationService>();
-
         public bool IsBusy
         {
             get { return this.isBusy; }

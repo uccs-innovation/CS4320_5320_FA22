@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using Microsoft.Maui.Controls;
-using System;
 
 namespace StudyN.Models
 {
@@ -23,8 +21,7 @@ namespace StudyN.Models
     {
         void GenerateCalendarTaskss()
         {
-            ObservableCollection<CalendarTask> result = new ObservableCollection<CalendarTask>();
-            result.Add(
+            CalendarTasks.Add(
                 new CalendarTask("HW: Pitch your Application Idea")
                 {
                     Completed = true,
@@ -34,7 +31,7 @@ namespace StudyN.Models
                     TimeNeeded = 3
                 }
             );
-            result.Add(
+            CalendarTasks.Add(
                 new CalendarTask("HW: Technology Proof of Concept")
                 {
                     Completed = false,
@@ -44,7 +41,7 @@ namespace StudyN.Models
                     TimeNeeded = 7
                 }
             );
-            result.Add(
+            CalendarTasks.Add(
                 new CalendarTask("HW: Prototype of Key Features")
                 {
                     Completed = false,
@@ -54,13 +51,13 @@ namespace StudyN.Models
                     TimeNeeded = 5
                 }
             );
-            CalendarTasks = result;
         }
 
         public ObservableCollection<CalendarTask> CalendarTasks { get; private set; }
 
         public CalendarTasksData()
         {
+            CalendarTasks = new ObservableCollection<CalendarTask>();
             GenerateCalendarTaskss();
         }
     }
