@@ -47,7 +47,7 @@ namespace StudyN.Models
                     Completed = false,
                     Id = 3,
                     Description = "Build a prototype of the feature...",
-                    DueDate = DateTime.Today,
+                    DueDate = DateTime.Today.AddHours(24),
                     TimeNeeded = 5
                 }
             );
