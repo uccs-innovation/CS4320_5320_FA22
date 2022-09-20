@@ -2,10 +2,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
-             xmlns:local="clr-namespace:StudyN"
+             xmlns:ViewModels="clr-namespace:StudyN.ViewModels"
              Title="Tasks"
              IconImageSource="grid"
              x:Class="StudyN.Views.TaskPage">
+    <ContentPage.BindingContext>
+        <ViewModels:TaskDataViewModel />
+    </ContentPage.BindingContext>
     <ContentPage.Content>
         <dxg:DataGridView ItemsSource="{Binding CalendarTasks}" >
             <!--Set the Columns to use.-->
