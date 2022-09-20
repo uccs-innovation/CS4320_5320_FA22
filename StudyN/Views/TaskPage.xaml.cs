@@ -8,16 +8,10 @@ namespace StudyN.Views
         public TaskPage()
         {
             InitializeComponent();
-            BindingContext = ViewModel = new TaskViewModel();
-            ViewModel.OnAppearing();
+            BindingContext = ViewModel = new TaskDataViewModel();
         }
 
-        TaskViewModel ViewModel { get; }
+        TaskDataViewModel ViewModel { get; }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            ViewModel.OnAppearing();
-        }
     }
 }

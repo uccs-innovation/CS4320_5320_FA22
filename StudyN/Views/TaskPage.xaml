@@ -6,7 +6,7 @@
              IconImageSource="grid"
              x:Class="StudyN.Views.TaskPage">
     <ContentPage.Content>
-        <dxg:DataGridView x:Name="grid" ItemsSource="{Binding Items}" SortMode="Multiple">
+        <dxg:DataGridView x:Name="grid" ItemsSource="{Binding CalendarTasksData}" SortMode="Multiple">
             <!--Set the Columns to use.-->
             <dxg:DataGridView.Columns>
                 <dxg:CheckBoxColumn FieldName="Completed" Caption=" " Width="15"/>

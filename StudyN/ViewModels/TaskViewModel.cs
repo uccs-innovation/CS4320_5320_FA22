@@ -1,20 +1,19 @@
 ﻿using StudyN.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using static Android.Icu.Text.CaseMap;
+
 namespace StudyN.ViewModels
 {
     public class TaskDataViewModel : INotifyPropertyChanged
     {
-        readonly Task data;
+        readonly CalendarTasksData data;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public IReadOnlyList<Task> Employees { get => data.Tasks; }
+        public IReadOnlyList<CalendarTask> CalendarTasks { get => data.CalendarTasks; }
 
         public TaskDataViewModel()
         {
-            Title = "Tasks"
-            data = new TaskData();
+            data = new CalendarTasksData();
         }
 
         protected void RaisePropertyChanged(string name)

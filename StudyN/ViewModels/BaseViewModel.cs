@@ -7,12 +7,8 @@ namespace StudyN.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        readonly CalendarDataStore data;
-
         bool isBusy = false;
         string title = string.Empty;
-
-        public IReadOnlyList<CalendarItem> Employees { get => data.CalendarItems; }
 
         public INavigationService Navigation => DependencyService.Get<INavigationService>();
 
@@ -27,7 +23,6 @@ namespace StudyN.ViewModels
             get { return this.title; }
             set { SetProperty(ref this.title, value); }
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

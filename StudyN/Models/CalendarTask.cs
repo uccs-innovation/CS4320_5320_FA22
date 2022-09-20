@@ -4,9 +4,9 @@ using System;
 
 namespace StudyN.Models
 {
-    public class Task
+    public class CalendarTask
     {
-        public Task(string name)
+        public CalendarTask(string name)
         {
             this.Name = name;
         }
@@ -19,13 +19,13 @@ namespace StudyN.Models
         public int TimeNeeded { get; set; }
     }
 
-    public class TaskData
+    public class CalendarTasksData
     {
-        void GenerateTasks()
+        void GenerateCalendarTaskss()
         {
-            ObservableCollection<Task> result = new ObservableCollection<Task>();
+            ObservableCollection<CalendarTask> result = new ObservableCollection<CalendarTask>();
             result.Add(
-                new Task("HW: Pitch your Application Idea")
+                new CalendarTask("HW: Pitch your Application Idea")
                 {
                     Completed = true,
                     Id = 1,
@@ -35,7 +35,7 @@ namespace StudyN.Models
                 }
             );
             result.Add(
-                new Task("HW: Technology Proof of Concept")
+                new CalendarTask("HW: Technology Proof of Concept")
                 {
                     Completed = false,
                     Id = 2,
@@ -45,7 +45,7 @@ namespace StudyN.Models
                 }
             );
             result.Add(
-                new Task("HW: Prototype of Key Features")
+                new CalendarTask("HW: Prototype of Key Features")
                 {
                     Completed = false,
                     Id = 3,
@@ -54,14 +54,14 @@ namespace StudyN.Models
                     TimeNeeded = 5
                 }
             );
-            Tasks = result;
+            CalendarTasks = result;
         }
 
-        public ObservableCollection<Task> Tasks { get; private set; }
+        public ObservableCollection<CalendarTask> CalendarTasks { get; private set; }
 
-        public TaskData()
+        public CalendarTasksData()
         {
-            GenerateTasks();
+            GenerateCalendarTaskss();
         }
     }
 }
