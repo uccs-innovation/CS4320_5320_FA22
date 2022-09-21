@@ -1,5 +1,4 @@
 ﻿using StudyN.Models;
-using StudyN.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -7,15 +6,8 @@ namespace StudyN.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-
         bool isBusy = false;
         string title = string.Empty;
-
-
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
-
-        public INavigationService Navigation => DependencyService.Get<INavigationService>();
-
         public bool IsBusy
         {
             get { return this.isBusy; }
@@ -27,7 +19,6 @@ namespace StudyN.ViewModels
             get { return this.title; }
             set { SetProperty(ref this.title, value); }
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

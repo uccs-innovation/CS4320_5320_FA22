@@ -1,25 +1,27 @@
-﻿using StudyN.Models;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using StudyN.Models;
 
 namespace StudyN.ViewModels
 {
-    public class TaskViewModel : BaseViewModel
+    public class TaskDataViewModel : INotifyPropertyChanged
     {
-        public TaskViewModel()
+        private CalendarTasksData data;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public ObservableCollection<CalendarTask> CalendarTasks { get => data.CalendarTasks; }
+
+        public TaskDataViewModel()
         {
-            Title = "Tasks";
-            Items = new ObservableCollection<Item>();
+            data = new CalendarTasksData();
         }
 
-        public ObservableCollection<Item> Items { get; private set; }
-
-        async public void OnAppearing()
+        protected void RaisePropertyChanged(string name)
         {
-            IEnumerable<Item> items = await DataStore.GetItemsAsync(true);
-            Items.Clear();
-            foreach (Item item in items)
+            if (PropertyChanged != null)
             {
-                Items.Add(item);
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
     }
