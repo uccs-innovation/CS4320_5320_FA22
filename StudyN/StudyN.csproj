@@ -36,6 +36,11 @@
 		<MauiFont Include="Resources\Fonts\*" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="Resources\Images\image2vector.svg" />
+	  <None Remove="Resources\Images\plus_button.png" />
+	</ItemGroup>
+
 
 	<ItemGroup>
 		<PackageReference Include="DevExpress.Maui.Charts" Version="22.1.4" />
@@ -48,6 +53,9 @@
 
 
 	<ItemGroup>
+	  <Compile Update="Views\AddEventPage.xaml.cs">
+	    <DependentUpon>AddEventPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\SettingsPage.xaml.cs">
 	    <DependentUpon>SettingsPage.xaml</DependentUpon>
 	  </Compile>
@@ -60,6 +68,13 @@
 	  <Compile Update="Views\HomePage.xaml.cs">
 	    <DependentUpon>HomePage.xaml</DependentUpon>
 	  </Compile>
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\AddEventPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<PropertyGroup>
