@@ -1,7 +1,7 @@
 ﻿using DevExpress.Maui.DataGrid;
 using StudyN.Models;
 using StudyN.ViewModels;
-using static AndroidX.Concurrent.Futures.CallbackToFutureAdapter;
+//using static AndroidX.Concurrent.Futures.CallbackToFutureAdapter;
 
 namespace StudyN.Views
 {

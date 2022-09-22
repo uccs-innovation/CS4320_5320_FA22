@@ -1,4 +1,5 @@
 ﻿using StudyN.ViewModels;
+using StudyN.Resources;
 
 namespace StudyN.Views
 {
@@ -9,6 +10,26 @@ namespace StudyN.Views
         {
             InitializeComponent();
             BindingContext = new SettingsViewModel();
+        }
+
+        private void Button_ClickedDark(object sender, EventArgs e)
+        {
+            ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
+            if (mergedDictionaries != null)
+            {
+                mergedDictionaries.Clear();
+                mergedDictionaries.Add(new Dictionary2());
+            }
+        }
+
+        private void Button_ClickedLight(object sender, EventArgs e)
+        {
+            ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
+            if (mergedDictionaries != null)
+            {
+                mergedDictionaries.Clear();
+                mergedDictionaries.Add(new Dictionary1());
+            }
         }
     }
 }

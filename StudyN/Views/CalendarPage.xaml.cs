@@ -1,6 +1,6 @@
 ﻿using DevExpress.Maui.Scheduler;
 using DevExpress.Utils.Serializing;
-using DevExpress.XamarinAndroid.Scheduler.Visual.Data;
+//using DevExpress.XamarinAndroid.Scheduler.Visual.Data;
 using StudyN.ViewModels;
 using System.ComponentModel;
 
