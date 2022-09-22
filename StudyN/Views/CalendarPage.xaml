@@ -2,30 +2,103 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dxsch="clr-namespace:DevExpress.Maui.Scheduler;assembly=DevExpress.Maui.Scheduler"
-             Title="{Binding Title}"
+             Title="Calendar Page"
              IconImageSource="scheduler"
              BackgroundColor="{StaticResource NormalBackgroundColor}"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              ios:Page.UseSafeArea="true"
              x:Class="StudyN.Views.CalendarPage">
+    <Shell.TitleView>
+        <StackLayout
+            Orientation="Horizontal"
+            HorizontalOptions="Center"
+            Spacing="5">
+            <Button Text="Daily"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            BorderColor="Black"
+            BorderWidth="1"
+            TextColor="Black"
+            BackgroundColor="White"
+            Clicked="OnDailyClicked"
+            ></Button>
+            <Button Text="Weekly"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            BorderColor="Black"
+            BorderWidth="1"
+            TextColor="Black"
+            BackgroundColor="White"
+            Clicked="OnWeeklyClicked"
+            ></Button>
+            <Button Text="Monthly"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            BorderColor="Black"
+            TextColor="Black"
+            BorderWidth="1"
+            BackgroundColor="White"
+            Clicked="OnMonthlyClicked"
+            ></Button>
+        </StackLayout>
+    </Shell.TitleView>
     <ContentPage.Content>
-        <dxsch:DayView x:Name="dayView">
-            <dxsch:DayView.DataStorage>
-                <dxsch:SchedulerDataStorage>
-                    <dxsch:SchedulerDataStorage.DataSource>
-                        <dxsch:DataSource AppointmentsSource="{Binding Items}">
-                            <dxsch:DataSource.AppointmentMappings>
-                                <dxsch:AppointmentMappings 
+        <StackLayout>
+            <dxsch:DayView x:Name="dayView">
+                <dxsch:DayView.DataStorage>
+                    <dxsch:SchedulerDataStorage>
+                        <dxsch:SchedulerDataStorage.DataSource>
+                            <dxsch:DataSource AppointmentsSource="{Binding Items}">
+                                <dxsch:DataSource.AppointmentMappings>
+                                    <dxsch:AppointmentMappings 
                                     Id="Id" 
                                     Start="StartTime" 
                                     End="EndTime" 
                                     Subject="Text"
-                                    />      
-                            </dxsch:DataSource.AppointmentMappings>
-                        </dxsch:DataSource>
-                    </dxsch:SchedulerDataStorage.DataSource>
-                </dxsch:SchedulerDataStorage>
-            </dxsch:DayView.DataStorage>
-        </dxsch:DayView>
-    </ContentPage.Content>
+                                    />
+                                </dxsch:DataSource.AppointmentMappings>
+                            </dxsch:DataSource>
+                        </dxsch:SchedulerDataStorage.DataSource>
+                    </dxsch:SchedulerDataStorage>
+                </dxsch:DayView.DataStorage>
+            </dxsch:DayView>
+            <dxsch:WeekView x:Name="weekView">
+                <dxsch:WeekView.DataStorage>
+                    <dxsch:SchedulerDataStorage>
+                        <dxsch:SchedulerDataStorage.DataSource>
+                            <dxsch:DataSource AppointmentsSource="{Binding Items}">
+                                <dxsch:DataSource.AppointmentMappings>
+                                    <dxsch:AppointmentMappings 
+                                    Id="Id" 
+                                    Start="StartTime" 
+                                    End="EndTime" 
+                                    Subject="Text"
+                                    />
+                                </dxsch:DataSource.AppointmentMappings>
+                            </dxsch:DataSource>
+                        </dxsch:SchedulerDataStorage.DataSource>
+                    </dxsch:SchedulerDataStorage>
+                </dxsch:WeekView.DataStorage>
+            </dxsch:WeekView>
+            <dxsch:MonthView x:Name="monthView">
+                <dxsch:MonthView.DataStorage>
+                    <dxsch:SchedulerDataStorage>
+                        <dxsch:SchedulerDataStorage.DataSource>
+                            <dxsch:DataSource AppointmentsSource="{Binding Items}">
+                                <dxsch:DataSource.AppointmentMappings>
+                                    <dxsch:AppointmentMappings 
+                                    Id="Id" 
+                                    Start="StartTime" 
+                                    End="EndTime" 
+                                    Subject="Text"
+                                    />
+                                </dxsch:DataSource.AppointmentMappings>
+                            </dxsch:DataSource>
+                        </dxsch:SchedulerDataStorage.DataSource>
+                    </dxsch:SchedulerDataStorage>
+                </dxsch:MonthView.DataStorage>
+            </dxsch:MonthView>
+        </StackLayout>
+        </ContentPage.Content>
 </ContentPage>
+    
