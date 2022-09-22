@@ -1,4 +1,5 @@
 ﻿using StudyN.ViewModels;
+using StudyN.Resources;
 
 namespace StudyN.Views
 {

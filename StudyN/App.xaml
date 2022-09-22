@@ -6,11 +6,9 @@
              windows:Application.ImageDirectory="Assets">
     <Application.Resources>
 
-        <ResourceDictionary Source="Resources/Dictionary1.xaml"/>
-
-        <ResourceDictionary>
+        <ResourceDictionary Source="Resources/Dictionary1.xaml">
             <Style TargetType="NavigationPage">
-                <Setter Property="BarBackgroundColor" Value="{StaticResource Primary}"/>
+                <Setter Property="BarBackgroundColor" Value="{DynamicResource Primary}"/>
                 <Setter Property="BarTextColor" Value="White"/>
             </Style>
             <Style x:Key="PrimaryButton" TargetType="Button">
@@ -18,13 +16,13 @@
                 <Setter Property="TextColor" Value="{DynamicResource PrimaryLight}"/>
             </Style>
             <Style x:Key="ShellStyle" TargetType="Element">
-                <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
-                <Setter Property="Shell.TitleColor" Value="{StaticResource TitleTextColor}" />
-                <Setter Property="Shell.ForegroundColor" Value="{StaticResource TitleTextColor}" />
-                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource NormalBackgroundColor}" />
-                <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource Primary}" />
-                <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource Primary}" />
-                <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource NormalText}" />
+                <Setter Property="Shell.BackgroundColor" Value="{DynamicResource Primary}" />
+                <Setter Property="Shell.TitleColor" Value="{DynamicResource TitleTextColor}" />
+                <Setter Property="Shell.ForegroundColor" Value="{DynamicResource TitleTextColor}" />
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{DynamicResource NormalBackgroundColor}" />
+                <Setter Property="Shell.TabBarForegroundColor" Value="{DynamicResource Primary}" />
+                <Setter Property="Shell.TabBarTitleColor" Value="{DynamicResource Primary}" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="{DynamicResource NormalText}" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

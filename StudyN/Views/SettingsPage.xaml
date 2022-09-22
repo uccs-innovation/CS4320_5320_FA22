@@ -14,10 +14,11 @@
              ios:Page.UseSafeArea="true"
              x:Class="StudyN.Views.SettingsPage">
     <ContentPage.Content>
+        
+        
         <Grid RowDefinitions="100,*,Auto">
-            <Grid>
-                <Image Source="background" HorizontalOptions="FillAndExpand" Aspect="Fill"/>
-                <StackLayout VerticalOptions="Center" Margin="0,10,0,10">
+            <Image Source="background" HorizontalOptions="FillAndExpand" Aspect="Fill"/>
+                <StackLayout VerticalOptions="Center" Margin="0,10,0,10" Spacing="5">
                     <!-- Buttons in settings page to change the colors, of just the buttons for now-->
                     <Button
                         Text="Light mode"
@@ -29,6 +30,5 @@
                         Clicked="Button_ClickedDark"/>
                 </StackLayout>
             </Grid>
-        </Grid>
     </ContentPage.Content>
 </ContentPage>
