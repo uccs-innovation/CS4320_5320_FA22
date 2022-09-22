@@ -13,6 +13,21 @@ namespace StudyN.Views
 
         CalendarViewModel ViewModel { get; }
 
+        void OnDailyClicked(object sender, EventArgs args)
+        {
+            System.Diagnostics.Debug.WriteLine("test1");
+        }
+
+        void OnWeeklyClicked(object sender, EventArgs args)
+        {
+            System.Diagnostics.Debug.WriteLine("test2");
+        }
+
+        void OnMonthlyClicked(object sender, EventArgs args)
+        {
+            System.Diagnostics.Debug.WriteLine("test3");
+        }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
