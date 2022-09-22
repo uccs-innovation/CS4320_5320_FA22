@@ -11,7 +11,8 @@
     <Shell.TitleView>
         <StackLayout
             Orientation="Horizontal"
-            HorizontalOptions="Center">
+            HorizontalOptions="Center"
+            Spacing="5">
             <Button Text="Daily"
             VerticalOptions="Center"
             HorizontalOptions="Center"
@@ -42,24 +43,62 @@
         </StackLayout>
     </Shell.TitleView>
     <ContentPage.Content>
-        <dxsch:WeekView x:Name="weekView">
-            <dxsch:WeekView.DataStorage>
-                <dxsch:SchedulerDataStorage>
-                    <dxsch:SchedulerDataStorage.DataSource>
-                        <dxsch:DataSource AppointmentsSource="{Binding Items}">
-                            <dxsch:DataSource.AppointmentMappings>
-                                <dxsch:AppointmentMappings 
+        <StackLayout>
+            <dxsch:DayView x:Name="dayView">
+                <dxsch:DayView.DataStorage>
+                    <dxsch:SchedulerDataStorage>
+                        <dxsch:SchedulerDataStorage.DataSource>
+                            <dxsch:DataSource AppointmentsSource="{Binding Items}">
+                                <dxsch:DataSource.AppointmentMappings>
+                                    <dxsch:AppointmentMappings 
                                     Id="Id" 
                                     Start="StartTime" 
                                     End="EndTime" 
                                     Subject="Text"
-                                    />      
-                            </dxsch:DataSource.AppointmentMappings>
-                        </dxsch:DataSource>
-                    </dxsch:SchedulerDataStorage.DataSource>
-                </dxsch:SchedulerDataStorage>
-            </dxsch:WeekView.DataStorage>
-        </dxsch:WeekView>
-    </ContentPage.Content>
+                                    />
+                                </dxsch:DataSource.AppointmentMappings>
+                            </dxsch:DataSource>
+                        </dxsch:SchedulerDataStorage.DataSource>
+                    </dxsch:SchedulerDataStorage>
+                </dxsch:DayView.DataStorage>
+            </dxsch:DayView>
+            <dxsch:WeekView x:Name="weekView">
+                <dxsch:WeekView.DataStorage>
+                    <dxsch:SchedulerDataStorage>
+                        <dxsch:SchedulerDataStorage.DataSource>
+                            <dxsch:DataSource AppointmentsSource="{Binding Items}">
+                                <dxsch:DataSource.AppointmentMappings>
+                                    <dxsch:AppointmentMappings 
+                                    Id="Id" 
+                                    Start="StartTime" 
+                                    End="EndTime" 
+                                    Subject="Text"
+                                    />
+                                </dxsch:DataSource.AppointmentMappings>
+                            </dxsch:DataSource>
+                        </dxsch:SchedulerDataStorage.DataSource>
+                    </dxsch:SchedulerDataStorage>
+                </dxsch:WeekView.DataStorage>
+            </dxsch:WeekView>
+            <dxsch:MonthView x:Name="monthView">
+                <dxsch:MonthView.DataStorage>
+                    <dxsch:SchedulerDataStorage>
+                        <dxsch:SchedulerDataStorage.DataSource>
+                            <dxsch:DataSource AppointmentsSource="{Binding Items}">
+                                <dxsch:DataSource.AppointmentMappings>
+                                    <dxsch:AppointmentMappings 
+                                    Id="Id" 
+                                    Start="StartTime" 
+                                    End="EndTime" 
+                                    Subject="Text"
+                                    />
+                                </dxsch:DataSource.AppointmentMappings>
+                            </dxsch:DataSource>
+                        </dxsch:SchedulerDataStorage.DataSource>
+                    </dxsch:SchedulerDataStorage>
+                </dxsch:MonthView.DataStorage>
+            </dxsch:MonthView>
+        </StackLayout>
+        </ContentPage.Content>
 </ContentPage>
     
