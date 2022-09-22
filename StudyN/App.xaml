@@ -5,20 +5,17 @@
              x:Class="StudyN.App"
              windows:Application.ImageDirectory="Assets">
     <Application.Resources>
+
+        <ResourceDictionary Source="Resources/Dictionary1.xaml"/>
+
         <ResourceDictionary>
-            <Color x:Key="Primary">#512BD4</Color>
-            <Color x:Key="NormalText">#55575c</Color>
-            <Color x:Key="NormalHeaderText">#55575c</Color>
-            <Color x:Key="NormalLightText">#959aa0</Color>
-            <Color x:Key="TitleTextColor">White</Color>
-            <Color x:Key="NormalBackgroundColor">White</Color>
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource Primary}"/>
                 <Setter Property="BarTextColor" Value="White"/>
             </Style>
             <Style x:Key="PrimaryButton" TargetType="Button">
-                <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
-                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource Primary}"/>
+                <Setter Property="TextColor" Value="{DynamicResource PrimaryLight}"/>
             </Style>
             <Style x:Key="ShellStyle" TargetType="Element">
                 <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />

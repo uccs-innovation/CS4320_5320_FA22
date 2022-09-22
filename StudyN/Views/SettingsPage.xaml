@@ -18,19 +18,17 @@
             <Grid>
                 <Image Source="background" HorizontalOptions="FillAndExpand" Aspect="Fill"/>
                 <StackLayout VerticalOptions="Center" Margin="0,10,0,10">
-                    <Label Text=".NET MAUI Controls" FontFamily="Univia-Pro" FontSize="20" HorizontalOptions="Center" TextColor="{StaticResource NormalHeaderText}"/>
-                    <Label Text="from DevExpress" FontFamily="Univia-Pro" FontSize="14" HorizontalOptions="Center" TextColor="{StaticResource NormalHeaderText}"/>
+                    <!-- Buttons in settings page to change the colors, of just the buttons for now-->
+                    <Button
+                        Text="Light mode"
+                        Style="{StaticResource PrimaryButton}"
+                        Clicked="Button_ClickedLight"/>
+                    <Button
+                        Text="Dark Mode"
+                        Style="{StaticResource PrimaryButton}"
+                        Clicked="Button_ClickedDark"/>
                 </StackLayout>
             </Grid>
-            <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto" Padding="25,25,25,15" RowSpacing="10">
-                <Label Grid.Row="0" Text="Get the most out of your mobile hardware and OS" FontFamily="Roboto-Bold" FontSize="18" TextColor="{StaticResource NormalText}"/>
-                <Label Grid.Row="1" Text="All .NET MAUI UI controls are written in Objective-C for iOS and Java/Kotlin for Android and are seamlessly integrated with the .NET MAUI platform." FontFamily="Roboto" FontSize="16" TextColor="{StaticResource NormalText}"/>
-                <Label Grid.Row="2" Text="DevExpress UI controls abstract the complexities of native mobile development and deliver unmatched performance, usability, and functionality." FontFamily="Roboto" FontSize="16" TextColor="{StaticResource NormalText}" Padding="0,0,0,7"/>
-            </Grid>
-            <Button Grid.Row="2" Margin="25,20,25,20"
-                    Text="Learn more"
-                    Style="{StaticResource PrimaryButton}"
-                    Command="{Binding OpenWebCommand}"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>
