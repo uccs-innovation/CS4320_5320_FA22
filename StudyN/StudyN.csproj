@@ -36,6 +36,11 @@
 		<MauiFont Include="Resources\Fonts\*" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="Resources\Images\image2vector.svg" />
+	  <None Remove="Resources\Images\plus_button.png" />
+	</ItemGroup>
+
 
 	<ItemGroup>
 		<PackageReference Include="DevExpress.Maui.Charts" Version="22.1.4" />

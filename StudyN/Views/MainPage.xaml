@@ -14,6 +14,11 @@
         <Tab Title="Calendar" Icon="scheduler">
             <ShellContent ContentTemplate="{DataTemplate local:CalendarPage}" />
         </Tab>
+
+        <Tab Title="Add Event" Icon="image2vector">
+            <ShellContent ContentTemplate="{DataTemplate local:CalendarPage}" />
+        </Tab>
+        
         <Tab Title="Tasks" Icon="grid">
             <ShellContent ContentTemplate="{DataTemplate local:TaskPage}"/>
         </Tab>
