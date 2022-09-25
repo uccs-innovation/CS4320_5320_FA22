@@ -2,12 +2,16 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dxsch="clr-namespace:DevExpress.Maui.Scheduler;assembly=DevExpress.Maui.Scheduler"
+             xmlns:ViewModels="clr-namespace:StudyN.ViewModels"
              Title="Calendar Page"
              IconImageSource="scheduler"
              BackgroundColor="{StaticResource NormalBackgroundColor}"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              ios:Page.UseSafeArea="true"
              x:Class="StudyN.Views.CalendarPage">
+    <ContentPage.BindingContext>
+        <ViewModels:TaskDataViewModel />
+    </ContentPage.BindingContext>
     <Shell.TitleView>
         <StackLayout
             Orientation="Horizontal"
@@ -48,12 +52,12 @@
                 <dxsch:DayView.DataStorage>
                     <dxsch:SchedulerDataStorage>
                         <dxsch:SchedulerDataStorage.DataSource>
-                            <dxsch:DataSource AppointmentsSource="{Binding Items}">
+                            <dxsch:DataSource AppointmentsSource="{Binding CalendarTasks}">
                                 <dxsch:DataSource.AppointmentMappings>
                                     <dxsch:AppointmentMappings 
                                     Id="Id" 
                                     Start="StartTime" 
-                                    End="EndTime" 
+                                    End="DueDate" 
                                     Subject="Text"
                                     />
                                 </dxsch:DataSource.AppointmentMappings>
@@ -66,12 +70,12 @@
                 <dxsch:WeekView.DataStorage>
                     <dxsch:SchedulerDataStorage>
                         <dxsch:SchedulerDataStorage.DataSource>
-                            <dxsch:DataSource AppointmentsSource="{Binding Items}">
+                            <dxsch:DataSource AppointmentsSource="{Binding CalendarTasks}">
                                 <dxsch:DataSource.AppointmentMappings>
                                     <dxsch:AppointmentMappings 
                                     Id="Id" 
                                     Start="StartTime" 
-                                    End="EndTime" 
+                                    End="DueDate" 
                                     Subject="Text"
                                     />
                                 </dxsch:DataSource.AppointmentMappings>
@@ -84,12 +88,12 @@
                 <dxsch:MonthView.DataStorage>
                     <dxsch:SchedulerDataStorage>
                         <dxsch:SchedulerDataStorage.DataSource>
-                            <dxsch:DataSource AppointmentsSource="{Binding Items}">
+                            <dxsch:DataSource AppointmentsSource="{Binding CalendarTasks}">
                                 <dxsch:DataSource.AppointmentMappings>
                                     <dxsch:AppointmentMappings 
                                     Id="Id" 
                                     Start="StartTime" 
-                                    End="EndTime" 
+                                    End="DueDate" 
                                     Subject="Text"
                                     />
                                 </dxsch:DataSource.AppointmentMappings>

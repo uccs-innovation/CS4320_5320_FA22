@@ -13,6 +13,7 @@ namespace StudyN.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public DateTime StartTime { get; set; }
         public DateTime DueDate { get; set; }
         public int TimeNeeded { get; set; }
 
@@ -30,6 +31,7 @@ namespace StudyN.Models
                     Completed = false,
                     Id = 1,
                     Description = "Pitch your appilcation idea...",
+                    StartTime = DateTime.Now,
                     DueDate = DateTime.Today,
                     TimeNeeded = 3
                 }
@@ -41,6 +43,7 @@ namespace StudyN.Models
                     Completed = false,
                     Id = 2,
                     Description = "Prove your technology works...",
+                    StartTime = DateTime.Now,
                     DueDate = DateTime.Today,
                     TimeNeeded = 7
                 }
@@ -52,6 +55,7 @@ namespace StudyN.Models
                     Completed = false,
                     Id = 3,
                     Description = "Build a prototype of the feature...",
+                    StartTime = DateTime.Now,
                     DueDate = DateTime.Today.AddHours(24),
                     TimeNeeded = 5
                 }
