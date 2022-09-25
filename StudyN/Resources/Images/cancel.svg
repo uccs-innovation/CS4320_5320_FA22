@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-labelledby="title"
+aria-describedby="desc" role="img" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>Cancel</title>
+  <desc>A solid styled icon from Orion Icon Library.</desc>
+  <path data-name="layer1"
+  d="M32 2a30 30 0 1 0 30 30A30 30 0 0 0 32 2zm0 7a22.89 22.89 0 0 1 13.598 4.454L13.453 45.597A22.996 22.996 0 0 1 32 9zm0 46a22.89 22.89 0 0 1-13.598-4.454l32.145-32.143A22.996 22.996 0 0 1 32 55z"
+  fill="#202020"></path>
+</svg>

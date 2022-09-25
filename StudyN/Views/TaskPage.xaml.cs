@@ -1,4 +1,5 @@
 ﻿using DevExpress.Maui.DataGrid;
+using Java.Util;
 using Microsoft.Maui.Controls;
 using StudyN.Models;
 using StudyN.ViewModels;
@@ -8,32 +9,74 @@ namespace StudyN.Views
 {
     public partial class TaskPage : ContentPage
     {
+        bool isLongPressMenuVisible;
+        ToolbarItem cancelToolbarItem;
         ToolbarItem trashToolbarItem;
+        ToolbarItem completeToolbarItem;
+
+        HashSet<CalendarTask> selectedTasks;
 
         public TaskPage()
         {
             InitializeComponent();
 
-            foreach(ToolbarItem item in ToolbarItems)
+            selectedTasks = new HashSet<CalendarTask>();
+
+            foreach (ToolbarItem item in ToolbarItems)
             {
                 if(item.Text == "Trash")
                 {
                     trashToolbarItem = item;
                 }
+                else if(item.Text == "Cancel")
+                {
+                    cancelToolbarItem = item;
+                }
+                else if(item.Text == "Complete")
+                {
+                    completeToolbarItem = item;
+                }
             }
 
             ShowLongPressMenu(false);
         }
-        private async void TrashButtonClicked(object sender, EventArgs e)
+        private void CancelButtonClicked(object sender, EventArgs e)
         {
-            //await Shell.Current.GoToAsync(nameof(AddEventPage));
+            selectedTasks.Clear();
+            ShowLongPressMenu(false);
+        }
+
+        private void TrashButtonClicked(object sender, EventArgs e)
+        {
+            // Hookup when available
+        }
+        private void CompleteButtonClicked(object sender, EventArgs e)
+        {
+            // Hookup when available
         }
         private void RowLongPressed(object sender, DataGridGestureEventArgs e)
         {
-            //DataGridView gridView = sender as DataGridView;
-            //TaskDataViewModel model = gridView.BindingContext as TaskDataViewModel;
-            //model.isLongPressMenuEnabled = true;
-            ShowLongPressMenu(true);
+            CalendarTask task = e.Item as CalendarTask;
+
+            // Add/Remove from list as needed
+            if(selectedTasks.Contains(task))
+            {
+                selectedTasks.Remove(task);
+            }
+            else
+            {
+                selectedTasks.Add(task);
+            }
+
+            // Display based on number of items selected
+            if(selectedTasks.Count > 0)
+            {
+                ShowLongPressMenu(true);
+            }
+            else
+            {
+                ShowLongPressMenu(false);
+            }
         }
 
         private void CellClicked(object sender, DataGridGestureEventArgs e)
@@ -50,10 +93,18 @@ namespace StudyN.Views
 
         void ShowLongPressMenu(bool setVisible)
         {
-            if(setVisible)
+            if (isLongPressMenuVisible == setVisible)
+            {
+                return;
+            }
+
+            isLongPressMenuVisible = setVisible;
+            if (setVisible)
             {
                 ToolbarItems.Clear();
                 ToolbarItems.Add(trashToolbarItem);
+                ToolbarItems.Add(completeToolbarItem);
+                ToolbarItems.Add(cancelToolbarItem);
             }
             else
             {

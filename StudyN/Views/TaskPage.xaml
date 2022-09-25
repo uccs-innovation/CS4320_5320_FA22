@@ -14,11 +14,19 @@
     <!-- Toolbar -->
     <ContentPage.ToolbarItems>
         <!-- Press and hold options -->
+        <ToolbarItem Text="Cancel"
+                     Clicked="CancelButtonClicked"
+                     Priority="0"
+                     IconImageSource="cancel" />
         <ToolbarItem Text="Trash"
                      Clicked="TrashButtonClicked"
-                     Command="{Binding ShowLongPressOptions}"
-                     IconImageSource="trashcan">
-        </ToolbarItem>
+                     Priority="1"
+                     IconImageSource="trashcan" />
+        <ToolbarItem Text="Complete"
+                     Clicked="CompleteButtonClicked"
+                     Priority="2"
+                     IconImageSource="checkbox" />
+
     </ContentPage.ToolbarItems>
     <!-- DataGrid -->
     <dxg:DataGridView ItemsSource="{Binding CalendarTasks}"
