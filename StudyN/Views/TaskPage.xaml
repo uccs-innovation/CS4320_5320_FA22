@@ -7,6 +7,10 @@
              Title="Tasks"
              IconImageSource="grid"
              x:Class="StudyN.Views.TaskPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Clicked="Add_Clicked" IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+    </ContentPage.ToolbarItems>
+    
     <ContentPage.BindingContext>
         <ViewModels:TaskDataViewModel />
     </ContentPage.BindingContext>

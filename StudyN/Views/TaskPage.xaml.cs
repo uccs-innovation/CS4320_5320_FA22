@@ -24,5 +24,11 @@ namespace StudyN.Views
                 gridView.EndUpdate();
             }
         }
+
+        private async void Add_Clicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(AddEventPage));
+        }
+
     }
 }
