@@ -44,9 +44,10 @@
     </Shell.TitleView>
     <ContentPage.Content>
         <StackLayout>
-            <dxsch:DayView x:Name="dayView">
+            <dxsch:DayView x:Name="dayView"
+                           Tap="onCalendarTap">
                 <dxsch:DayView.DataStorage>
-                    <dxsch:SchedulerDataStorage>
+                    <dxsch:SchedulerDataStorage x:Name="storage">
                         <dxsch:SchedulerDataStorage.DataSource>
                             <dxsch:DataSource AppointmentsSource="{Binding Items}">
                                 <dxsch:DataSource.AppointmentMappings>
