@@ -1,11 +1,8 @@
 ﻿using DevExpress.Maui.DataGrid;
 using StudyN.Models;
-using StudyN.ViewModels;
-//using static AndroidX.Concurrent.Futures.CallbackToFutureAdapter;
 
 namespace StudyN.Views
 {
-    //[XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TaskPage : ContentPage
     {
         public TaskPage()
@@ -19,8 +16,11 @@ namespace StudyN.Views
             {
                 DataGridView gridView = (DataGridView)sender;
                 gridView.BeginUpdate();
+
+                // Update task
                 CalendarTask task = (CalendarTask)e.Item;
-                task.Parent.TaskComplete(task);
+                task.Parent.TaskComplete(task.TaskId);
+
                 gridView.EndUpdate();
             }
         }
