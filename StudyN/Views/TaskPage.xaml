@@ -31,7 +31,8 @@
     <!-- DataGrid -->
     <dxg:DataGridView ItemsSource="{Binding CalendarTasks}"
                       Tap="CellClicked"
-                      LongPress="RowLongPressed">
+                      LongPress="RowLongPressed"
+                      CustomCellStyle="DataGridView_CustomCellStyle">
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
             <dxg:CheckBoxColumn FieldName="Completed" Caption=" " Width="15" />

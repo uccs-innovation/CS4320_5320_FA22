@@ -1,4 +1,5 @@
-﻿using DevExpress.Maui.DataGrid;
+﻿using Android.Widget;
+using DevExpress.Maui.DataGrid;
 using Java.Util;
 using Microsoft.Maui.Controls;
 using StudyN.Models;
@@ -9,18 +10,19 @@ namespace StudyN.Views
 {
     public partial class TaskPage : ContentPage
     {
-        bool isLongPressMenuVisible;
+        bool isLongPressMenuVisible = true;
         ToolbarItem cancelToolbarItem;
         ToolbarItem trashToolbarItem;
         ToolbarItem completeToolbarItem;
 
         HashSet<CalendarTask> selectedTasks;
-
+        HashSet<int> rowHandleList;
         public TaskPage()
         {
             InitializeComponent();
 
             selectedTasks = new HashSet<CalendarTask>();
+            rowHandleList = new HashSet<int>();
 
             foreach (ToolbarItem item in ToolbarItems)
             {
@@ -43,6 +45,7 @@ namespace StudyN.Views
         private void CancelButtonClicked(object sender, EventArgs e)
         {
             selectedTasks.Clear();
+            rowHandleList.Clear();
             ShowLongPressMenu(false);
         }
 
@@ -54,18 +57,25 @@ namespace StudyN.Views
         {
             // Hookup when available
         }
+
+
         private void RowLongPressed(object sender, DataGridGestureEventArgs e)
         {
             CalendarTask task = e.Item as CalendarTask;
+            DataGridView gridView = sender as DataGridView;
+
+            gridView.BeginUpdate();
 
             // Add/Remove from list as needed
-            if(selectedTasks.Contains(task))
+            if (selectedTasks.Contains(task))
             {
                 selectedTasks.Remove(task);
+                rowHandleList.Remove(e.RowHandle);
             }
             else
             {
                 selectedTasks.Add(task);
+                rowHandleList.Add(e.RowHandle);
             }
 
             // Display based on number of items selected
@@ -77,6 +87,8 @@ namespace StudyN.Views
             {
                 ShowLongPressMenu(false);
             }
+
+            gridView.EndUpdate();
         }
 
         private void CellClicked(object sender, DataGridGestureEventArgs e)
@@ -110,6 +122,19 @@ namespace StudyN.Views
             {
                 ToolbarItems.Clear();
             }
+        }
+
+        private void DataGridView_CustomCellStyle(object sender, CustomCellStyleEventArgs e)
+        {
+            if(rowHandleList.Contains(e.RowHandle))
+            {
+                e.BackgroundColor = Color.FromArgb("#d9f0fe");
+            }
+            else
+            {
+                e.BackgroundColor = Color.FromArgb("#FFFFFF");
+            }
+            
         }
     }
 }
