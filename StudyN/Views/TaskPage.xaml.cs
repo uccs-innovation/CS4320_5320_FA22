@@ -25,7 +25,8 @@ namespace StudyN.Views
             }
         }
 
-        private async void Add_Clicked(object sender, EventArgs e)
+        //Function for the add task button to bring to new task page
+        private async void AddButtonClicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync(nameof(AddEventPage));
         }
