@@ -1,10 +1,6 @@
-﻿using Android.Widget;
+﻿using System;
 using DevExpress.Maui.DataGrid;
-using Java.Util;
-using Microsoft.Maui.Controls;
 using StudyN.Models;
-using StudyN.ViewModels;
-
 
 namespace StudyN.Views
 {
@@ -44,9 +40,24 @@ namespace StudyN.Views
         }
         private void CancelButtonClicked(object sender, EventArgs e)
         {
-            selectedTasks.Clear();
-            rowHandleList.Clear();
-            ShowLongPressMenu(false);
+            try
+            {
+                ToolbarItem toolbar = sender as ToolbarItem;
+                ContentPage contentPage = toolbar.Parent as ContentPage;
+                DataGridView gridView = contentPage.Content as DataGridView;
+
+                gridView.BeginUpdate();
+
+                selectedTasks.Clear();
+                rowHandleList.Clear();
+                ShowLongPressMenu(false);
+
+                gridView.EndUpdate();
+            }
+            catch(NullReferenceException execption)
+            {
+                Console.WriteLine(execption.Message);
+            }
         }
 
         private void TrashButtonClicked(object sender, EventArgs e)
