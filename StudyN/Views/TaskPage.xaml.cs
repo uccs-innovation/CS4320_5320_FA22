@@ -1,15 +1,14 @@
 ﻿using DevExpress.Maui.DataGrid;
-using Java.Nio.FileNio;
 using Microsoft.Maui.Controls;
 using StudyN.Models;
 using StudyN.ViewModels;
-//using static AndroidX.Concurrent.Futures.CallbackToFutureAdapter;
+
 
 namespace StudyN.Views
 {
     public partial class TaskPage : ContentPage
     {
-        ToolbarItem addTaskToolbarItem;
+        ToolbarItem trashToolbarItem;
 
         public TaskPage()
         {
@@ -17,15 +16,15 @@ namespace StudyN.Views
 
             foreach(ToolbarItem item in ToolbarItems)
             {
-                if(item.Text == "Add")
+                if(item.Text == "Trash")
                 {
-                    addTaskToolbarItem = item;
+                    trashToolbarItem = item;
                 }
             }
 
             ShowLongPressMenu(false);
         }
-        private async void AddButtonClicked(object sender, EventArgs e)
+        private async void TrashButtonClicked(object sender, EventArgs e)
         {
             //await Shell.Current.GoToAsync(nameof(AddEventPage));
         }
@@ -54,7 +53,7 @@ namespace StudyN.Views
             if(setVisible)
             {
                 ToolbarItems.Clear();
-                ToolbarItems.Add(addTaskToolbarItem);
+                ToolbarItems.Add(trashToolbarItem);
             }
             else
             {

@@ -14,11 +14,11 @@
     <!-- Toolbar -->
     <ContentPage.ToolbarItems>
         <!-- Press and hold options -->
-        <ToolbarItem Text="Add"
-                     Clicked="AddButtonClicked"
-                     IsEnabled="False"
+        <ToolbarItem Text="Trash"
+                     Clicked="TrashButtonClicked"
                      Command="{Binding ShowLongPressOptions}"
-                     IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+                     IconImageSource="trashcan">
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
     <!-- DataGrid -->
     <dxg:DataGridView ItemsSource="{Binding CalendarTasks}"
