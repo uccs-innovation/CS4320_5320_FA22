@@ -1,6 +1,9 @@
 
-### Folders to Ignore ###
+### Folders to ignore ###
 StudyN/bin
 StudyN/obj
 StudyN/.vs
 .vs/
+
+### File types to ignore ###
+*.user

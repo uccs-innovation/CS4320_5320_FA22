@@ -1,68 +1,72 @@
 ﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace StudyN.Models
 {
     public class CalendarTask
     {
-        public CalendarTask(string Text)
+        public CalendarTask(string name, DateTime dueTime)
         {
-            this.Name = Text;
+            this.Name = name;
+            this.DueTime = dueTime;
         }
 
-        public bool Completed { get; set; }
-        public int Id { get; set; }
+        public bool Completed { get; set; } = false;
+        public Guid TaskId { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
-        public string Description { get; set; }
-        public DateTime DueDate { get; set; }
-        public int TimeNeeded { get; set; }
-
-        public CalendarTasksData Parent { get; set; }
+        public string Description { get; set; } = "";
+        public DateTime DueTime { get; set; }
+        public int CompletionProgress { get; set; } = 0;
+        public int TotalTimeNeeded { get; set; } = 0;
+        public int Priority { get; set; } = 3;
+        public CalendarTasksData Parent { get; set; } = null;
     }
 
     public class CalendarTasksData
     {
-        void GenerateCalendarTaskss()
+        void GenerateCalendarTasks()
         {
-            CalendarTasks.Add(
-                new CalendarTask("HW: Pitch your Application Idea")
-                {
-                    Parent = this,
-                    Completed = false,
-                    Id = 1,
-                    Description = "Pitch your appilcation idea...",
-                    DueDate = DateTime.Today,
-                    TimeNeeded = 3
-                }
-            ); ;
-            CalendarTasks.Add(
-                new CalendarTask("HW: Technology Proof of Concept")
-                {
-                    Parent = this,
-                    Completed = false,
-                    Id = 2,
-                    Description = "Prove your technology works...",
-                    DueDate = DateTime.Today,
-                    TimeNeeded = 7
-                }
-            );
-            CalendarTasks.Add(
-                new CalendarTask("HW: Prototype of Key Features")
-                {
-                    Parent = this,
-                    Completed = false,
-                    Id = 3,
-                    Description = "Build a prototype of the feature...",
-                    DueDate = DateTime.Today.AddHours(24),
-                    TimeNeeded = 5
-                }
-            );
+            CalendarTask task = AddTask("HW: Pitch your Application Idea", DateTime.Today);
+            task.Description = "Pitch your appilcation idea...";
+
+            task = AddTask("HW: Technology Proof of Concept", DateTime.Today);
+            task.Description = "Prove your technology works...";
+
+            task = AddTask("HW: Prototype of Key Features", DateTime.Today.AddHours(24));
+            task.Description = "Build a prototype of the feature...";
         }
 
-        public void TaskComplete(CalendarTask task)
+        public CalendarTask AddTask(string name, DateTime dueTime)
         {
-            task.Completed = !task.Completed;
-            CompletedTasks.Add(task);
-            CalendarTasks.Remove(task);
+            CalendarTask newTask = new CalendarTask(name, dueTime);
+            newTask.Parent = this;
+            CalendarTasks.Add(newTask);
+            return newTask;
+        }
+
+        public void RemoveTask(Guid taskId)
+        {
+            foreach(CalendarTask task in CalendarTasks)
+            {
+                if(task.TaskId == taskId)
+                {
+                    CalendarTasks.Remove(task);
+                    return;
+                }
+            }
+        }
+        public void TaskComplete(Guid taskId)
+        {
+            foreach (CalendarTask task in CalendarTasks)
+            {
+                if (task.TaskId == taskId)
+                {
+                    task.Completed = true;
+                    CompletedTasks.Add(task);
+                    CalendarTasks.Remove(task);
+                    return;
+                }
+            }
         }
 
         public ObservableCollection<CalendarTask> CalendarTasks { get; private set; }
@@ -72,7 +76,7 @@ namespace StudyN.Models
         {
             CalendarTasks = new ObservableCollection<CalendarTask>();
             CompletedTasks = new ObservableCollection<CalendarTask>();
-            GenerateCalendarTaskss();
+            GenerateCalendarTasks();
         }
     }
 }
