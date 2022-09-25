@@ -7,10 +7,23 @@
              Title="Tasks"
              IconImageSource="grid"
              x:Class="StudyN.Views.TaskPage">
+    <!-- Binding Context -->
     <ContentPage.BindingContext>
         <ViewModels:TaskDataViewModel />
     </ContentPage.BindingContext>
-    <dxg:DataGridView ItemsSource="{Binding CalendarTasks}" Tap="CellClicked">
+    <!-- Toolbar -->
+    <ContentPage.ToolbarItems>
+        <!-- Press and hold options -->
+        <ToolbarItem Text="Add"
+                     Clicked="AddButtonClicked"
+                     IsEnabled="False"
+                     Command="{Binding ShowLongPressOptions}"
+                     IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+    </ContentPage.ToolbarItems>
+    <!-- DataGrid -->
+    <dxg:DataGridView ItemsSource="{Binding CalendarTasks}"
+                      Tap="CellClicked"
+                      LongPress="RowLongPressed">
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
             <dxg:CheckBoxColumn FieldName="Completed" Caption=" " Width="15" />
