@@ -50,7 +50,7 @@ namespace StudyN.Views
             ViewModel.OnAppearing();
         }
 
-        private void onCalendarTap(object sender, SchedulerGestureEventArgs e)
+        private void CalendarTap(object sender, SchedulerGestureEventArgs e)
         {
             if (e.AppointmentInfo == null)
             {
