@@ -83,7 +83,7 @@
                                     Id="Id" 
                                     Start="StartTime" 
                                     End="EndTime" 
-                                     Subject="Subject"
+                                    Subject="Subject"
                                     LabelId="LabelId"
                                     Location="Location"
                                     />
