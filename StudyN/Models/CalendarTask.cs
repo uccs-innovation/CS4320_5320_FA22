@@ -4,6 +4,14 @@ namespace StudyN.Models
 {
     public class CalendarTask
     {
+
+        //public int Id { get; set; }
+        //public DateTime StartTime { get; set; }
+        //public DateTime EndTime { get; set; }
+        //public string Subject { get; set; }
+        //public int LabelId { get; set; }
+        //public string Location { get; set; }
+
         public CalendarTask(string Text)
         {
             this.Name = Text;
@@ -16,6 +24,7 @@ namespace StudyN.Models
         public DateTime StartTime { get; set; }
         public DateTime DueDate { get; set; }
         public int TimeNeeded { get; set; }
+        public string Location { get; set; }
 
         public CalendarTasksData Parent { get; set; }
     }
@@ -33,7 +42,8 @@ namespace StudyN.Models
                     Description = "Pitch your appilcation idea...",
                     StartTime = DateTime.Now,
                     DueDate = DateTime.Today,
-                    TimeNeeded = 3
+                    TimeNeeded = 3,
+                    Location = "test location 0"
                 }
             ); ;
             CalendarTasks.Add(
@@ -45,7 +55,8 @@ namespace StudyN.Models
                     Description = "Prove your technology works...",
                     StartTime = DateTime.Now,
                     DueDate = DateTime.Today,
-                    TimeNeeded = 7
+                    TimeNeeded = 7,
+                    Location = "test location 1"
                 }
             );
             CalendarTasks.Add(
@@ -57,7 +68,21 @@ namespace StudyN.Models
                     Description = "Build a prototype of the feature...",
                     StartTime = DateTime.Now,
                     DueDate = DateTime.Today.AddHours(24),
-                    TimeNeeded = 5
+                    TimeNeeded = 5,
+                    Location = "test location 2"
+                }
+            );
+            CalendarTasks.Add(
+                new CalendarTask("Test")
+                {
+                    Parent = this,
+                    Completed = false,
+                    Id = 4,
+                    Description = "this is a test",
+                    StartTime = DateTime.Now,
+                    DueDate = DateTime.Today.AddHours(24),
+                    TimeNeeded = 5,
+                    Location = "test location 3"
                 }
             );
         }
