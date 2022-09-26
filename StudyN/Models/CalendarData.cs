@@ -25,10 +25,17 @@ namespace StudyN.Models
     {
         public static DateTime BaseDate = DateTime.Today;
 
-        public static string[] AppointmentTypes = { "Free Time", "Office Hours", "Class", "Work", "Bed Time" };
-        public static Color[] AppointmentTypeColors = { Color.FromHex("#dfcfe9"), Color.FromHex("#c2f49d"),
-                                                        Color.FromHex("#8de8df"), Color.FromHex("#a8d5ff"),
-                                                        Color.FromHex("#c8f4ff") };
+        public static string[] AppointmentTypes = { "Event", "Appointment", "Class", "Assignment", "Free Time", "Exam", "Office Hours", "Work"};
+        public static Color[] AppointmentTypeColors = { Color.FromHex("#a8d5ff"),   // periwinkle blue
+                                                        Color.FromHex("#c2f49d"),   // lime                                                        
+                                                        Color.FromHex("#FCC7FF"),   // orchid
+                                                        Color.FromHex("#FDFDB1"),   // yellow
+                                                        Color.FromHex("#8de8df"),   // aqua                                                        
+                                                        Color.FromHex("FDD5B1"),    // apricot
+                                                        Color.FromHex("#FFC7D8"),   // salmon                                                         
+                                                        Color.FromHex("#dfcfe9") };   // lavendar
+                                                        //Color.FromHex("#c8f4ff") }; // cornflower blue //save color if needed later
+                                                       
 
         //Calls to the things that we are going to do
         public static string[] User = { "Soccer ", "Math Class", "CS Class",
