@@ -53,7 +53,7 @@ namespace StudyN.Views
             ViewModel.OnAppearing();
         }
 
-        private void CalendarTap(object sender, SchedulerGestureEventArgs e)
+        private void CalendarTap_FromDayview(object sender, SchedulerGestureEventArgs e)
         {
             if (e.AppointmentInfo == null)
             {
@@ -66,14 +66,40 @@ namespace StudyN.Views
 
         private void ShowAppointmentEditPage(AppointmentItem appointment)
         {
-            AppointmentEditPage appEditPage = new AppointmentEditPage(appointment, this.storage);
+            AppointmentEditPage appEditPage = new AppointmentEditPage(appointment, this.dayviewStorage);
             Navigation.PushAsync(appEditPage);
         }
 
         private void ShowNewAppointmentEditPage(IntervalInfo info)
         {
             AppointmentEditPage appEditPage = new AppointmentEditPage(info.Start, info.End,
-                                                                     info.AllDay, this.storage);
+                                                                     info.AllDay, this.dayviewStorage);
+            Navigation.PushAsync(appEditPage);
+        }
+
+        // estep: I know there must be a better way to do this, but I just want to try it
+        //        since it won't let me use the same storage name for both SchedulerDataStorage objects
+        private void CalendarTap_FromWeekview(object sender, SchedulerGestureEventArgs e)
+        {
+            if (e.AppointmentInfo == null)
+            {
+                ShowNewAppointmentEditPage_WeekView(e.IntervalInfo);
+                return;
+            }
+            AppointmentItem appointment = e.AppointmentInfo.Appointment;
+            ShowAppointmentEditPage_WeekView(appointment);
+        }
+
+        private void ShowAppointmentEditPage_WeekView(AppointmentItem appointment)
+        {
+            AppointmentEditPage appEditPage = new AppointmentEditPage(appointment, this.weekviewStorage);
+            Navigation.PushAsync(appEditPage);
+        }
+
+        private void ShowNewAppointmentEditPage_WeekView(IntervalInfo info)
+        {
+            AppointmentEditPage appEditPage = new AppointmentEditPage(info.Start, info.End,
+                                                                     info.AllDay, this.weekviewStorage);
             Navigation.PushAsync(appEditPage);
         }
 
@@ -84,7 +110,9 @@ namespace StudyN.Views
 
             public event PropertyChangedEventHandler PropertyChanged;
             public DateTime StartDate { get { return AppData.BaseDate; } }
-            public IReadOnlyList<UserEvents> UserEvents { get => data.UserEven; }
+
+            //public IReadOnlyList<UserEvents> UserEvents { get => data.UserEven; } // estep: I think this was the problem
+            public IReadOnlyList<UserEvents> UserEven { get => data.UserEven; } // estep: trying this 
             public IReadOnlyList<UserEventsType> AppointmentTypes { get => data.Labels; }
 
             public UserCalendarDataView()
