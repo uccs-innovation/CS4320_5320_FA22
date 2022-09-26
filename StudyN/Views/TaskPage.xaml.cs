@@ -7,6 +7,7 @@ namespace StudyN.Views
     public partial class TaskPage : ContentPage
     {
         bool isLongPressMenuVisible = true;
+        ToolbarItem addToolbarItem;
         ToolbarItem cancelToolbarItem;
         ToolbarItem trashToolbarItem;
         ToolbarItem completeToolbarItem;
@@ -22,17 +23,22 @@ namespace StudyN.Views
 
             foreach (ToolbarItem item in ToolbarItems)
             {
-                if(item.Text == "Trash")
+                switch(item.Text)
                 {
-                    trashToolbarItem = item;
-                }
-                else if(item.Text == "Cancel")
-                {
-                    cancelToolbarItem = item;
-                }
-                else if(item.Text == "Complete")
-                {
-                    completeToolbarItem = item;
+                    case "Add":
+                        addToolbarItem = item;
+                        break;
+                    case "Trash":
+                        trashToolbarItem = item;
+                        break;
+                    case "Cancel":
+                        cancelToolbarItem = item;
+                        break;
+                    case "Complete":
+                        completeToolbarItem = item;
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -62,11 +68,57 @@ namespace StudyN.Views
 
         private void TrashButtonClicked(object sender, EventArgs e)
         {
-            // Hookup when available
+            try
+            {
+                ToolbarItem toolbar = sender as ToolbarItem;
+                ContentPage contentPage = toolbar.Parent as ContentPage;
+                DataGridView gridView = contentPage.Content as DataGridView;
+
+                gridView.BeginUpdate();
+
+                // Delete tasks
+                foreach(CalendarTask task in selectedTasks)
+                {
+                    task.Parent.TaskDelete(task.TaskId);
+                }
+
+                selectedTasks.Clear();
+                rowHandleList.Clear();
+                ShowLongPressMenu(false);
+
+                gridView.EndUpdate();
+            }
+            catch (NullReferenceException execption)
+            {
+                Console.WriteLine(execption.Message);
+            }
         }
         private void CompleteButtonClicked(object sender, EventArgs e)
         {
-            // Hookup when available
+            try
+            {
+                ToolbarItem toolbar = sender as ToolbarItem;
+                ContentPage contentPage = toolbar.Parent as ContentPage;
+                DataGridView gridView = contentPage.Content as DataGridView;
+
+                gridView.BeginUpdate();
+
+                // Delete tasks
+                foreach (CalendarTask task in selectedTasks)
+                {
+                    task.Parent.TaskComplete(task.TaskId);
+                }
+
+                selectedTasks.Clear();
+                rowHandleList.Clear();
+                ShowLongPressMenu(false);
+
+                gridView.EndUpdate();
+            }
+            catch (NullReferenceException execption)
+            {
+                Console.WriteLine(execption.Message);
+            }
         }
 
 
@@ -119,7 +171,8 @@ namespace StudyN.Views
 
         //Function for the add task button to bring to new task page
         
-        private async void AddButtonClicked(object sender, EventArgs e) { 
+        private async void AddButtonClicked(object sender, EventArgs e)
+        { 
             await Shell.Current.GoToAsync(nameof(AddEventPage));
         }
 
@@ -142,6 +195,7 @@ namespace StudyN.Views
             else
             {
                 ToolbarItems.Clear();
+                ToolbarItems.Add(addToolbarItem);
             }
         }
 
