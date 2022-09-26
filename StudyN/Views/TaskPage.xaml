@@ -21,15 +21,15 @@
         <ToolbarItem Text="Cancel"
                      Clicked="CancelButtonClicked"
                      Priority="0"
-                     IconImageSource="cancel" />
+                     IconImageSource="whitecancel" />
         <ToolbarItem Text="Trash"
                      Clicked="TrashButtonClicked"
                      Priority="1"
-                     IconImageSource="trashcan" />
+                     IconImageSource="whitetrashcan" />
         <ToolbarItem Text="Complete"
                      Clicked="CompleteButtonClicked"
                      Priority="2"
-                     IconImageSource="checkbox" />
+                     IconImageSource="whitecheckbox" />
 
     </ContentPage.ToolbarItems>
     <!-- DataGrid -->
