@@ -1,5 +1,6 @@
 ﻿using DevExpress.Maui.Scheduler;
 using DevExpress.Utils.Serializing;
+using StudyN.Models; //Calls Calendar Data
 //using DevExpress.XamarinAndroid.Scheduler.Visual.Data;
 using StudyN.ViewModels;
 using System.ComponentModel;
@@ -13,9 +14,11 @@ namespace StudyN.Views
     {
         public CalendarPage()
         {
-            
+
             InitializeComponent();
-            BindingContext = ViewModel = new CalendarViewModel();
+            ViewModel = new CalendarViewModel();
+            BindingContext = new UserCalendarDataView(); //Use to pull data of CalendarData under Models
+
         }
 
         CalendarViewModel ViewModel { get; }
@@ -73,5 +76,30 @@ namespace StudyN.Views
                                                                      info.AllDay, this.storage);
             Navigation.PushAsync(appEditPage);
         }
+
+        //View of events 
+        public class UserCalendarDataView : INotifyPropertyChanged
+        {
+            readonly AppData data;
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            public DateTime StartDate { get { return AppData.BaseDate; } }
+            public IReadOnlyList<UserEvents> UserEvents { get => data.UserEven; }
+            public IReadOnlyList<UserEventsType> AppointmentTypes { get => data.Labels; }
+
+            public UserCalendarDataView()
+            {
+                data = new AppData();
+            }
+
+            protected void RaisePropertyChanged(string name)
+            {
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(name));
+                }
+            }
+        }
+
     }
-}
+} 
