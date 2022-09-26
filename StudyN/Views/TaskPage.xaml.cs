@@ -199,7 +199,7 @@ namespace StudyN.Views
             }
         }
 
-        private void DataGridView_CustomCellStyle(object sender, CustomCellStyleEventArgs e)
+        private void HighlightSelectedRows(object sender, CustomCellStyleEventArgs e)
         {
             if(rowHandleList.Contains(e.RowHandle))
             {
