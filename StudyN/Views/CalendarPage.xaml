@@ -17,6 +17,17 @@
             Orientation="Horizontal"
             HorizontalOptions="Center"
             Spacing="5">
+            
+            <Button Text="Add calendar event"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            BorderColor="Black"
+            BorderWidth="1"
+            TextColor="Black"
+            BackgroundColor="White"
+            Clicked="OnAddCalendarEventClicked"
+            ></Button>
+            
             <Button Text="Daily"
             VerticalOptions="Center"
             HorizontalOptions="Center"
