@@ -11,6 +11,7 @@ namespace StudyN.Views
         public TaskPage()
         {
             InitializeComponent();
+            BindingContext = new TaskDataViewModel();
         }
 
         private void CellClicked(object sender, DataGridGestureEventArgs e)

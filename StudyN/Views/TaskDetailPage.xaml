@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Title="{Binding ViewName}"
+             xmlns:dxco="clr-namespace:DevExpress.Maui.Controls;assembly=DevExpress.Maui.Controls"
              x:Class="StudyN.Views.TaskDetailPage">
     <ContentPage.Content>
         <StackLayout Spacing="6" Padding="13">
@@ -17,4 +18,20 @@
             <Label Text="{Binding DueDate}" FontFamily="Roboto" FontSize="12" TextColor="Black"/>
         </StackLayout>
     </ContentPage.Content>
+    <dxco:SimpleButton Text="Remove"
+                       TextColor="White"
+                       PressedTextColor="Black"
+                       DisabledTextColor="DarkGray"
+                       BackgroundColor="Black"
+                       PressedBackgroundColor="White"
+                       DisabledBackgroundColor="Gray"
+                       Clicked="RemoveButton"/>
+    <dxco:SimpleButton Text="Modify"
+                       TextColor="White"
+                       PressedTextColor="Black"
+                       DisabledTextColor="DarkGray"
+                       BackgroundColor="BlueViolet"
+                       PressedBackgroundColor="Cyan"
+                       DisabledBackgroundColor="Blue"
+                       Clicked="ModifyButton"/>
 </ContentPage>

@@ -68,5 +68,5 @@ namespace StudyN.ViewModels
             DueDate = task.DueDate;
             Complete = task.Completed;
         }
-	}
+    }
 }
