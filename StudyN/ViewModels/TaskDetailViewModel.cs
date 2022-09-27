@@ -7,7 +7,7 @@ namespace StudyN.ViewModels
         public const string ViewName = "Task Details";
 
         // fields
-        private string title;
+        private string name;
         private string description;
         private List<DateTime> startTimes;
         private List<DateTime> endTimes;
@@ -16,10 +16,10 @@ namespace StudyN.ViewModels
 
         public int Id { get; set; }
 
-        public string Title0
+        public string Name
         {
-            get => title;
-            set => SetProperty(ref title, value);
+            get => name;
+            set => SetProperty(ref name, value);
         }
 
         public string Description
@@ -52,9 +52,21 @@ namespace StudyN.ViewModels
             set => SetProperty(ref complete, value);
         }
 
-        public TaskDetailViewModel()
-		{
-			
-		}
+        /// <summary>
+        /// Gets the data of the selected task
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        public async Task LoadTaskId(int taskId)
+        {
+            var task = await TaskStore.GetItemAsync(taskId);
+            Id = task.Id;
+            Name = task.Name;
+            Description = task.Description;
+            StartTimes = task.StartTimes;
+            EndTimes = task.EndTimes;
+            DueDate = task.DueDate;
+            Complete = task.Completed;
+        }
 	}
 }

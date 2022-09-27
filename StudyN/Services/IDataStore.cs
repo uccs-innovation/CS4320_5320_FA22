@@ -2,14 +2,16 @@
 {
     public interface IDataStore<T>
     {
-        Task<bool> AddItemAsync(Task item);
+        Task<bool> AddItemAsync(T item);
 
-        Task<bool> UpdateItemAsync(Task item);
+        Task<bool> UpdateItemAsync(T item);
 
-        Task<bool> DeleteItemAsync(Task item);
+        Task<bool> DeleteItemAsync(int id);
 
-        Task<T> GetItemAsync(bool forceRefresh = false);
+        Task<T> GetItemAsync(int id);
 
-        IEnumerable<T> GetItem(bool forceRefresh = false);
+        Task<IEnumerable<T>> GetAllItemsAsync(bool forceRefresh = false);
+
+        IEnumerable<T> GetItems(bool forceRefresh = false);
     }
 }
