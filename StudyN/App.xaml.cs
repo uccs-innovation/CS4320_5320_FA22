@@ -1,4 +1,5 @@
-﻿using StudyN.Views;
+﻿using StudyN.Services;
+using StudyN.Views;
 using Application = Microsoft.Maui.Controls.Application;
 
 namespace StudyN
@@ -8,7 +9,8 @@ namespace StudyN
         public App()
         {
             InitializeComponent();
-
+            DependencyService.Register<MockDataStore>();
+            DependencyService.Register<NavigationService>();
             MainPage = new MainPage();
 
         }

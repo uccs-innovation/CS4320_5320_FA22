@@ -1,4 +1,6 @@
-﻿using StudyN.Models;
+﻿using Ical.Net.CalendarComponents;
+using StudyN.Models;
+using StudyN.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -8,6 +10,10 @@ namespace StudyN.ViewModels
     {
         bool isBusy = false;
         string title = string.Empty;
+        public IDataStore<CalendarEvent> DataStore => DependencyService.Get<IDataStore<CalendarEvent>>();
+
+        public INavigationService Navigation => DependencyService.Get<INavigationService>();
+
         public bool IsBusy
         {
             get { return this.isBusy; }
