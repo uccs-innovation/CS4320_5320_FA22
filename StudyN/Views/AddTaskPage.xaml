@@ -7,7 +7,8 @@
              Title="Add Task">
     <ContentPage.Content>
         <!--Grid for organizing -->
-        <Grid Margin="10">
+        <Grid Margin="10"
+              Padding="5">
             <!--Grid rows definitions-->
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
@@ -24,21 +25,23 @@
             </Grid.ColumnDefinitions>
     
             <!--task name box GridRow 1 Spans 2 columns-->
-            <Entry
-                    Grid.ColumnSpan="2"
-                    MaxLength="20"
-                    Style="{StaticResource CommonEntryStyle}"
-                    Text="Enter Task Name" />
-            <BoxView Grid.Row="1"/>
-            
-            <!--task discription box GridRow 2 Spans 2 columns-->
-            <Entry
-                    Grid.ColumnSpan="2"
-                    Grid.Row="1"
-                    MaxLength="200"
-                    Style="{StaticResource CommonEntryStyle}"
-                    Text="Enter Event discription (200 character max)" />
-            <BoxView Grid.Row="2"/>
+            <dxe:TextEdit
+                Grid.ColumnSpan="2"
+                LabelText="Task Name"
+                IsLabelFloating="True"
+                Margin="1"
+            >
+            </dxe:TextEdit>
+
+            <!--task discription box in GridRow 2 Spans 2 columns-->
+            <dxe:TextEdit
+                Grid.ColumnSpan="2"
+                LabelText="Task Discription"
+                IsLabelFloating="True"
+                Grid.Row="1"
+                Margin="1"
+                >
+            </dxe:TextEdit>
 
             <!--Time Entry Box GridRow 3 Spans 1 Column-->
             <dxe:TimeEdit TimeFormatMode="HourFormat12"
@@ -46,6 +49,7 @@
                 Grid.ColumnSpan="1"
                 LabelText="Time Due"
                 IsLabelFloating="True"
+                Margin="1"
              />
 
             <!--Date Entry box GridRow 3 Spans 1 Column-->
@@ -54,39 +58,43 @@
                           Grid.Column="1"
                           Grid.ColumnSpan="1"
                           LabelText="Date Due"
-                          IsLabelFloating="True"/>
+                          IsLabelFloating="True"
+                          Margin="1"/>
+            
+            <!--Time Spent On Task So far Entry box-->
+            <dxe:NumericEdit Value="0" DisplayFormat="n0"
+                             Grid.Row="3"
+                             Grid.ColumnSpan="1"
+                             LabelText="Time Completed"
+                             IsLabelFloating="True"
+                             Margin="1"/>
 
-            
-            <Entry
-                    Grid.ColumnSpan="1"
-                    Grid.Row="3"
-                    MaxLength="50"
-                    Style="{StaticResource CommonEntryStyle}"
-                    Text="Time Spent On Task" />
-            <BoxView Grid.Row="2"/>
-            
-            
-            <Entry
-                    Grid.ColumnSpan="1"
-                    Grid.Column="1"
-                    Grid.Row="3"
-                    MaxLength="50"
-                    Style="{StaticResource CommonEntryStyle}"
-                    Text="Time To Complete" />
-            <BoxView Grid.Row="2"/>
+            <!--Time Needed to Complete Task-->
+            <dxe:NumericEdit Value="0" DisplayFormat="n0"
+                             Grid.Row="3"
+                             Grid.ColumnSpan="1"
+                             Grid.Column="1"
+                             LabelText="Time To Completion"
+                             IsLabelFloating="True"
+                             Margin="1"/>
 
-            <Slider Maximum="5"
+
+            <!--Priority Slider and Label-->
+            
+            
+            <Slider 
+                Maximum="5"
+                Minimum="0"
                 ValueChanged="OnSliderValueChanged" 
-                    Grid.Row="4"
-                    Grid.ColumnSpan="2"/>
-            
+                Grid.Row="4"
+                Grid.ColumnSpan="2"/>
             <Label x:Name="displayLabel"
                Text="Priority"
                HorizontalOptions="Center"
                VerticalOptions="Center" 
                Grid.Row="5"
                Grid.ColumnSpan="2"
-                   />
+               />
 
 
         </Grid>
