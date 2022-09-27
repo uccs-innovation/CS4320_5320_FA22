@@ -16,22 +16,8 @@
             <Label Text="{MultiBinding EndTimes}" FontFamily="Roboto" FontSize="12" TextColor="Black"/>
             <Label Text="Task Due:" FontFamily="Roboto" FontSize="12" TextColor="Black"/>
             <Label Text="{Binding DueDate}" FontFamily="Roboto" FontSize="12" TextColor="Black"/>
+            <Button Text="Remove" TextColor="White" BackgroundColor="Black" Clicked="RemoveButton"/>
+            <Button Text="Modify" TextColor="White" BackgroundColor="BlueViolet" Clicked="ModifyButton"/>
         </StackLayout>
     </ContentPage.Content>
-    <dxco:SimpleButton Text="Remove"
-                       TextColor="White"
-                       PressedTextColor="Black"
-                       DisabledTextColor="DarkGray"
-                       BackgroundColor="Black"
-                       PressedBackgroundColor="White"
-                       DisabledBackgroundColor="Gray"
-                       Clicked="RemoveButton"/>
-    <dxco:SimpleButton Text="Modify"
-                       TextColor="White"
-                       PressedTextColor="Black"
-                       DisabledTextColor="DarkGray"
-                       BackgroundColor="BlueViolet"
-                       PressedBackgroundColor="Cyan"
-                       DisabledBackgroundColor="Blue"
-                       Clicked="ModifyButton"/>
 </ContentPage>
