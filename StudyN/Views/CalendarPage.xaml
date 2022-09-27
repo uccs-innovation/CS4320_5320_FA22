@@ -121,6 +121,11 @@
                                 &#10;Tap outside the popup to hide it."
                         TextColor="{StaticResource NormalText}"
                         Margin="5, 5"/>
+
+                    <Entry x:Name="Description"
+                        MaxLength="100"
+                        Style="{StaticResource CommonEntryStyle}"
+                        Text="Description of event." />
                 </StackLayout>
             </dxco:DXPopup>
             
