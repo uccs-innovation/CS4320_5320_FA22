@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyN.Views.TaskDetailPage"
+             Title="TaskDetailPage">
+    <ContentPage.Content>
+        <StackLayout Spacing="6" Padding="13">
+            <Label Text="Title:" FontFamily="Roboto" FontSize="12" TextColor="Black"/>
+            <Label Text="{Binding Title0}" FontFamily="Roboto" FontSize="12" TextColor="Black" Margin="0, 0, 0, 13"/>
+            <Label Text="Description:" FontFamily="Roboto" FontSize="12" TextColor="Black"/>
+            <Label Text="{Binding Description}" FontFamily="Roboto" FontSize="12" TextColor="Black"/>
+            <Label Text="Start Time(s):" FontFamily="Roboto" FontSize="12" TextColor="Black"/>
+            <Label Text="{MultiBinding StartTimes}" FontFamily="Roboto" FontSize="12" TextColor="Black"/>
+            <Label Text="End Time(s):" FontFamily="Roboto" FontSize="12" TextColor="Black"/>
+            <Label Text="{MultiBinding EndTimes}" FontFamily="Roboto" FontSize="12" TextColor="Black"/>
+            <Label Text="Task Due:" FontFamily="Roboto" FontSize="12" TextColor="Black"/>
+            <Label Text="{Binding DueDate}" FontFamily="Roboto" FontSize="12" TextColor="Black"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
