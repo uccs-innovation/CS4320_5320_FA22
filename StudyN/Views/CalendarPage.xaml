@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dxsch="clr-namespace:DevExpress.Maui.Scheduler;assembly=DevExpress.Maui.Scheduler"
              xmlns:ViewModels="clr-namespace:StudyN.ViewModels"
+             xmlns:dxco="clr-namespace:DevExpress.Maui.Controls;assembly=DevExpress.Maui.Controls"
              Title="Calendar Page"
              IconImageSource="scheduler"
              BackgroundColor="{StaticResource NormalBackgroundColor}"
@@ -113,6 +114,16 @@
                     </dxsch:SchedulerDataStorage>
                 </dxsch:MonthView.DataStorage>
             </dxsch:MonthView>
+
+            <dxco:DXPopup x:Name="Popup">
+                <StackLayout WidthRequest="200" BackgroundColor="AliceBlue">
+                    <Label Text="Popup for text fields.
+                                &#10;Tap outside the popup to hide it."
+                        TextColor="{StaticResource NormalText}"
+                        Margin="5, 5"/>
+                </StackLayout>
+            </dxco:DXPopup>
+            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

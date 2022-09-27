@@ -49,6 +49,8 @@ namespace StudyN.Views
         void OnAddCalendarEventClicked(object sender, EventArgs args)
         {
             //Console.WriteLine("hi");
+            Popup.IsOpen = true;
+
             Item newItem = new Item();
             newItem.Id = "5";
             newItem.Text = "Hard coded item to add";
@@ -57,7 +59,6 @@ namespace StudyN.Views
             newItem.EndTime = DateTime.Today.AddHours(32);
             newItem.Value = 40.5;
             ViewModel.Items.Add(newItem);
-            Console.WriteLine(ViewModel.Items.Count);
         }
 
         protected override void OnAppearing()
