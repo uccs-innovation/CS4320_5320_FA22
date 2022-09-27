@@ -11,7 +11,7 @@ namespace StudyN
 
             MainPage = new MainPage();
 
-            Routing.RegisterRoute(typeof(AddEventPage).FullName, typeof(AddEventPage));
+            Routing.RegisterRoute(nameof(Views.AddEventPage), typeof(Views.AddEventPage));
         }
     }
 }

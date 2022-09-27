@@ -69,6 +69,18 @@ namespace StudyN.Models
             }
         }
 
+        public void TaskDelete(Guid taskId)
+        {
+            foreach (CalendarTask task in CalendarTasks)
+            {
+                if (task.TaskId == taskId)
+                {
+                    CalendarTasks.Remove(task);
+                    return;
+                }
+            }
+        }
+
         public ObservableCollection<CalendarTask> CalendarTasks { get; private set; }
         private ObservableCollection<CalendarTask> CompletedTasks { get; set; }
 

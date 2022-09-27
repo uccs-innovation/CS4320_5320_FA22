@@ -11,7 +11,6 @@ namespace StudyN.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<CalendarTask> CalendarTasks { get => data.CalendarTasks; }
-
         public TaskDataViewModel()
         {
             data = new CalendarTasksData();
