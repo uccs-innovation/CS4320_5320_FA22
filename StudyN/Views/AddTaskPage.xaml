@@ -4,6 +4,7 @@
              x:Class="StudyN.Views.AddTaskPage"
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
              xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
+             xmlns:dxee="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              Title="Add Task">
     <ContentPage.Content>
         <!--Grid for organizing -->
@@ -80,8 +81,8 @@
 
 
             <!--Priority Slider and Label-->
-            
-            
+
+
             <Slider 
                 Maximum="5"
                 Minimum="0"

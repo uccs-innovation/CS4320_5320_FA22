@@ -10,6 +10,6 @@ public partial class AddTaskPage : ContentPage
     void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
     {
         double value = args.NewValue;
-        displayLabel.Text = String.Format("Priority {0}", value);
+        displayLabel.Text = String.Format("Priority");
     }
 }
