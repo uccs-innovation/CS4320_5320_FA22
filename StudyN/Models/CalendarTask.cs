@@ -15,6 +15,8 @@ namespace StudyN.Models
         public string Description { get; set; }
         public DateTime DueDate { get; set; }
         public int TimeNeeded { get; set; }
+        public List<DateTime> StartTimes { get; set; }
+        public List<DateTime> EndTimes { get; set; }   
 
         public CalendarTasksData Parent { get; set; }
     }
@@ -30,10 +32,12 @@ namespace StudyN.Models
                     Completed = false,
                     Id = 1,
                     Description = "Pitch your appilcation idea...",
-                    DueDate = DateTime.Today,
-                    TimeNeeded = 3
+                    DueDate = DateTime.Today.AddHours(23).AddMinutes(59),
+                    TimeNeeded = 3,
+                    StartTimes = { DateTime.Today.AddHours(12) },
+                    EndTimes = { DateTime.Today.AddHours(15) }
                 }
-            ); ;
+            );
             CalendarTasks.Add(
                 new CalendarTask("HW: Technology Proof of Concept")
                 {
@@ -41,8 +45,10 @@ namespace StudyN.Models
                     Completed = false,
                     Id = 2,
                     Description = "Prove your technology works...",
-                    DueDate = DateTime.Today,
-                    TimeNeeded = 7
+                    DueDate = DateTime.Today.AddHours(47).AddMinutes(59),
+                    TimeNeeded = 7,
+                    StartTimes = { DateTime.Today.AddHours(15), DateTime.Today.AddHours(36) },
+                    EndTimes = { DateTime.Today.AddHours(20), DateTime.Today.AddHours(38) }
                 }
             );
             CalendarTasks.Add(
@@ -52,8 +58,10 @@ namespace StudyN.Models
                     Completed = false,
                     Id = 3,
                     Description = "Build a prototype of the feature...",
-                    DueDate = DateTime.Today.AddHours(24),
-                    TimeNeeded = 5
+                    DueDate = DateTime.Today.AddHours(47).AddMinutes(59),
+                    TimeNeeded = 5,
+                    StartTimes = { DateTime.Today.AddHours(38) },
+                    EndTimes = { DateTime.Today.AddHours(43)}
                 }
             );
         }
