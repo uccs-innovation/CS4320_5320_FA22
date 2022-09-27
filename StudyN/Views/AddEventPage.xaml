@@ -62,8 +62,7 @@
                 Grid.ColumnSpan="1"
                 LabelText="Time Due"
                 IsLabelFloating="False"
-                
-                          />
+             />
 
         </Grid>
 
