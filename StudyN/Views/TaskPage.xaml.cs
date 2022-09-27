@@ -154,19 +154,13 @@ namespace StudyN.Views
             gridView.EndUpdate();
         }
 
-        private void CellClicked(object sender, DataGridGestureEventArgs e)
+        private async void CellClicked(object sender, DataGridGestureEventArgs e)
         {
-            if(e.Item != null && e.FieldName == "Completed")
-            {
-                DataGridView gridView = (DataGridView)sender;
-                gridView.BeginUpdate();
+            // Task we need to edit...
+            CalendarTask task = (CalendarTask)e.Item;
 
-                // Update task
-                CalendarTask task = (CalendarTask)e.Item;
-                task.Parent.TaskComplete(task.TaskId);
-
-                gridView.EndUpdate();
-            }
+            // Get it in here
+            await Shell.Current.GoToAsync(nameof(AddEventPage));
         }
 
         //Function for the add task button to bring to new task page
