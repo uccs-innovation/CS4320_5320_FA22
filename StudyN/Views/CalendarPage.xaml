@@ -123,9 +123,20 @@
                         Margin="5, 5"/>
 
                     <Entry x:Name="Description"
-                        MaxLength="100"
+                        MaxLength="200"
                         Style="{StaticResource CommonEntryStyle}"
-                        Text="Description of event." />
+                        Placeholder="Description"
+                        Text="" />
+
+                    <Button Text="Add"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        BorderColor="Black"
+                        BorderWidth="1"
+                        TextColor="Black"
+                        BackgroundColor="White"
+                        Clicked="OnPopupAddButtonClicked"></Button>
+
                 </StackLayout>
             </dxco:DXPopup>
             

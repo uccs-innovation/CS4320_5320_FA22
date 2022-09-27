@@ -51,14 +51,20 @@ namespace StudyN.Views
             //Console.WriteLine("hi");
             Popup.IsOpen = true;
 
+
+        }
+
+        void OnPopupAddButtonClicked(object sender, EventArgs args)
+        {
             Item newItem = new Item();
-            newItem.Id = "5";
-            newItem.Text = "Hard coded item to add";
-            newItem.Description = "Description for hard coded item to add";
+            newItem.Id = "5"; //TODO generate unique id's on each add
+            newItem.Text = Description.Text;
+            newItem.Description = "Desc placeholder";
             newItem.StartTime = DateTime.Today.AddHours(24);
             newItem.EndTime = DateTime.Today.AddHours(32);
             newItem.Value = 40.5;
             ViewModel.Items.Add(newItem);
+            Popup.IsOpen = false;
         }
 
         protected override void OnAppearing()

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ActiveDebugFramework>net6.0-android</ActiveDebugFramework>
     <IsFirstTimeProjectOpen>False</IsFirstTimeProjectOpen>
-    <ActiveDebugProfile>pixel (Android 12.1 - API 32)</ActiveDebugProfile>
+    <ActiveDebugProfile>Pixel (Android 12.1 - API 32)</ActiveDebugProfile>
     <SelectedPlatformGroup>Emulator</SelectedPlatformGroup>
     <DefaultDevice>pixel</DefaultDevice>
   </PropertyGroup>
