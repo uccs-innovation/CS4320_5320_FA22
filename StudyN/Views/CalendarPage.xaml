@@ -116,9 +116,8 @@
             </dxsch:MonthView>
 
             <dxco:DXPopup x:Name="Popup">
-                <StackLayout WidthRequest="200" BackgroundColor="AliceBlue">
-                    <Label Text="Popup for text fields.
-                                &#10;Tap outside the popup to hide it."
+                <StackLayout WidthRequest="300" BackgroundColor="AliceBlue">
+                    <Label Text="Add a calendar event!"
                         TextColor="{StaticResource NormalText}"
                         Margin="5, 5"/>
 
@@ -127,6 +126,19 @@
                         Style="{StaticResource CommonEntryStyle}"
                         Placeholder="Description"
                         Text="" />
+
+                    <Label Text="Start Time YYYY/MM/DD/HH/MM/SS "></Label>
+                    <Entry x:Name="StartTime"
+                        MaxLength="200"
+                        Style="{StaticResource CommonEntryStyle}"
+                        Placeholder="YYYY/MM/DD/HH/MM/SS"
+                        Text="" />
+
+                    <Label Text="End Time YYYY/MM/DD/HH/MM/SS "></Label>
+                    <Entry x:Name="EndTime"
+                        MaxLength="200"
+                        Style="{StaticResource CommonEntryStyle}"
+                        Placeholder="YYYY/MM/DD/HH/MM/SS" />
 
                     <Button Text="Add"
                         VerticalOptions="Center"

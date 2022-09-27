@@ -59,10 +59,16 @@ namespace StudyN.Views
             Item newItem = new Item();
             newItem.Id = "5"; //TODO generate unique id's on each add
             newItem.Text = Description.Text;
-            newItem.Description = "Desc placeholder";
-            newItem.StartTime = DateTime.Today.AddHours(24);
-            newItem.EndTime = DateTime.Today.AddHours(32);
-            newItem.Value = 40.5;
+            newItem.Description = Description.Text;
+
+            string[] sstring = StartTime.Text.Split('/');
+            string[] estring = EndTime.Text.Split('/');
+
+            DateTime start = new DateTime(Int16.Parse(sstring[0]), Int16.Parse(sstring[1]), Int16.Parse(sstring[2]), Int16.Parse(sstring[3]), Int16.Parse(sstring[4]), Int16.Parse(sstring[5])); //Should probably find a datetimepicker library
+            DateTime end = new DateTime(Int16.Parse(estring[0]), Int16.Parse(estring[1]), Int16.Parse(estring[2]), Int16.Parse(estring[3]), Int16.Parse(estring[4]), Int16.Parse(estring[5])); 
+            newItem.StartTime = start;
+            newItem.EndTime = end;
+            newItem.Value = 1; //Not sure what "value" is tbh
             ViewModel.Items.Add(newItem);
             Popup.IsOpen = false;
         }
