@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
              x:Class="StudyN.Views.AddEventPage"
+             xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
              Title="{Binding Title}"
              IconImageSource="image2vector">
     <ContentPage.Content>
@@ -33,6 +34,7 @@
                     Style="{StaticResource CommonEntryStyle}"
                     Text="Enter Event discription (200 character max)" />
             <BoxView Grid.Row="2"/>
+            
             <Entry
                     Grid.Row="2"
                     Grid.Column="0"
@@ -54,12 +56,14 @@
                     Style="{StaticResource CommonEntryStyle}"
                     Text="MM/DD/YYYY" />
 
-            <Button 
+
+            <dxe:TimeEdit TimeFormatMode="HourFormat12"
                 Grid.Row="4"
-                Grid.ColumnSpan="2"
-                Text="Enter New Event"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"/>
+                Grid.ColumnSpan="1"
+                LabelText="Time Due"
+                IsLabelFloating="False"
+                
+                          />
 
         </Grid>
 
