@@ -23,5 +23,10 @@ namespace StudyN.ViewModels
                 Items.Add(item);
             }
         }
+
+        public void AddToDataStore(Item item)
+        {
+            DataStore.AddItemAsync(item);
+        }
     }
 }

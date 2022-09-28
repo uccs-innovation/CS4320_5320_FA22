@@ -2,6 +2,7 @@
 using DevExpress.Utils.Serializing;
 using Microsoft.VisualBasic;
 using StudyN.Models;
+using StudyN.Services;
 //using DevExpress.XamarinAndroid.Scheduler.Visual.Data;
 using StudyN.ViewModels;
 using System.ComponentModel;
@@ -69,7 +70,8 @@ namespace StudyN.Views
             newItem.StartTime = start;
             newItem.EndTime = end;
             newItem.Value = 1; //Not sure what "value" is tbh
-            ViewModel.Items.Add(newItem);
+            ViewModel.AddToDataStore(newItem);
+            ViewModel.Items.Add(newItem); //adds to calendar, but not datastore
             Popup.IsOpen = false;
         }
 
