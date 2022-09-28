@@ -17,7 +17,7 @@ namespace StudyN.Models
         public DateTime DueDate { get; set; }
         public int TimeNeeded { get; set; }
         public List<DateTime> StartTimes { get; set; }
-        public List<DateTime> EndTimes { get; set; }   
+        public List<DateTime> EndTimes { get; set; }
 
         public CalendarTasksData Parent { get; set; }
     }
@@ -61,11 +61,11 @@ namespace StudyN.Models
                     Completed = false,
                     Id = 3,
                     Description = "Build a prototype of the feature...",
-                    Type=0,
+                    Type= 0,
                     DueDate = DateTime.Today.AddHours(47).AddMinutes(59),
                     TimeNeeded = 5,
                     StartTimes = { DateTime.Today.AddHours(38) },
-                    EndTimes = { DateTime.Today.AddHours(43)}
+                    EndTimes = { DateTime.Today.AddHours(43) }
                 }
             );
         }

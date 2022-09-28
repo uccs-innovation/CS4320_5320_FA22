@@ -20,9 +20,6 @@
     <MauiXaml Update="Views\HomePage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Views\TaskDetailPage.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
     <MauiXaml Update="Views\TaskPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
