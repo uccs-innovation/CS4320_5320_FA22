@@ -5,7 +5,7 @@ using StudyN.ViewModels;
 
 namespace StudyN.Views
 {
-    //[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TaskPage : ContentPage
     {
         public TaskPage()
@@ -16,14 +16,19 @@ namespace StudyN.Views
 
         private void CellClicked(object sender, DataGridGestureEventArgs e)
         {
-            if(e.Item != null && e.FieldName == "Completed")
+            DataGridView gridView = (DataGridView)sender;
+            if (e.Item != null && e.FieldName == "Completed")
             {
-                DataGridView gridView = (DataGridView)sender;
                 gridView.BeginUpdate();
                 CalendarTask task = (CalendarTask)e.Item;
                 task.Parent.TaskComplete(task);
                 gridView.EndUpdate();
             }
+            /*else if (e.Item != null && e.FieldName != "Completed")
+            {
+                //for transitioning to detail page
+                await Shell.Current.GoToAsync(nameof(TaskDetailPage));
+            }*/
         }
     }
 }

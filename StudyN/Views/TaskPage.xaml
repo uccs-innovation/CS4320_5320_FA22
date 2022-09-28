@@ -7,9 +7,9 @@
              Title="Tasks"
              IconImageSource="grid"
              x:Class="StudyN.Views.TaskPage">
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <ViewModels:TaskDataViewModel />
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
     <dxg:DataGridView ItemsSource="{Binding CalendarTasks}" Tap="CellClicked">
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
