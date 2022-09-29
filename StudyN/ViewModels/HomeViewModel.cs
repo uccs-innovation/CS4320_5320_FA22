@@ -1,14 +1,16 @@
-﻿using StudyN.Models;
-using System.Collections.ObjectModel;
+﻿using StudyN.Common;
 
 namespace StudyN.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {
+        public IcalViewModel Model { get; set; }
         public HomeViewModel()
         {
             Title = "Dashboard";
             //Items = new ObservableCollection<Item>();
+            Model = new IcalViewModel();
+
         }
 
         //public ObservableCollection<Item> Items { get; private set; }

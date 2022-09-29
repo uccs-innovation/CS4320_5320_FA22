@@ -6,8 +6,8 @@
              Title="{Binding Title}"
              IconImageSource="charts">
     <ContentPage.Content>
-        <Grid>
-        <dxc:PieChartView x:Name="chart">
+        <!--<Grid RowDefinitions="Auto,*">-->
+            <!--<dxc:PieChartView x:Name="chart">
             <dxc:PieChartView.Series>
                 <dxc:DonutSeries>
                     <dxc:DonutSeries.Data>
@@ -22,7 +22,8 @@
                         HorizontalPosition="RightOutside"
                         VerticalPosition="Center"/>
             </dxc:PieChartView.Legend>
-        </dxc:PieChartView>
-        </Grid>
+        </dxc:PieChartView>-->
+            <!--</Grid>
+        <Grid>-->
     </ContentPage.Content>
 </ContentPage>

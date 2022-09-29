@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-         xmlns:dxn="clr-namespace:DevExpress.Maui.Navigation;assembly=DevExpress.Maui.Navigation"
          xmlns:local="clr-namespace:StudyN.Views"
          Style="{StaticResource ShellStyle}"
          xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
@@ -18,7 +17,11 @@
         <Tab Title="Add Event" Icon="image2vector">
             <ShellContent ContentTemplate="{DataTemplate local:AddEventPage}" />
         </Tab>
-        
+
+        <Tab Title="Events" Icon="event3266044">
+            <ShellContent ContentTemplate="{DataTemplate local:EventDataGridPage}" />
+        </Tab>
+
         <Tab Title="Tasks" Icon="grid">
             <ShellContent ContentTemplate="{DataTemplate local:TaskPage}"/>
         </Tab>

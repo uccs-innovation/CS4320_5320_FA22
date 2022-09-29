@@ -37,18 +37,40 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\close.svg" />
+	  <None Remove="Resources\Images\event3266044.svg" />
+	  <None Remove="Resources\Images\gmail_logo_wine.svg" />
+	  <None Remove="Resources\Images\google_logo.svg" />
 	  <None Remove="Resources\Images\image2vector.svg" />
 	  <None Remove="Resources\Images\plus_button.png" />
+	  <None Remove="TestData\test.ics" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <COMReference Include="{bed7f4ea-1a96-11d2-8f08-00a0c9a6186d}">
+	    <WrapperTool>tlbimp</WrapperTool>
+	    <VersionMinor>4</VersionMinor>
+	    <VersionMajor>2</VersionMajor>
+	    <Guid>bed7f4ea-1a96-11d2-8f08-00a0c9a6186d</Guid>
+	  </COMReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="TestData\test.ics">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
 	</ItemGroup>
 
 
 	<ItemGroup>
-		<PackageReference Include="DevExpress.Maui.Charts" Version="22.1.4" />
-		<PackageReference Include="DevExpress.Maui.CollectionView" Version="22.1.4" />
-		<PackageReference Include="DevExpress.Maui.Core" Version="22.1.4" />
-		<PackageReference Include="DevExpress.Maui.DataGrid" Version="22.1.4" />
-		<PackageReference Include="DevExpress.Maui.Editors" Version="22.1.4" />
-		<PackageReference Include="DevExpress.Maui.Scheduler" Version="22.1.4" />
+		<PackageReference Include="DevExpress.Maui.Charts" Version="22.1.5" />
+		<PackageReference Include="DevExpress.Maui.CollectionView" Version="22.1.5" />
+		<PackageReference Include="DevExpress.Maui.Core" Version="22.1.5" />
+		<PackageReference Include="DevExpress.Maui.DataGrid" Version="22.1.5" />
+		<PackageReference Include="DevExpress.Maui.Editors" Version="22.1.5" />
+		<PackageReference Include="DevExpress.Maui.Scheduler" Version="22.1.5" />
+		<PackageReference Include="Ical.Net" Version="4.2.0" />
+		<PackageReference Include="Microsoft.Office.Interop.Outlook" Version="15.0.4797.1004" />
 	</ItemGroup>
 
 
@@ -73,6 +95,12 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\AddEventPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EventDataGridPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ImportCalPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

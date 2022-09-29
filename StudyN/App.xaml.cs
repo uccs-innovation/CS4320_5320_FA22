@@ -1,4 +1,5 @@
-﻿using StudyN.Views;
+﻿using StudyN.Services;
+using StudyN.Views;
 using Application = Microsoft.Maui.Controls.Application;
 
 namespace StudyN
@@ -8,7 +9,11 @@ namespace StudyN
         public App()
         {
             InitializeComponent();
-
+            DependencyService.Register<MockDataStore>();
+            DependencyService.Register<NavigationService>();
+            Routing.RegisterRoute(typeof(ImportCalPage).FullName, typeof(ImportCalPage));
+            Routing.RegisterRoute(typeof(SettingsPage).FullName, typeof(SettingsPage));
+            Routing.RegisterRoute(typeof(EventDataGridPage).FullName, typeof(EventDataGridPage));   
             MainPage = new MainPage();
 
         }
