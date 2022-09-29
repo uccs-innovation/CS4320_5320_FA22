@@ -7,8 +7,6 @@
              IconImageSource="charts">
     <ContentPage.Content>
         <!--<Grid RowDefinitions="Auto,*">-->
-        <StackLayout Spacing="5" Padding="15">
-            <Button Text="Import" VerticalOptions="Center" HorizontalOptions="Center" TextColor="Black" Clicked="OnImportClicked"/>
             <!--<dxc:PieChartView x:Name="chart">
             <dxc:PieChartView.Series>
                 <dxc:DonutSeries>
@@ -27,8 +25,5 @@
         </dxc:PieChartView>-->
             <!--</Grid>
         <Grid>-->
-            <Button Text="Load" VerticalOptions="Center" HorizontalOptions="Center" TextColor="Black" Clicked="OnLoadClicked"/>
-            <!--</Grid>-->
-        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

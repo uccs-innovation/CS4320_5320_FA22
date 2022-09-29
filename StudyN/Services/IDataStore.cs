@@ -12,5 +12,6 @@
 
         Task<IEnumerable<T>> GetItemsAsync(bool forceRefresh = false);
         IEnumerable<T> GetItems(bool forceRefresh = false);
+        T GetItem(string id);
     }
 }

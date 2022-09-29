@@ -1,16 +1,20 @@
-﻿using System.Windows.Input;
+﻿using StudyN.Services;
 
 namespace StudyN.ViewModels
 {
     public class SettingsViewModel : BaseViewModel
     {
         public const string ViewName = "SettingsPage";
+        NavigationService NavigationService { get; set; }
         public SettingsViewModel()
         {
             Title = "Settings";
-            OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://www.devexpress.com/xamarin/"));
+            NavigationService = new NavigationService();
         }
 
-        public ICommand OpenWebCommand { get; }
+        async public void OnImport()
+        {
+            await NavigationService.NavigateToAsync<ImportCalViewModel>();
+        }
     }
 }

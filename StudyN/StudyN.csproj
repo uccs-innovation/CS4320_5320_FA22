@@ -37,6 +37,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\close.svg" />
+	  <None Remove="Resources\Images\event3266044.svg" />
+	  <None Remove="Resources\Images\gmail_logo_wine.svg" />
+	  <None Remove="Resources\Images\google_logo.svg" />
 	  <None Remove="Resources\Images\image2vector.svg" />
 	  <None Remove="Resources\Images\plus_button.png" />
 	  <None Remove="TestData\test.ics" />
@@ -91,6 +95,12 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\AddEventPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EventDataGridPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ImportCalPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

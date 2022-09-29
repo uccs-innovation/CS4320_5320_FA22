@@ -12,14 +12,14 @@ namespace StudyN.Common
         /// Uses Ical.Net to load events from .ics file
         /// </summary>
         /// <returns>IUniqueComponentList of Ical.Net.CalendarComponents.CalendarEvent</returns>
-        public static async Task<Ical.Net.Proxies.IUniqueComponentList<Ical.Net.CalendarComponents.CalendarEvent>> ReadICalFile()
+        public static Ical.Net.Proxies.IUniqueComponentList<Ical.Net.CalendarComponents.CalendarEvent> ReadICalFile()
         {
             try
             {
                 var assembly = Assembly.GetExecutingAssembly();
                 using Stream stream = assembly.GetManifestResourceStream(_fileName);
                 using StreamReader reader = new(stream);
-                var result = await reader.ReadToEndAsync();
+                var result = reader.ReadToEnd();
                 var calendar = Calendar.Load(result);
                 return calendar.Events;
             }
