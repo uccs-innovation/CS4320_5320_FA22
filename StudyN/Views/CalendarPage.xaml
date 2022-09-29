@@ -60,11 +60,12 @@
     </Shell.TitleView>
     <ContentPage.Content>
         <StackLayout>
-            <dxsch:DayView x:Name="dayView">
+            <dxsch:DayView x:Name="dayView"
+                           DoubleTap="CalenderDoubleTap">
                 <dxsch:DayView.DataStorage>
                     <dxsch:SchedulerDataStorage>
                         <dxsch:SchedulerDataStorage.DataSource>
-                            <dxsch:DataSource AppointmentsSource="{Binding Items}">
+                            <dxsch:DataSource AppointmentsSource="{Binding CalenderItems}">
                                 <dxsch:DataSource.AppointmentMappings>
                                     <dxsch:AppointmentMappings 
                                     Id="Id" 
@@ -78,11 +79,12 @@
                     </dxsch:SchedulerDataStorage>
                 </dxsch:DayView.DataStorage>
             </dxsch:DayView>
-            <dxsch:WeekView x:Name="weekView">
+            <dxsch:WeekView x:Name="weekView"
+                            DoubleTap="CalenderDoubleTap">
                 <dxsch:WeekView.DataStorage>
                     <dxsch:SchedulerDataStorage>
                         <dxsch:SchedulerDataStorage.DataSource>
-                            <dxsch:DataSource AppointmentsSource="{Binding Items}">
+                            <dxsch:DataSource AppointmentsSource="{Binding CalenderItems}">
                                 <dxsch:DataSource.AppointmentMappings>
                                     <dxsch:AppointmentMappings 
                                     Id="Id" 
@@ -96,11 +98,12 @@
                     </dxsch:SchedulerDataStorage>
                 </dxsch:WeekView.DataStorage>
             </dxsch:WeekView>
-            <dxsch:MonthView x:Name="monthView">
+            <dxsch:MonthView x:Name="monthView"
+                             DoubleTap="CalenderDoubleTap">
                 <dxsch:MonthView.DataStorage>
                     <dxsch:SchedulerDataStorage>
                         <dxsch:SchedulerDataStorage.DataSource>
-                            <dxsch:DataSource AppointmentsSource="{Binding Items}">
+                            <dxsch:DataSource AppointmentsSource="{Binding CalenderItems}">
                                 <dxsch:DataSource.AppointmentMappings>
                                     <dxsch:AppointmentMappings 
                                     Id="Id" 
