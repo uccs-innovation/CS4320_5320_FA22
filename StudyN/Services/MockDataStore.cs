@@ -49,5 +49,10 @@ namespace StudyN.Services
         {
             return items;
         }
+
+        public CalendarEvent GetItem(string id)
+        {
+            return items.FirstOrDefault(s => s.Uid == id);
+        }
     }
 }

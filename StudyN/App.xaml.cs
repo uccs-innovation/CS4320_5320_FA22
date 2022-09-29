@@ -11,6 +11,9 @@ namespace StudyN
             InitializeComponent();
             DependencyService.Register<MockDataStore>();
             DependencyService.Register<NavigationService>();
+            Routing.RegisterRoute(typeof(ImportCalPage).FullName, typeof(ImportCalPage));
+            Routing.RegisterRoute(typeof(SettingsPage).FullName, typeof(SettingsPage));
+            Routing.RegisterRoute(typeof(EventDataGridPage).FullName, typeof(EventDataGridPage));   
             MainPage = new MainPage();
 
         }

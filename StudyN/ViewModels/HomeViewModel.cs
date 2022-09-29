@@ -24,17 +24,5 @@ namespace StudyN.ViewModels
             //    Items.Add(item);
             //}
         }
-
-        // added for testing
-        async public void OnImport()
-        {
-            Model.OnImport();
-        }
-
-        // added for testing
-        async public void OnLoad()
-        {
-            Model.OnLoadEvents();
-        }
     }
 }

@@ -70,12 +70,9 @@ namespace StudyN.Services
         //    await NavigateToPage(demoPage, displayItem);
         //}
 
-        //public static async Task NavigateToPage(Page page, TaskManagerDisplayItem displayItem = null)
-        //{
-        //    if (Shell.GetTitleView(page) == null)
-        //        SetDisplayPageTitleView(page, displayItem);
-
-        //    await Shell.Current.Navigation.PushAsync(page);
-        //}
+        public static async Task NavigateToPage(Page page)
+        {
+            await Shell.Current.Navigation.PushAsync(page);
+        }
     }
 }
