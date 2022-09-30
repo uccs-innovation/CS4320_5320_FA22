@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyN.Views.TaskModifyPage"
-             Title="TaskModifyPage">
+             Title="Task Modify">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
@@ -18,45 +18,41 @@
         </Grid.ColumnDefinitions>
         <BoxView/>
         <Entry
-                    Grid.ColumnSpan="2"
-                    MaxLength="20"
-                    Style="{StaticResource CommonEntryStyle}"
-                    Text="" />
+            Grid.ColumnSpan="2"
+            MaxLength="20"
+            Text="name" />
         <BoxView Grid.Row="1"/>
         <Entry
-                    Grid.ColumnSpan="2"
-                    Grid.Row="1"
-                    MaxLength="200"
-                    Style="{StaticResource CommonEntryStyle}"
-                    Text="Enter Event discription (200 character max)" />
+            Grid.ColumnSpan="2"
+            Grid.Row="1"
+            MaxLength="200"
+            Text="Enter Event discription (200 character max)" />
         <BoxView Grid.Row="2"/>
         <Entry
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    MaxLength="200"
-                    Style="{StaticResource CommonEntryStyle}"
-                    Text="Time Start" />
+            Grid.Row="2"
+            Grid.Column="0"
+            MaxLength="200"
+            Text="Time Start" />
 
         <Entry
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    MaxLength="200"
-                    Style="{StaticResource CommonEntryStyle}"
-                    Text="Time End" />
+            Grid.Row="2"
+            Grid.Column="1"
+            MaxLength="200"
+            Text="Time End" />
 
         <Entry
-                    Grid.Row="3"
-                    Grid.ColumnSpan="2"
-                    MaxLength="10"
-                    Style="{StaticResource CommonEntryStyle}"
-                    Text="MM/DD/YYYY" />
+            Grid.Row="3"
+            Grid.ColumnSpan="2"
+            MaxLength="10"
+            Text="{StaticResource }" />
 
-        <Button 
-                Grid.Row="4"
-                Grid.ColumnSpan="2"
-                Text="Enter New Event"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"/>
+        <Button
+            Grid.Row="4"
+            Grid.ColumnSpan="2"
+            Text="Save Changes"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            Clicked="saveChanges"/>
 
     </Grid>
 </ContentPage>

@@ -25,7 +25,8 @@ namespace StudyN.Views
             }
             else if (e.Item != null)
             {
-                Navigation.PushAsync(new TaskModifyPage());
+                CalendarTask task = (CalendarTask)e.Item;
+                Navigation.PushAsync(new TaskModifyPage(task));
             }
         }
     }
