@@ -23,6 +23,10 @@ namespace StudyN.Views
                 task.Parent.TaskComplete(task);
                 gridView.EndUpdate();
             }
+            else if (e.Item != null)
+            {
+                Navigation.PushAsync(new TaskModifyPage());
+            }
         }
     }
 }
