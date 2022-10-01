@@ -1,5 +1,6 @@
 namespace StudyN.Views;
 using StudyN.Models;
+using StudyN.ViewModels;
 
 public partial class AddTaskPage : ContentPage
 {
@@ -14,10 +15,12 @@ public partial class AddTaskPage : ContentPage
         displayLabel.Text = String.Format("Priority");
     }
 
-    private async void AddTask(object sender, EventArgs e)
+    private async void AddTaskButton(object sender, EventArgs e)
     {
+  
+            //File.WriteAllText(note.Filename, TextEditor.Text);
+            UIGlobal.MainPage.AddTask("YYEEESSS!!!!", new DateTime());
         
-        Routing.RegisterRoute(nameof(Views.AddTaskPage), typeof(Views.AddTaskPage));
-        await Shell.Current.GoToAsync(nameof(AddTaskPage));
+        await Shell.Current.GoToAsync(nameof(TaskPage));
     }
 }

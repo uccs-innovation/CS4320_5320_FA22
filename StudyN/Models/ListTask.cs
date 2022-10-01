@@ -77,6 +77,14 @@ namespace StudyN.Models
             CalendarTasks = new ObservableCollection<ListTask>();
             CompletedTasks = new ObservableCollection<ListTask>();
             GenerateCalendarTasks();
+            UIGlobal.MainPage = this;
         }
     }
+
+    public static class UIGlobal
+    {
+        public static ListTaskData MainPage { get; set; }
+    }
 }
+
+

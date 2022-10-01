@@ -8,7 +8,7 @@
              Title="Add Task">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Clicked="AddTask" IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+        <ToolbarItem Text="Add" Clicked="AddTaskButton" IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
