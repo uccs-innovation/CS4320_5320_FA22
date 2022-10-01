@@ -13,6 +13,7 @@
         <ToolbarItem Text="Add" Clicked="AddButtonClicked" IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
     </ContentPage.ToolbarItems>
     
+    
     <ContentPage.BindingContext>
         <ViewModels:TaskDataViewModel />
     </ContentPage.BindingContext>
