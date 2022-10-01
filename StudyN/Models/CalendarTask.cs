@@ -32,8 +32,20 @@ namespace StudyN.Models
             task = AddTask("HW: Technology Proof of Concept", DateTime.Today);
             task.Description = "Prove your technology works...";
 
-            task = AddTask("HW: Prototype of Key Features", DateTime.Today.AddHours(24));
+            task = AddTask("HW: Full System Use Case Diagram", DateTime.Today.AddDays(1));
+            task.Description = "The first step in designing software is to understand what functionality you will be implementing.";
+
+            task = AddTask("HW: Prototype of Key Features", DateTime.Today.AddDays(2));
             task.Description = "Build a prototype of the feature...";
+
+            task = AddTask("HW: Core Features", DateTime.Today.AddDays(8));
+            task.Description = "\"Weeks of programming can save you hours of planning.\" - Unknown";
+
+            task = AddTask("HW: Future Work", DateTime.Today.AddDays(31));
+            task.Description = "Build more features";
+
+            task = AddTask("HW: Finish the Project", DateTime.Today.AddDays(42));
+            task.Description = "Deliver the MVP";
         }
 
         public CalendarTask AddTask(string name, DateTime dueTime)
@@ -63,6 +75,18 @@ namespace StudyN.Models
                 {
                     task.Completed = true;
                     CompletedTasks.Add(task);
+                    CalendarTasks.Remove(task);
+                    return;
+                }
+            }
+        }
+
+        public void TaskDelete(Guid taskId)
+        {
+            foreach (CalendarTask task in CalendarTasks)
+            {
+                if (task.TaskId == taskId)
+                {
                     CalendarTasks.Remove(task);
                     return;
                 }
