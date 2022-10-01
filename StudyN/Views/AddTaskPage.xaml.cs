@@ -18,9 +18,7 @@ public partial class AddTaskPage : ContentPage
     private async void AddTaskButton(object sender, EventArgs e)
     {
   
-            //File.WriteAllText(note.Filename, TextEditor.Text);
-            UIGlobal.MainPage.AddTask(this.name.Text, this.description.Text, new DateTime(), (int)this.priority.Value);
-
+            UIGlobal.MainPage.AddTask(this.name.Text, this.description.Text, this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds), (int)this.priority.Value);
         await Shell.Current.GoToAsync("..");
     }
 }
