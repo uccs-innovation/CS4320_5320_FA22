@@ -3,9 +3,9 @@
   <PropertyGroup>
     <ActiveDebugFramework>net6.0-android</ActiveDebugFramework>
     <IsFirstTimeProjectOpen>False</IsFirstTimeProjectOpen>
-    <ActiveDebugProfile>Pixel (Android 12.1 - API 32)</ActiveDebugProfile>
+    <ActiveDebugProfile>Pixel 5 - API 32 (Android 12.1 - API 32)</ActiveDebugProfile>
     <SelectedPlatformGroup>Emulator</SelectedPlatformGroup>
-    <DefaultDevice>pixel</DefaultDevice>
+    <DefaultDevice>pixel_5_-_api_32</DefaultDevice>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetPlatformIdentifier)'=='iOS'">
     <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>

@@ -6,6 +6,7 @@ using StudyN.Services;
 //using DevExpress.XamarinAndroid.Scheduler.Visual.Data;
 using StudyN.ViewModels;
 using System.ComponentModel;
+using static Android.Icu.Text.IDNA;
 
 namespace StudyN.Views
 {
@@ -49,10 +50,10 @@ namespace StudyN.Views
 
         void OnAddCalendarEventClicked(object sender, EventArgs args)
         {
-            //Console.WriteLine("hi");
-            Popup.IsOpen = true;
-
-
+            AppointmentEditPage appEditPage = new AppointmentEditPage(DateTime.Today, DateTime.Today, false, this.dayView.DataStorage);
+            Navigation.PushAsync(appEditPage);
+            this.weekView.DataStorage = this.dayView.DataStorage;
+            this.monthView.DataStorage = this.dayView.DataStorage;
         }
 
         void OnPopupAddButtonClicked(object sender, EventArgs args)
@@ -73,6 +74,37 @@ namespace StudyN.Views
             ViewModel.AddToDataStore(newItem);
             ViewModel.Items.Add(newItem); //adds to calendar, but not datastore
             Popup.IsOpen = false;
+        }
+
+        void CalenderDoubleTap(object sender, SchedulerGestureEventArgs args)
+        {
+            if (args.AppointmentInfo == null)
+            {
+                ShowNewEventEdit(args.IntervalInfo);
+                return;
+            }
+            else
+            {
+               AppointmentItem appointment = args.AppointmentInfo.Appointment;
+                ShowEventEdit(appointment);
+            }
+
+        }
+
+        private void ShowNewEventEdit(IntervalInfo info)
+        {
+            AppointmentEditPage appEditPage = new AppointmentEditPage(info.Start, info.End, info.AllDay, this.dayView.DataStorage);
+            Navigation.PushAsync(appEditPage);
+            this.weekView.DataStorage = this.dayView.DataStorage;
+            this.monthView.DataStorage = this.dayView.DataStorage;
+        }
+
+        private void ShowEventEdit(AppointmentItem appointment)
+        {
+            AppointmentEditPage appEditPage = new AppointmentEditPage(appointment, this.dayView.DataStorage);
+            Navigation.PushAsync(appEditPage);
+            this.weekView.DataStorage = this.dayView.DataStorage;
+            this.monthView.DataStorage = this.dayView.DataStorage;
         }
 
         protected override void OnAppearing()
