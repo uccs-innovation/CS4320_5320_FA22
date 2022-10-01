@@ -19,8 +19,8 @@ public partial class AddTaskPage : ContentPage
     {
   
             //File.WriteAllText(note.Filename, TextEditor.Text);
-            UIGlobal.MainPage.AddTask("YYEEESSS!!!!", new DateTime());
-        
-        await Shell.Current.GoToAsync(nameof(TaskPage));
+            UIGlobal.MainPage.AddTask(this.name.Text, this.description.Text, new DateTime(), (int)this.priority.Value);
+
+        await Shell.Current.GoToAsync("..");
     }
 }

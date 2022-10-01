@@ -37,6 +37,7 @@
                 LabelText="Task Name"
                 IsLabelFloating="True"
                 Margin="1"
+                x:Name="name"
             >
             </dxe:TextEdit>
 
@@ -47,6 +48,7 @@
                 IsLabelFloating="True"
                 Grid.Row="1"
                 Margin="1"
+                x:Name="description"
                 >
             </dxe:TextEdit>
 
@@ -57,6 +59,7 @@
                 LabelText="Time Due"
                 IsLabelFloating="True"
                 Margin="1"
+                x:Name="time"
              />
 
             <!--Date Entry box GridRow 3 Spans 1 Column-->
@@ -66,7 +69,9 @@
                           Grid.ColumnSpan="1"
                           LabelText="Date Due"
                           IsLabelFloating="True"
-                          Margin="1"/>
+                          Margin="1"
+                          x:Name="date"
+             />
             
             <!--Time Spent On Task So far Entry box-->
             <dxe:NumericEdit Value="0" DisplayFormat="n0"
@@ -94,7 +99,9 @@
                 Minimum="0"
                 ValueChanged="OnSliderValueChanged" 
                 Grid.Row="4"
-                Grid.ColumnSpan="2"/>
+                Grid.ColumnSpan="2"
+                x:Name="priority"
+                />
             <Label x:Name="displayLabel"
                Text="Priority"
                HorizontalOptions="Center"

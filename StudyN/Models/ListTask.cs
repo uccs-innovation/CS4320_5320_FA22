@@ -5,10 +5,12 @@ namespace StudyN.Models
 {
     public class ListTask
     {
-        public ListTask(string name, DateTime dueTime)
+        public ListTask(string name, string description, DateTime dueTime, int priority)
         {
             this.Name = name;
+            this.Description = description;
             this.DueTime = dueTime;
+            this.Priority = priority;
         }
 
         public bool Completed { get; set; } = false;
@@ -26,19 +28,19 @@ namespace StudyN.Models
     {
         void GenerateCalendarTasks()
         {
-            ListTask task = AddTask("HW: Pitch your Application Idea", DateTime.Today);
+           /* ListTask task = AddTask("HW: Pitch your Application Idea", DateTime.Today);
             task.Description = "Pitch your appilcation idea...";
 
             task = AddTask("HW: Technology Proof of Concept", DateTime.Today);
             task.Description = "Prove your technology works...";
 
             task = AddTask("HW: Prototype of Key Features", DateTime.Today.AddHours(24));
-            task.Description = "Build a prototype of the feature...";
+            task.Description = "Build a prototype of the feature...";*/
         }
 
-        public ListTask AddTask(string name, DateTime dueTime)
+        public ListTask AddTask(string name, string description, DateTime dueTime, int priority)
         {
-            ListTask newTask = new ListTask(name, dueTime);
+            ListTask newTask = new ListTask(name, description, dueTime, priority);
             newTask.Parent = this;
             CalendarTasks.Add(newTask);
             return newTask;
