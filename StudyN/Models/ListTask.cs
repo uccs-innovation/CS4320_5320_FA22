@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace StudyN.Models
 {
-    public class CalendarTask
+    public class ListTask
     {
-        public CalendarTask(string name, DateTime dueTime)
+        public ListTask(string name, DateTime dueTime)
         {
             this.Name = name;
             this.DueTime = dueTime;
@@ -19,14 +19,14 @@ namespace StudyN.Models
         public int CompletionProgress { get; set; } = 0;
         public int TotalTimeNeeded { get; set; } = 0;
         public int Priority { get; set; } = 3;
-        public CalendarTasksData Parent { get; set; } = null;
+        public ListTaskData Parent { get; set; } = null;
     }
 
-    public class CalendarTasksData
+    public class ListTaskData
     {
         void GenerateCalendarTasks()
         {
-            CalendarTask task = AddTask("HW: Pitch your Application Idea", DateTime.Today);
+            ListTask task = AddTask("HW: Pitch your Application Idea", DateTime.Today);
             task.Description = "Pitch your appilcation idea...";
 
             task = AddTask("HW: Technology Proof of Concept", DateTime.Today);
@@ -36,9 +36,9 @@ namespace StudyN.Models
             task.Description = "Build a prototype of the feature...";
         }
 
-        public CalendarTask AddTask(string name, DateTime dueTime)
+        public ListTask AddTask(string name, DateTime dueTime)
         {
-            CalendarTask newTask = new CalendarTask(name, dueTime);
+            ListTask newTask = new ListTask(name, dueTime);
             newTask.Parent = this;
             CalendarTasks.Add(newTask);
             return newTask;
@@ -46,7 +46,7 @@ namespace StudyN.Models
 
         public void RemoveTask(Guid taskId)
         {
-            foreach(CalendarTask task in CalendarTasks)
+            foreach(ListTask task in CalendarTasks)
             {
                 if(task.TaskId == taskId)
                 {
@@ -57,7 +57,7 @@ namespace StudyN.Models
         }
         public void TaskComplete(Guid taskId)
         {
-            foreach (CalendarTask task in CalendarTasks)
+            foreach (ListTask task in CalendarTasks)
             {
                 if (task.TaskId == taskId)
                 {
@@ -69,13 +69,13 @@ namespace StudyN.Models
             }
         }
 
-        public ObservableCollection<CalendarTask> CalendarTasks { get; private set; }
-        private ObservableCollection<CalendarTask> CompletedTasks { get; set; }
+        public ObservableCollection<ListTask> CalendarTasks { get; private set; }
+        private ObservableCollection<ListTask> CompletedTasks { get; set; }
 
-        public CalendarTasksData()
+        public ListTaskData()
         {
-            CalendarTasks = new ObservableCollection<CalendarTask>();
-            CompletedTasks = new ObservableCollection<CalendarTask>();
+            CalendarTasks = new ObservableCollection<ListTask>();
+            CompletedTasks = new ObservableCollection<ListTask>();
             GenerateCalendarTasks();
         }
     }

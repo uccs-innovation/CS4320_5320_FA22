@@ -18,7 +18,7 @@ namespace StudyN.Views
                 gridView.BeginUpdate();
 
                 // Update task
-                CalendarTask task = (CalendarTask)e.Item;
+                ListTask task = (ListTask)e.Item;
                 task.Parent.TaskComplete(task.TaskId);
 
                 gridView.EndUpdate();
