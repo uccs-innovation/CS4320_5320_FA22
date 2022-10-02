@@ -78,8 +78,8 @@ namespace StudyN.Views
 
                 // Delete tasks
                 foreach(CalendarTask task in selectedTasks)
-                {
                     task.Parent.TaskDelete(task.TaskId);
+                {
                 }
 
                 selectedTasks.Clear();
