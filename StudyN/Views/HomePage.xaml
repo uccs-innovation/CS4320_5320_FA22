@@ -23,6 +23,20 @@
                         VerticalPosition="Center"/>
             </dxc:PieChartView.Legend>
         </dxc:PieChartView>
+
+            <BoxView/>
+            <Entry
+                    Grid.ColumnSpan="2"
+                    MaxLength="20"
+                    Style="{StaticResource CommonEntryStyle}"
+                    Text="Enter the link" />
+            <BoxView Grid.Row="1"/>
+            <Button 
+                Grid.Row="4"
+                Grid.ColumnSpan="2"
+                Text="INTEGRATE WITH G CALENDER"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>
