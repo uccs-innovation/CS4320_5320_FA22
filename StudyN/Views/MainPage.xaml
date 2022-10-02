@@ -26,6 +26,10 @@
         <Tab Title="Settings" Icon="info">
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
+
+        <Tab Title="Integrate" Icon="info">
+            <ShellContent ContentTemplate="{DataTemplate local:HomePage}" />
+        </Tab>
     </TabBar>
 
 </Shell>
