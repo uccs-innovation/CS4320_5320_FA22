@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using DevExpress.Maui.DataGrid;
 using StudyN.Models;
 
@@ -158,14 +159,15 @@ namespace StudyN.Views
         {
             // Task we need to edit...
             ListTask task = (ListTask)e.Item;
-
+            UIGlobal.ToEdit = task;
             // Get it in here
-            await Shell.Current.GoToAsync(nameof(AddEventPage));
+            await Shell.Current.GoToAsync(nameof(AddTaskPage));
         }
 
         //Function for the add task button to bring to new task page
         
         private async void AddButtonClicked(object sender, EventArgs e) {
+            UIGlobal.ToEdit = null;
             await Shell.Current.GoToAsync(nameof(AddTaskPage));
 
         }

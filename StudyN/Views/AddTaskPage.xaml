@@ -8,7 +8,6 @@
              Title="Add Task">
 
     <ContentPage.ToolbarItems>
-
         <ToolbarItem Text="Add" Clicked="AddTaskButton" IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
     </ContentPage.ToolbarItems>
 
@@ -104,13 +103,16 @@
                 Maximum="5"
                 Minimum="0"
                 ValueChanged="OnSliderValueChanged" 
+                Grid.Row="4"
                 Grid.ColumnSpan="2"
                 x:Name="priority"
                 />
             <Label x:Name="displayLabel"
                Text="Priority"
-               Grid.Row="4"
-               Padding="15"
+               HorizontalOptions="Center"
+               VerticalOptions="Center" 
+               Grid.Row="5"
+               Grid.ColumnSpan="2"
                />
             <!--Buttons for completing/deleting tasks-->
             <Button 
@@ -124,7 +126,7 @@
 
             <Button
                 Text="Complete Task"
-                Grid.Row="6"
+                Grid.Row="7"
                 Grid.Column="1"
                 CornerRadius="7"
                 Margin="1"

@@ -98,6 +98,7 @@ namespace StudyN.Models
     public static class UIGlobal
     {
         public static ListTaskData MainPage { get; set; }
+        public static ListTask ToEdit { get; set; }
     }
 }
 

@@ -7,6 +7,10 @@ public partial class AddTaskPage : ContentPage
 	public AddTaskPage()
 	{
 		InitializeComponent();
+        if (UIGlobal.ToEdit != null)
+        {
+            LoadValues();
+        }
 	}
 
     //toolbar check button for adding task
@@ -33,8 +37,16 @@ public partial class AddTaskPage : ContentPage
 
     private async void AddTaskButton(object sender, EventArgs e)
     {
-  
-            UIGlobal.MainPage.AddTask(this.name.Text, this.description.Text, this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds), (int)this.priority.Value);
+        UIGlobal.MainPage.AddTask(this.name.Text, this.description.Text, this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds), (int)this.priority.Value);
+
         await Shell.Current.GoToAsync("..");
+    }
+    void LoadValues()
+    {
+        this.name.Text = UIGlobal.ToEdit.Name;
+        this.description.Text = UIGlobal.ToEdit.Description;
+        this.date.Date.Value.Equals(UIGlobal.ToEdit.DueTime.Date);
+        this.time.Time.Value.Equals(UIGlobal.ToEdit.DueTime.TimeOfDay);
+        this.priority.Value.Equals(UIGlobal.ToEdit.Priority);
     }
 }
