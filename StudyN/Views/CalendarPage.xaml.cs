@@ -6,7 +6,6 @@ using StudyN.Services;
 //using DevExpress.XamarinAndroid.Scheduler.Visual.Data;
 using StudyN.ViewModels;
 using System.ComponentModel;
-using static Android.Icu.Text.IDNA;
 
 namespace StudyN.Views
 {
@@ -24,6 +23,10 @@ namespace StudyN.Views
 
         CalendarViewModel ViewModel { get; }
 
+        void OnClickOpenHowToUse(object sender, EventArgs args)
+        {
+            Popup.IsOpen = true;
+        }
 
         void OnDailyClicked(object sender, EventArgs args)
         {
@@ -56,24 +59,16 @@ namespace StudyN.Views
             this.monthView.DataStorage = this.dayView.DataStorage;
         }
 
-        void OnPopupAddButtonClicked(object sender, EventArgs args)
+        void CalenderSingleTap(object sender, SchedulerGestureEventArgs args)
         {
-            Item newItem = new Item();
-            newItem.Id = "5"; //TODO generate unique id's on each add
-            newItem.Text = Description.Text;
-            newItem.Description = Description.Text;
-
-            string[] sstring = StartTime.Text.Split('/');
-            string[] estring = EndTime.Text.Split('/');
-
-            DateTime start = new DateTime(Int16.Parse(sstring[0]), Int16.Parse(sstring[1]), Int16.Parse(sstring[2]), Int16.Parse(sstring[3]), Int16.Parse(sstring[4]), Int16.Parse(sstring[5])); //Should probably find a datetimepicker library
-            DateTime end = new DateTime(Int16.Parse(estring[0]), Int16.Parse(estring[1]), Int16.Parse(estring[2]), Int16.Parse(estring[3]), Int16.Parse(estring[4]), Int16.Parse(estring[5])); 
-            newItem.StartTime = start;
-            newItem.EndTime = end;
-            newItem.Value = 1; //Not sure what "value" is tbh
-            ViewModel.AddToDataStore(newItem);
-            ViewModel.Items.Add(newItem); //adds to calendar, but not datastore
-            Popup.IsOpen = false;
+            if (args.AppointmentInfo != null)
+            {
+                AppointmentItem appointment = args.AppointmentInfo.Appointment;
+                AppointmentDetailPage appDetailPage = new AppointmentDetailPage(appointment, this.dayView.DataStorage);
+                Navigation.PushAsync(appDetailPage);
+                this.weekView.DataStorage = this.dayView.DataStorage;
+                this.monthView.DataStorage = this.dayView.DataStorage;
+            }
         }
 
         void CalenderDoubleTap(object sender, SchedulerGestureEventArgs args)
@@ -110,7 +105,6 @@ namespace StudyN.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ViewModel.OnAppearing();
         }
     }
 }

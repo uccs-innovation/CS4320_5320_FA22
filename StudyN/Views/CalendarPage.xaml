@@ -19,14 +19,14 @@
             HorizontalOptions="Center"
             Spacing="5">
             
-            <Button Text="Add calendar event"
+            <Button Text="?"
             VerticalOptions="Center"
             HorizontalOptions="Center"
             BorderColor="Black"
-            BorderWidth="1"
+            BorderWidth=".25"
             TextColor="Black"
             BackgroundColor="White"
-            Clicked="OnAddCalendarEventClicked"
+            Clicked="OnClickOpenHowToUse"
             ></Button>
             
             <Button Text="Daily"
@@ -61,6 +61,7 @@
     <ContentPage.Content>
         <StackLayout>
             <dxsch:DayView x:Name="dayView"
+                           Tap="CalenderSingleTap"
                            DoubleTap="CalenderDoubleTap">
                 <dxsch:DayView.DataStorage>
                     <dxsch:SchedulerDataStorage>
@@ -80,6 +81,7 @@
                 </dxsch:DayView.DataStorage>
             </dxsch:DayView>
             <dxsch:WeekView x:Name="weekView"
+                            Tap="CalenderSingleTap"
                             DoubleTap="CalenderDoubleTap">
                 <dxsch:WeekView.DataStorage>
                     <dxsch:SchedulerDataStorage>
@@ -99,6 +101,7 @@
                 </dxsch:WeekView.DataStorage>
             </dxsch:WeekView>
             <dxsch:MonthView x:Name="monthView"
+                             Tap="CalenderSingleTap"
                              DoubleTap="CalenderDoubleTap">
                 <dxsch:MonthView.DataStorage>
                     <dxsch:SchedulerDataStorage>
@@ -120,37 +123,15 @@
 
             <dxco:DXPopup x:Name="Popup">
                 <StackLayout WidthRequest="300" BackgroundColor="AliceBlue">
-                    <Label Text="Add a calendar event!"
+                    <Label Text="How to use the Calender Page"
                         TextColor="{StaticResource NormalText}"
                         Margin="5, 5"/>
-
-                    <Entry x:Name="Description"
-                        MaxLength="200"
-                        Style="{StaticResource CommonEntryStyle}"
-                        Placeholder="Description"
-                        Text="" />
-
-                    <Label Text="Start Time YYYY/MM/DD/HH/MM/SS "></Label>
-                    <Entry x:Name="StartTime"
-                        MaxLength="200"
-                        Style="{StaticResource CommonEntryStyle}"
-                        Placeholder="YYYY/MM/DD/HH/MM/SS"
-                        Text="" />
-
-                    <Label Text="End Time YYYY/MM/DD/HH/MM/SS "></Label>
-                    <Entry x:Name="EndTime"
-                        MaxLength="200"
-                        Style="{StaticResource CommonEntryStyle}"
-                        Placeholder="YYYY/MM/DD/HH/MM/SS" />
-
-                    <Button Text="Add"
-                        VerticalOptions="Center"
-                        HorizontalOptions="Center"
-                        BorderColor="Black"
-                        BorderWidth="1"
-                        TextColor="Black"
-                        BackgroundColor="White"
-                        Clicked="OnPopupAddButtonClicked"></Button>
+                    <Label Text="To view a Daily View, click the Daily button."/>
+                    <Label Text="To view a Weekly View, click the Weekly button."/>
+                    <Label Text="To view a Monthly View, click the Monthly button."/>
+                    <Label Text="To create a new appointment, double tap a time block."/>
+                    <Label Text="To edit an appointment, double tap an existing appointment."/>
+                    <Label Text="To view an appointment to delete it, single tap an existing appoint."/>
 
                 </StackLayout>
             </dxco:DXPopup>

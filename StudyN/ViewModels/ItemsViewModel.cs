@@ -10,7 +10,7 @@ namespace StudyN.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
         public DateTime StartDate { get { return DateTime.Today; } }
-        public IReadOnlyList<Item> MedicalAppointments { get => data.CalenderItems; }
+        public IReadOnlyList<Item> EventAppointments { get => data.CalenderItems; }
 
         public ItemsViewModel()
         {
