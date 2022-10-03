@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.ComponentModel.DataAnnotations;
 
 namespace StudyN.ViewModels
 {
@@ -88,8 +89,27 @@ namespace StudyN.ViewModels
         // when data is able to get saved to a database, this will, and bring back to task page
         private async void OnClickSave(object sender, EventArgs e)
         {
-            Routing.RegisterRoute(nameof(Views.NewTaskPage), typeof(Views.NewTaskPage));
-            await Shell.Current.GoToAsync(nameof(Views.NewTaskPage));
+            // validate before saving
+            if (Validation() == true)
+            {
+                // save data
+                /*
+                MapDueDate();
+                var newTask = new CalendarTask()
+                {
+                    Id = CalendarTask.LastId() + 1,
+                    Completed = false,
+                    Name = Name,
+                    Priority = NewPriority,
+                    Description = Description,
+                    TimeNeeded = TimeNeeded,
+                    DueDate = finalDueDate
+                };
+                */
+                // go back to task page
+                Routing.RegisterRoute(nameof(Views.NewTaskPage), typeof(Views.NewTaskPage));
+                await Shell.Current.GoToAsync(nameof(Views.NewTaskPage));
+            }
         }
     }
 }
