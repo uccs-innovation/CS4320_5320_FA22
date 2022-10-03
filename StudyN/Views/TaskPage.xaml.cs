@@ -160,7 +160,7 @@ namespace StudyN.Views
             CalendarTask task = (CalendarTask)e.Item;
 
             // Get it in here
-            await Shell.Current.GoToAsync(nameof(AddEventPage));
+            await Shell.Current.GoToAsync(nameof(AddTaskPage));
         }
 
         //Function for the add task button to bring to new task page

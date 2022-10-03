@@ -24,6 +24,8 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+
             </Grid.RowDefinitions>
             <!--Grid column definitions-->
             <Grid.ColumnDefinitions>
@@ -75,7 +77,7 @@
                 Value="0" DisplayFormat="n0"
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
-                LabelText="Time Completed"
+                LabelText="Time Spent On Task"
                 IsLabelFloating="True"
                 Margin="1"/>
 
@@ -85,7 +87,7 @@
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
                 Grid.Column="1"
-                LabelText="Time To Completion"
+                LabelText="Time Needed To Do Task"
                 IsLabelFloating="True"
                 Margin="1"/>
 
@@ -118,6 +120,14 @@
                 CornerRadius="7"
                 Margin="1"
                 Clicked="OnDeleteTaskClicked"/>
+
+            <Button
+                Text="Save Task"
+                Grid.Row="7"
+                Grid.ColumnSpan="2"
+                CornerRadius="7"
+                Margin="1"
+                Clicked="OnSaveTaskClicked"/>
 
 
 
