@@ -1,9 +1,20 @@
-namespace StudyN.Views;
+using StudyN.ViewModels;
 
-public partial class NewTaskPage : ContentPage
+namespace StudyN.Views
 {
-	public NewTaskPage()
-	{
-		InitializeComponent();
-	}
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class NewTaskPage : ContentPage
+    {
+        public NewTaskPage()
+        {
+            InitializeComponent();
+            BindingContext = new NewTaskViewModel();
+        }
+
+        private async void OnClickBack()
+        {
+            //Routing.RegisterRoute(nameof(Views.TaskPage))typeof(Views.TaskPage);
+            await Shell.Current.GoToAsync(nameof(Views.TaskPage));
+        }
+    }
 }
