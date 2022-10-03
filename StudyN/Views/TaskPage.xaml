@@ -11,7 +11,7 @@
         <ViewModels:TaskDataViewModel />
     </ContentPage.BindingContext>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="+ADD" Command="{Binding OnClickAdd}"/>
+        <ToolbarItem Text="+ADD" Command="{Binding AddCommand}"/>
     </ContentPage.ToolbarItems>
     <dxg:DataGridView ItemsSource="{Binding CalendarTasks}" Tap="CellClicked">
         <!--Set the Columns to use.-->

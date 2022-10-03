@@ -6,7 +6,7 @@
              x:Class="StudyN.Views.NewTaskPage"
              Title="New Task">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Back" Command="{Binding OnClickBack}"/>
+        <ToolbarItem Text="Back" Command="{Binding BackCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <dxdf:DataFormView x:Name="dataForm" DataObject="{Binding .}" ContentPadding="4" Margin="12">
@@ -25,5 +25,5 @@
         </dxdf:DataFormView>
     </ContentPage.Content>
     <dxco:SimpleButton Text="Add Task" TextColor="White" BorderThickness="1" BorderColor="Black"
-                       BackgroundColor="BlueViolet" Clicked ="OnClickSave"/>
+                       BackgroundColor="BlueViolet" Clicked="OnClickSave"/>
 </ContentPage>

@@ -12,9 +12,12 @@ namespace StudyN.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<CalendarTask> CalendarTasks { get => data.CalendarTasks; }
 
+        public Command AddCommand { get; }
+
         public TaskDataViewModel()
         {
             data = new CalendarTasksData();
+            AddCommand = new Command(OnClickAdd);
         }
 
         protected void RaisePropertyChanged(string name)
@@ -23,6 +26,12 @@ namespace StudyN.ViewModels
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
+        }
+
+        async void OnClickAdd(object sender)
+        {
+            Routing.RegisterRoute(nameof(Views.NewTaskPage), typeof(Views.NewTaskPage));
+            await Shell.Current.GoToAsync(nameof(Views.NewTaskPage));
         }
     }
 }

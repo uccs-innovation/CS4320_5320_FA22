@@ -15,6 +15,7 @@ namespace StudyN.ViewModels
         private DateTime dueTime;
         private DateTime finalDueDate;
         private Priority priority;
+        public Command BackCommand { get; }
 
         
 
@@ -27,6 +28,7 @@ namespace StudyN.ViewModels
             dueDate = DateTime.Today.AddHours(24);
             dueTime = DateTime.Today.AddHours(24);
             priority = Priority.Normal;
+            BackCommand = new Command(OnClickBack);
         }
 
         public string Name
@@ -110,6 +112,11 @@ namespace StudyN.ViewModels
                 Routing.RegisterRoute(nameof(Views.NewTaskPage), typeof(Views.NewTaskPage));
                 await Shell.Current.GoToAsync(nameof(Views.NewTaskPage));
             }
+        }
+        async void OnClickBack(object sender)
+        {
+            Routing.RegisterRoute(nameof(Views.TaskPage), typeof(Views.TaskPage));
+            await Shell.Current.GoToAsync(nameof(Views.TaskPage));
         }
     }
 }
