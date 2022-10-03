@@ -7,6 +7,15 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Back" Command="{Binding OnClickBack}"/>
     </ContentPage.ToolbarItems>
-    <VerticalStackLayout>
-    </VerticalStackLayout>
+    <ContentPage.Content>
+        <dxdf:DataFormView x:Name="dataForm" EditorLabelWidth="40" EditorLabelColor="Gray"
+                           GroupHeaderBackgroundColor="LightGray" GroupHeaderTextColor="Black">
+            <dxdf:DataFormTextItem InplaceLabelText="Title" FieldName="Name" IsVisible="False"></dxdf:DataFormTextItem>
+            <dxdf:DataFormComboBoxItem InplaceLabelText="Priority" FieldName="NewPriority" IsVisible="False"></dxdf:DataFormComboBoxItem>
+            <dxdf:DataFormTextItem InplaceLabelText="Description" FieldName="Description" IsVisible="False"></dxdf:DataFormTextItem>
+            <dxdf:DataFormTextItem InplaceLabelText="Time Needed" FieldName="TimeNeeded" IsVisible="False"></dxdf:DataFormTextItem>
+            <dxdf:DataFormDateItem InplaceLabelText="Due Date" FieldName="DueDate" IsVisible="False"></dxdf:DataFormDateItem>
+            <dxdf:DataFormTimeItem InplaceLabelText="Due Time" FieldName="DueTime" IsVisible="False"></dxdf:DataFormTimeItem>
+        </dxdf:DataFormView>
+    </ContentPage.Content>
 </ContentPage>

@@ -11,6 +11,7 @@ namespace StudyN.ViewModels
         private string description;
         private int timeNeeded;
         private DateTime dueDate;
+        private DateTime dueTime;
         private Priority priority;
 
         
@@ -22,6 +23,7 @@ namespace StudyN.ViewModels
             description = null;
             timeNeeded = 0;
             dueDate = DateTime.Today.AddHours(24);
+            dueTime = DateTime.Today.AddHours(24);
             priority = Priority.Normal;
         }
 
@@ -49,11 +51,16 @@ namespace StudyN.ViewModels
             set => SetProperty(ref dueDate, value);
         }
 
+        public DateTime DueTime
+        {
+            get => dueTime;
+            set => SetProperty(ref dueTime, value);
+        }
+
         public virtual Priority NewPriority
         {
             get => priority;
             set => SetProperty(ref priority, value);
         }
-
     }
 }
