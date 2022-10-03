@@ -1,28 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dxdf="clr-namespace:DevExpress.Maui.DataForm;assembly=DevExpress.Maui.Editors"
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
              x:Class="StudyN.Views.HomePage"
              Title="{Binding Title}"
              IconImageSource="charts">
     <ContentPage.Content>
         <Grid>
-        <dxc:PieChartView x:Name="chart">
-            <dxc:PieChartView.Series>
-                <dxc:DonutSeries>
-                    <dxc:DonutSeries.Data>
-                        <dxc:PieSeriesDataAdapter DataSource="{Binding Items}"
-                                              LabelDataMember="Text"
-                                              ValueDataMember="Value"/>
-                    </dxc:DonutSeries.Data>
-                </dxc:DonutSeries>
-            </dxc:PieChartView.Series>
-            <dxc:PieChartView.Legend>
-                <dxc:Legend Orientation="TopToBottom"
-                        HorizontalPosition="RightOutside"
-                        VerticalPosition="Center"/>
-            </dxc:PieChartView.Legend>
-        </dxc:PieChartView>
+            <Grid RowDefinitions="0,*,Auto">
+                <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto" Padding="20,15,20,15" RowSpacing="10">
+                    <dxdf:DataFormView x:Name="dataForm" DataObject="{Binding .}" CommitMode="PropertyChanged" ContentPadding="0">
+
+                        <dxdf:DataFormTextItem InplaceLabelText="Link to your G cal" 
+                                           FieldName="File Name"
+                                           IsLabelVisible="False" />
+                    </dxdf:DataFormView>
+                </Grid>
+
+
+
+                <Button 
+                Grid.Row="1"
+                Grid.ColumnSpan="1"
+                Text="SUBMIT"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"/>
+            </Grid>
         </Grid>
     </ContentPage.Content>
 </ContentPage>
