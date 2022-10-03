@@ -27,7 +27,7 @@ namespace StudyN.Views
 
         private async void OnClickAdd(object sender, EventArgs e)
         {
-            //Routing.RegisterRoute(nameof(Views.NewTaskPage))typeof(Views.NewTaskPage);
+            Routing.RegisterRoute(nameof(Views.NewTaskPage), typeof(Views.NewTaskPage));
             await Shell.Current.GoToAsync(nameof(Views.NewTaskPage));
         }
     }

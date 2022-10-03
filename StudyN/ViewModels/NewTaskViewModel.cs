@@ -12,6 +12,7 @@ namespace StudyN.ViewModels
         private int timeNeeded;
         private DateTime dueDate;
         private DateTime dueTime;
+        private DateTime finalDueDate;
         private Priority priority;
 
         
@@ -63,9 +64,31 @@ namespace StudyN.ViewModels
             set => SetProperty(ref priority, value);
         }
 
+        private void MapDueDate()
+        {
+            finalDueDate = DateTime.Parse(dueDate.ToString("yyyy-MM-dd") + " " + dueTime.TimeOfDay.ToString());
+        }
+
+        private bool Validation()
+        {
+            if(name == null)
+            {
+                return false;
+            }else if (description == null)
+            {
+                return false;
+            }else if (timeNeeded <= 0)
+            {
+                return false;
+            }
+            else
+                return true;
+        }
+
+        // when data is able to get saved to a database, this will, and bring back to task page
         private async void OnClickSave(object sender, EventArgs e)
         {
-            //Routing.RegisterRoute(nameof(Views.NewTaskPage))typeof(Views.NewTaskPage);
+            Routing.RegisterRoute(nameof(Views.NewTaskPage), typeof(Views.NewTaskPage));
             await Shell.Current.GoToAsync(nameof(Views.NewTaskPage));
         }
     }
