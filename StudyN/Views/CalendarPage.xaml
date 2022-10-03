@@ -44,13 +44,14 @@
     </Shell.TitleView>
     <ContentPage.Content>
         <StackLayout>
-            <dxsch:DayView x:Name="dayView"
-                           Tap="CalendarTap_FromDayview">
+            <dxsch:DayView x:Name="dayView"                           
+                           Tap="Handle_onCalendarTap_FromDayView">
                 <dxsch:DayView.DataStorage>
                     <dxsch:SchedulerDataStorage x:Name="dayviewStorage">
                         <dxsch:SchedulerDataStorage.DataSource>
                             <dxsch:DataSource AppointmentsSource="{Binding UserEven}"
-                                              AppointmentLabelsSource="{Binding AppointmentTypes}">
+                                              AppointmentLabelsSource="{Binding AppointmentTypes}"
+                                              AppointmentStatusesSource="{Binding AppointmentStatuses}">
                                 <dxsch:DataSource.AppointmentMappings>
                                     <dxsch:AppointmentMappings 
                                     Id="Id"
@@ -58,7 +59,11 @@
                                     End="EndTime" 
                                     Subject="Subject"
                                     LabelId="LabelId"
-                                    Location="Location"/>
+                                    Location="Location"
+                                    Reminder="ReminderInfo"
+                                    RecurrenceInfo="RecurrenceInfo" 
+                                    StatusId="StatusId"
+                                    />
                                 </dxsch:DataSource.AppointmentMappings>
                                 <dxsch:DataSource.AppointmentLabelMappings>
                                     <dxsch:AppointmentLabelMappings 
@@ -72,7 +77,7 @@
                 </dxsch:DayView.DataStorage>
             </dxsch:DayView>
             <dxsch:WeekView x:Name="weekView"
-                            Tap="CalendarTap_FromWeekview">
+                            Tap="Handle_onCalendarTap_FromWeekView">
                 <dxsch:WeekView.DataStorage>
                     <dxsch:SchedulerDataStorage x:Name="weekviewStorage">
                         <dxsch:SchedulerDataStorage.DataSource>
@@ -93,7 +98,8 @@
                     </dxsch:SchedulerDataStorage>
                 </dxsch:WeekView.DataStorage>
             </dxsch:WeekView>
-            <dxsch:MonthView x:Name="monthView">
+            <dxsch:MonthView x:Name="monthView"
+                             Tap="Handle_onCalendarTap_FromMonthView">
                 <dxsch:MonthView.DataStorage>
                     <dxsch:SchedulerDataStorage>
                         <dxsch:SchedulerDataStorage.DataSource>

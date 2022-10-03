@@ -11,8 +11,12 @@ namespace StudyN.Models
         public DateTime EndTime { get; set; }
         public string Subject { get; set; }
         public int LabelId { get; set; }
-        public string Location { get; set; }
+        public string Location { get; set; }        
+        public int StatusId { get; set; }
+        public string RecurrenceInfo { get; set; }
+        public string ReminderInfo { get; set; }
     }
+
 
     public class UserEventsType
     {
@@ -21,11 +25,19 @@ namespace StudyN.Models
         public Color Color { get; set; }
     }
 
+    public class ApptStatus
+    {
+        public int Id { get; set; }
+        public string Caption { get; set; }
+        public Color Color { get; set; }
+    }
+
+
     public class AppData
     {
         public static DateTime BaseDate = DateTime.Today;
 
-        public static string[] AppointmentTypes = { "Event", "Appointment", "Class", "Assignment", "Free Time", "Exam", "Office Hours", "Work"};
+        public static string[] AppointmentTypes = { "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work"};
         public static Color[] AppointmentTypeColors = { Color.FromHex("#a8d5ff"),   // periwinkle blue
                                                         Color.FromHex("#c2f49d"),   // lime                                                        
                                                         Color.FromHex("#FCC7FF"),   // orchid
@@ -34,9 +46,15 @@ namespace StudyN.Models
                                                         Color.FromHex("FDD5B1"),    // apricot
                                                         Color.FromHex("#FFC7D8"),   // salmon                                                         
                                                         Color.FromHex("#dfcfe9") };   // lavendar
-                                                        //Color.FromHex("#c8f4ff") }; // cornflower blue //save color if needed later
-                                                       
+                                                                                      //Color.FromHex("#c8f4ff") }; // cornflower blue //save color if needed later
 
+        public static string[] AppointmentStatuses = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
+        public static Color[] AppointmentStatusColors = { Color.FromHex("00FF80"),   // light green
+                                                          Color.FromHex("#FF3333"),  // red                                                        
+                                                          Color.FromHex("FF33FF"),   // magenta
+                                                          Color.FromHex("#FFFF00"),  // yellow
+                                                          Color.FromHex("#00FFFF") };// cyan
+                                                                                                                 
         //Calls to the things that we are going to do
         public static string[] User = { "Soccer ", "Math Class", "CS Class",
                                                 "going out to hike", "Sleeping", "English",
@@ -84,6 +102,21 @@ namespace StudyN.Models
             Labels = result;
         }
 
+        void CreateStatuses()
+        {
+            ObservableCollection<ApptStatus> result = new ObservableCollection<ApptStatus>();
+            int count = AppointmentStatuses.Length;
+            for (int i = 0; i < count; i++)
+            {
+                ApptStatus appointmentStatus = new ApptStatus();
+                appointmentStatus.Id = i;
+                appointmentStatus.Caption = AppointmentStatuses[i];
+                appointmentStatus.Color = AppointmentStatusColors[i];
+                result.Add(appointmentStatus);
+            }
+            Statuses = result;
+        }
+
         UserEvents CreateUserAppointment(int appointmentId, string patientName,
                                                     DateTime start, TimeSpan duration, int room)
         {
@@ -93,18 +126,20 @@ namespace StudyN.Models
             userAppEvent.EndTime = start.Add(duration);
             userAppEvent.Subject = patientName;
             userAppEvent.LabelId = Labels[rnd.Next(0, 5)].Id;
-            if (userAppEvent.LabelId != 3)
-                userAppEvent.Location = string.Format("{0}", room);
+            userAppEvent.StatusId = Statuses[rnd.Next(0, 5)].Id;            
+            userAppEvent.Location = string.Format("{0}", room);
             return userAppEvent;
         }
 
         public ObservableCollection<UserEvents> UserEven { get; private set; }
         public ObservableCollection<UserEventsType> Labels { get; private set; }
+        public ObservableCollection<ApptStatus> Statuses { get; private set; }
 
 
         public AppData()
         {
             CreateLabels();
+            CreateStatuses();
             CreateUserEvents();
         }
     }

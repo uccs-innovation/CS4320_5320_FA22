@@ -53,7 +53,7 @@ namespace StudyN.Views
             ViewModel.OnAppearing();
         }
 
-        private void CalendarTap_FromDayview(object sender, SchedulerGestureEventArgs e)
+        private void Handle_onCalendarTap_FromDayView(object sender, SchedulerGestureEventArgs e)
         {
             if (e.AppointmentInfo == null)
             {
@@ -79,7 +79,7 @@ namespace StudyN.Views
 
         // estep: I know there must be a better way to do this, but I just want to try it
         //        since it won't let me use the same storage name for both SchedulerDataStorage objects
-        private void CalendarTap_FromWeekview(object sender, SchedulerGestureEventArgs e)
+        private void Handle_onCalendarTap_FromWeekView(object sender, SchedulerGestureEventArgs e)
         {
             if (e.AppointmentInfo == null)
             {
@@ -101,6 +101,11 @@ namespace StudyN.Views
             AppointmentEditPage appEditPage = new AppointmentEditPage(info.Start, info.End,
                                                                      info.AllDay, this.weekviewStorage);
             Navigation.PushAsync(appEditPage);
+        }
+
+        private void Handle_onCalendarTap_FromMonthView(object sender, SchedulerGestureEventArgs e)
+        {
+            //OnDailyClicked(sender, e); // estepanek: not sure if this is causing the devexpress.maui.navigation assembly not found error, because it seems to go away when I comment this out
         }
 
         //View of events 
