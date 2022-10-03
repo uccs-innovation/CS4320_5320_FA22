@@ -12,7 +12,7 @@
     </ContentPage.BindingContext>
     <dxg:DataGridView ItemsSource="{Binding Events}">
         <dxg:DataGridView.Columns>
-            <dxg:TemplateColumn FieldName="Summary" Caption="Event" MinWidth="200">
+            <dxg:TemplateColumn FieldName="Summary" Caption="Event Summary" MinWidth="250">
                 <dxg:TemplateColumn.DisplayTemplate>
                     <DataTemplate>
                         <Grid VerticalOptions="Center" Padding="15, 0, 0, 0" RowDefinitions="Auto, Auto, Auto">
@@ -29,15 +29,39 @@
                 </dxg:TemplateColumn.DisplayTemplate>
             </dxg:TemplateColumn>
             <dxg:TextColumn FieldName="Description"
-                            MinWidth="200" VerticalContentAlignment="Center"/>
+                            MinWidth="250" VerticalContentAlignment="Center"/>
             <dxg:TextColumn FieldName="Start"
                             MinWidth="150" VerticalContentAlignment="Center"/>
             <dxg:TextColumn FieldName="End"
                             MinWidth="150" VerticalContentAlignment="Center"/>
-            <dxg:TextColumn FieldName="LastModified"
-                            MinWidth="150" VerticalContentAlignment="Center"/>
-            <dxg:TextColumn FieldName="Created"
-                            MinWidth="150" VerticalContentAlignment="Center"/>
+            <dxg:TemplateColumn FieldName="Recurrence" Caption="Event Recurrence" MinWidth="250">
+                <dxg:TemplateColumn.DisplayTemplate>
+                    <DataTemplate>
+                        <Grid VerticalOptions="Center" Padding="15,0,0,0" RowDefinitions="Auto, Auto, Auto">
+                            <Label Text="{Binding Item.RecurrenceRulesBy, StringFormat='{0}'}"
+                                FontSize="Small" TextColor="{DynamicResource GridCellFontColor}" 
+                                Grid.Row="0"/>
+                            <Label Text="{Binding Item.RecurrenceRulesCountUntil, StringFormat='{0}'}"
+                                FontSize="Small" TextColor="{DynamicResource GridCellFontColor}" 
+                                Grid.Row="2"/>
+                        </Grid>
+                    </DataTemplate>
+                </dxg:TemplateColumn.DisplayTemplate>
+            </dxg:TemplateColumn>
+            <dxg:TemplateColumn FieldName="Data" Caption="Event Data" MinWidth="250">
+                <dxg:TemplateColumn.DisplayTemplate>
+                    <DataTemplate>
+                        <Grid VerticalOptions="Center" Padding="15,0,0,0" RowDefinitions="Auto, Auto, Auto">
+                            <Label Text="{Binding Item.Created, StringFormat='Created: {0}'}"
+                                FontSize="Small" TextColor="{DynamicResource GridCellFontColor}" 
+                                Grid.Row="0"/>
+                            <Label Text="{Binding Item.LastModified, StringFormat='Last Modified: {0}'}"
+                                FontSize="Small" TextColor="{DynamicResource GridCellFontColor}" 
+                                Grid.Row="2"/>
+                        </Grid>
+                    </DataTemplate>
+                </dxg:TemplateColumn.DisplayTemplate>
+            </dxg:TemplateColumn>
         </dxg:DataGridView.Columns>
     </dxg:DataGridView>
 </ContentPage>

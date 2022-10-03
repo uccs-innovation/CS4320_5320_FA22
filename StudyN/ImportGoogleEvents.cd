@@ -17,7 +17,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="StudyN.Common.ICalManager">
-    <Position X="13.5" Y="0.75" Width="1.5" />
+    <Position X="16" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Common\ICalManager.cs</FileName>
@@ -39,7 +39,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="StudyN.App">
-    <Position X="0.5" Y="4.75" Width="1.5" />
+    <Position X="0.5" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>App.xaml.cs</FileName>
@@ -88,7 +88,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="StudyN.Models.StudyNCalendarEvent">
-    <Position X="7.75" Y="8" Width="3.5" />
+    <Position X="16" Y="3.5" Width="3.5" />
     <TypeIdentifier>
       <HashCode>AAKAAAAEACAgAAAAABIAAAACAAAAAAQAAAAAAAAAAAA=</HashCode>
       <FileName>Models\StudyNCalendarEvent.cs</FileName>
