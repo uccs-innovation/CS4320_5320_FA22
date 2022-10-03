@@ -23,6 +23,10 @@ public partial class AddTaskPage : ContentPage
     {
     }
 
+    private async void OnSaveTaskClicked(object sender, EventArgs args)
+    {
+    }
+
     void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
     {
         double value = args.NewValue;
