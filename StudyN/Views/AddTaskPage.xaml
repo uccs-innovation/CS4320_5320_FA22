@@ -15,7 +15,7 @@
 
  
 
-            <!--Grid for organizing -->
+        <!--Grid for organizing -->
         <Grid Margin="10"
               Padding="5">
             <!--Grid rows definitions-->
@@ -121,6 +121,7 @@
                 />
             <!--Buttons for completing/deleting tasks-->
             <Button 
+                x:Name="DeleteTaskButton"
                 Text="Delete Task"
                 Grid.Row="6"
                 CornerRadius="7"
@@ -129,12 +130,14 @@
 
 
             <Button
+                x:Name="CompleteTaskButton"
                 Text="Complete Task"
                 Grid.Row="6"
                 Grid.Column="1"
                 CornerRadius="7"
                 Margin="1"
-                Clicked="HandleDeleteTaskClicked"/>
+                Clicked="HandleDeleteTaskClicked"
+                Command="{Binding ButtonVisibility}"/>
 
 
 

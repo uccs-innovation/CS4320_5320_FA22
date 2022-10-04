@@ -6,19 +6,26 @@ using StudyN.ViewModels;
 
 public partial class AddTaskPage : ContentPage
 {
+    bool EditButtonsVisible;
 	public AddTaskPage()
 	{
 		InitializeComponent();
         if (UIGlobal.ToEdit != null)
         {
             LoadValues();
+            BindingContext = new EditTaskViewModel();
+            EditButtonsVisible = true;
         }
         else
         {
+            EditButtonsVisible=false; 
             SetValues();
         }
+        DeleteTaskButton.IsVisible = EditButtonsVisible;
+        CompleteTaskButton.IsVisible = EditButtonsVisible;
 	}
 
+    //calls delete task
     private async void HandleDeleteTaskClicked(object sender, EventArgs args)
     {
         UIGlobal.ToEdit.Parent.DeleteTask(UIGlobal.ToEdit.TaskId);
