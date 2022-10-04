@@ -99,8 +99,7 @@ namespace StudyN.ViewModels
             // validate before saving
             if (Validation() == true)
             {
-                // save data
-                /*
+                /*// save data
                 MapDueDate();
                 var newTask = new CalendarTask()
                 {
@@ -118,6 +117,7 @@ namespace StudyN.ViewModels
                 await Shell.Current.GoToAsync(nameof(Views.NewTaskPage));
             }
         }
+        
         async void OnClickBack(object sender)
         {
             Routing.RegisterRoute(nameof(Views.TaskPage), typeof(Views.TaskPage));

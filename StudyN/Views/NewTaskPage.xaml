@@ -6,23 +6,24 @@
              xmlns:dxco="clr-namespace:DevExpress.Maui.Controls;assembly=DevExpress.Maui.Controls"
              x:Class="StudyN.Views.NewTaskPage"
              Title="New Task">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add Task" Command="{Binding SaveCommand}"/>
-    </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <dxdf:DataFormView x:Name="dataForm" DataObject="{Binding NewTaskViewModel}" ContentPadding="0" Margin="12">
-            <dxdf:DataFormView.Resources>
-                <Style TargetType="dxe:TextEdit">
-                    <Setter Property="TextFontSize" Value="12"/>
-                    <Setter Property="PlaceholderColor" Value="Black"/>
-                </Style>
-            </dxdf:DataFormView.Resources>
-            <dxdf:DataFormTextItem InplaceLabelText="Title" FieldName="Name" RowOrder="1"></dxdf:DataFormTextItem>
-            <dxdf:DataFormComboBoxItem InplaceLabelText="Priority" FieldName="NewPriority" RowOrder="2"></dxdf:DataFormComboBoxItem>
-            <dxdf:DataFormTextItem InplaceLabelText="Description" FieldName="Description" RowOrder="3"></dxdf:DataFormTextItem>
-            <dxdf:DataFormTextItem InplaceLabelText="Time Needed" FieldName="TimeNeeded" RowOrder="4"></dxdf:DataFormTextItem>
-            <dxdf:DataFormDateItem InplaceLabelText="Due Date" FieldName="DueDate" RowOrder="5" ItemOrderInRow="1"></dxdf:DataFormDateItem>
-            <dxdf:DataFormTimeItem InplaceLabelText="Due Time" FieldName="DueTime" RowOrder="5" ItemOrderInRow="2"></dxdf:DataFormTimeItem>
-        </dxdf:DataFormView>
+        <StackLayout>
+            <dxdf:DataFormView x:Name="dataForm" DataObject="{Binding NewTaskViewModel}" ContentPadding="0" Margin="12">
+                <dxdf:DataFormView.Resources>
+                    <Style TargetType="dxe:TextEdit">
+                        <Setter Property="TextFontSize" Value="12"/>
+                        <Setter Property="PlaceholderColor" Value="Black"/>
+                    </Style>
+                </dxdf:DataFormView.Resources>
+                <dxdf:DataFormTextItem FieldName="Name" InplaceLabelText="Title" RowOrder="1" IsLabelVisible="False"></dxdf:DataFormTextItem>
+                <dxdf:DataFormComboBoxItem FieldName="NewPriority" InplaceLabelText="Priority" RowOrder="2" IsLabelVisible="False" IsVisible="False"></dxdf:DataFormComboBoxItem>
+                <dxdf:DataFormTextItem FieldName="Description" InplaceLabelText="Description" RowOrder="3" IsLabelVisible="False"></dxdf:DataFormTextItem>
+                <dxdf:DataFormTextItem FieldName="TimeNeeded" InplaceLabelText="Time Needed" RowOrder="4" IsLabelVisible="False"></dxdf:DataFormTextItem>
+                <dxdf:DataFormDateItem FieldName="DueDate" InplaceLabelText="Due Date" RowOrder="5" ItemOrderInRow="1" IsLabelVisible="False"></dxdf:DataFormDateItem>
+                <dxdf:DataFormTimeItem FieldName="DueTime" InplaceLabelText="Due Time" RowOrder="5" ItemOrderInRow="2" IsLabelVisible="False"></dxdf:DataFormTimeItem>
+            </dxdf:DataFormView>
+            <Button Text="Add Task" TextColor="White" BorderColor="Black"
+                    BackgroundColor="BlueViolet" Command="{Binding SaveCommand}"/>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>
