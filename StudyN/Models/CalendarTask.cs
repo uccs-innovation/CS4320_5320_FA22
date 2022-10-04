@@ -1,4 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using Android.Opengl;
+using Microsoft.VisualBasic;
+using System.Collections.ObjectModel;
+using static Android.Util.EventLogTags;
+using static Java.Util.Jar.Attributes;
 
 namespace StudyN.Models
 {
@@ -7,6 +11,18 @@ namespace StudyN.Models
         public CalendarTask(string Text)
         {
             this.Name = Text;
+        }
+
+        public CalendarTask(int id)
+        {
+            ObservableCollection<CalendarTask> tasks = new ObservableCollection<CalendarTask>();
+            CalendarTask indTask = tasks.Where(z => z.Id == id).FirstOrDefault();
+            this.Name = indTask.Name;
+            this.Id = indTask.Id;
+            this.Completed = indTask.Completed;
+            this.Description = indTask.Description;
+            this.DueDate = indTask.DueDate;
+            this.TimeNeeded = indTask.TimeNeeded;
         }
 
         public bool Completed { get; set; }
@@ -52,7 +68,7 @@ namespace StudyN.Models
                     Completed = false,
                     Id = 3,
                     Description = "Build a prototype of the feature...",
-                    DueDate = DateTime.Today.AddHours(24),
+                    DueDate = DateTime.Today.AddDays(3),
                     TimeNeeded = 5
                 }
             );
