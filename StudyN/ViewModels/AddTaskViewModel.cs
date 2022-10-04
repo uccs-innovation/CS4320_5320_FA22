@@ -4,5 +4,6 @@ public class AddTaskViewModel : BaseViewModel
 {
 	public AddTaskViewModel()
 	{
-	}
+
+    }
 }

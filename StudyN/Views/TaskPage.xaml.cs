@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using DevExpress.Maui.DataGrid;
 using StudyN.Models;
 
@@ -12,13 +13,13 @@ namespace StudyN.Views
         ToolbarItem trashToolbarItem;
         ToolbarItem completeToolbarItem;
 
-        HashSet<CalendarTask> selectedTasks;
+        HashSet<ListTask> selectedTasks;
         HashSet<int> rowHandleList;
         public TaskPage()
         {
             InitializeComponent();
 
-            selectedTasks = new HashSet<CalendarTask>();
+            selectedTasks = new HashSet<ListTask>();
             rowHandleList = new HashSet<int>();
 
             foreach (ToolbarItem item in ToolbarItems)
@@ -77,9 +78,9 @@ namespace StudyN.Views
                 gridView.BeginUpdate();
 
                 // Delete tasks
-                foreach(CalendarTask task in selectedTasks)
-                {
-                    task.Parent.TaskDelete(task.TaskId);
+                foreach (ListTask task in selectedTasks)
+                { 
+                    task.Parent.DeleteTask(task.TaskId);
                 }
 
                 selectedTasks.Clear();
@@ -104,9 +105,9 @@ namespace StudyN.Views
                 gridView.BeginUpdate();
 
                 // Delete tasks
-                foreach (CalendarTask task in selectedTasks)
+                foreach (ListTask task in selectedTasks)
                 {
-                    task.Parent.TaskComplete(task.TaskId);
+                    task.Parent.CompleteTask(task.TaskId);
                 }
 
                 selectedTasks.Clear();
@@ -124,7 +125,7 @@ namespace StudyN.Views
 
         private void RowLongPressed(object sender, DataGridGestureEventArgs e)
         {
-            CalendarTask task = e.Item as CalendarTask;
+            ListTask task = e.Item as ListTask;
             DataGridView gridView = sender as DataGridView;
 
             gridView.BeginUpdate();
@@ -157,15 +158,17 @@ namespace StudyN.Views
         private async void CellClicked(object sender, DataGridGestureEventArgs e)
         {
             // Task we need to edit...
-            CalendarTask task = (CalendarTask)e.Item;
-
+            ListTask task = (ListTask)e.Item;
+            UIGlobal.ToEdit = task;
             // Get it in here
             await Shell.Current.GoToAsync(nameof(AddTaskPage));
+            task.Parent.RemoveTask(task.TaskId);
         }
 
         //Function for the add task button to bring to new task page
         
         private async void AddButtonClicked(object sender, EventArgs e) {
+            UIGlobal.ToEdit = null;
             await Shell.Current.GoToAsync(nameof(AddTaskPage));
 
         }
