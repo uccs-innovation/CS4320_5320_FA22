@@ -1,5 +1,5 @@
 #CS 4320/5320 StudyN! Project
-This is a DevExpress Maui .NET project for building a mobile scheduling application.
+- This is a DevExpress Maui .NET project for building a mobile scheduling application.
 
 #Project Dependencies
 - Visual Studios V17.3.x
