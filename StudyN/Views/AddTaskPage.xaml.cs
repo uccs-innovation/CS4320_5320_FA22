@@ -1,4 +1,6 @@
 namespace StudyN.Views;
+
+using Microsoft.Maui.Animations;
 using StudyN.Models;
 using StudyN.ViewModels;
 
@@ -45,8 +47,8 @@ public partial class AddTaskPage : ContentPage
     {
         this.name.Text = UIGlobal.ToEdit.Name;
         this.description.Text = UIGlobal.ToEdit.Description;
-        this.date.Date.Value.Equals(UIGlobal.ToEdit.DueTime.Date);
-        this.time.Time.Value.Equals(UIGlobal.ToEdit.DueTime.TimeOfDay);
-        this.priority.Value.Equals(UIGlobal.ToEdit.Priority);
+        this.date.Date = (UIGlobal.ToEdit.DueTime.Date);
+        this.time.Time = UIGlobal.ToEdit.DueTime;
+        this.priority.Value = (UIGlobal.ToEdit.Priority);
     }
 }
