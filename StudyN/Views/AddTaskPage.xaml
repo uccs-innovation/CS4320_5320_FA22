@@ -8,7 +8,7 @@
              Title="Add Task">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Clicked="HandleAddTaskButton" IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+        <ToolbarItem Text="Save" Clicked="HandleAddTaskButton"/> 
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
@@ -69,14 +69,15 @@
              />
 
             <!--Date Entry box GridRow 3 Spans 1 Column-->
-            <dxe:DateEdit DisplayFormat="d"
-                          Grid.Row="2"
-                          Grid.Column="1"
-                          Grid.ColumnSpan="1"
-                          LabelText="Date Due"
-                          IsLabelFloating="True"
-                          Margin="1"
-                          x:Name="date"
+            <dxe:DateEdit 
+                DisplayFormat="d"
+                Grid.Row="2"
+                Grid.Column="1"
+                Grid.ColumnSpan="1"
+                LabelText="Date Due"
+                IsLabelFloating="True"
+                Margin="1"
+                x:Name="date"
              />
             
             <!--Time Spent On Task So far Entry box-->
@@ -102,48 +103,38 @@
 
 
             <!--Priority Slider and Label-->
-            
-            <Slider 
-                Maximum="5"
-                Minimum="0"
-                ValueChanged="HandleSliderValueChanged" 
-                Grid.Row="4"
-                Grid.ColumnSpan="2"
-                x:Name="priority"
-                />
             <Label x:Name="displayLabel"
                Text="Priority"
                HorizontalOptions="Center"
                VerticalOptions="Center" 
-               Grid.Row="5"
+               Grid.Row="4"
                Grid.ColumnSpan="2"
+               FontSize="16"
                />
+            <Slider  
+                Maximum="5"
+                Minimum="0"
+                ValueChanged="HandleSliderValueChanged" 
+                Grid.Row="5"
+                Grid.ColumnSpan="2"
+                x:Name="priority"
+                />
             <!--Buttons for completing/deleting tasks-->
             <Button 
                 Text="Delete Task"
                 Grid.Row="6"
-                Grid.Column="1"
                 CornerRadius="7"
                 Margin="1"
                 Clicked="HandleDeleteTaskClicked" />
-               
+
 
             <Button
                 Text="Complete Task"
-                Grid.Row="7"
+                Grid.Row="6"
                 Grid.Column="1"
                 CornerRadius="7"
                 Margin="1"
                 Clicked="HandleDeleteTaskClicked"/>
-
-            <Button
-                Text="Save Task"
-                Grid.Row="7"
-                Grid.ColumnSpan="2"
-                CornerRadius="7"
-                Margin="1"
-                Clicked="OnSaveTaskClicked"/>
-
 
 
 

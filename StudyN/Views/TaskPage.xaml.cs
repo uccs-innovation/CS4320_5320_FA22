@@ -157,12 +157,18 @@ namespace StudyN.Views
 
         private async void CellClicked(object sender, DataGridGestureEventArgs e)
         {
-            // Task we need to edit...
-            ListTask task = (ListTask)e.Item;
-            UIGlobal.ToEdit = task;
-            // Get it in here
-            await Shell.Current.GoToAsync(nameof(AddTaskPage));
-            task.Parent.RemoveTask(task.TaskId);
+            if(!isLongPressMenuVisible)
+            {
+                // Task we need to edit...
+                ListTask task = (ListTask)e.Item;
+                UIGlobal.ToEdit = task;
+                // Get it in here
+                await Shell.Current.GoToAsync(nameof(AddTaskPage));
+                task.Parent.RemoveTask(task.TaskId);
+            } else {
+                RowLongPressed(sender, e);
+            }
+
         }
 
         //Function for the add task button to bring to new task page
