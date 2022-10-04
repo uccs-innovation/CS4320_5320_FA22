@@ -10,24 +10,27 @@
         <Grid>
             <Grid RowDefinitions="0,*,Auto">
                 <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto" Padding="20,15,20,15" RowSpacing="10" TranslationY ="200">
-                    <dxdf:DataFormView x:Name="linkDataForm" DataObject="{Binding .}" CommitMode="PropertyChanged" ContentPadding="0" EditorLabelWidth="30">
-                        <dxdf:DataFormTextItem InplaceLabelText="Google Calendar Link"
-                                               LabelMaxWidth="300"
-                                               FieldName="fileName"
-                                               IsLabelVisible="False" 
-                                               Placeholder="Enter link to iCal file(.ics)"/>
-                    </dxdf:DataFormView>
+                    <Entry
+                        Grid.ColumnSpan="1"
+                        Placeholder="Enter link to iCal file (.ics)"
+                        ClearButtonVisibility="WhileEditing"
+                        ReturnType="Go"
+                        Keyboard="Url"
+                        IsSpellCheckEnabled="false"
+                        IsTextPredictionEnabled="false"
+                        MaxLength="200"
+                        TextChanged="Entry_TextChanged"/>
                 </Grid>
                 <Button 
                     Grid.Row="1"
                     Grid.Column="1"
                     Grid.ColumnSpan="1"
                     Text="Submit"
-                    Clicked="OnSubmitClick"
+                    Clicked="Button_OnClick"
                     VerticalOptions="Start"
                     HorizontalOptions="End"
                     TranslationX="-20"
-                    TranslationY="300"/>
+                    TranslationY="270"/>
             </Grid>
         </Grid>
     </ContentPage.Content>
