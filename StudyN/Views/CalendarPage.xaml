@@ -49,7 +49,7 @@
                 <dxsch:DayView.DataStorage>
                     <dxsch:SchedulerDataStorage x:Name="dayviewStorage">
                         <dxsch:SchedulerDataStorage.DataSource>
-                            <dxsch:DataSource AppointmentsSource="{Binding UserEven}"
+                            <dxsch:DataSource AppointmentsSource="{Binding Appointments}"
                                               AppointmentLabelsSource="{Binding AppointmentTypes}"
                                               AppointmentStatusesSource="{Binding AppointmentStatuses}">
                                 <dxsch:DataSource.AppointmentMappings>
@@ -58,7 +58,7 @@
                                     Start="StartTime" 
                                     End="EndTime" 
                                     Subject="Subject"
-                                    LabelId="LabelId"
+                                    LabelId="CategoryId"
                                     Location="Location"
                                     Reminder="ReminderInfo"
                                     RecurrenceInfo="RecurrenceInfo" 
@@ -71,6 +71,12 @@
                                         Color="Color"
                                         Id="Id"/>
                                 </dxsch:DataSource.AppointmentLabelMappings>
+                                <dxsch:DataSource.AppointmentStatusMappings>
+                                    <dxsch:AppointmentStatusMappings 
+                                        Caption="Caption"
+                                        Color="Color"
+                                        Id="Id"/>
+                                </dxsch:DataSource.AppointmentStatusMappings>
                             </dxsch:DataSource>
                         </dxsch:SchedulerDataStorage.DataSource>
                     </dxsch:SchedulerDataStorage>
@@ -81,7 +87,7 @@
                 <dxsch:WeekView.DataStorage>
                     <dxsch:SchedulerDataStorage x:Name="weekviewStorage">
                         <dxsch:SchedulerDataStorage.DataSource>
-                            <dxsch:DataSource AppointmentsSource="{Binding UserEven}"
+                            <dxsch:DataSource AppointmentsSource="{Binding Appointments}"
                                               AppointmentLabelsSource="{Binding AppointmentTypes}">
                                 <dxsch:DataSource.AppointmentMappings>
                                     <dxsch:AppointmentMappings 
@@ -89,7 +95,7 @@
                                     Start="StartTime" 
                                     End="EndTime" 
                                     Subject="Subject"
-                                    LabelId="LabelId"
+                                    LabelId="CategoryId"
                                     Location="Location"
                                     />
                                 </dxsch:DataSource.AppointmentMappings>

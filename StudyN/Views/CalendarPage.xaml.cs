@@ -17,7 +17,7 @@ namespace StudyN.Views
 
             InitializeComponent();
             ViewModel = new CalendarViewModel();
-            BindingContext = new UserCalendarDataView(); //Use to pull data of CalendarData under Models
+            BindingContext = new CalendarDataView(); //Use to pull data of CalendarData under Models
 
         }
 
@@ -79,6 +79,7 @@ namespace StudyN.Views
 
         // estep: I know there must be a better way to do this, but I just want to try it
         //        since it won't let me use the same storage name for both SchedulerDataStorage objects
+        //        (so I have to have this kind of repeated code)
         private void Handle_onCalendarTap_FromWeekView(object sender, SchedulerGestureEventArgs e)
         {
             if (e.AppointmentInfo == null)
@@ -109,18 +110,18 @@ namespace StudyN.Views
         }
 
         //View of events 
-        public class UserCalendarDataView : INotifyPropertyChanged
+        public class CalendarDataView : INotifyPropertyChanged
         {
             readonly AppData data;
 
             public event PropertyChangedEventHandler PropertyChanged;
             public DateTime StartDate { get { return AppData.BaseDate; } }
+            
+            public IReadOnlyList<Appointment> Appointments { get => data.Appointments; } 
+            public IReadOnlyList<AppointmentCategory> AppointmentCategories { get => data.AppointmentCategories; }
+            public IReadOnlyList<AppointmentStatus> AppointmentStatuses { get => data.AppointmentStatuses; }
 
-            //public IReadOnlyList<UserEvents> UserEvents { get => data.UserEven; } // estep: I think this was the problem
-            public IReadOnlyList<UserEvents> UserEven { get => data.UserEven; } // estep: trying this 
-            public IReadOnlyList<UserEventsType> AppointmentTypes { get => data.Labels; }
-
-            public UserCalendarDataView()
+            public CalendarDataView()
             {
                 data = new AppData();
             }
