@@ -15,6 +15,8 @@ namespace StudyN.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime DueDate { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
         public int TimeNeeded { get; set; }
 
         public CalendarTasksData Parent { get; set; }
@@ -22,24 +24,56 @@ namespace StudyN.Models
 
     public class CalendarTasksData
     {
-        public string text = "SUMMARY:BOB\n" +
-                "END:1";
+        public string text = HomePage.content;
         public string eventName = "";
-        public int id = 0;
-        public string desc = "";
+        public int id = 1;
+        public string eventType = "";
+        public string startDate = "";
+        public string endDate = "";
         void GenerateCalendarTaskss()
         {
-            CalendarTasks.Add(
-                        new CalendarTask(eventName)
-                        {
-                            Parent = this,
-                            Completed = false,
-                            Id = id,
-                            Description = desc,
-                            DueDate = DateTime.Today,
-                            TimeNeeded = 3
-                        }
-                    );
+            using var sr = new StringReader(text);
+            int count = 0;
+            string line = "";
+            while((line = sr.ReadLine()) != null)
+            {
+                count++;
+                Console.WriteLine("Line {0}: {1}", count, line);
+                if (line.Contains("SUMMARY") == true)
+                {
+                    eventName = line;
+                }
+                if (line.Contains("DESCRIPTION") == true)
+                {
+                    eventType = line;
+                }
+                if (line.Contains("DTSTART;VALUE=DATE") == true)
+                {
+                    startDate = line;
+                }
+                if (line.Contains("DTEND;VALUE=DATE") == true)
+                {
+                    endDate = line;
+                }
+                if (line.Contains("END") == true)
+                {
+                    CalendarTasks.Add(
+                            new CalendarTask(eventName)
+                            {
+                                Parent = this,
+                                Completed = false,
+                                Id = id,
+                                Description = eventType,
+                                StartTime = startDate,
+                                EndTime = endDate,
+                                DueDate = DateTime.Today,
+                                TimeNeeded = 3
+                            }
+                        );
+                    id++;
+                }
+            }
+          
         }
 
         public void TaskComplete(CalendarTask task)
