@@ -8,7 +8,7 @@
              Title="Add Task">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Save" Clicked="HandleAddTaskButton"/> 
+        <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" /> 
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
@@ -85,7 +85,7 @@
                 Value="0" DisplayFormat="n0"
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
-                LabelText="Time Spent On Task"
+                LabelText="Hours Logged"
                 IsLabelFloating="True"
                 Margin="1"
                 x:Name="tSpent"/>
@@ -96,7 +96,7 @@
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
                 Grid.Column="1"
-                LabelText="Time Needed To Do Task"
+                LabelText="Total Hours Needed"
                 IsLabelFloating="True"
                 Margin="1"
                 x:Name="tComplete"/>
@@ -131,7 +131,7 @@
 
             <Button
                 x:Name="CompleteTaskButton"
-                Text="Complete Task"
+                Text="Mark Complete"
                 Grid.Row="6"
                 Grid.Column="1"
                 CornerRadius="7"
