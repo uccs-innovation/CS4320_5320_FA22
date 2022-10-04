@@ -10,7 +10,7 @@ namespace StudyN.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string Subject { get; set; }
-        public int CategoryId { get; set; }
+        public int LabelId { get; set; }
         public string Location { get; set; }        
         public int StatusId { get; set; }
         public string RecurrenceInfo { get; set; }
@@ -66,16 +66,15 @@ namespace StudyN.Models
         public static DateTime BaseDate = DateTime.Today;
 
         public static string[] AppointmentCategoryTitles = { "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work"};
-        public static Color[] AppointmentCategoryColors = { Color.FromHex("#a8d5ff"),   // periwinkle blue
-                                                        Color.FromHex("#c2f49d"),   // lime                                                        
-                                                        Color.FromHex("#FCC7FF"),   // orchid
-                                                        Color.FromHex("#FDFDB1"),   // yellow
-                                                        Color.FromHex("#8de8df"),   // aqua                                                        
-                                                        Color.FromHex("FDD5B1"),    // apricot
-                                                        Color.FromHex("#FFC7D8"),   // salmon                                                         
-                                                        Color.FromHex("#dfcfe9") };   // lavendar
-                                                                                      //Color.FromHex("#c8f4ff") }; // cornflower blue //save color if needed later
-
+        public static Color[] AppointmentCategoryColors = { Color.FromHex("#3333FF"),   // dark blue
+                                                        Color.FromHex("#008A00"),   // green                                                        
+                                                        Color.FromHex("#D80073"),   // dark pink
+                                                        Color.FromHex("#FFCB21"),   // mustard
+                                                        Color.FromHex("#1BA1E2"),   // medium blue                                                        
+                                                        Color.FromHex("FF8000"),    // orange
+                                                        Color.FromHex("#A20025"),   // burgundy                                                         
+                                                        Color.FromHex("#6A00FF") };   // purple
+                                                                                      
         public static string[] AppointmentStatusTitles = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
         public static Color[] AppointmentStatusColors = { Color.FromHex("00FF80"),   // light green
                                                           Color.FromHex("#FF3333"),  // red                                                        
@@ -84,9 +83,9 @@ namespace StudyN.Models
                                                           Color.FromHex("#00FFFF") };// cyan
                                                                                                                  
         //Calls to the things that we are going to do
-        public static string[] AppointmentList = { "Soccer ", "Math Class", "CS Class",
-                                                "going out to hike", "Sleeping", "English",
-                                                "Professor Office", "Going to work", "Going to conert",
+        public static string[] AppointmentTitles = { "Soccer", "Math Class", "CS Class",
+                                                "Hike", "Sleep", "English Class",
+                                                "Professor Office", "Work", "Concert",
                                                 "Homework", "Project", "GYM",
                                                 "Going to get Food"};
 
@@ -105,11 +104,11 @@ namespace StudyN.Models
                     int room = rnd.Next(1, 100);
                     start = BaseDate.AddDays(i).AddHours(rnd.Next(8, 17)).AddMinutes(rnd.Next(0, 40));
                     duration = TimeSpan.FromMinutes(rnd.Next(20, 30));
-                    result.Add(CreateAppointment(appointmentId, AppointmentList[appointmentListIndex],
+                    result.Add(CreateAppointment(appointmentId, AppointmentTitles[appointmentListIndex],
                                                       start, duration, room));
                     appointmentId++;
                     appointmentListIndex++;
-                    if (appointmentListIndex >= AppointmentList.Length - 1)
+                    if (appointmentListIndex >= AppointmentTitles.Length - 1)
                         appointmentListIndex = 1;
                 }
             Appointments = result;
@@ -121,11 +120,11 @@ namespace StudyN.Models
             int count = AppointmentCategoryTitles.Length;
             for (int i = 0; i < count; i++)
             {
-                AppointmentCategory appointmentType = new AppointmentCategory();
-                appointmentType.Id = i;
-                appointmentType.Caption = AppointmentCategoryTitles[i];
-                appointmentType.Color = AppointmentCategoryColors[i];
-                result.Add(appointmentType);
+                AppointmentCategory cat = new AppointmentCategory();
+                cat.Id = i;
+                cat.Caption = AppointmentCategoryTitles[i];
+                cat.Color = AppointmentCategoryColors[i];
+                result.Add(cat);
             }
             AppointmentCategories = result;
         }
@@ -136,24 +135,24 @@ namespace StudyN.Models
             int count = AppointmentStatusTitles.Length;
             for (int i = 0; i < count; i++)
             {
-                AppointmentStatus appointmentStatus = new AppointmentStatus();
-                appointmentStatus.Id = i;
-                appointmentStatus.Caption = AppointmentStatusTitles[i];
-                appointmentStatus.Color = AppointmentStatusColors[i];
-                result.Add(appointmentStatus);
+                AppointmentStatus stat = new AppointmentStatus();
+                stat.Id = i;
+                stat.Caption = AppointmentStatusTitles[i];
+                stat.Color = AppointmentStatusColors[i];
+                result.Add(stat);
             }
             AppointmentStatuses = result;
         }
 
-        Appointment CreateAppointment(int appointmentId, string patientName,
+        Appointment CreateAppointment(int appointmentId, string appointmentTitle,
                                                     DateTime start, TimeSpan duration, int room)
         {
             Appointment appt = new Appointment();
             appt.Id = appointmentId;
             appt.StartTime = start;
             appt.EndTime = start.Add(duration);
-            appt.Subject = patientName;
-            appt.CategoryId = AppointmentCategories[rnd.Next(0, 5)].Id;
+            appt.Subject = appointmentTitle;
+            appt.LabelId = AppointmentCategories[rnd.Next(0, 5)].Id;
             appt.StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id;
             appt.Location = string.Format("{0}", room);
             return appt;
