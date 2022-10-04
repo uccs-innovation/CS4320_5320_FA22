@@ -19,8 +19,9 @@ namespace StudyN.Common
                 var assembly = Assembly.GetExecutingAssembly();
                 using Stream stream = assembly.GetManifestResourceStream(_fileName);
                 using StreamReader reader = new(stream);
-                var result = reader.ReadToEnd();
-                var calendar = Calendar.Load(result);
+                var calendar = Calendar.Load(reader);
+                //var result = reader.ReadToEnd();
+                //var calendar = Calendar.Load(result);
                 return calendar.Events;
             }
             catch (Exception e)
