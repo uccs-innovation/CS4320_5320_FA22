@@ -64,6 +64,21 @@ namespace StudyN.Views
             ShowAppointmentEditPage(appointment);
         }
 
+        private async void Handle_onCalendarHold_FromDayView(object sender, SchedulerGestureEventArgs e)
+        {
+            if (e.AppointmentInfo != null)
+            {
+                AppointmentItem appointment = e.AppointmentInfo.Appointment;
+                bool answer = await DisplayAlert("Are you sure?",
+                    appointment.Subject + " will be deleted.", "Yes", "No");
+
+                if (answer == true)
+                {
+                    this.dayviewStorage.RemoveAppointment(appointment);
+                }
+            }
+        }
+
         private void ShowAppointmentEditPage(AppointmentItem appointment)
         {
             AppointmentEditPage appEditPage = new AppointmentEditPage(appointment, this.dayviewStorage);
@@ -89,6 +104,21 @@ namespace StudyN.Views
             }
             AppointmentItem appointment = e.AppointmentInfo.Appointment;
             ShowAppointmentEditPage_WeekView(appointment);
+        }
+
+        private async void Handle_onCalendarHold_FromWeekView(object sender, SchedulerGestureEventArgs e)
+        {
+            if (e.AppointmentInfo != null)
+            {
+                AppointmentItem appointment = e.AppointmentInfo.Appointment;
+                bool answer = await DisplayAlert("Are you sure?",
+                    appointment.Subject + " will be deleted.", "Yes", "No");
+
+                if (answer == true)
+                {
+                    this.weekviewStorage.RemoveAppointment(appointment);
+                }
+            }
         }
 
         private void ShowAppointmentEditPage_WeekView(AppointmentItem appointment)
