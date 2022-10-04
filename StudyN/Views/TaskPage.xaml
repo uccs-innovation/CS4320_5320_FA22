@@ -34,7 +34,7 @@
 
     </ContentPage.ToolbarItems>
     <!-- DataGrid -->
-    <dxg:DataGridView ItemsSource="{Binding CalendarTasks}"
+    <dxg:DataGridView ItemsSource="{Binding ListTasks}"
                       Tap="CellClicked"
                       LongPress="RowLongPressed"
                       CustomCellStyle="HighlightSelectedRows"
@@ -46,11 +46,11 @@
         </dxg:DataGridView.Columns>
         <!--Customize the appearance of group row.-->
         <dxg:DataGridView.GroupRowStyle>
-            <dxg:GroupRowStyle FontSize="14" />
+            <dxg:GroupRowStyle FontSize="18" />
         </dxg:DataGridView.GroupRowStyle>
         <!--Customize the appearance of grid cells.-->
         <dxg:DataGridView.CellStyle>
-            <dxg:CellStyle Padding="10" FontSize="24"/>
+            <dxg:CellStyle Padding="10" FontSize="16"/>
         </dxg:DataGridView.CellStyle>
         <!--Customize the appearance of column headers.-->
         <dxg:DataGridView.ColumnHeaderStyle>
