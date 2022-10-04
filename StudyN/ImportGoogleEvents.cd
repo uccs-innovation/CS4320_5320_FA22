@@ -83,14 +83,14 @@
   <Class Name="StudyN.ViewModels.EventDataGridViewModel">
     <Position X="7.75" Y="5.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAgAAAAAAAAgAAAAQAAA=</HashCode>
+      <HashCode>AAAAAAgAAAgAAAAAAAAAAAAAAgAAAAAAAAgAAAAQAAA=</HashCode>
       <FileName>ViewModels\EventDataGridViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="StudyN.Models.StudyNCalendarEvent">
-    <Position X="16" Y="3.5" Width="3.5" />
+    <Position X="16" Y="3.5" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAKAAAAEACAgAAAAABIAAAACAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAKABAAEBCAgAAAAABIAAABCAAAAAAQAAAAAAAAIAAA=</HashCode>
       <FileName>Models\StudyNCalendarEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
