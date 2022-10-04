@@ -113,8 +113,8 @@ namespace StudyN.ViewModels
                 };
                 */
                 // go back to task page
-                Routing.RegisterRoute(nameof(Views.NewTaskPage), typeof(Views.NewTaskPage));
-                await Shell.Current.GoToAsync(nameof(Views.NewTaskPage));
+                Routing.RegisterRoute(nameof(Views.TaskPage), typeof(Views.TaskPage));
+                await Shell.Current.GoToAsync(nameof(Views.TaskPage));
             }
         }
         
