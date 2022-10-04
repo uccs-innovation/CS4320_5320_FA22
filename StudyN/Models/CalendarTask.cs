@@ -38,7 +38,6 @@ namespace StudyN.Models
             while((line = sr.ReadLine()) != null)
             {
                 count++;
-                Console.WriteLine("Line {0}: {1}", count, line);
                 if (line.Contains("SUMMARY") == true)
                 {
                     eventName = line;
