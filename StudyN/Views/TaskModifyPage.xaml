@@ -20,13 +20,13 @@
         <Entry
             Grid.ColumnSpan="2"
             MaxLength="20"
-            Text="name" />
+            Text="{StaticResource Key=taskName}"/>
         <BoxView Grid.Row="1"/>
         <Entry
             Grid.ColumnSpan="2"
             Grid.Row="1"
             MaxLength="200"
-            Text="Enter Event discription (200 character max)" />
+            Text="{Binding Source={x:Reference taskmod}, Path=Name}" />
         <BoxView Grid.Row="2"/>
         <Entry
             Grid.Row="2"
@@ -44,7 +44,7 @@
             Grid.Row="3"
             Grid.ColumnSpan="2"
             MaxLength="10"
-            Text="{StaticResource }" />
+            Text="" />
 
         <Button
             Grid.Row="4"

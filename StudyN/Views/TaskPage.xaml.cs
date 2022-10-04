@@ -13,7 +13,7 @@ namespace StudyN.Views
             InitializeComponent();
         }
 
-        private void CellClicked(object sender, DataGridGestureEventArgs e)
+        async private void CellClicked(object sender, DataGridGestureEventArgs e)
         {
             if(e.Item != null && e.FieldName == "Completed")
             {
@@ -26,7 +26,17 @@ namespace StudyN.Views
             else if (e.Item != null)
             {
                 CalendarTask task = (CalendarTask)e.Item;
-                Navigation.PushAsync(new TaskModifyPage(task));
+
+                var navigationParameter = new Dictionary<string, object>
+                {
+                   { "taskmod", task }
+                };
+
+                //Navigation.PushAsync(TaskModifyPage(task));
+                await Shell.Current.GoToAsync($"TaskModifyPage", navigationParameter);
+                //this.Frame.Navigate(typeof(TaskModifyPage), task);
+                //await Shell.Current.GoToAsync(nameof(TaskModifyPage));
+                //Navigation.PushAsync(new TaskModifyPage(task));
             }
         }
     }

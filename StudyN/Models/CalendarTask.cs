@@ -65,11 +65,6 @@ namespace StudyN.Models
             CalendarTasks.Remove(task);
         }
 
-        public void taskChange(CalendarTask task)
-        {
-
-        }
-
         public ObservableCollection<CalendarTask> CalendarTasks { get; private set; }
         private ObservableCollection<CalendarTask> CompletedTasks { get; set; }
 
