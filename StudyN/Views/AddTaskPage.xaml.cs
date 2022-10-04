@@ -54,5 +54,7 @@ public partial class AddTaskPage : ContentPage
         this.date.Date = (UIGlobal.ToEdit.DueTime.Date);
         this.time.Time = UIGlobal.ToEdit.DueTime;
         this.priority.Value = (UIGlobal.ToEdit.Priority);
+        this.tComplete.Value = UIGlobal.ToEdit.TotalTimeNeeded;
+        this.tSpent.Value = UIGlobal.ToEdit.CompletionProgress;
     }
 }

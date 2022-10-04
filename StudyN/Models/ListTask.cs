@@ -42,7 +42,7 @@ namespace StudyN.Models
 
         public ListTask AddTask(string name, string description, DateTime dueTime, int priority, int CompletionProgress, int TotalTimeNeeded)
         {
-            ListTask newTask = new ListTask(name, description, dueTime, priority, int CompletionProgress, int TotalTimeNeeded);
+            ListTask newTask = new ListTask(name, description, dueTime, priority, CompletionProgress, TotalTimeNeeded);
             newTask.Parent = this;
             CalendarTasks.Add(newTask);
             return newTask;
