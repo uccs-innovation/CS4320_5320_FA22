@@ -34,7 +34,7 @@
 
     </ContentPage.ToolbarItems>
     <!-- DataGrid -->
-    <dxg:DataGridView ItemsSource="{Binding CalendarTasks}"
+    <dxg:DataGridView ItemsSource="{Binding ListTasks}"
                       Tap="CellClicked"
                       LongPress="RowLongPressed"
                       CustomCellStyle="HighlightSelectedRows"

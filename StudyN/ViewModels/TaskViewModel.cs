@@ -8,9 +8,8 @@ namespace StudyN.ViewModels
     public class TaskDataViewModel : INotifyPropertyChanged
     {
         private ListTaskData data;
-
         public event PropertyChangedEventHandler PropertyChanged;
-        public ObservableCollection<ListTask> CalendarTasks { get => data.CalendarTasks; }
+        public ObservableCollection<ListTask> ListTasks { get => data.ListTasks; }
 
         public TaskDataViewModel()
         {
