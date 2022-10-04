@@ -3,9 +3,9 @@
   <PropertyGroup>
     <ActiveDebugFramework>net6.0-android</ActiveDebugFramework>
     <IsFirstTimeProjectOpen>False</IsFirstTimeProjectOpen>
-    <ActiveDebugProfile>Pixel 4 XL - API 30 (Android 11.0 - API 30)</ActiveDebugProfile>
+    <ActiveDebugProfile>Pixel 5 - API 32 (Android 12.1 - API 32)</ActiveDebugProfile>
     <SelectedPlatformGroup>Emulator</SelectedPlatformGroup>
-    <DefaultDevice>pixel_4_xl_-_api_30</DefaultDevice>
+    <DefaultDevice>pixel_5_-_api_32</DefaultDevice>
   </PropertyGroup>
   <ItemGroup>
     <MauiXaml Update="App.xaml">

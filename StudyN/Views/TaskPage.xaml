@@ -14,9 +14,10 @@
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
             <dxg:CheckBoxColumn FieldName="Completed" Caption=" " Width="15" />
-            <dxg:TextColumn FieldName="Name" Caption="Task" />
-            <dxg:TextColumn FieldName="Description" Caption="Description" />
-            <dxg:DateColumn FieldName="DueDate" Caption="Due" DisplayFormat="h:mm tt" IsGrouped="True"/>
+            <dxg:TextColumn FieldName="Name" Caption="Event Name" />
+            <dxg:TextColumn FieldName="Description" Caption="Event Type" />
+            <dxg:TextColumn FieldName="StartTime" Caption="Start Time" />
+            <dxg:TextColumn FieldName="EndTime" Caption="End Time" />
         </dxg:DataGridView.Columns>
         <!--Customize the appearance of grid cells.-->
         <dxg:DataGridView.CellStyle>
