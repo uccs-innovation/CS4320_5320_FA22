@@ -16,6 +16,7 @@ namespace StudyN.ViewModels
         private DateTime finalDueDate;
         private Priority priority;
         public Command BackCommand { get; }
+        public Command SaveCommand { get; }
 
         
 
@@ -29,6 +30,7 @@ namespace StudyN.ViewModels
             dueTime = DateTime.Today.AddHours(24);
             priority = Priority.Normal;
             BackCommand = new Command(OnClickBack);
+            SaveCommand = new Command(OnClickSave);
         }
 
         public string Name
@@ -89,7 +91,7 @@ namespace StudyN.ViewModels
         }
 
         // when data is able to get saved to a database, this will, and bring back to task page
-        private async void OnClickSave(object sender, EventArgs e)
+        async void OnClickSave(object sender)
         {
             // validate before saving
             if (Validation() == true)
