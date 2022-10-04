@@ -1,4 +1,5 @@
-﻿using StudyN.ViewModels;
+﻿using StudyN.Models;
+using StudyN.ViewModels;
 using System.Net;
 
 namespace StudyN.Views
@@ -7,6 +8,7 @@ namespace StudyN.Views
     public partial class HomePage : ContentPage
     {
         protected string link;
+        public static string content { get; set; }
         static readonly HttpClient client = new HttpClient();
 
         public HomePage()
@@ -30,10 +32,13 @@ namespace StudyN.Views
             if (!string.IsNullOrEmpty(link))
             { 
                 HttpResponseMessage response = await client.GetAsync(link);
-                var content = client.GetStringAsync(link);
-                Console.WriteLine(content.Result);
+                var content1 = client.GetStringAsync(link);
+                content = content1.Result;
+                Console.WriteLine(content1.Result);
             }
         }
+
+
 
         private void Entry_TextChanged(object sender, TextChangedEventArgs e)
         {

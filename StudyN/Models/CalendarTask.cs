@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using StudyN.Views;
+using System.Collections.ObjectModel;
 
 namespace StudyN.Models
 {
@@ -21,41 +22,24 @@ namespace StudyN.Models
 
     public class CalendarTasksData
     {
+        public string text = "SUMMARY:BOB\n" +
+                "END:1";
+        public string eventName = "";
+        public int id = 0;
+        public string desc = "";
         void GenerateCalendarTaskss()
         {
             CalendarTasks.Add(
-                new CalendarTask("HW: Pitch your Application Idea")
-                {
-                    Parent = this,
-                    Completed = false,
-                    Id = 1,
-                    Description = "Pitch your appilcation idea...",
-                    DueDate = DateTime.Today,
-                    TimeNeeded = 3
-                }
-            ); ;
-            CalendarTasks.Add(
-                new CalendarTask("HW: Technology Proof of Concept")
-                {
-                    Parent = this,
-                    Completed = false,
-                    Id = 2,
-                    Description = "Prove your technology works...",
-                    DueDate = DateTime.Today,
-                    TimeNeeded = 7
-                }
-            );
-            CalendarTasks.Add(
-                new CalendarTask("HW: Prototype of Key Features")
-                {
-                    Parent = this,
-                    Completed = false,
-                    Id = 3,
-                    Description = "Build a prototype of the feature...",
-                    DueDate = DateTime.Today.AddHours(24),
-                    TimeNeeded = 5
-                }
-            );
+                        new CalendarTask(eventName)
+                        {
+                            Parent = this,
+                            Completed = false,
+                            Id = id,
+                            Description = desc,
+                            DueDate = DateTime.Today,
+                            TimeNeeded = 3
+                        }
+                    );
         }
 
         public void TaskComplete(CalendarTask task)
