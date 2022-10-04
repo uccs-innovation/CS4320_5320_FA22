@@ -1,4 +1,5 @@
-﻿using StudyN.ViewModels;
+﻿using DevExpress.Maui.DataForm;
+using StudyN.ViewModels;
 
 namespace StudyN.Views
 {
@@ -18,6 +19,11 @@ namespace StudyN.Views
         {
             base.OnAppearing();
             ViewModel.OnAppearing();
+        }
+
+        protected void OnSubmitClick(object sender, EventArgs e)
+        {
+            Console.WriteLine();
         }
     }
 }
