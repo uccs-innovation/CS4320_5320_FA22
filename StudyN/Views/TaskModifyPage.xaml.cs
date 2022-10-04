@@ -1,4 +1,5 @@
 using StudyN.Models;
+using StudyN.ViewModels;
 
 namespace StudyN.Views;
 
@@ -6,13 +7,15 @@ namespace StudyN.Views;
 
 public partial class TaskModifyPage : ContentPage
 {
-	CalendarTask Taskmod { get; set; }
+	public CalendarTask Taskmod = new CalendarTask("Joe");
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         Taskmod = query["taskmod"] as CalendarTask;
         OnPropertyChanged("taskmod");
     }
+
+	
 
     //public CalendarTask GetCalendarTask()
 	//{
@@ -23,17 +26,16 @@ public partial class TaskModifyPage : ContentPage
 	{
 		InitializeComponent();
 
-		BindingContext = this;
-
 		//var taskName = new Label();
 		//taskName.SetBinding (Label.TextProperty, "Name");
 		//taskName.BindingContext = taskMod;
     }
 
-	private void saveChanges(object sender, EventArgs e)
+	async private void saveChanges(object sender, EventArgs e)
 	{
-
-	}
+        Routing.RegisterRoute(nameof(Views.TaskPage), typeof(Views.TaskPage));
+        await Shell.Current.GoToAsync(nameof(Views.TaskPage));
+    }
 
 	
 }
