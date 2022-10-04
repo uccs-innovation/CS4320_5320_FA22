@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.ComponentModel.DataAnnotations;
+using DevExpress.Maui.DataForm;
 
 namespace StudyN.ViewModels
 {
@@ -15,8 +16,7 @@ namespace StudyN.ViewModels
         private DateTime dueTime;
         private DateTime finalDueDate;
         private Priority priority;
-        public Command BackCommand { get; }
-        public Command SaveCommand { get; }
+        
 
         
 
@@ -24,11 +24,11 @@ namespace StudyN.ViewModels
         public NewTaskViewModel()
         {
             name = null;
+            priority = Priority.Normal;
             description = null;
             timeNeeded = 0;
             dueDate = DateTime.Today.AddHours(24);
             dueTime = DateTime.Today.AddHours(24);
-            priority = Priority.Normal;
             BackCommand = new Command(OnClickBack);
             SaveCommand = new Command(OnClickSave);
         }
@@ -39,6 +39,12 @@ namespace StudyN.ViewModels
             set => SetProperty(ref name, value);
         }
 
+        public virtual Priority NewPriority
+        {
+            get => priority;
+            set => SetProperty(ref priority, value);
+        }
+        
         public string Description
         {
             get => description;
@@ -62,13 +68,10 @@ namespace StudyN.ViewModels
             get => dueTime;
             set => SetProperty(ref dueTime, value);
         }
-
-        public virtual Priority NewPriority
-        {
-            get => priority;
-            set => SetProperty(ref priority, value);
-        }
-
+        
+        public Command BackCommand { get; }
+        public Command SaveCommand { get; }
+        
         private void MapDueDate()
         {
             finalDueDate = DateTime.Parse(dueDate.ToString("yyyy-MM-dd") + " " + dueTime.TimeOfDay.ToString());
