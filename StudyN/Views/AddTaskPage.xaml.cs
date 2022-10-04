@@ -25,10 +25,14 @@ public partial class AddTaskPage : ContentPage
     }
     private async void OnDeleteTaskClicked(object sender, EventArgs args)
     {
+        UIGlobal.ToEdit.Parent.TaskComplete(UIGlobal.ToEdit.TaskId);
+        await Shell.Current.GoToAsync("..");
+
     }
 
     private async void OnCompleteTaskClicked(object sender, EventArgs args)
     {
+        await Shell.Current.GoToAsync("..");
     }
 
     void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
@@ -39,7 +43,7 @@ public partial class AddTaskPage : ContentPage
 
     private async void AddTaskButton(object sender, EventArgs e)
     {
-        UIGlobal.MainPage.AddTask(this.name.Text, this.description.Text, this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds), (int)this.priority.Value);
+        UIGlobal.MainPage.AddTask(this.name.Text, this.description.Text, this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds), (int)this.priority.Value, (int)this.tSpent.Value, (int)this.tComplete.Value);
 
         await Shell.Current.GoToAsync("..");
     }

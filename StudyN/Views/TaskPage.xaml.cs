@@ -162,6 +162,7 @@ namespace StudyN.Views
             UIGlobal.ToEdit = task;
             // Get it in here
             await Shell.Current.GoToAsync(nameof(AddTaskPage));
+            task.Parent.RemoveTask(task.TaskId);
         }
 
         //Function for the add task button to bring to new task page

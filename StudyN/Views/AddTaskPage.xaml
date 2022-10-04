@@ -84,7 +84,8 @@
                 Grid.ColumnSpan="1"
                 LabelText="Time Completed"
                 IsLabelFloating="True"
-                Margin="1"/>
+                Margin="1"
+                x:Name="tSpent"/>
 
             <!--Time Needed to Complete Task-->
             <dxe:NumericEdit 
@@ -94,7 +95,8 @@
                 Grid.Column="1"
                 LabelText="Time To Completion"
                 IsLabelFloating="True"
-                Margin="1"/>
+                Margin="1"
+                x:Name="tComplete"/>
 
 
             <!--Priority Slider and Label-->

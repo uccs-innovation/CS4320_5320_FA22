@@ -5,12 +5,14 @@ namespace StudyN.Models
 {
     public class ListTask
     {
-        public ListTask(string name, string description, DateTime dueTime, int priority)
+        public ListTask(string name, string description, DateTime dueTime, int priority, int completionProgress, int totalTimeNeeded)
         {
             this.Name = name;
             this.Description = description;
             this.DueTime = dueTime;
             this.Priority = priority;
+            this.CompletionProgress = completionProgress;
+            this.TotalTimeNeeded = totalTimeNeeded;
         }
 
         public bool Completed { get; set; } = false;
@@ -38,9 +40,9 @@ namespace StudyN.Models
             task.Description = "Build a prototype of the feature...";*/
         }
 
-        public ListTask AddTask(string name, string description, DateTime dueTime, int priority)
+        public ListTask AddTask(string name, string description, DateTime dueTime, int priority, int CompletionProgress, int TotalTimeNeeded)
         {
-            ListTask newTask = new ListTask(name, description, dueTime, priority);
+            ListTask newTask = new ListTask(name, description, dueTime, priority, int CompletionProgress, int TotalTimeNeeded);
             newTask.Parent = this;
             CalendarTasks.Add(newTask);
             return newTask;
@@ -99,6 +101,8 @@ namespace StudyN.Models
     {
         public static ListTaskData MainPage { get; set; }
         public static ListTask ToEdit { get; set; }
+
+      
     }
 }
 
