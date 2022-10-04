@@ -35,7 +35,15 @@ namespace StudyN.Models
             ListTasks.Add(newTask);
             return newTask;
         }
-         
+
+        public ListTask AddTask(ListTask task)
+        {
+            ListTask newTask = new ListTask(task.Name, task.Description, task.DueTime, task.Priority, task.CompletionProgress, task.TotalTimeNeeded);
+            newTask.Parent = this;
+            ListTasks.Add(newTask);
+            return newTask;
+        }
+
         public void RemoveTask(Guid taskId)
         {
             foreach(ListTask task in ListTasks)
@@ -89,7 +97,6 @@ namespace StudyN.Models
         public static ListTaskData MainData { get; set; }
         public static ListTask ToEdit { get; set; }
 
-      
     }
 }
 

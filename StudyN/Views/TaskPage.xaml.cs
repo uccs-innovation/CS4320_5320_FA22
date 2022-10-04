@@ -164,7 +164,7 @@ namespace StudyN.Views
                 UIGlobal.ToEdit = task;
                 // Get it in here
                 await Shell.Current.GoToAsync(nameof(AddTaskPage));
-                task.Parent.RemoveTask(task.TaskId);
+               // task.Parent.RemoveTask(task.TaskId);
             } else {
                 RowLongPressed(sender, e);
             }

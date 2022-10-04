@@ -49,6 +49,12 @@ public partial class AddTaskPage : ContentPage
     {
         UIGlobal.MainData.AddTask(this.name.Text, this.description.Text, this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds), (int)this.priority.Value, (int)this.tSpent.Value, (int)this.tComplete.Value);
 
+        if (UIGlobal.ToEdit != null)
+        {
+            UIGlobal.MainData.CompleteTask(UIGlobal.ToEdit.TaskId);
+            UIGlobal.ToEdit = null;
+        }
+        
         await Shell.Current.GoToAsync("..");
     }
     void LoadValues()
