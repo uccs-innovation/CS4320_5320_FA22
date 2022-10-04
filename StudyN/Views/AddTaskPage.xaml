@@ -8,7 +8,7 @@
              Title="Add Task">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Save" Clicked="HandleAddTaskButton"/> 
+        <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" IconImageSource="whitesave"/> 
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
