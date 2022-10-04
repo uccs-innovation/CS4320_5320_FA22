@@ -8,7 +8,7 @@
              Title="Add Task">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Clicked="AddTaskButton" IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+        <ToolbarItem Text="Add" Clicked="HandleAddTaskButton" IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
@@ -104,7 +104,7 @@
             <Slider 
                 Maximum="5"
                 Minimum="0"
-                ValueChanged="OnSliderValueChanged" 
+                ValueChanged="HandleSliderValueChanged" 
                 Grid.Row="4"
                 Grid.ColumnSpan="2"
                 x:Name="priority"
@@ -123,7 +123,7 @@
                 Grid.Column="1"
                 CornerRadius="7"
                 Margin="1"
-                Clicked="OnDeleteTaskClicked" />
+                Clicked="HandleDeleteTaskClicked" />
                
 
             <Button
@@ -132,7 +132,7 @@
                 Grid.Column="1"
                 CornerRadius="7"
                 Margin="1"
-                Clicked="OnDeleteTaskClicked"/>
+                Clicked="HandleDeleteTaskClicked"/>
 
 
 

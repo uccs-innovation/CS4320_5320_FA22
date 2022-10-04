@@ -59,7 +59,7 @@ namespace StudyN.Models
                 }
             }
         }
-        public void TaskComplete(Guid taskId)
+        public void CompleteTask(Guid taskId)
         {
             foreach (ListTask task in CalendarTasks)
             {
@@ -73,7 +73,7 @@ namespace StudyN.Models
             }
         }
 
-        public void TaskDelete(Guid taskId)
+        public void DeleteTask(Guid taskId)
         {
             foreach (ListTask task in CalendarTasks)
             {
@@ -93,13 +93,13 @@ namespace StudyN.Models
             CalendarTasks = new ObservableCollection<ListTask>();
             CompletedTasks = new ObservableCollection<ListTask>();
             GenerateCalendarTasks();
-            UIGlobal.MainPage = this;
+            UIGlobal.MainData = this;
         }
     }
 
     public static class UIGlobal
     {
-        public static ListTaskData MainPage { get; set; }
+        public static ListTaskData MainData { get; set; }
         public static ListTask ToEdit { get; set; }
 
       

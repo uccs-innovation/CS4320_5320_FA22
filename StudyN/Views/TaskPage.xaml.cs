@@ -80,7 +80,7 @@ namespace StudyN.Views
                 // Delete tasks
                 foreach (ListTask task in selectedTasks)
                 { 
-                    task.Parent.TaskDelete(task.TaskId);
+                    task.Parent.DeleteTask(task.TaskId);
                 }
 
                 selectedTasks.Clear();
@@ -107,7 +107,7 @@ namespace StudyN.Views
                 // Delete tasks
                 foreach (ListTask task in selectedTasks)
                 {
-                    task.Parent.TaskComplete(task.TaskId);
+                    task.Parent.CompleteTask(task.TaskId);
                 }
 
                 selectedTasks.Clear();
