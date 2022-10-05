@@ -5,7 +5,7 @@
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
              xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
              xmlns:dxee="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-             Title="Add Task">
+             Title="{Binding Title}">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" IconImageSource="whitesave"/> 
@@ -17,19 +17,22 @@
 
         <!--Grid for organizing -->
         <Grid Margin="10"
-              Padding="5">
+              Padding="5"
+              RowSpacing="10"
+              ColumnSpacing="10">
+            
             <!--Grid rows definitions-->
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
-                <RowDefinition Height="100" />
+                <RowDefinition Height="250" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="30" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
-                <RowDefinition Height="50" />
-                <RowDefinition Height="50" />
-
             </Grid.RowDefinitions>
+            
             <!--Grid column definitions-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -39,23 +42,20 @@
             <!--task name box GridRow 1 Spans 2 columns-->
             <dxe:TextEdit
                 Grid.ColumnSpan="2"
-                LabelText="Task Name"
+                LabelText="Name"
                 IsLabelFloating="True"
                 Margin="1"
-                x:Name="name"
-            >
-            </dxe:TextEdit>
+                x:Name="name" />
+
 
             <!--task discription box in GridRow 2 Spans 2 columns-->
-            <dxe:TextEdit
+            <dxe:MultilineEdit
                 Grid.ColumnSpan="2"
-                LabelText="Task Discription"
+                LabelText="Description"
                 IsLabelFloating="True"
                 Grid.Row="1"
-                Margin="1"
-                x:Name="description"
-                >
-            </dxe:TextEdit>
+                x:Name="description" />
+
 
             <!--Time Entry Box GridRow 3 Spans 1 Column-->
             <dxe:TimeEdit 
@@ -65,8 +65,7 @@
                 LabelText="Time Due"
                 IsLabelFloating="True"
                 Margin="1"
-                x:Name="time"
-             />
+                x:Name="time" />
 
             <!--Date Entry box GridRow 3 Spans 1 Column-->
             <dxe:DateEdit 
@@ -77,15 +76,14 @@
                 LabelText="Date Due"
                 IsLabelFloating="True"
                 Margin="1"
-                x:Name="date"
-             />
+                x:Name="date" />
             
             <!--Time Spent On Task So far Entry box-->
             <dxe:NumericEdit 
                 Value="0" DisplayFormat="n0"
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
-                LabelText="Time Spent On Task"
+                LabelText="Time Logged"
                 IsLabelFloating="True"
                 Margin="1"
                 x:Name="tSpent"/>
@@ -96,11 +94,10 @@
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
                 Grid.Column="1"
-                LabelText="Time Needed To Do Task"
+                LabelText="Total Time Needed"
                 IsLabelFloating="True"
                 Margin="1"
                 x:Name="tComplete"/>
-
 
             <!--Priority Slider and Label-->
             <Label x:Name="displayLabel"
@@ -109,16 +106,15 @@
                VerticalOptions="Center" 
                Grid.Row="4"
                Grid.ColumnSpan="2"
-               FontSize="16"
-               />
-            <Slider  
+               FontSize="16" />
+            <Slider 
                 Maximum="5"
                 Minimum="0"
                 ValueChanged="HandleSliderValueChanged" 
                 Grid.Row="5"
                 Grid.ColumnSpan="2"
-                x:Name="priority"
-                />
+                x:Name="priority" />
+            
             <!--Buttons for completing/deleting tasks-->
             <Button 
                 x:Name="DeleteTaskButton"
@@ -128,21 +124,15 @@
                 Margin="1"
                 Clicked="HandleDeleteTaskClicked" />
 
-
             <Button
                 x:Name="CompleteTaskButton"
-                Text="Complete Task"
+                Text="Mark Complete"
                 Grid.Row="6"
                 Grid.Column="1"
                 CornerRadius="7"
                 Margin="1"
                 Clicked="HandleDeleteTaskClicked"
                 Command="{Binding ButtonVisibility}"/>
-
-
-
-
-
         </Grid>
     </ContentPage.Content>
 

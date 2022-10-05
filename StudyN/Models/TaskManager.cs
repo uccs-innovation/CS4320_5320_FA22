@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace StudyN.Models
 {
-    public class ListTask
+    public class TaskItem
     {
-        public ListTask(string name, string description, DateTime dueTime, int priority, int completionProgress, int totalTimeNeeded)
+        public TaskItem(string name, string description, DateTime dueTime, int priority, int completionProgress, int totalTimeNeeded)
         {
             this.Name = name;
             this.Description = description;
@@ -23,47 +23,47 @@ namespace StudyN.Models
         public int CompletionProgress { get; set; } = 0;
         public int TotalTimeNeeded { get; set; } = 0;
         public int Priority { get; set; } = 3;
-        public ListTaskData Parent { get; set; } = null;
+        public TaskDataManager Parent { get; set; } = null;
     }
 
-    public class ListTaskData
+    public class TaskDataManager
     {
-        public ListTask AddTask(string name, string description, DateTime dueTime, int priority, int CompletionProgress, int TotalTimeNeeded)
+        public TaskItem AddTask(string name, string description, DateTime dueTime, int priority, int CompletionProgress, int TotalTimeNeeded)
         {
-            ListTask newTask = new ListTask(name, description, dueTime, priority, CompletionProgress, TotalTimeNeeded);
+            TaskItem newTask = new TaskItem(name, description, dueTime, priority, CompletionProgress, TotalTimeNeeded);
             newTask.Parent = this;
-            ListTasks.Add(newTask);
+            TaskList.Add(newTask);
             return newTask;
         }
 
-        public ListTask AddTask(ListTask task)
+        public TaskItem AddTask(TaskItem task)
         {
-            ListTask newTask = new ListTask(task.Name, task.Description, task.DueTime, task.Priority, task.CompletionProgress, task.TotalTimeNeeded);
+            TaskItem newTask = new TaskItem(task.Name, task.Description, task.DueTime, task.Priority, task.CompletionProgress, task.TotalTimeNeeded);
             newTask.Parent = this;
-            ListTasks.Add(newTask);
+            TaskList.Add(newTask);
             return newTask;
         }
 
         public void RemoveTask(Guid taskId)
         {
-            foreach(ListTask task in ListTasks)
+            foreach(TaskItem task in TaskList)
             {
                 if(task.TaskId == taskId)
                 {
-                    ListTasks.Remove(task);
+                    TaskList.Remove(task);
                     return;
                 }
             }
         }
         public void CompleteTask(Guid taskId)
         {
-            foreach (ListTask task in ListTasks)
+            foreach (TaskItem task in TaskList)
             {
                 if (task.TaskId == taskId)
                 {
                     task.Completed = true;
                     CompletedTasks.Add(task);
-                    ListTasks.Remove(task);
+                    TaskList.Remove(task);
                     return;
                 }
             }
@@ -71,31 +71,31 @@ namespace StudyN.Models
 
         public void DeleteTask(Guid taskId)
         {
-            foreach (ListTask task in ListTasks)
+            foreach (TaskItem task in TaskList)
             {
                 if (task.TaskId == taskId)
                 {
-                    ListTasks.Remove(task);
+                    TaskList.Remove(task);
                     return;
                 }
             }
         }
 
-        public ObservableCollection<ListTask> ListTasks { get; private set; }
-        private ObservableCollection<ListTask> CompletedTasks { get; set; }
+        public ObservableCollection<TaskItem> TaskList { get; private set; }
+        private ObservableCollection<TaskItem> CompletedTasks { get; set; }
 
-        public ListTaskData()
+        public TaskDataManager()
         {
-            ListTasks = new ObservableCollection<ListTask>();
-            CompletedTasks = new ObservableCollection<ListTask>();
+            TaskList = new ObservableCollection<TaskItem>();
+            CompletedTasks = new ObservableCollection<TaskItem>();
             UIGlobal.MainData = this;
         }
     }
 
     public static class UIGlobal
     {
-        public static ListTaskData MainData { get; set; }
-        public static ListTask ToEdit { get; set; }
+        public static TaskDataManager MainData { get; set; }
+        public static TaskItem ToEdit { get; set; }
 
     }
 }
