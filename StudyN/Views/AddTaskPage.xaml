@@ -8,6 +8,7 @@
              Title="{Binding Title}">
 
     <ContentPage.ToolbarItems>
+
         <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" IconImageSource="whitesave"/> 
     </ContentPage.ToolbarItems>
 
@@ -80,7 +81,7 @@
                 Value="0" DisplayFormat="n0"
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
-                LabelText="Time Logged"
+                LabelText="Hours Logged"
                 IsLabelFloating="True"
                 Margin="1"
                 x:Name="tSpent"/>
@@ -91,7 +92,7 @@
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
                 Grid.Column="1"
-                LabelText="Total Time Needed"
+                LabelText="Total Hours Needed"
                 IsLabelFloating="True"
                 Margin="1"
                 x:Name="tComplete"/>
