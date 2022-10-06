@@ -5,7 +5,12 @@ namespace StudyN.Models
 {
     public class TaskItem
     {
-        public TaskItem(string name, string description, DateTime dueTime, int priority, int completionProgress, int totalTimeNeeded)
+        public TaskItem(string name,
+                        string description,
+                        DateTime dueTime,
+                        int priority,
+                        int completionProgress,
+                        int totalTimeNeeded)
         {
             this.Name = name;
             this.Description = description;
@@ -28,9 +33,19 @@ namespace StudyN.Models
 
     public class TaskDataManager
     {
-        public TaskItem AddTask(string name, string description, DateTime dueTime, int priority, int CompletionProgress, int TotalTimeNeeded)
+        public TaskItem AddTask(string name,
+                                string description,
+                                DateTime dueTime,
+                                int priority,
+                                int CompletionProgress,
+                                int TotalTimeNeeded)
         {
-            TaskItem newTask = new TaskItem(name, description, dueTime, priority, CompletionProgress, TotalTimeNeeded);
+            TaskItem newTask  = new TaskItem(name,
+                                            description,
+                                            dueTime,
+                                            priority,
+                                            CompletionProgress,
+                                            TotalTimeNeeded);
             newTask.Parent = this;
             TaskList.Add(newTask);
             return newTask;
@@ -38,7 +53,12 @@ namespace StudyN.Models
 
         public TaskItem AddTask(TaskItem task)
         {
-            TaskItem newTask = new TaskItem(task.Name, task.Description, task.DueTime, task.Priority, task.CompletionProgress, task.TotalTimeNeeded);
+            TaskItem newTask = new TaskItem(task.Name,
+                                            task.Description,
+                                            task.DueTime,
+                                            task.Priority,
+                                            task.CompletionProgress,
+                                            task.TotalTimeNeeded);
             newTask.Parent = this;
             TaskList.Add(newTask);
             return newTask;

@@ -42,7 +42,7 @@
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
             <dxg:TextColumn FieldName="Name" Caption="Task" />
-            <dxg:DateColumn FieldName="DueDate" Caption="Due" DisplayFormat="h:mm tt" IsGrouped="True"/>
+            <dxg:DateColumn FieldName="DueTime" Caption="Due" DisplayFormat="h:mm tt" IsGrouped="True"/>
         </dxg:DataGridView.Columns>
         <!--Customize the appearance of group row.-->
         <dxg:DataGridView.GroupRowStyle>

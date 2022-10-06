@@ -66,21 +66,21 @@ namespace StudyN.Models
         public static DateTime BaseDate = DateTime.Today;
 
         public static string[] AppointmentCategoryTitles = { "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work"};
-        public static Color[] AppointmentCategoryColors = { Color.FromHex("#3333FF"),   // dark blue
-                                                        Color.FromHex("#008A00"),   // green                                                        
-                                                        Color.FromHex("#D80073"),   // dark pink
-                                                        Color.FromHex("#FFCB21"),   // mustard
-                                                        Color.FromHex("#1BA1E2"),   // medium blue                                                        
-                                                        Color.FromHex("FF8000"),    // orange
-                                                        Color.FromHex("#A20025"),   // burgundy                                                         
-                                                        Color.FromHex("#6A00FF") };   // purple
+        public static Color[] AppointmentCategoryColors = { Color.FromArgb("#3333FF"),   // dark blue
+                                                        Color.FromArgb("#008A00"),   // green                                                        
+                                                        Color.FromArgb("#D80073"),   // dark pink
+                                                        Color.FromArgb("#FFCB21"),   // mustard
+                                                        Color.FromArgb("#1BA1E2"),   // medium blue                                                        
+                                                        Color.FromArgb("FF8000"),    // orange
+                                                        Color.FromArgb("#A20025"),   // burgundy                                                         
+                                                        Color.FromArgb("#6A00FF") };   // purple
                                                                                       
         public static string[] AppointmentStatusTitles = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
-        public static Color[] AppointmentStatusColors = { Color.FromHex("00FF80"),   // light green
-                                                          Color.FromHex("#FF3333"),  // red                                                        
-                                                          Color.FromHex("FF33FF"),   // magenta
-                                                          Color.FromHex("#FFFF00"),  // yellow
-                                                          Color.FromHex("#00FFFF") };// cyan
+        public static Color[] AppointmentStatusColors = { Color.FromArgb("00FF80"),   // light green
+                                                          Color.FromArgb("#FF3333"),  // red                                                        
+                                                          Color.FromArgb("FF33FF"),   // magenta
+                                                          Color.FromArgb("#FFFF00"),  // yellow
+                                                          Color.FromArgb("#00FFFF") };// cyan
                                                                                                                  
         //Calls to the things that we are going to do
         public static string[] AppointmentTitles = { "Soccer", "Math Class", "CS Class",

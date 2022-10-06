@@ -173,7 +173,6 @@ namespace StudyN.Views
                     UIGlobal.ToEdit = task;
                     // Get it in here
                     await Shell.Current.GoToAsync(nameof(AddTaskPage));
-                    // task.Parent.RemoveTask(task.TaskId);
                 }
                 else
                 {
@@ -187,7 +186,6 @@ namespace StudyN.Views
         {
             UIGlobal.ToEdit = null;
             await Shell.Current.GoToAsync(nameof(AddTaskPage));
-
         }
 
 

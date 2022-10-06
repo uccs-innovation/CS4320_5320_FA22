@@ -78,7 +78,8 @@
             
             <!--Time Spent On Task So far Entry box-->
             <dxe:NumericEdit 
-                Value="0" DisplayFormat="n0"
+                AllowNullValue="True"
+                DisplayFormat="n0"
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
                 LabelText="Hours Logged"
@@ -88,7 +89,8 @@
 
             <!--Time Needed to Complete Task-->
             <dxe:NumericEdit 
-                Value="0" DisplayFormat="n0"
+                AllowNullValue="True"
+                DisplayFormat="n0"
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
                 Grid.Column="1"
@@ -107,7 +109,8 @@
                FontSize="16" />
             <Slider 
                 Maximum="5"
-                Minimum="0"
+                Minimum="1"
+                Value="3"
                 ValueChanged="HandleSliderValueChanged" 
                 Grid.Row="5"
                 Grid.ColumnSpan="2"

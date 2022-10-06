@@ -50,13 +50,19 @@ public partial class AddTaskPage : ContentPage
 
     private async void HandleAddTaskButton(object sender, EventArgs e)
     {
+        // Make sure we aren't storing nulls
+        this.name.Text = this.name.Text == null ? "No Name" : this.name.Text;
+        this.description.Text = this.description.Text == null ? "" : this.description.Text;
+        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
+        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+
         UIGlobal.MainData.AddTask(
             this.name.Text,
             this.description.Text,
             this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds),
             (int)this.priority.Value,
-            (int)this.tSpent.Value,
-            (int)this.tComplete.Value);
+            timeLogged,
+            totalTime);
 
         if (UIGlobal.ToEdit != null)
         {
