@@ -16,13 +16,13 @@ namespace StudyN.Views
         ToolbarItem trashToolbarItem;
         ToolbarItem completeToolbarItem;
 
-        HashSet<ListTask> selectedTasks;
+        HashSet<TaskItem> selectedTasks;
         HashSet<int> rowHandleList;
         public TaskPage()
         {
             InitializeComponent();
 
-            selectedTasks = new HashSet<ListTask>();
+            selectedTasks = new HashSet<TaskItem>();
             rowHandleList = new HashSet<int>();
 
             foreach (ToolbarItem item in ToolbarItems)
@@ -81,7 +81,7 @@ namespace StudyN.Views
                 gridView.BeginUpdate();
 
                 // Delete tasks
-                foreach (ListTask task in selectedTasks)
+                foreach (TaskItem task in selectedTasks)
                 { 
                     task.Parent.DeleteTask(task.TaskId);
                 }
@@ -108,7 +108,7 @@ namespace StudyN.Views
                 gridView.BeginUpdate();
 
                 // Delete tasks
-                foreach (ListTask task in selectedTasks)
+                foreach (TaskItem task in selectedTasks)
                 {
                     task.Parent.CompleteTask(task.TaskId);
                 }
@@ -128,55 +128,63 @@ namespace StudyN.Views
 
         private void RowLongPressed(object sender, DataGridGestureEventArgs e)
         {
-            ListTask task = e.Item as ListTask;
-            DataGridView gridView = sender as DataGridView;
-
-            gridView.BeginUpdate();
-
-            // Add/Remove from list as needed
-            if (selectedTasks.Contains(task))
+            if (e.Item != null && e.FieldName != "DueTime")
             {
-                selectedTasks.Remove(task);
-                rowHandleList.Remove(e.RowHandle);
-            }
-            else
-            {
-                selectedTasks.Add(task);
-                rowHandleList.Add(e.RowHandle);
-            }
+                TaskItem task = e.Item as TaskItem;
+                DataGridView gridView = sender as DataGridView;
 
-            // Display based on number of items selected
-            if(selectedTasks.Count > 0)
-            {
-                ShowLongPressMenu(true);
-            }
-            else
-            {
-                ShowLongPressMenu(false);
-            }
+                gridView.BeginUpdate();
 
-            gridView.EndUpdate();
+                // Add/Remove from list as needed
+                if (selectedTasks.Contains(task))
+                {
+                    selectedTasks.Remove(task);
+                    rowHandleList.Remove(e.RowHandle);
+                }
+                else
+                {
+                    selectedTasks.Add(task);
+                    rowHandleList.Add(e.RowHandle);
+                }
+
+                // Display based on number of items selected
+                if (selectedTasks.Count > 0)
+                {
+                    ShowLongPressMenu(true);
+                }
+                else
+                {
+                    ShowLongPressMenu(false);
+                }
+
+                gridView.EndUpdate();
+            }
         }
 
         private async void CellClicked(object sender, DataGridGestureEventArgs e)
         {
-            if(!isLongPressMenuVisible)
-            {
-                // Task we need to edit...
-                ListTask task = (ListTask)e.Item;
-                UIGlobal.ToEdit = task;
-                // Get it in here
-                await Shell.Current.GoToAsync(nameof(AddTaskPage));
-               // task.Parent.RemoveTask(task.TaskId);
-            } else {
-                RowLongPressed(sender, e);
-            }
 
+            if (e.Item != null && e.FieldName != "DueTime")
+            {
+                if (!isLongPressMenuVisible)
+                {
+                    // TaskItem we need to edit...
+                    TaskItem task = (TaskItem)e.Item;
+                    UIGlobal.ToEdit = task;
+                    // Get it in here
+                    await Shell.Current.GoToAsync(nameof(AddTaskPage));
+                    // task.Parent.RemoveTask(task.TaskId);
+                }
+                else
+                {
+                    RowLongPressed(sender, e);
+                }
+            }
         }
 
         //Function for the add task button to bring to new task page
-        
-        private async void AddButtonClicked(object sender, EventArgs e) {
+        private async void AddButtonClicked(object sender, EventArgs e)
+        {
             UIGlobal.ToEdit = null;
             await Shell.Current.GoToAsync(nameof(AddTaskPage));
 

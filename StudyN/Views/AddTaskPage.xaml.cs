@@ -10,15 +10,18 @@ public partial class AddTaskPage : ContentPage
 	public AddTaskPage()
 	{
 		InitializeComponent();
+
         if (UIGlobal.ToEdit != null)
         {
+            Title = "Edit Task";
             LoadValues();
             BindingContext = new EditTaskViewModel();
             EditButtonsVisible = true;
         }
         else
         {
-            EditButtonsVisible=false; 
+            Title = "Add Task";
+            EditButtonsVisible =false; 
             SetValues();
         }
         DeleteTaskButton.IsVisible = EditButtonsVisible;
@@ -47,7 +50,13 @@ public partial class AddTaskPage : ContentPage
 
     private async void HandleAddTaskButton(object sender, EventArgs e)
     {
-        UIGlobal.MainData.AddTask(this.name.Text, this.description.Text, this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds), (int)this.priority.Value, (int)this.tSpent.Value, (int)this.tComplete.Value);
+        UIGlobal.MainData.AddTask(
+            this.name.Text,
+            this.description.Text,
+            this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds),
+            (int)this.priority.Value,
+            (int)this.tSpent.Value,
+            (int)this.tComplete.Value);
 
         if (UIGlobal.ToEdit != null)
         {
