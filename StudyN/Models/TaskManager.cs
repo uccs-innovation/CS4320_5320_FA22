@@ -49,6 +49,7 @@ namespace StudyN.Models
                                             CompletionProgress,
                                             TotalTimeNeeded);
 
+            TaskList.Add(newTask);
 
             sendFileUpdate(FileManager.Operation.AddTask, newTask.TaskId, updateFile);
 
@@ -125,8 +126,8 @@ namespace StudyN.Models
         {
             TaskList = new ObservableCollection<TaskItem>();
             CompletedTasks = new ObservableCollection<TaskItem>();
+            //GlobalTaskData.TaskManager = this;
             AddTask("test", "", DateTime.Now, 3, 0, 10);
-            GlobalTaskData.TaskManager = this;
         }
     }
 

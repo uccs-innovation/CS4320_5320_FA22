@@ -50,7 +50,6 @@ namespace StudyN.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ViewModel.OnAppearing();
         }
 
         private void Handle_onCalendarTap_FromDayView(object sender, SchedulerGestureEventArgs e)

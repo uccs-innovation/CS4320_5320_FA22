@@ -9,6 +9,8 @@ namespace StudyN.Views
         {
             InitializeComponent();
             BindingContext = new MainViewModel();
+
+            GlobalTaskData.TaskManager = new TaskDataManager();
         }
     }
 }
