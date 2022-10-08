@@ -170,7 +170,7 @@ namespace StudyN.Views
                 {
                     // TaskItem we need to edit...
                     TaskItem task = (TaskItem)e.Item;
-                    UIGlobal.ToEdit = task;
+                    GlobalTaskData.ToEdit = task;
                     // Get it in here
                     await Shell.Current.GoToAsync(nameof(AddTaskPage));
                 }
@@ -184,7 +184,7 @@ namespace StudyN.Views
         //Function for the add task button to bring to new task page
         private async void AddButtonClicked(object sender, EventArgs e)
         {
-            UIGlobal.ToEdit = null;
+            GlobalTaskData.ToEdit = null;
             await Shell.Current.GoToAsync(nameof(AddTaskPage));
         }
 

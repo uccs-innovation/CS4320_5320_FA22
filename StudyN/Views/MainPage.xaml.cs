@@ -1,4 +1,5 @@
-﻿using StudyN.ViewModels;
+﻿using StudyN.Models;
+using StudyN.ViewModels;
 
 namespace StudyN.Views
 {

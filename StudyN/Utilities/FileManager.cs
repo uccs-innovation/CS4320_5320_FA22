@@ -14,13 +14,13 @@ namespace StudyN.Utilities
         }
         public class FileOperation
         {
-            public FileOperation(Guid taskID, Operation operation)
+            public FileOperation(Operation operation, List<Guid> idList)
             {
-                TaskID = taskID;
+                TaskIdList = idList;
                 Operation = operation;
             }
 
-            public Guid TaskID { get; set; }
+            public List<Guid> TaskIdList { get; set; }
             public Operation Operation { get; set; }
         }
 
