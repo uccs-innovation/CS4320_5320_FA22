@@ -90,12 +90,9 @@ namespace StudyN.Models
 
         public void DeleteListOfTasks(List<Guid> taskIds, bool updateFile = true)
         {
-            foreach (TaskItem task in TaskList)
+            foreach (Guid id in taskIds)
             {
-                if(taskIds.Contains(task.TaskId))
-                {
-                    TaskList.Remove(task);
-                }
+                DeleteTask(id, false);
             }
 
             sendFileUpdate(FileManager.Operation.DeleteTask, taskIds, updateFile);
@@ -128,6 +125,12 @@ namespace StudyN.Models
             CompletedTasks = new ObservableCollection<TaskItem>();
             //GlobalTaskData.TaskManager = this;
             AddTask("test", "", DateTime.Now, 3, 0, 10);
+            AddTask("test2", "", DateTime.Now, 3, 0, 10);
+            AddTask("test3", "", DateTime.Now, 3, 0, 10);
+            AddTask("test4", "", DateTime.Now, 3, 0, 10);
+            AddTask("test5", "", DateTime.Now, 3, 0, 10);
+            AddTask("test6", "", DateTime.Now, 3, 0, 10);
+            AddTask("test7", "", DateTime.Now, 3, 0, 10);
         }
     }
 

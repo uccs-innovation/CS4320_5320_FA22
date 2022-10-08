@@ -35,37 +35,45 @@ namespace StudyN.Utilities
             await foreach(FileOperation op in FILE_OP_QUEUE)
             {
                 if(op.Operation == Operation.AddTask)
-                    Console.WriteLine("Adding Task");
-                if (op.Operation == Operation.DeleteTask)
-                    Console.WriteLine("Deleting Task");
-                if (op.Operation == Operation.CompleteTask)
-                    Console.WriteLine("Completing Task");
+                {
+                    TasksAdded(op.TaskIdList);
+                }
+                else if (op.Operation == Operation.DeleteTask)
+                {
+                    TasksDeleted(op.TaskIdList);
+                }
+                else if (op.Operation == Operation.CompleteTask)
+                {
+                    TasksCompleted(op.TaskIdList);
+                }
             }
         }
 
-        static string generateTaskJson()
+        public static async Task TasksAdded(List<Guid> taskIdList)
         {
-            return "";
+            Console.WriteLine("Tasks Added:");
+            foreach(Guid id in taskIdList)
+            {
+                Console.WriteLine("    " + id.ToString());
+            }
         }
 
-        static string generateCompletedTaskJson()
+        public static async Task TasksDeleted(List<Guid> taskIdList)
         {
-            return "";
+            Console.WriteLine("Tasks Deleted:");
+            foreach (Guid id in taskIdList)
+            {
+                Console.WriteLine("    " + id.ToString());
+            }
         }
-        static async Task WriteJsonAync()
+
+        public static async Task TasksCompleted(List<Guid> taskIdList)
         {
-            Console.WriteLine("Async Write File has started");
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(DIR, TASK_FILENAME)))
+            Console.WriteLine("Tasks Completed:");
+            foreach (Guid id in taskIdList)
             {
-                Console.WriteLine("Writing to: " + TASK_FILENAME);
-                await outputFile.WriteAsync(generateTaskJson());
+                Console.WriteLine("    " + id.ToString());
             }
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(DIR, COMPLETE_TASK_FILENAME)))
-            {
-                Console.WriteLine("Writing to: " + COMPLETE_TASK_FILENAME);
-                await outputFile.WriteAsync(generateCompletedTaskJson());
-            }
-            Console.WriteLine("Async Write File has completed");
         }
     }
 }

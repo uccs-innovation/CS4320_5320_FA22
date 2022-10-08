@@ -81,10 +81,13 @@ namespace StudyN.Views
                 gridView.BeginUpdate();
 
                 // Delete tasks
+                List<Guid> taskIds = new List<Guid>();
                 foreach (TaskItem task in selectedTasks)
-                { 
-                    task.Parent.DeleteTask(task.TaskId);
+                {
+                    taskIds.Add(task.TaskId);
                 }
+
+                GlobalTaskData.TaskManager.DeleteListOfTasks(taskIds);
 
                 selectedTasks.Clear();
                 rowHandleList.Clear();
@@ -110,7 +113,7 @@ namespace StudyN.Views
                 // Delete tasks
                 foreach (TaskItem task in selectedTasks)
                 {
-                    task.Parent.CompleteTask(task.TaskId);
+                    GlobalTaskData.TaskManager.CompleteTask(task.TaskId);
                 }
 
                 selectedTasks.Clear();
