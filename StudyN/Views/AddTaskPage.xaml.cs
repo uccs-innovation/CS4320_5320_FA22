@@ -32,14 +32,14 @@ public partial class AddTaskPage : ContentPage
     //calls delete task
     private async void HandleDeleteTaskClicked(object sender, EventArgs args)
     {
-        GlobalTaskData.ToEdit.Parent.DeleteTask(GlobalTaskData.ToEdit.TaskId);
+        GlobalTaskData.TaskManager.DeleteTask(GlobalTaskData.ToEdit.TaskId);
         await Shell.Current.GoToAsync("..");
 
     }
 
     private async void HandleCompleteTaskClicked(object sender, EventArgs args)
     {
-        GlobalTaskData.ToEdit.Parent.CompleteTask(GlobalTaskData.ToEdit.TaskId);
+        GlobalTaskData.TaskManager.CompleteTask(GlobalTaskData.ToEdit.TaskId);
         await Shell.Current.GoToAsync("..");
     }
 

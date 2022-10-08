@@ -49,7 +49,7 @@ namespace StudyN.Utilities
             }
         }
 
-        public static async Task TasksAdded(List<Guid> taskIdList)
+        public static void TasksAdded(List<Guid> taskIdList)
         {
             Console.WriteLine("Tasks Added:");
             foreach(Guid id in taskIdList)
@@ -58,7 +58,7 @@ namespace StudyN.Utilities
             }
         }
 
-        public static async Task TasksDeleted(List<Guid> taskIdList)
+        public static void TasksDeleted(List<Guid> taskIdList)
         {
             Console.WriteLine("Tasks Deleted:");
             foreach (Guid id in taskIdList)
@@ -67,7 +67,7 @@ namespace StudyN.Utilities
             }
         }
 
-        public static async Task TasksCompleted(List<Guid> taskIdList)
+        public static void TasksCompleted(List<Guid> taskIdList)
         {
             Console.WriteLine("Tasks Completed:");
             foreach (Guid id in taskIdList)

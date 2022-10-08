@@ -4,34 +4,6 @@ using System.Threading.Tasks;
 
 namespace StudyN.Models
 {
-    public class TaskItem
-    {
-        public TaskItem(string name,
-                        string description,
-                        DateTime dueTime,
-                        int priority,
-                        int completionProgress,
-                        int totalTimeNeeded)
-        {
-            this.Name = name;
-            this.Description = description;
-            this.DueTime = dueTime;
-            this.Priority = priority;
-            this.CompletionProgress = completionProgress;
-            this.TotalTimeNeeded = totalTimeNeeded;
-        }
-
-        public bool Completed { get; set; } = false;
-        public Guid TaskId { get; set; } = Guid.NewGuid();
-        public string Name { get; set; }
-        public string Description { get; set; } = "";
-        public DateTime DueTime { get; set; }
-        public int CompletionProgress { get; set; } = 0;
-        public int TotalTimeNeeded { get; set; } = 0;
-        public int Priority { get; set; } = 3;
-        public TaskDataManager Parent { get; set; } = null;
-    }
-
     public class TaskDataManager
     {
         public TaskItem AddTask(string name,
@@ -123,21 +95,7 @@ namespace StudyN.Models
         {
             TaskList = new ObservableCollection<TaskItem>();
             CompletedTasks = new ObservableCollection<TaskItem>();
-            //GlobalTaskData.TaskManager = this;
-            AddTask("test", "", DateTime.Now, 3, 0, 10);
-            AddTask("test2", "", DateTime.Now, 3, 0, 10);
-            AddTask("test3", "", DateTime.Now, 3, 0, 10);
-            AddTask("test4", "", DateTime.Now, 3, 0, 10);
-            AddTask("test5", "", DateTime.Now, 3, 0, 10);
-            AddTask("test6", "", DateTime.Now, 3, 0, 10);
-            AddTask("test7", "", DateTime.Now, 3, 0, 10);
         }
-    }
-
-    public static class GlobalTaskData
-    {
-        public static TaskDataManager TaskManager { get; set; }
-        public static TaskItem ToEdit { get; set; }
     }
 }
 
