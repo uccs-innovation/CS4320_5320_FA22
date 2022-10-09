@@ -55,14 +55,16 @@ public partial class AddTaskPage : ContentPage
         this.description.Text = this.description.Text == null ? "" : this.description.Text;
         int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
         int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
-
+        double percent = 0;
+    
         UIGlobal.MainData.AddTask(
             this.name.Text,
             this.description.Text,
             this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds),
             (int)this.priority.Value,
             timeLogged,
-            totalTime);
+            totalTime, 
+            percent);
 
         if (UIGlobal.ToEdit != null)
         {
