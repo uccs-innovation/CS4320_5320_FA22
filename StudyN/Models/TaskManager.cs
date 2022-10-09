@@ -1,36 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using StudyN.Utilities;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace StudyN.Models
 {
-    public class TaskItem
-    {
-        public TaskItem(string name,
-                        string description,
-                        DateTime dueTime,
-                        int priority,
-                        int completionProgress,
-                        int totalTimeNeeded)
-        {
-            this.Name = name;
-            this.Description = description;
-            this.DueTime = dueTime;
-            this.Priority = priority;
-            this.CompletionProgress = completionProgress;
-            this.TotalTimeNeeded = totalTimeNeeded;
-        }
-
-        public bool Completed { get; set; } = false;
-        public Guid TaskId { get; set; } = Guid.NewGuid();
-        public string Name { get; set; }
-        public string Description { get; set; } = "";
-        public DateTime DueTime { get; set; }
-        public int CompletionProgress { get; set; } = 0;
-        public int TotalTimeNeeded { get; set; } = 0;
-        public int Priority { get; set; } = 3;
-        public TaskDataManager Parent { get; set; } = null;
-    }
-
     public class TaskDataManager
     {
         public TaskItem AddTask(string name,
@@ -38,7 +11,8 @@ namespace StudyN.Models
                                 DateTime dueTime,
                                 int priority,
                                 int CompletionProgress,
-                                int TotalTimeNeeded)
+                                int TotalTimeNeeded,
+                                bool updateFile = true)
         {
             TaskItem newTask  = new TaskItem(name,
                                             description,
@@ -46,36 +20,15 @@ namespace StudyN.Models
                                             priority,
                                             CompletionProgress,
                                             TotalTimeNeeded);
-            newTask.Parent = this;
+
             TaskList.Add(newTask);
+
+            sendFileUpdate(FileManager.Operation.AddTask, newTask.TaskId, updateFile);
+
             return newTask;
         }
 
-        public TaskItem AddTask(TaskItem task)
-        {
-            TaskItem newTask = new TaskItem(task.Name,
-                                            task.Description,
-                                            task.DueTime,
-                                            task.Priority,
-                                            task.CompletionProgress,
-                                            task.TotalTimeNeeded);
-            newTask.Parent = this;
-            TaskList.Add(newTask);
-            return newTask;
-        }
-
-        public void RemoveTask(Guid taskId)
-        {
-            foreach(TaskItem task in TaskList)
-            {
-                if(task.TaskId == taskId)
-                {
-                    TaskList.Remove(task);
-                    return;
-                }
-            }
-        }
-        public void CompleteTask(Guid taskId)
+        public void CompleteTask(Guid taskId, bool updateFile = true)
         {
             foreach (TaskItem task in TaskList)
             {
@@ -84,20 +37,54 @@ namespace StudyN.Models
                     task.Completed = true;
                     CompletedTasks.Add(task);
                     TaskList.Remove(task);
+
+                    sendFileUpdate(FileManager.Operation.CompleteTask, taskId, updateFile);
+
                     return;
                 }
             }
         }
 
-        public void DeleteTask(Guid taskId)
+        public void DeleteTask(Guid taskId, bool updateFile = true)
         {
             foreach (TaskItem task in TaskList)
             {
                 if (task.TaskId == taskId)
                 {
                     TaskList.Remove(task);
+
+                    sendFileUpdate(FileManager.Operation.AddTask, taskId, updateFile);
+
                     return;
                 }
+            }
+        }
+
+        public void DeleteListOfTasks(List<Guid> taskIds, bool updateFile = true)
+        {
+            foreach (Guid id in taskIds)
+            {
+                DeleteTask(id, false);
+            }
+
+            sendFileUpdate(FileManager.Operation.DeleteTask, taskIds, updateFile);
+        }
+
+
+        public void sendFileUpdate(FileManager.Operation op, Guid taskId, bool updateFile)
+        {
+            List<Guid> taskIdList = new List<Guid>();
+            taskIdList.Add(taskId);
+
+            sendFileUpdate(op, taskIdList, updateFile);
+        }
+        public void sendFileUpdate(FileManager.Operation op, List<Guid> taskIds, bool updateFile)
+        {
+            if (updateFile)
+            {
+                // Send update to Filemanager
+                FileManager.FILE_OP_QUEUE.Enquue(
+                    new FileManager.FileOperation(op, taskIds));
             }
         }
 
@@ -108,15 +95,7 @@ namespace StudyN.Models
         {
             TaskList = new ObservableCollection<TaskItem>();
             CompletedTasks = new ObservableCollection<TaskItem>();
-            UIGlobal.MainData = this;
         }
-    }
-
-    public static class UIGlobal
-    {
-        public static TaskDataManager MainData { get; set; }
-        public static TaskItem ToEdit { get; set; }
-
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using StudyN.ViewModels;
+﻿using StudyN.Models;
+using StudyN.ViewModels;
 
 namespace StudyN.Views
 {
@@ -8,6 +9,8 @@ namespace StudyN.Views
         {
             InitializeComponent();
             BindingContext = new MainViewModel();
+
+            GlobalTaskData.TaskManager = new TaskDataManager();
         }
     }
 }

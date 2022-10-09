@@ -7,13 +7,11 @@ namespace StudyN.ViewModels
 {
     public class TaskDataViewModel : INotifyPropertyChanged
     {
-        private TaskDataManager data;
         public event PropertyChangedEventHandler PropertyChanged;
-        public ObservableCollection<TaskItem> TaskList { get => data.TaskList; }
+        public ObservableCollection<TaskItem> TaskList { get => GlobalTaskData.TaskManager.TaskList; }
 
         public TaskDataViewModel()
         {
-            data = new TaskDataManager();
         }
 
         protected void RaisePropertyChanged(string name)

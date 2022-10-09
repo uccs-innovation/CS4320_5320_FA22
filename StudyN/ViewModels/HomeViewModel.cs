@@ -1,4 +1,5 @@
 ﻿using StudyN.Models;
+using StudyN.Utilities;
 using System.Collections.ObjectModel;
 
 namespace StudyN.ViewModels
@@ -15,12 +16,7 @@ namespace StudyN.ViewModels
 
         async public void OnAppearing()
         {
-            //IEnumerable<Item> items = await DataStore.GetItemsAsync(true);
-            //Items.Clear();
-            //foreach (Item item in items)
-            //{
-            //    Items.Add(item);
-            //}
+            await FileManager.WaitForFileOp();
         }
     }
 }

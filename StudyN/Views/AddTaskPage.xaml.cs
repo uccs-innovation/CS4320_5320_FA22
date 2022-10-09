@@ -2,6 +2,7 @@ namespace StudyN.Views;
 
 using Microsoft.Maui.Animations;
 using StudyN.Models;
+using StudyN.Utilities;
 using StudyN.ViewModels;
 
 public partial class AddTaskPage : ContentPage
@@ -11,7 +12,7 @@ public partial class AddTaskPage : ContentPage
 	{
 		InitializeComponent();
 
-        if (UIGlobal.ToEdit != null)
+        if (GlobalTaskData.ToEdit != null)
         {
             Title = "Edit Task";
             LoadValues();
@@ -31,14 +32,14 @@ public partial class AddTaskPage : ContentPage
     //calls delete task
     private async void HandleDeleteTaskClicked(object sender, EventArgs args)
     {
-        UIGlobal.ToEdit.Parent.DeleteTask(UIGlobal.ToEdit.TaskId);
+        GlobalTaskData.TaskManager.DeleteTask(GlobalTaskData.ToEdit.TaskId);
         await Shell.Current.GoToAsync("..");
 
     }
 
     private async void HandleCompleteTaskClicked(object sender, EventArgs args)
     {
-        UIGlobal.ToEdit.Parent.CompleteTask(UIGlobal.ToEdit.TaskId);
+        GlobalTaskData.TaskManager.CompleteTask(GlobalTaskData.ToEdit.TaskId);
         await Shell.Current.GoToAsync("..");
     }
 
@@ -56,7 +57,7 @@ public partial class AddTaskPage : ContentPage
         int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
         int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
 
-        UIGlobal.MainData.AddTask(
+        TaskItem task = GlobalTaskData.TaskManager.AddTask(
             this.name.Text,
             this.description.Text,
             this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds),
@@ -64,23 +65,23 @@ public partial class AddTaskPage : ContentPage
             timeLogged,
             totalTime);
 
-        if (UIGlobal.ToEdit != null)
+        if (GlobalTaskData.ToEdit != null)
         {
-            UIGlobal.MainData.CompleteTask(UIGlobal.ToEdit.TaskId);
-            UIGlobal.ToEdit = null;
+            GlobalTaskData.TaskManager.CompleteTask(GlobalTaskData.ToEdit.TaskId);
+            GlobalTaskData.ToEdit = null;
         }
         
         await Shell.Current.GoToAsync("..");
     }
     void LoadValues()
     {
-        this.name.Text = UIGlobal.ToEdit.Name;
-        this.description.Text = UIGlobal.ToEdit.Description;
-        this.date.Date = (UIGlobal.ToEdit.DueTime.Date);
-        this.time.Time = UIGlobal.ToEdit.DueTime;
-        this.priority.Value = (UIGlobal.ToEdit.Priority);
-        this.tComplete.Value = UIGlobal.ToEdit.TotalTimeNeeded;
-        this.tSpent.Value = UIGlobal.ToEdit.CompletionProgress;
+        this.name.Text = GlobalTaskData.ToEdit.Name;
+        this.description.Text = GlobalTaskData.ToEdit.Description;
+        this.date.Date = (GlobalTaskData.ToEdit.DueTime.Date);
+        this.time.Time = GlobalTaskData.ToEdit.DueTime;
+        this.priority.Value = (GlobalTaskData.ToEdit.Priority);
+        this.tComplete.Value = GlobalTaskData.ToEdit.TotalTimeNeeded;
+        this.tSpent.Value = GlobalTaskData.ToEdit.CompletionProgress;
     }
 
     void SetValues()
