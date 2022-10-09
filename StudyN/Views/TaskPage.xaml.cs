@@ -15,6 +15,7 @@ namespace StudyN.Views
         ToolbarItem cancelToolbarItem;
         ToolbarItem trashToolbarItem;
         ToolbarItem completeToolbarItem;
+        ToolbarItem chartToolbarItem;
 
         HashSet<TaskItem> selectedTasks;
         HashSet<int> rowHandleList;
@@ -40,6 +41,9 @@ namespace StudyN.Views
                         break;
                     case "Complete":
                         completeToolbarItem = item;
+                        break;
+                    case "Chart":
+                        chartToolbarItem = item;
                         break;
                     default:
                         break;
@@ -125,6 +129,11 @@ namespace StudyN.Views
             }
         }
 
+        // Bringing up the Task Metrics Visualization Page
+        private async void TaskChartsButtonClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(TaskChartsPage));
+        }
 
         private void RowLongPressed(object sender, DataGridGestureEventArgs e)
         {
@@ -209,6 +218,7 @@ namespace StudyN.Views
                 ToolbarItems.Clear();
                 ToolbarItems.Add(addToolbarItem);
             }
+            ToolbarItems.Add(chartToolbarItem);
         }
 
         private void HighlightSelectedRows(object sender, CustomCellStyleEventArgs e)
