@@ -35,16 +35,7 @@ namespace StudyN.Models
 
         public double Percent { 
             get {
-                 _percentage = (double)CompletionProgress / (double)TotalTimeNeeded;
-
-                if (_percentage.Equals(null))
-                {
-                    return 0;
-                }
-                else
-                {
-                    return _percentage;
-                }
+                return _percentage = (double)CompletionProgress / (double)TotalTimeNeeded;
             }
             set { 
                  _percentage = value;
