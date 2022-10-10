@@ -2,7 +2,51 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
-             x:Class="StudyN.Views.TaskChartsPage"             
+             x:Class="StudyN.Views.TaskChartsPage" 
+             xmlns:local="clr-namespace:StudyN.ViewModels"
              Title="Task Charts">
-    <dxc:PieChartView/>
+    <ContentPage.BindingContext>
+        <local:TaskChartsViewModel/>
+    </ContentPage.BindingContext>
+    <Shell.TitleView>
+        <StackLayout
+            Orientation="Horizontal"
+            HorizontalOptions="Center"
+            Spacing="5">
+            <Button Text="Testing Button"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            BorderColor="Black"
+            BorderWidth="1"
+            TextColor="Black"
+            BackgroundColor="White"
+            ></Button>
+        </StackLayout>
+    </Shell.TitleView>
+    <dxc:PieChartView>
+        <dxc:PieChartView.Series>
+            <dxc:DonutSeries>
+                <dxc:DonutSeries.Data>
+                    <dxc:PieSeriesDataAdapter DataSource="{Binding HoursRemainingList}"
+                                              LabelDataMember="StudyDay"
+                                              ValueDataMember="HoursLeftForDay"/>
+                </dxc:DonutSeries.Data>
+                <dxc:DonutSeries.Label>
+                    <dxc:PieSeriesLabel Position="TwoColumns" Indent="20">
+                    </dxc:PieSeriesLabel>
+                </dxc:DonutSeries.Label>
+            </dxc:DonutSeries>
+        </dxc:PieChartView.Series>
+        <dxc:PieChartView.Legend>
+            <dxc:Legend Orientation="TopToBottom"
+                HorizontalPosition="Center"
+                VerticalPosition="BottomOutside">
+            </dxc:Legend>
+        </dxc:PieChartView.Legend>
+        <dxc:PieChartView.Hint>
+            <dxc:PieHint Enabled="True">
+                <!-- ... -->
+            </dxc:PieHint>
+        </dxc:PieChartView.Hint>
+    </dxc:PieChartView>
 </ContentPage>
