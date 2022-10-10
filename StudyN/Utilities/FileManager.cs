@@ -38,8 +38,11 @@ namespace StudyN.Utilities
         /// </summary>
         public static void CreateJsonFiles()
         {
-            File.CreateSymbolicLink(TASK_FILENAME, DIR);
-            File.CreateSymbolicLink(COMPLETE_TASK_FILENAME, DIR);
+            if (!File.Exists(TASK_FILENAME) && !File.Exists(COMPLETE_TASK_FILENAME))
+            {
+                File.CreateSymbolicLink(DIR, TASK_FILENAME);
+                File.CreateSymbolicLink(DIR, COMPLETE_TASK_FILENAME);
+            }
         }
 
         public static async Task WaitForFileOp()
