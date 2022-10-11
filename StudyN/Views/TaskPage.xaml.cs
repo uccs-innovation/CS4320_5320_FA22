@@ -18,12 +18,15 @@ namespace StudyN.Views
 
         HashSet<TaskItem> selectedTasks;
         HashSet<int> rowHandleList;
+
+        AutoScheduler autoScheduler;
         public TaskPage()
         {
             InitializeComponent();
 
             selectedTasks = new HashSet<TaskItem>();
             rowHandleList = new HashSet<int>();
+            autoScheduler = new AutoScheduler(UIGlobal.MainData.TaskList);
 
             foreach (ToolbarItem item in ToolbarItems)
             {
@@ -47,6 +50,7 @@ namespace StudyN.Views
             }
 
             ShowLongPressMenu(false);
+
         }
         private void CancelButtonClicked(object sender, EventArgs e)
         {
@@ -186,7 +190,14 @@ namespace StudyN.Views
         {
             UIGlobal.ToEdit = null;
             await Shell.Current.GoToAsync(nameof(AddTaskPage));
+            autoScheduler.run();
         }
+
+        //Might as well do this when task originally get added, right?
+        //public void AutoScheduleButtonClicked(object sender, EventArgs e)
+        //{
+        //    Console.WriteLine("hi");
+        //}
 
 
         void ShowLongPressMenu(bool setVisible)

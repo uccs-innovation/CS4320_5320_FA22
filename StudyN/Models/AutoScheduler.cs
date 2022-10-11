@@ -5,9 +5,10 @@ using StudyN.Models;
 
 public class AutoScheduler
 {
+
     private ObservableCollection<TaskItem> Tasklist { get; set; }
     private double[] weightAssoc;   //weightAssoc[0] corresponds to TaskList[0], weightAssoc[1] corresponds to TaskList[1]...
-    private DateTime[] calPosAssoc; //calPosAssoc[0] corresponds to TaskList[0], calPosAssoc[1] corresponds to TaskList[1]...
+    public DateTime[] calPosAssoc; //calPosAssoc[0] corresponds to TaskList[0], calPosAssoc[1] corresponds to TaskList[1]...
 
                                     //calPosAssoc holds the START TIMES of each task. The end time can be calculated using 
                                     //task.TotalTimeNeeded * (1 - task.CompletionProgress / 100), and then adding that to the start time
@@ -22,7 +23,7 @@ public class AutoScheduler
         Array.Fill(calPosAssoc, DateTime.Now);
     }
 
-    void associateCalendarPositions()
+    private void associateCalendarPositions()
     {
         for(int i = 0; i < Tasklist.Count; i++)
         {
@@ -31,7 +32,7 @@ public class AutoScheduler
     }
 
     //Compute each items calendar position based on its associated weight
-    void calculateCalendarPosition(int index)
+    private void calculateCalendarPosition(int index)
     {
         double weight = weightAssoc[index];
         if (weight > 0)
@@ -43,7 +44,7 @@ public class AutoScheduler
         else { DateTime startTime = DateTime.Now.AddDays(7); } //If weight is really really small, then schedule it for a week from now. 
     }
 
-    void associateWeights()
+    private void associateWeights()
     {
         for(int i = 0; i < Tasklist.Count; i++)
         {
@@ -51,17 +52,21 @@ public class AutoScheduler
         }
     }
 
-    double calculateWeight(TaskItem task)
+    private double calculateWeight(TaskItem task)
     {
         //Higher weight means item of more importance, IE schedule earlier
         double weight = 1;
-        double remainingMinutesNeeded = task.TotalTimeNeeded * (1 - task.CompletionProgress / 100); //Assuming task.TotaltimeNeeded is in minutes,
-                                                                                                    //and assuming the numerical value of completion
-                                                                                                    //progresses represents a percent
-                                                                                                    //IE 85 = 85% complete
+        //double remainingMinutesNeeded = task.TotalTimeNeeded * (1 - task.CompletionProgress / 100);   //Assuming task.TotaltimeNeeded is in minutes,
+                                                                                                        //and assuming the numerical value of completion
+                                                                                                        //progresses represents a percent
+                                                                                                        //IE 85 = 85% complete
+
+        double remainingMinutesNeeded = task.TotalTimeNeeded * 60; //completionProgress seems to be bugged, so currently not using. BUT WE SHOULD USE THE ABOVE LINE IDEALLY
+
 
         //Amount of time between (now + estimated time remaining to complete task), and task due date
-        double dueDistance = ( (DateTime.Now.AddMinutes(remainingMinutesNeeded)) - task.DueTime ).TotalMinutes;
+        double dueDistance = ( task.DueTime - (DateTime.Now.AddMinutes(remainingMinutesNeeded)) ).TotalMinutes;
+        Console.WriteLine("dueDistance: " + dueDistance);
         if (dueDistance > 0) //Item is possible to complete BEFORE deadline
         {
             weight = weight / dueDistance;   //As dueDistance trends to infinity, weight trends to 0. Smaller weights have less scheduling importance.
@@ -79,11 +84,35 @@ public class AutoScheduler
     //available slot after blackout time.
     //If two things get scheduled at the same time or overlapping, put the one with more weight first.
     //If two things have the same weight (realllyyyyyy unlikely), just randomly put one before the other.
-    void addToCalendar()
+    private void addToCalendar()
     {
-
+        Console.WriteLine("TODO: implement autoScheduler.addToCalendar");
     }
 
+    private void refreshArrays()
+    {
+        weightAssoc = new double[Tasklist.Count];
+        calPosAssoc = new DateTime[Tasklist.Count];
+        Array.Fill(weightAssoc, 0);
+        Array.Fill(calPosAssoc, DateTime.Now);
+    }
+
+    public void run()
+    {
+        Console.WriteLine("started running auto scheduler");
+        refreshArrays();
+        associateWeights();
+        associateCalendarPositions();
+        addToCalendar();
+
+        for(int i = 0; i < Tasklist.Count; i++)
+        {
+            Console.WriteLine(Tasklist[i].Name + ", Weight: " + weightAssoc[i] + ", startTime: ", calPosAssoc[i]);
+
+        }
+
+        Console.WriteLine("done running auto scheduler");
+    }
 
 
 }
