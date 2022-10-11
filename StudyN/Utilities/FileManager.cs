@@ -30,6 +30,7 @@ namespace StudyN.Utilities
 
             public List<Guid> TaskIdList { get; set; }
             public Operation Operation { get; set; }
+            
         }
 
         static string DIR = FileSystem.AppDataDirectory;
@@ -38,7 +39,8 @@ namespace StudyN.Utilities
         
 
         public static AsyncQueue<FileOperation> FILE_OP_QUEUE = new AsyncQueue<FileOperation>();
-
+        static TaskDataManager Tasks;
+        
         public static async Task WaitForFileOp()
         {
             await foreach(FileOperation op in FILE_OP_QUEUE)
@@ -63,7 +65,8 @@ namespace StudyN.Utilities
             // serialaize tasks into task file
             string fileName = TASK_FILENAME + "task" + taskIdList.First() + ".json";
             var indent = new JsonSerializerOptions { WriteIndented = true };
-            string jsonString = JsonSerializer.Serialize(taskIdList, indent);
+            TaskItem task = Tasks.GetTask(taskIdList.First());
+            string jsonString = JsonSerializer.Serialize(task, indent);
             File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
             Console.WriteLine("Tasks Added:");
