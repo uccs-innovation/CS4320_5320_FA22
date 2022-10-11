@@ -1,14 +1,17 @@
 namespace StudyN.Models;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using StudyN.Models;
 
 public class AutoScheduler
 {
-	public AutoScheduler()
+    private ObservableCollection<TaskItem> Tasklist { get; set; }
+
+    public AutoScheduler()
 	{
-		ObservableCollection<TaskItem> TaskList;
-		TaskDataManager taskData = new TaskDataManager();
-		TaskList = taskData.TaskList;
+        Tasklist = new ObservableCollection<TaskItem>();
+
+
 	}
 
 
