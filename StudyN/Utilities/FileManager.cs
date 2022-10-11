@@ -67,7 +67,11 @@ namespace StudyN.Utilities
 
         public static void TasksAdded(List<Guid> taskIdList)
         {
-            
+            // serialaize tasks into task file
+            var indent = new JsonSerializerOptions { WriteIndented = true };
+            string jsonString = JsonSerializer.Serialize(taskIdList, indent);
+            File.WriteAllText(TASK_FILENAME, jsonString);
+            // output, might be taken out later
             Console.WriteLine("Tasks Added:");
             foreach(Guid id in taskIdList)
             {
