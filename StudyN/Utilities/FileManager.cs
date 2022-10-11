@@ -93,8 +93,9 @@ namespace StudyN.Utilities
                 string fileName = TASK_FILENAME + "task" + taskIdList.First() + ".json";
                 string completeFileName = COMPLETE_TASK_FILENAME + "completedtask" + taskIdList.First() + ".json";
                 var indent = new JsonSerializerOptions { WriteIndented = true };
+                TaskItem task = Tasks.GetTask(taskIdList.First());
                 File.Delete(fileName);
-                string jsonString = JsonSerializer.Serialize(taskIdList, indent);
+                string jsonString = JsonSerializer.Serialize(task, indent);
                 File.WriteAllText(completeFileName, jsonString);
                 // output, might be taken out later
                 Console.WriteLine("Tasks Completed:");
