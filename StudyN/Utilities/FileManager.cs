@@ -79,18 +79,27 @@ namespace StudyN.Utilities
 
         public static void TasksCompleted(List<Guid> taskIdList)
         {
-            // deserialize task in task file, and serialize it in completed tasks
-            string completeFileName = COMPLETE_TASK_FILENAME + "completedtask" + taskIdList.First() + ".json";
-            var indent = new JsonSerializerOptions { WriteIndented = true };
-            //deserializtion code here
-            string jsonString = JsonSerializer.Serialize(taskIdList, indent);
-            File.WriteAllText(completeFileName, jsonString);
-            // output, might be taken out later
-            Console.WriteLine("Tasks Completed:");
-            foreach (Guid id in taskIdList)
+            try
             {
-                Console.WriteLine("    " + id.ToString());
+                // delete task in task directory, and serialize it in completed tasks
+                string fileName = TASK_FILENAME + "task" + taskIdList.First() + ".json";
+                string completeFileName = COMPLETE_TASK_FILENAME + "completedtask" + taskIdList.First() + ".json";
+                var indent = new JsonSerializerOptions { WriteIndented = true };
+                File.Delete(fileName);
+                string jsonString = JsonSerializer.Serialize(taskIdList, indent);
+                File.WriteAllText(completeFileName, jsonString);
+                // output, might be taken out later
+                Console.WriteLine("Tasks Completed:");
+                foreach (Guid id in taskIdList)
+                {
+                   Console.WriteLine("    " + id.ToString());
+                }
+            }catch(NullReferenceException exception)
+            {
+                // most likely going to be caused by fileName
+                Console.WriteLine(exception.Message);
             }
+            
         }
     }
 }
