@@ -20,6 +20,7 @@ namespace StudyN.Utilities
             {
                 TaskIdList = idList;
                 Operation = operation;
+                CreateJsonFiles();
             }
 
             public List<Guid> TaskIdList { get; set; }
@@ -27,8 +28,8 @@ namespace StudyN.Utilities
         }
 
         static string DIR = FileSystem.AppDataDirectory;
-        static string TASK_FILENAME = "tasks.json";
-        static string COMPLETE_TASK_FILENAME = "completedTask.json";
+        static string TASK_FILENAME = DIR + "tasks.json";
+        static string COMPLETE_TASK_FILENAME = DIR + "completedTask.json";
         
 
         public static AsyncQueue<FileOperation> FILE_OP_QUEUE = new AsyncQueue<FileOperation>();
@@ -40,8 +41,8 @@ namespace StudyN.Utilities
         {
             if (!File.Exists(TASK_FILENAME) && !File.Exists(COMPLETE_TASK_FILENAME))
             {
-                File.CreateSymbolicLink(DIR, TASK_FILENAME);
-                File.CreateSymbolicLink(DIR, COMPLETE_TASK_FILENAME);
+                File.Create(TASK_FILENAME);
+                File.Create(COMPLETE_TASK_FILENAME);
             }
         }
 
