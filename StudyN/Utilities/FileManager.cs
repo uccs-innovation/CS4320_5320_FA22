@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using StudyN.Models;
 
 namespace StudyN.Utilities
 {
@@ -20,7 +21,6 @@ namespace StudyN.Utilities
             {
                 TaskIdList = idList;
                 Operation = operation;
-                CreateJsonFiles();
             }
 
             public List<Guid> TaskIdList { get; set; }
@@ -28,23 +28,11 @@ namespace StudyN.Utilities
         }
 
         static string DIR = FileSystem.AppDataDirectory;
-        static string TASK_FILENAME = DIR + "tasks.json";
-        static string COMPLETE_TASK_FILENAME = DIR + "completedTask.json";
+        static string TASK_FILENAME = DIR + "tasks/";
+        static string COMPLETE_TASK_FILENAME = DIR + "completedTask/";
         
 
         public static AsyncQueue<FileOperation> FILE_OP_QUEUE = new AsyncQueue<FileOperation>();
-
-        /// <summary>
-        /// creates json files for listing tasks
-        /// </summary>
-        private static void CreateJsonFiles()
-        {
-            if (!File.Exists(TASK_FILENAME) && !File.Exists(COMPLETE_TASK_FILENAME))
-            {
-                File.Create(TASK_FILENAME);
-                File.Create(COMPLETE_TASK_FILENAME);
-            }
-        }
 
         public static async Task WaitForFileOp()
         {
@@ -68,9 +56,10 @@ namespace StudyN.Utilities
         public static void TasksAdded(List<Guid> taskIdList)
         {
             // serialaize tasks into task file
+            string fileName = TASK_FILENAME + "task" + taskIdList.First() + ".json";
             var indent = new JsonSerializerOptions { WriteIndented = true };
             string jsonString = JsonSerializer.Serialize(taskIdList, indent);
-            File.WriteAllText(TASK_FILENAME, jsonString);
+            File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
             Console.WriteLine("Tasks Added:");
             foreach(Guid id in taskIdList)
@@ -91,10 +80,11 @@ namespace StudyN.Utilities
         public static void TasksCompleted(List<Guid> taskIdList)
         {
             // deserialize task in task file, and serialize it in completed tasks
+            string completeFileName = COMPLETE_TASK_FILENAME + "completedtask" + taskIdList.First() + ".json";
             var indent = new JsonSerializerOptions { WriteIndented = true };
             //deserializtion code here
             string jsonString = JsonSerializer.Serialize(taskIdList, indent);
-            File.WriteAllText(COMPLETE_TASK_FILENAME, jsonString);
+            File.WriteAllText(completeFileName, jsonString);
             // output, might be taken out later
             Console.WriteLine("Tasks Completed:");
             foreach (Guid id in taskIdList)
