@@ -37,7 +37,7 @@ namespace StudyN.Utilities
         /// <summary>
         /// creates json files for listing tasks
         /// </summary>
-        public static void CreateJsonFiles()
+        private static void CreateJsonFiles()
         {
             if (!File.Exists(TASK_FILENAME) && !File.Exists(COMPLETE_TASK_FILENAME))
             {
@@ -86,7 +86,12 @@ namespace StudyN.Utilities
 
         public static void TasksCompleted(List<Guid> taskIdList)
         {
+            // deserialize task in task file, and serialize it in completed tasks
             var indent = new JsonSerializerOptions { WriteIndented = true };
+            //deserializtion code here
+            string jsonString = JsonSerializer.Serialize(taskIdList, indent);
+            File.WriteAllText(COMPLETE_TASK_FILENAME, jsonString);
+            // output, might be taken out later
             Console.WriteLine("Tasks Completed:");
             foreach (Guid id in taskIdList)
             {
