@@ -6,24 +6,49 @@ using StudyN.Models;
 public class AutoScheduler
 {
     private ObservableCollection<TaskItem> Tasklist { get; set; }
-    private int[] weightAssoc; //weightAssoc[0] corresponds to TaskList[0], weightAssoc[1] corresponds to TaskList[1]...
-    private DateTime timeBlockAssoc; //timeBlockAssoc[0] corresponds to TaskList[0], timeBlockAssoc[1] corresponds to TaskList[1]...
+    private double[] weightAssoc;   //weightAssoc[0] corresponds to TaskList[0], weightAssoc[1] corresponds to TaskList[1]...
+    private DateTime[] calPosAssoc; //calPosAssoc[0] corresponds to TaskList[0], calPosAssoc[1] corresponds to TaskList[1]...
+
+                                    //calPosAssoc holds the START TIMES of each task. The end time can be calculated using 
+                                    //task.TotalTimeNeeded * (1 - task.CompletionProgress / 100), and then adding that to the start time
 
     public AutoScheduler( ObservableCollection<TaskItem> TL )
 	{
         Tasklist = TL;
-        weightAssoc = new int[Tasklist.Count];
+        weightAssoc = new double[Tasklist.Count];
+        calPosAssoc = new DateTime[Tasklist.Count];
+
+        Array.Fill(weightAssoc, 0);
+        Array.Fill(calPosAssoc, DateTime.Now);
+    }
+
+    void associateCalendarPositions()
+    {
+        for(int i = 0; i < Tasklist.Count; i++)
+        {
+            calculateCalendarPosition(i);
+        }
     }
 
     //Compute each items calendar position based on its associated weight
-    void computeCalendarPosition()
+    void calculateCalendarPosition(int index)
     {
+        double weight = weightAssoc[index];
+        if (weight > 0)
+        {
+            DateTime startTime = DateTime.Now.AddDays(1 / weight); //If the weight is small, schedule it far in the future
+            calPosAssoc[index] = startTime;                        //IE, if weight is 1, schedule it in 1 day. If weight is 10, schedule it in .1 days. If weight is HUGE, schedule it now.
+        }
 
+        else { DateTime startTime = DateTime.Now.AddDays(7); } //If weight is really really small, then schedule it for a week from now. 
     }
 
     void associateWeights()
     {
-
+        for(int i = 0; i < Tasklist.Count; i++)
+        {
+            weightAssoc[i] = calculateWeight(Tasklist[i]);
+        }
     }
 
     double calculateWeight(TaskItem task)
@@ -47,6 +72,16 @@ public class AutoScheduler
         else { weight = 9999999999; } //Item is NOT possible to complete before deadline. Assign it highest priority. 
 
         return weight;
+    }
+
+
+    //This is where conflict resolution will happen. If an event gets scheduled during blackout time, put it in the first
+    //available slot after blackout time.
+    //If two things get scheduled at the same time or overlapping, put the one with more weight first.
+    //If two things have the same weight (realllyyyyyy unlikely), just randomly put one before the other.
+    void addToCalendar()
+    {
+
     }
 
 
