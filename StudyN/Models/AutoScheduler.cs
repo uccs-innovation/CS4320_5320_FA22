@@ -61,11 +61,14 @@ public class AutoScheduler
                                                                                                         //progresses represents a percent
                                                                                                         //IE 85 = 85% complete
 
-        double remainingMinutesNeeded = task.TotalTimeNeeded * 60; //completionProgress seems to be bugged, so currently not using. BUT WE SHOULD USE THE ABOVE LINE IDEALLY
+        double remainingMinutesNeeded = task.TotalTimeNeeded/60; //completionProgress seems to be bugged, so currently not using. BUT WE SHOULD USE THE ABOVE LINE IDEALLY
 
 
-        //Amount of time between (now + estimated time remaining to complete task), and task due date
-        double dueDistance = ( task.DueTime - (DateTime.Now.AddMinutes(remainingMinutesNeeded)) ).TotalMinutes;
+        //Amount of days between (now + estimated time remaining to complete task), and task due date
+        double dueDistance = ( task.DueTime - (DateTime.Now.AddMinutes(remainingMinutesNeeded)) ).TotalDays; 
+
+        Console.WriteLine("Time now: " + DateTime.Now);
+        Console.WriteLine("dueTime: " + task.DueTime);
         Console.WriteLine("dueDistance: " + dueDistance);
         if (dueDistance > 0) //Item is possible to complete BEFORE deadline
         {
@@ -107,7 +110,7 @@ public class AutoScheduler
 
         for(int i = 0; i < Tasklist.Count; i++)
         {
-            Console.WriteLine(Tasklist[i].Name + ", Weight: " + weightAssoc[i] + ", startTime: ", calPosAssoc[i]);
+            Console.WriteLine(Tasklist[i].Name + ", Weight: " + weightAssoc[i] + ", startTime: " + calPosAssoc[i]);
 
         }
 

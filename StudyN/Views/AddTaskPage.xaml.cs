@@ -57,12 +57,12 @@ public partial class AddTaskPage : ContentPage
         int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
 
         UIGlobal.MainData.AddTask(
-            this.name.Text,
-            this.description.Text,
-            this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds),
-            (int)this.priority.Value,
-            timeLogged,
-            totalTime);
+           this.name.Text,
+           this.description.Text,
+           this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds),
+           (int)this.priority.Value,
+           timeLogged,
+           totalTime);
 
         if (UIGlobal.ToEdit != null)
         {
