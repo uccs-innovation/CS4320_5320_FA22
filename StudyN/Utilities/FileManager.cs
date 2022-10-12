@@ -12,21 +12,22 @@ namespace StudyN.Utilities
         public enum Operation
         {
             AddTask,
+            EditTask,
             DeleteTask,
             CompleteTask
         }
         public class FileOperation
         {
-            public FileOperation(Operation operation, List<Guid> idList)
+            public FileOperation(Operation operation, Guid id)
             {
-                TaskIdList = idList;
+                TaskId = id;
                 Operation = operation;
                 // create directories
                 System.IO.Directory.CreateDirectory(TASK_DIR);
                 System.IO.Directory.CreateDirectory(COMPLETE_TASK_DIR);
             }
 
-            public List<Guid> TaskIdList { get; set; }
+            public Guid TaskId { get; set; }
             public Operation Operation { get; set; }
             
         }
@@ -44,69 +45,69 @@ namespace StudyN.Utilities
             {
                 if(op.Operation == Operation.AddTask)
                 {
-                    TasksAdded(op.TaskIdList);
+                    TasksAdded(op.TaskId);
+                }
+                else if (op.Operation == Operation.EditTask)
+                {
+                    TaskEdited(op.TaskId);
                 }
                 else if (op.Operation == Operation.DeleteTask)
                 {
-                    TasksDeleted(op.TaskIdList);
+                    TasksDeleted(op.TaskId);
                 }
                 else if (op.Operation == Operation.CompleteTask)
                 {
-                    TasksCompleted(op.TaskIdList);
+                    TasksCompleted(op.TaskId);
                 }
             }
         }
 
-        public static void TasksAdded(List<Guid> taskIdList)
+        public static void TasksAdded(Guid taskId)
         {
             // serialaize tasks into task file
-            string fileName = TASK_DIR + "task" + taskIdList.First() + ".json";
+            string fileName = TASK_DIR + "task" + taskId + ".json";
             var indent = new JsonSerializerOptions { WriteIndented = true };
-            TaskItem task = TaskManager.GetTask(taskIdList.First());
+            TaskItem task = TaskManager.GetTask(taskId);
             string jsonString = JsonSerializer.Serialize(task, indent);
             File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
             Console.WriteLine("Tasks Added:");
-            foreach(Guid id in taskIdList)
-            {
-                Console.WriteLine("    " + id.ToString());
-            }
+            Console.WriteLine("    " + taskId.ToString());
         }
 
-        public static void TasksDeleted(List<Guid> taskIdList)
+        public static void TasksDeleted(Guid taskId)
         {
             Console.WriteLine("Tasks Deleted:");
-            foreach (Guid id in taskIdList)
-            {
-                Console.WriteLine("    " + id.ToString());
-            }
+            Console.WriteLine("    " + taskId.ToString());
         }
 
-        public static void TasksCompleted(List<Guid> taskIdList)
+        public static void TasksCompleted(Guid taskId)
         {
             try
             {
                 // delete task in task directory, and serialize it in completed tasks
-                string fileName = TASK_DIR + "task" + taskIdList.First() + ".json";
-                string completeFileName = COMPLETE_TASK_DIR + "completedtask" + taskIdList.First() + ".json";
+                string fileName = TASK_DIR + "task" + taskId + ".json";
+                string completeFileName = COMPLETE_TASK_DIR + "completedtask" + taskId + ".json";
                 var indent = new JsonSerializerOptions { WriteIndented = true };
-                TaskItem task = TaskManager.GetTask(taskIdList.First());
+                TaskItem task = TaskManager.GetTask(taskId);
                 File.Delete(fileName);
                 string jsonString = JsonSerializer.Serialize(task, indent);
                 File.WriteAllText(completeFileName, jsonString);
                 // output, might be taken out later
-                Console.WriteLine("Tasks Completed:");
-                foreach (Guid id in taskIdList)
-                {
-                    Console.WriteLine("    " + id.ToString());
-                }
+           Console.WriteLine("Tasks Completed:");
+           Console.WriteLine("    " + taskId.ToString());
             }
             catch (NullReferenceException exception)
             {
                 // most likely going to be caused by fileName
                 Console.WriteLine(exception.Message);
             }
+        }
 
+        public static void TaskEdited(Guid taskId)
+        {
+            Console.WriteLine("Task Edited:");
+            Console.WriteLine("    " + taskId.ToString());
         }
     }
 }
