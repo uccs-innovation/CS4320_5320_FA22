@@ -94,8 +94,8 @@ namespace StudyN.Utilities
                 string jsonString = JsonSerializer.Serialize(task, indent);
                 File.WriteAllText(completeFileName, jsonString);
                 // output, might be taken out later
-           Console.WriteLine("Tasks Completed:");
-           Console.WriteLine("    " + taskId.ToString());
+                Console.WriteLine("Tasks Completed:");
+                Console.WriteLine("    " + taskId.ToString());
             }
             catch (NullReferenceException exception)
             {
