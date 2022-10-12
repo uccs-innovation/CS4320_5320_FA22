@@ -64,7 +64,7 @@ public partial class AddTaskPage : ContentPage
             (int)this.priority.Value,
             timeLogged,
             totalTime, 
-            percent);
+            (int)percent);
 
         if (UIGlobal.ToEdit != null)
         {
