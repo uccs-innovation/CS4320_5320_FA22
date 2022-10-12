@@ -34,12 +34,11 @@ namespace StudyN.Utilities
         }
 
         static string DIR = FileSystem.AppDataDirectory;
-        static string TASK_FILENAME = DIR + "/tasks/";
-        static string COMPLETE_TASK_FILENAME = DIR + "/completedTask/";
+        static string TASK_DIR = DIR + "/tasks/";
+        static string COMPLETE_TASK_DIR = DIR + "/completedTask/";
         
 
         public static AsyncQueue<FileOperation> FILE_OP_QUEUE = new AsyncQueue<FileOperation>();
-        static TaskDataManager Tasks;
         
         public static async Task WaitForFileOp()
         {
@@ -63,7 +62,7 @@ namespace StudyN.Utilities
         public static void TasksAdded(List<Guid> taskIdList)
         {
             // what naming new files look like
-            //string fileName = TASK_FILENAME + "task" + taskIdList.First() + ".json";
+            //string fileName = TASK_DIR + "task" + taskIdList.First() + ".json";
             // output, might be taken out later
             Console.WriteLine("Tasks Added:");
             foreach(Guid id in taskIdList)
@@ -84,8 +83,8 @@ namespace StudyN.Utilities
         public static void TasksCompleted(List<Guid> taskIdList)
         {
            // what naming new files looks like
-           //string fileName = TASK_FILENAME + "task" + taskIdList.First() + ".json";
-           //string completeFileName = COMPLETE_TASK_FILENAME + "completedtask" + taskIdList.First() + ".json";
+           //string fileName = TASK_DIR + "task" + taskIdList.First() + ".json";
+           //string completeFileName = COMPLETE_TASK_DIR + "completedtask" + taskIdList.First() + ".json";
            // output, might be taken out later
            Console.WriteLine("Tasks Completed:");
            foreach (Guid id in taskIdList)
