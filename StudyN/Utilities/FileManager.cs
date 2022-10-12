@@ -18,16 +18,16 @@ namespace StudyN.Utilities
         }
         public class FileOperation
         {
-            public FileOperation(Operation operation, List<Guid> idList)
+            public FileOperation(Operation operation, Guid id)
             {
-                TaskIdList = idList;
+                TaskId = id;
                 Operation = operation;
                 // create directories
                 System.IO.Directory.CreateDirectory(TASK_DIR);
                 System.IO.Directory.CreateDirectory(COMPLETE_TASK_DIR);
             }
 
-            public List<Guid> TaskIdList { get; set; }
+            public Guid TaskId { get; set; }
             public Operation Operation { get; set; }
             
         }
@@ -45,64 +45,52 @@ namespace StudyN.Utilities
             {
                 if(op.Operation == Operation.AddTask)
                 {
-                    TasksAdded(op.TaskIdList);
+                    TasksAdded(op.TaskId);
                 }
                 else if (op.Operation == Operation.EditTask)
                 {
-                    TaskEdited(op.TaskIdList);
+                    TaskEdited(op.TaskId);
                 }
                 else if (op.Operation == Operation.DeleteTask)
                 {
-                    TasksDeleted(op.TaskIdList);
+                    TasksDeleted(op.TaskId);
                 }
                 else if (op.Operation == Operation.CompleteTask)
                 {
-                    TasksCompleted(op.TaskIdList);
+                    TasksCompleted(op.TaskId);
                 }
             }
         }
 
-        public static void TasksAdded(List<Guid> taskIdList)
+        public static void TasksAdded(Guid taskId)
         {
             // what naming new files look like
             //string fileName = TASK_DIR + "task" + taskIdList.First() + ".json";
             // output, might be taken out later
             Console.WriteLine("Tasks Added:");
-            foreach(Guid id in taskIdList)
-            {
-                Console.WriteLine("    " + id.ToString());
-            }
+            Console.WriteLine("    " + taskId.ToString());
         }
 
-        public static void TasksDeleted(List<Guid> taskIdList)
+        public static void TasksDeleted(Guid taskId)
         {
             Console.WriteLine("Tasks Deleted:");
-            foreach (Guid id in taskIdList)
-            {
-                Console.WriteLine("    " + id.ToString());
-            }
+            Console.WriteLine("    " + taskId.ToString());
         }
 
-        public static void TasksCompleted(List<Guid> taskIdList)
+        public static void TasksCompleted(Guid taskId)
         {
            // what naming new files looks like
            //string fileName = TASK_DIR + "task" + taskIdList.First() + ".json";
            //string completeFileName = COMPLETE_TASK_DIR + "completedtask" + taskIdList.First() + ".json";
            // output, might be taken out later
            Console.WriteLine("Tasks Completed:");
-           foreach (Guid id in taskIdList)
-           {
-               Console.WriteLine("    " + id.ToString());
-           }
+           Console.WriteLine("    " + taskId.ToString());
         }
 
-        public static void TaskEdited(List<Guid> taskIdList)
+        public static void TaskEdited(Guid taskId)
         {
             Console.WriteLine("Task Edited:");
-            foreach(Guid id in taskIdList)
-            {
-                Console.WriteLine("    " + id.ToString());
-            }
+            Console.WriteLine("    " + taskId.ToString());
         }
     }
 }
