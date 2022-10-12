@@ -65,9 +65,9 @@ namespace StudyN.Utilities
         public static void TasksAdded(Guid taskId)
         {
             // serialaize tasks into task file
-            string fileName = TASK_DIR + "task" + taskId + ".json";
+            string fileName = TASK_DIR + taskId + ".json";
             var indent = new JsonSerializerOptions { WriteIndented = true };
-            TaskItem task = TaskDataManager.GetTask(taskId);
+            TaskItem task = GlobalTaskData.TaskManager.GetTask(taskId);
             string jsonString = JsonSerializer.Serialize(task, indent);
             File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
@@ -86,10 +86,10 @@ namespace StudyN.Utilities
             try
             {
                 // delete task in task directory, and serialize it in completed tasks
-                string fileName = TASK_DIR + "task" + taskId + ".json";
-                string completeFileName = COMPLETE_TASK_DIR + "completedtask" + taskId + ".json";
+                string fileName = TASK_DIR + taskId + ".json";
+                string completeFileName = COMPLETE_TASK_DIR + taskId + ".json";
                 var indent = new JsonSerializerOptions { WriteIndented = true };
-                TaskItem task = TaskDataManager.GetTask(taskId);
+                TaskItem task = GlobalTaskData.TaskManager.GetTask(taskId);
                 File.Delete(fileName);
                 string jsonString = JsonSerializer.Serialize(task, indent);
                 File.WriteAllText(completeFileName, jsonString);

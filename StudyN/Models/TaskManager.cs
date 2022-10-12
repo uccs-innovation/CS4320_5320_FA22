@@ -128,32 +128,5 @@ namespace StudyN.Models
             TaskList = new ObservableCollection<TaskItem>();
             CompletedTasks = new ObservableCollection<TaskItem>();
         }
-
-        public TaskItem GetTask(Guid id)
-        {
-            bool found = false;
-            int i = 0;
-            foreach(TaskItem item in TaskList)
-            {
-                if (item.TaskId == id)
-                {
-                    found = true;
-                    break;
-                }
-                else
-                {
-                    i++;
-                }
-            }
-            if (found)
-            {
-                return TaskList.ElementAt(i);
-            }
-            else
-            {
-                Console.WriteLine("Error: Task couldn't be found");
-                return null;
-            }
-        }
     }
 }
