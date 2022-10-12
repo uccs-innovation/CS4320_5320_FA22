@@ -28,6 +28,47 @@ namespace StudyN.Models
             return newTask;
         }
 
+        public TaskItem GetTask(Guid taskId)
+        {
+            foreach (TaskItem task in TaskList)
+            {
+                if (task.TaskId == taskId)
+                {
+                    return task;
+                }
+            }
+
+            return null;
+        }
+
+        public bool EditTask(Guid taskId,
+                                string name,
+                                string description,
+                                DateTime dueTime,
+                                int priority,
+                                int CompletionProgress,
+                                int TotalTimeNeeded,
+                                bool updateFile = true)
+        {
+            TaskItem task = GetTask(taskId);
+
+            if(task == null)
+            {
+                return false;
+            }
+
+            task.Name = name;
+            task.Description = description;
+            task.DueTime = dueTime;
+            task.Priority = priority;
+            task.CompletionProgress = CompletionProgress;
+            task.TotalTimeNeeded = TotalTimeNeeded;
+
+            sendFileUpdate(FileManager.Operation.EditTask, taskId, updateFile);
+
+            return true;
+        }
+
         public void CompleteTask(Guid taskId, bool updateFile = true)
         {
             foreach (TaskItem task in TaskList)

@@ -7,7 +7,7 @@ using StudyN.ViewModels;
 
 public partial class AddTaskPage : ContentPage
 {
-    bool EditButtonsVisible;
+    bool editingExistingTask;
 	public AddTaskPage()
 	{
 		InitializeComponent();
@@ -17,29 +17,31 @@ public partial class AddTaskPage : ContentPage
             Title = "Edit Task";
             LoadValues();
             BindingContext = new EditTaskViewModel();
-            EditButtonsVisible = true;
+            editingExistingTask = true;
         }
         else
         {
             Title = "Add Task";
-            EditButtonsVisible =false; 
+            editingExistingTask = false;
             SetValues();
         }
-        DeleteTaskButton.IsVisible = EditButtonsVisible;
-        CompleteTaskButton.IsVisible = EditButtonsVisible;
-	}
+
+        DeleteTaskButton.IsVisible = editingExistingTask;
+        CompleteTaskButton.IsVisible = editingExistingTask;
+    }
 
     //calls delete task
     private async void HandleDeleteTaskClicked(object sender, EventArgs args)
     {
         GlobalTaskData.TaskManager.DeleteTask(GlobalTaskData.ToEdit.TaskId);
+        GlobalTaskData.ToEdit = null;
         await Shell.Current.GoToAsync("..");
-
     }
 
     private async void HandleCompleteTaskClicked(object sender, EventArgs args)
     {
         GlobalTaskData.TaskManager.CompleteTask(GlobalTaskData.ToEdit.TaskId);
+        GlobalTaskData.ToEdit = null;
         await Shell.Current.GoToAsync("..");
     }
 
@@ -56,19 +58,29 @@ public partial class AddTaskPage : ContentPage
         this.description.Text = this.description.Text == null ? "" : this.description.Text;
         int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
         int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        DateTime dueTime = this.date.Date.Value.Date + this.time.Time.Value.TimeOfDay;
 
-        TaskItem task = GlobalTaskData.TaskManager.AddTask(
-            this.name.Text,
-            this.description.Text,
-            this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds),
-            (int)this.priority.Value,
-            timeLogged,
-            totalTime);
-
-        if (GlobalTaskData.ToEdit != null)
+        if(editingExistingTask)
         {
-            GlobalTaskData.TaskManager.CompleteTask(GlobalTaskData.ToEdit.TaskId);
+            GlobalTaskData.TaskManager.EditTask(
+                GlobalTaskData.ToEdit.TaskId,
+                this.name.Text,
+                this.description.Text,
+                dueTime,
+                (int)this.priority.Value,
+                timeLogged,
+                totalTime);
             GlobalTaskData.ToEdit = null;
+        }
+        else
+        {
+            GlobalTaskData.TaskManager.AddTask(
+                this.name.Text,
+                this.description.Text,
+                dueTime,
+                (int)this.priority.Value,
+                timeLogged,
+                totalTime);
         }
         
         await Shell.Current.GoToAsync("..");

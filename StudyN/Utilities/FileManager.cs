@@ -9,6 +9,7 @@ namespace StudyN.Utilities
         public enum Operation
         {
             AddTask,
+            EditTask,
             DeleteTask,
             CompleteTask
         }
@@ -37,6 +38,10 @@ namespace StudyN.Utilities
                 if(op.Operation == Operation.AddTask)
                 {
                     TasksAdded(op.TaskIdList);
+                }
+                else if (op.Operation == Operation.EditTask)
+                {
+                    TaskEdited(op.TaskIdList);
                 }
                 else if (op.Operation == Operation.DeleteTask)
                 {
@@ -71,6 +76,15 @@ namespace StudyN.Utilities
         {
             Console.WriteLine("Tasks Completed:");
             foreach (Guid id in taskIdList)
+            {
+                Console.WriteLine("    " + id.ToString());
+            }
+        }
+
+        public static void TaskEdited(List<Guid> taskIdList)
+        {
+            Console.WriteLine("Task Edited:");
+            foreach(Guid id in taskIdList)
             {
                 Console.WriteLine("    " + id.ToString());
             }
