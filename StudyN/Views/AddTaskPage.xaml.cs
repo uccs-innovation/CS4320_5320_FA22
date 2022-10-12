@@ -58,7 +58,6 @@ public partial class AddTaskPage : ContentPage
         this.description.Text = this.description.Text == null ? "" : this.description.Text;
         int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
         int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
-        DateTime dueTime = this.date.Date.Value.Date + this.time.Time.Value.TimeOfDay;
 
         if(editingExistingTask)
         {
@@ -66,7 +65,7 @@ public partial class AddTaskPage : ContentPage
                 GlobalTaskData.ToEdit.TaskId,
                 this.name.Text,
                 this.description.Text,
-                dueTime,
+                this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds),
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime);
@@ -77,7 +76,7 @@ public partial class AddTaskPage : ContentPage
             GlobalTaskData.TaskManager.AddTask(
                 this.name.Text,
                 this.description.Text,
-                dueTime,
+                this.date.Date.Value.AddMilliseconds(this.time.Time.Value.TimeOfDay.TotalMilliseconds),
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime);
