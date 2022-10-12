@@ -47,6 +47,7 @@
         <dxg:DataGridView.Columns>
             <dxg:TextColumn FieldName="Name" Caption="Task" />
             <dxg:DateColumn FieldName="DueTime" Caption="Due" DisplayFormat="h:mm tt" IsGrouped="True"/>
+            <dxg:TextColumn FieldName="Percent" Caption="Percent" DisplayFormat="P0" />
         </dxg:DataGridView.Columns>
         <!--Customize the appearance of group row.-->
         <dxg:DataGridView.GroupRowStyle>
