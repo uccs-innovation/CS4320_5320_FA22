@@ -28,6 +28,47 @@ namespace StudyN.Models
             return newTask;
         }
 
+        public TaskItem GetTask(Guid taskId)
+        {
+            foreach (TaskItem task in TaskList)
+            {
+                if (task.TaskId == taskId)
+                {
+                    return task;
+                }
+            }
+
+            return null;
+        }
+
+        public bool EditTask(Guid taskId,
+                                string name,
+                                string description,
+                                DateTime dueTime,
+                                int priority,
+                                int CompletionProgress,
+                                int TotalTimeNeeded,
+                                bool updateFile = true)
+        {
+            TaskItem task = GetTask(taskId);
+
+            if(task == null)
+            {
+                return false;
+            }
+
+            task.Name = name;
+            task.Description = description;
+            task.DueTime = dueTime;
+            task.Priority = priority;
+            task.CompletionProgress = CompletionProgress;
+            task.TotalTimeNeeded = TotalTimeNeeded;
+
+            sendFileUpdate(FileManager.Operation.EditTask, taskId, updateFile);
+
+            return true;
+        }
+
         public void CompleteTask(Guid taskId, bool updateFile = true)
         {
             foreach (TaskItem task in TaskList)
@@ -53,7 +94,7 @@ namespace StudyN.Models
                 {
                     TaskList.Remove(task);
 
-                    sendFileUpdate(FileManager.Operation.AddTask, taskId, updateFile);
+                    sendFileUpdate(FileManager.Operation.DeleteTask, taskId, updateFile);
 
                     return;
                 }
@@ -64,27 +105,18 @@ namespace StudyN.Models
         {
             foreach (Guid id in taskIds)
             {
-                DeleteTask(id, false);
+                DeleteTask(id);
             }
-
-            sendFileUpdate(FileManager.Operation.DeleteTask, taskIds, updateFile);
         }
 
 
         public void sendFileUpdate(FileManager.Operation op, Guid taskId, bool updateFile)
         {
-            List<Guid> taskIdList = new List<Guid>();
-            taskIdList.Add(taskId);
-
-            sendFileUpdate(op, taskIdList, updateFile);
-        }
-        public void sendFileUpdate(FileManager.Operation op, List<Guid> taskIds, bool updateFile)
-        {
             if (updateFile)
             {
                 // Send update to Filemanager
                 FileManager.FILE_OP_QUEUE.Enquue(
-                    new FileManager.FileOperation(op, taskIds));
+                    new FileManager.FileOperation(op, taskId));
             }
         }
 
