@@ -28,7 +28,9 @@
                         Text="Dark Mode"
                         Style="{StaticResource PrimaryButton}"
                         Clicked="Button_ClickedDark"/>
-                </StackLayout>
+               
+            </StackLayout>
             </Grid>
+       
     </ContentPage.Content>
 </ContentPage>

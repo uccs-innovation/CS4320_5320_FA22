@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
              xmlns:ViewModels="clr-namespace:StudyN.ViewModels"
@@ -14,11 +14,16 @@
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
             <dxg:CheckBoxColumn FieldName="Completed" Caption=" " Width="15" />
-            <dxg:TextColumn FieldName="Name" Caption="Event Name" />
-            <dxg:TextColumn FieldName="Description" Caption="Event Type" />
+            <dxg:TextColumn FieldName="Name" Caption="Task Name" />
+            <dxg:TextColumn FieldName="Description" Caption="Task Description" />
             <dxg:TextColumn FieldName="StartTime" Caption="Start Time" />
-            <dxg:TextColumn FieldName="EndTime" Caption="End Time" />
+            <dxg:TextColumn FieldName="End Time" Caption="EndTime" />
+            <dxg:TextColumn FieldName="EstimateTime" Caption="Estimate Time" />
+            
+
+
         </dxg:DataGridView.Columns>
+     
         <!--Customize the appearance of grid cells.-->
         <dxg:DataGridView.CellStyle>
             <dxg:CellStyle Padding="3" CheckBoxPadding="3"/>
@@ -27,5 +32,6 @@
         <dxg:DataGridView.ColumnHeaderStyle>
             <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
         </dxg:DataGridView.ColumnHeaderStyle>
+        
     </dxg:DataGridView>
 </ContentPage>

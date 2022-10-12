@@ -24,5 +24,6 @@ namespace StudyN.Views
                 gridView.EndUpdate();
             }
         }
+
     }
 }
