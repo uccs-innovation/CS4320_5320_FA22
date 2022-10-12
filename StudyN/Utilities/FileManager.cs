@@ -64,8 +64,12 @@ namespace StudyN.Utilities
 
         public static void TasksAdded(Guid taskId)
         {
-            // what naming new files look like
-            //string fileName = TASK_DIR + "task" + taskIdList.First() + ".json";
+            // serialaize tasks into task file
+            string fileName = TASK_DIR + taskId + ".json";
+            var indent = new JsonSerializerOptions { WriteIndented = true };
+            TaskItem task = GlobalTaskData.TaskManager.GetTask(taskId);
+            string jsonString = JsonSerializer.Serialize(task, indent);
+            File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
             Console.WriteLine("Tasks Added:");
             Console.WriteLine("    " + taskId.ToString());
@@ -79,12 +83,25 @@ namespace StudyN.Utilities
 
         public static void TasksCompleted(Guid taskId)
         {
-           // what naming new files looks like
-           //string fileName = TASK_DIR + "task" + taskIdList.First() + ".json";
-           //string completeFileName = COMPLETE_TASK_DIR + "completedtask" + taskIdList.First() + ".json";
-           // output, might be taken out later
-           Console.WriteLine("Tasks Completed:");
-           Console.WriteLine("    " + taskId.ToString());
+            try
+            {
+                // delete task in task directory, and serialize it in completed tasks
+                string fileName = TASK_DIR + taskId + ".json";
+                string completeFileName = COMPLETE_TASK_DIR + taskId + ".json";
+                var indent = new JsonSerializerOptions { WriteIndented = true };
+                TaskItem task = GlobalTaskData.TaskManager.GetTask(taskId);
+                File.Delete(fileName);
+                string jsonString = JsonSerializer.Serialize(task, indent);
+                File.WriteAllText(completeFileName, jsonString);
+                // output, might be taken out later
+                Console.WriteLine("Tasks Completed:");
+                Console.WriteLine("    " + taskId.ToString());
+            }
+            catch (NullReferenceException exception)
+            {
+                // most likely going to be caused by fileName
+                Console.WriteLine(exception.Message);
+            }
         }
 
         public static void TaskEdited(Guid taskId)

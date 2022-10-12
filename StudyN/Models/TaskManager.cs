@@ -38,6 +38,14 @@ namespace StudyN.Models
                 }
             }
 
+            foreach (TaskItem task in CompletedTasks)
+            {
+                if(task.TaskId == taskId)
+                {
+                    return task;
+                }
+            }
+
             return null;
         }
 
@@ -130,5 +138,3 @@ namespace StudyN.Models
         }
     }
 }
-
-

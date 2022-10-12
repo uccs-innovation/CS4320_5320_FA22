@@ -132,7 +132,7 @@
                 Grid.Column="1"
                 CornerRadius="7"
                 Margin="1"
-                Clicked="HandleDeleteTaskClicked"
+                Clicked="HandleCompleteTaskClicked"
                 Command="{Binding ButtonVisibility}"/>
         </Grid>
     </ContentPage.Content>
