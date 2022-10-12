@@ -67,7 +67,7 @@ namespace StudyN.Utilities
             // serialaize tasks into task file
             string fileName = TASK_DIR + "task" + taskId + ".json";
             var indent = new JsonSerializerOptions { WriteIndented = true };
-            TaskItem task = TaskManager.GetTask(taskId);
+            TaskItem task = TaskDataManager.GetTask(taskId);
             string jsonString = JsonSerializer.Serialize(task, indent);
             File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
@@ -89,7 +89,7 @@ namespace StudyN.Utilities
                 string fileName = TASK_DIR + "task" + taskId + ".json";
                 string completeFileName = COMPLETE_TASK_DIR + "completedtask" + taskId + ".json";
                 var indent = new JsonSerializerOptions { WriteIndented = true };
-                TaskItem task = TaskManager.GetTask(taskId);
+                TaskItem task = TaskDataManager.GetTask(taskId);
                 File.Delete(fileName);
                 string jsonString = JsonSerializer.Serialize(task, indent);
                 File.WriteAllText(completeFileName, jsonString);
