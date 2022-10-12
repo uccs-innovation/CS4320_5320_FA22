@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Maui.Graphics;
+using StudyN.Models;
 
 namespace StudyN.ViewModels
 {
@@ -10,6 +11,7 @@ namespace StudyN.ViewModels
 
         public TaskChartsViewModel()
         {
+            GetData();
             HoursRemainingList = new List<HoursRemainingItem>()
             {
                 new HoursRemainingItem(DateTime.Now, 6, 5),
@@ -21,6 +23,14 @@ namespace StudyN.ViewModels
         }
         readonly Color[] palette;
         public Color[] Palette => palette;
+
+        void GetData() // estepanek: left off here
+        {
+            foreach (TaskItem item in TaskDataManager.)
+            {
+
+            }
+        }
 
     }
     static class PaletteLoader

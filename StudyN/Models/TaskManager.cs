@@ -131,10 +131,10 @@ namespace StudyN.Models
         public TaskDataManager()
         {
             TaskList = new ObservableCollection<TaskItem>();
+            GenerateTestData_Tasks(); // estepanek:just for testing
+
             CompletedTasks = new ObservableCollection<TaskItem>();
             UIGlobal.MainData = this;
-
-            GenerateTestData_Tasks(); // estepanek:just for testing
             
         }
 
