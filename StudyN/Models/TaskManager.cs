@@ -94,7 +94,7 @@ namespace StudyN.Models
                 {
                     TaskList.Remove(task);
 
-                    sendFileUpdate(FileManager.Operation.AddTask, taskId, updateFile);
+                    sendFileUpdate(FileManager.Operation.DeleteTask, taskId, updateFile);
 
                     return;
                 }
@@ -105,27 +105,18 @@ namespace StudyN.Models
         {
             foreach (Guid id in taskIds)
             {
-                DeleteTask(id, false);
+                DeleteTask(id);
             }
-
-            sendFileUpdate(FileManager.Operation.DeleteTask, taskIds, updateFile);
         }
 
 
         public void sendFileUpdate(FileManager.Operation op, Guid taskId, bool updateFile)
         {
-            List<Guid> taskIdList = new List<Guid>();
-            taskIdList.Add(taskId);
-
-            sendFileUpdate(op, taskIdList, updateFile);
-        }
-        public void sendFileUpdate(FileManager.Operation op, List<Guid> taskIds, bool updateFile)
-        {
             if (updateFile)
             {
                 // Send update to Filemanager
                 FileManager.FILE_OP_QUEUE.Enquue(
-                    new FileManager.FileOperation(op, taskIds));
+                    new FileManager.FileOperation(op, taskId));
             }
         }
 
