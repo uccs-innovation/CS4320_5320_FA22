@@ -10,7 +10,8 @@ namespace StudyN.Models
                         DateTime dueTime,
                         int priority,
                         int completionProgress,
-                        int totalTimeNeeded)
+                        int totalTimeNeeded,
+                        double percent)
         {
             this.Name = name;
             this.Description = description;
@@ -18,6 +19,7 @@ namespace StudyN.Models
             this.Priority = priority;
             this.CompletionProgress = completionProgress;
             this.TotalTimeNeeded = totalTimeNeeded;
+            this.Percent = percent;
         }
 
         public bool Completed { get; set; } = false;
@@ -29,8 +31,27 @@ namespace StudyN.Models
         public int TotalTimeNeeded { get; set; } = 0;
         public int Priority { get; set; } = 3;
         public TaskDataManager Parent { get; set; } = null;
-    }
+        private double _percentage; //to display % of completenes
 
+        public double Percent { 
+            get {
+                if (TotalTimeNeeded != 0)
+                {
+                    _percentage = (double)CompletionProgress / (double)TotalTimeNeeded;
+                    if (_percentage == Double.NaN)
+                        return 0;
+                    else
+                        return _percentage;
+                }
+                else
+                    return 0;
+            }
+            set { 
+                 _percentage = value;
+            }
+        }
+
+    }
     public class TaskDataManager
     {
         public TaskItem AddTask(string name,
@@ -38,14 +59,16 @@ namespace StudyN.Models
                                 DateTime dueTime,
                                 int priority,
                                 int CompletionProgress,
-                                int TotalTimeNeeded)
+                                int TotalTimeNeeded,
+                                double Percent)
         {
             TaskItem newTask  = new TaskItem(name,
                                             description,
                                             dueTime,
                                             priority,
                                             CompletionProgress,
-                                            TotalTimeNeeded);
+                                            TotalTimeNeeded,
+                                            Percent);
             newTask.Parent = this;
             TaskList.Add(newTask);
             return newTask;
@@ -58,7 +81,8 @@ namespace StudyN.Models
                                             task.DueTime,
                                             task.Priority,
                                             task.CompletionProgress,
-                                            task.TotalTimeNeeded);
+                                            task.TotalTimeNeeded,
+                                            task.Percent);
             newTask.Parent = this;
             TaskList.Add(newTask);
             return newTask;
@@ -100,7 +124,7 @@ namespace StudyN.Models
                 }
             }
         }
-
+        
         public ObservableCollection<TaskItem> TaskList { get; private set; }
         private ObservableCollection<TaskItem> CompletedTasks { get; set; }
 
