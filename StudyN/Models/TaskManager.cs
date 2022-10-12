@@ -133,7 +133,29 @@ namespace StudyN.Models
             TaskList = new ObservableCollection<TaskItem>();
             CompletedTasks = new ObservableCollection<TaskItem>();
             UIGlobal.MainData = this;
+
+            GenerateTestData_Tasks(); // estepanek:just for testing
+            
         }
+
+        void GenerateTestData_Tasks()
+        {
+            Random rnd = new Random();
+            DateTime tmpDate;
+            ObservableCollection<TaskItem> result = new ObservableCollection<TaskItem>();
+           
+            tmpDate = DateTime.Today.AddDays(1).AddHours(rnd.Next(8, 17)).AddMinutes(rnd.Next(0, 40));                    
+            result.Add(AddTask("Wireframes", "Wireframes for CS5320", tmpDate, 0, 0, 3, 0));
+
+            tmpDate = DateTime.Today.AddDays(2).AddHours(rnd.Next(8, 17)).AddMinutes(rnd.Next(0, 40));
+            result.Add(AddTask("Development", "Feature development for CS5320", tmpDate, 0, 4, 6, 0));
+
+            tmpDate = DateTime.Today.AddDays(3).AddHours(rnd.Next(8, 17)).AddMinutes(rnd.Next(0, 40));
+            result.Add(AddTask("Study for Midterm", "Study for CS5320 Midterm", tmpDate, 0, 5, 10, 0));
+
+            TaskList = result;
+        }
+
     }
 
     public static class UIGlobal

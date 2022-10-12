@@ -12,8 +12,8 @@ namespace StudyN.ViewModels
         {
             HoursRemainingList = new List<HoursRemainingItem>()
             {
-                new HoursRemainingItem(DateTime.Now, 5),
-                new HoursRemainingItem(DateTime.Now, 3)
+                new HoursRemainingItem(DateTime.Now, 6, 5),
+                new HoursRemainingItem(DateTime.Now, 5, 3)
             };
 
             palette = PaletteLoader.LoadPalette("#975ba5", "#03bfc1", "#f8c855", "#f45a4e",
@@ -38,13 +38,15 @@ namespace StudyN.ViewModels
     {
         // Properties
         public DateTime StudyDay { get; }
+        public int TotalHoursForDay { get; }
         public int HoursLeftForDay { get; }
 
 
         // Constructor
-        public HoursRemainingItem(DateTime studyDay, int hoursLeftForDay)
+        public HoursRemainingItem(DateTime studyDay, int totalHoursForDay, int hoursLeftForDay)
         {
             this.StudyDay = studyDay;
+            this.TotalHoursForDay = totalHoursForDay;
             this.HoursLeftForDay = hoursLeftForDay;
         }
     }    

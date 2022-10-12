@@ -13,40 +13,67 @@
             Orientation="Horizontal"
             HorizontalOptions="Center"
             Spacing="5">
-            <Button Text="Testing Button"
+            <Label Text="How much work do I have left?"
             VerticalOptions="Center"
             HorizontalOptions="Center"
-            BorderColor="Black"
-            BorderWidth="1"
             TextColor="Black"
             BackgroundColor="White"
-            ></Button>
+            ></Label>
         </StackLayout>
     </Shell.TitleView>
-    <dxc:PieChartView>
-        <dxc:PieChartView.Series>
-            <dxc:DonutSeries>
-                <dxc:DonutSeries.Data>
-                    <dxc:PieSeriesDataAdapter DataSource="{Binding HoursRemainingList}"
-                                              LabelDataMember="StudyDay"
-                                              ValueDataMember="HoursLeftForDay"/>
-                </dxc:DonutSeries.Data>
-                <dxc:DonutSeries.Label>
-                    <dxc:PieSeriesLabel Position="TwoColumns" Indent="20">
-                    </dxc:PieSeriesLabel>
-                </dxc:DonutSeries.Label>
-            </dxc:DonutSeries>
-        </dxc:PieChartView.Series>
-        <dxc:PieChartView.Legend>
-            <dxc:Legend Orientation="TopToBottom"
-                HorizontalPosition="Center"
-                VerticalPosition="BottomOutside">
-            </dxc:Legend>
-        </dxc:PieChartView.Legend>
-        <dxc:PieChartView.Hint>
-            <dxc:PieHint Enabled="True">
-                <!-- ... -->
-            </dxc:PieHint>
-        </dxc:PieChartView.Hint>
-    </dxc:PieChartView>
+    <dxc:ChartView>
+        <dxc:ChartView.Series>
+            <dxc:LineSeries DisplayName="Total Study Hours For Due Date" MarkersVisible="True">
+                <dxc:LineSeries.Data>
+                    <dxc:SeriesDataAdapter DataSource="{Binding HoursRemainingList}"
+                                           ArgumentDataMember="StudyDay">
+                        <dxc:ValueDataMember Type="Value" Member="TotalHoursForDay"/>
+                    </dxc:SeriesDataAdapter>
+                </dxc:LineSeries.Data>
+            </dxc:LineSeries>
+            <dxc:LineSeries DisplayName="Hours Left for Due Date">
+                <dxc:LineSeries.Data>
+                    <dxc:SeriesDataAdapter DataSource="{Binding HoursRemainingList}"
+                                           ArgumentDataMember="StudyDay">
+                        <dxc:ValueDataMember Type="Value" Member="HoursLeftForDay"/>
+                    </dxc:SeriesDataAdapter>
+                </dxc:LineSeries.Data>
+                <dxc:LineSeries.Style>
+                    <dxc:LineSeriesStyle Stroke="#7145a7" StrokeThickness="2" MarkerSize="8">
+                        <dxc:LineSeriesStyle.MarkerStyle>
+                            <dxc:MarkerStyle Fill="#7145a7"/>
+                        </dxc:LineSeriesStyle.MarkerStyle>
+                    </dxc:LineSeriesStyle>
+                </dxc:LineSeries.Style>
+            </dxc:LineSeries>
+        </dxc:ChartView.Series>
+        <dxc:ChartView.AxisX>
+            <dxc:DateTimeAxisX MeasureUnit="Day" 
+                           GridAlignment="Day" 
+                           GridSpacing="1"/>
+        </dxc:ChartView.AxisX>
+        <dxc:ChartView.AxisY>
+            <dxc:NumericAxisY>
+                <dxc:NumericAxisY.Title>
+                    <dxc:AxisTitle Text="HOURS">
+                        <dxc:AxisTitle.Style>
+                            <dxc:TitleStyle>
+                                <dxc:TitleStyle.TextStyle>
+                                    <dxc:TextStyle Size="16"/>
+                                </dxc:TitleStyle.TextStyle>
+                            </dxc:TitleStyle>
+                        </dxc:AxisTitle.Style>
+                    </dxc:AxisTitle>
+                </dxc:NumericAxisY.Title>
+                <dxc:NumericAxisY.Label>
+                    <dxc:AxisLabel TextFormat="##.#" Position="Inside"/>
+                </dxc:NumericAxisY.Label>
+            </dxc:NumericAxisY>
+        </dxc:ChartView.AxisY>
+        <dxc:ChartView.Legend>
+            <dxc:Legend VerticalPosition="BottomOutside" 
+                    HorizontalPosition="Center" 
+                    Orientation="LeftToRight"/>
+        </dxc:ChartView.Legend>
+    </dxc:ChartView>
 </ContentPage>
