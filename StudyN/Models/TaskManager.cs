@@ -96,7 +96,23 @@ namespace StudyN.Models
             TaskList = new ObservableCollection<TaskItem>();
             CompletedTasks = new ObservableCollection<TaskItem>();
         }
+
+        public TaskItem GetTask(Guid id)
+        {
+            bool found = false;
+            int i = 0;
+            while (!found)
+            {
+                if (TaskList.ElementAt(i).TaskId == id)
+                {
+                    found = true;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            return TaskList.ElementAt(i);
+        }
     }
 }
-
-
