@@ -101,18 +101,27 @@ namespace StudyN.Models
         {
             bool found = false;
             int i = 0;
-            while (!found)
+            foreach(TaskItem item in TaskList)
             {
-                if (TaskList.ElementAt(i).TaskId == id)
+                if (item.TaskId == id)
                 {
                     found = true;
+                    break;
                 }
                 else
                 {
                     i++;
                 }
             }
-            return TaskList.ElementAt(i);
+            if (found)
+            {
+                return TaskList.ElementAt(i);
+            }
+            else
+            {
+                Console.WriteLine("Error: Task couldn't be found");
+                return null;
+            }
         }
     }
 }
