@@ -22,10 +22,8 @@ namespace StudyN.Utilities
                 TaskIdList = idList;
                 Operation = operation;
                 // create directories
-                string taskDir = System.IO.Path.Combine(DIR, "tasks");
-                string completeDir = System.IO.Path.Combine(DIR, "completedTasks");
-                System.IO.Directory.CreateDirectory(taskDir);
-                System.IO.Directory.CreateDirectory(completeDir);
+                System.IO.Directory.CreateDirectory(TASK_DIR);
+                System.IO.Directory.CreateDirectory(COMPLETE_TASK_DIR);
             }
 
             public List<Guid> TaskIdList { get; set; }
@@ -34,12 +32,11 @@ namespace StudyN.Utilities
         }
 
         static string DIR = FileSystem.AppDataDirectory;
-        static string TASK_FILENAME = DIR + "/tasks/";
-        static string COMPLETE_TASK_FILENAME = DIR + "/completedTask/";
+        static string TASK_DIR = DIR + "/tasks/";
+        static string COMPLETE_TASK_DIR = DIR + "/completedTask/";
         
 
         public static AsyncQueue<FileOperation> FILE_OP_QUEUE = new AsyncQueue<FileOperation>();
-        static TaskDataManager Tasks;
         
         public static async Task WaitForFileOp()
         {
@@ -62,12 +59,8 @@ namespace StudyN.Utilities
 
         public static void TasksAdded(List<Guid> taskIdList)
         {
-            // serialaize tasks into task file
-            string fileName = TASK_FILENAME + "task" + taskIdList.First() + ".json";
-            var indent = new JsonSerializerOptions { WriteIndented = true };
-            TaskItem task = Tasks.GetTask(taskIdList.First());
-            string jsonString = JsonSerializer.Serialize(task, indent);
-            File.WriteAllText(fileName, jsonString);
+            // what naming new files look like
+            //string fileName = TASK_DIR + "task" + taskIdList.First() + ".json";
             // output, might be taken out later
             Console.WriteLine("Tasks Added:");
             foreach(Guid id in taskIdList)
@@ -87,28 +80,15 @@ namespace StudyN.Utilities
 
         public static void TasksCompleted(List<Guid> taskIdList)
         {
-            try
-            {
-                // delete task in task directory, and serialize it in completed tasks
-                string fileName = TASK_FILENAME + "task" + taskIdList.First() + ".json";
-                string completeFileName = COMPLETE_TASK_FILENAME + "completedtask" + taskIdList.First() + ".json";
-                var indent = new JsonSerializerOptions { WriteIndented = true };
-                TaskItem task = Tasks.GetTask(taskIdList.First());
-                File.Delete(fileName);
-                string jsonString = JsonSerializer.Serialize(task, indent);
-                File.WriteAllText(completeFileName, jsonString);
-                // output, might be taken out later
-                Console.WriteLine("Tasks Completed:");
-                foreach (Guid id in taskIdList)
-                {
-                   Console.WriteLine("    " + id.ToString());
-                }
-            }catch(NullReferenceException exception)
-            {
-                // most likely going to be caused by fileName
-                Console.WriteLine(exception.Message);
-            }
-            
+           // what naming new files looks like
+           //string fileName = TASK_DIR + "task" + taskIdList.First() + ".json";
+           //string completeFileName = COMPLETE_TASK_DIR + "completedtask" + taskIdList.First() + ".json";
+           // output, might be taken out later
+           Console.WriteLine("Tasks Completed:");
+           foreach (Guid id in taskIdList)
+           {
+               Console.WriteLine("    " + id.ToString());
+           }
         }
     }
 }
