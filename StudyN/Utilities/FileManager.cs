@@ -62,12 +62,8 @@ namespace StudyN.Utilities
 
         public static void TasksAdded(List<Guid> taskIdList)
         {
-            // serialaize tasks into task file
-            string fileName = TASK_FILENAME + "task" + taskIdList.First() + ".json";
-            var indent = new JsonSerializerOptions { WriteIndented = true };
-            TaskItem task = Tasks.GetTask(taskIdList.First());
-            string jsonString = JsonSerializer.Serialize(task, indent);
-            File.WriteAllText(fileName, jsonString);
+            // what naming new files look like
+            //string fileName = TASK_FILENAME + "task" + taskIdList.First() + ".json";
             // output, might be taken out later
             Console.WriteLine("Tasks Added:");
             foreach(Guid id in taskIdList)
@@ -87,28 +83,15 @@ namespace StudyN.Utilities
 
         public static void TasksCompleted(List<Guid> taskIdList)
         {
-            try
-            {
-                // delete task in task directory, and serialize it in completed tasks
-                string fileName = TASK_FILENAME + "task" + taskIdList.First() + ".json";
-                string completeFileName = COMPLETE_TASK_FILENAME + "completedtask" + taskIdList.First() + ".json";
-                var indent = new JsonSerializerOptions { WriteIndented = true };
-                TaskItem task = Tasks.GetTask(taskIdList.First());
-                File.Delete(fileName);
-                string jsonString = JsonSerializer.Serialize(task, indent);
-                File.WriteAllText(completeFileName, jsonString);
-                // output, might be taken out later
-                Console.WriteLine("Tasks Completed:");
-                foreach (Guid id in taskIdList)
-                {
-                   Console.WriteLine("    " + id.ToString());
-                }
-            }catch(NullReferenceException exception)
-            {
-                // most likely going to be caused by fileName
-                Console.WriteLine(exception.Message);
-            }
-            
+           // what naming new files looks like
+           //string fileName = TASK_FILENAME + "task" + taskIdList.First() + ".json";
+           //string completeFileName = COMPLETE_TASK_FILENAME + "completedtask" + taskIdList.First() + ".json";
+           // output, might be taken out later
+           Console.WriteLine("Tasks Completed:");
+           foreach (Guid id in taskIdList)
+           {
+               Console.WriteLine("    " + id.ToString());
+           }
         }
     }
 }
