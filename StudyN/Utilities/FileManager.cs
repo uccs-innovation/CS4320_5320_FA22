@@ -22,10 +22,8 @@ namespace StudyN.Utilities
                 TaskIdList = idList;
                 Operation = operation;
                 // create directories
-                string taskDir = System.IO.Path.Combine(DIR, "tasks");
-                string completeDir = System.IO.Path.Combine(DIR, "completedTasks");
-                System.IO.Directory.CreateDirectory(taskDir);
-                System.IO.Directory.CreateDirectory(completeDir);
+                System.IO.Directory.CreateDirectory(TASK_DIR);
+                System.IO.Directory.CreateDirectory(COMPLETE_TASK_DIR);
             }
 
             public List<Guid> TaskIdList { get; set; }
