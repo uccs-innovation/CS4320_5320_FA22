@@ -104,6 +104,18 @@ namespace StudyN.Utilities
             }
         }
 
+        public static string[] LoadFileNames()
+        {
+            Console.WriteLine("WRITING OUT FILES");
+            string[] files = Directory.GetFiles(TASK_DIR);
+            foreach (string file in files)
+            {
+                Console.WriteLine("file:");
+                Console.WriteLine(file);
+            }
+            return files;
+        }
+
         public static void TaskEdited(Guid taskId)
         {
             Console.WriteLine("Task Edited:");

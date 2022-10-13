@@ -25,6 +25,7 @@ namespace StudyN.Models
 
             sendFileUpdate(FileManager.Operation.AddTask, newTask.TaskId, updateFile);
 
+
             return newTask;
         }
 
@@ -120,6 +121,7 @@ namespace StudyN.Models
 
         public void sendFileUpdate(FileManager.Operation op, Guid taskId, bool updateFile)
         {
+            FileManager.LoadFileNames();
             if (updateFile)
             {
                 // Send update to Filemanager
