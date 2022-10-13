@@ -13,6 +13,7 @@ namespace StudyN.Platforms.Android.Services
     [IntentFilter(new[] {"com.google.firebase.MESSAGING_EVENT"})]
     public class FirebaseService : FirebaseMessagingService
     {
+        const string PATH = "StudyN.private_key.json";
         //private const string FIREBASE_URL = @"https://fcm.googleapis.com/v1/projects/studyn-pushnotification/messages:send";
         //private const string PUBLIC_SERVER_KEY = @"=BK-Koy1xEam6DavLn1W4s3953gKe93jECus11BPiy_4MPynD30sBZTWVuuS3U4Mhd3CGbHh33Ml_ffSNyDqM20I";
         //private const string PUBLIC_SERVER_KEY = @"=BAR8oFBS50ueEeXpmxVbjzNEFpnabJX_vIgHAw0aDpVknS14yJs2AD8-XqIoDK5vYxETWvaXv9Lbvuk0kqWAgSE";
@@ -27,7 +28,7 @@ namespace StudyN.Platforms.Android.Services
             {
                 FirebaseApp.Create(new AppOptions
                 {
-                    Credential = GoogleCredential.FromFile(@"Platforms\Android\private_key.json")
+                    Credential = GoogleCredential.FromFile(PATH)
                 });
 
                 // this registration token comes from the client FCM SDKs.
