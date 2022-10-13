@@ -119,7 +119,7 @@ namespace StudyN.Utilities
         public static string[] LoadTaskFileNames()
         {
             string[] files = Directory.GetFiles(TASK_DIR);
-            return files = Directory.GetFiles(COMPLETE_TASK_DIR); ;
+            return files;
         }
 
         public static string[] LoadCompletedFileNames()
