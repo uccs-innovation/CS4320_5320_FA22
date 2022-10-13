@@ -71,25 +71,25 @@ namespace StudyN.Utilities
             string jsonString = JsonSerializer.Serialize(task, indent);
             File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
-            Console.WriteLine("Tasks Added:");
-            Console.WriteLine("    " + taskId.ToString());
+            //Console.WriteLine("Tasks Added:");
+            //Console.WriteLine("    " + taskId.ToString());
+
         }
 
         public static void TasksDeleted(Guid taskId)
         {
+         
             string fileName = TASK_DIR + taskId + ".json";
-            Console.WriteLine(fileName);
 
+      
             if (File.Exists(fileName))
             {
                 File.Delete(fileName);
-                Console.WriteLine("    " + taskId.ToString());
-                Console.WriteLine("TASK HAS BEEN DELETED");
-                return;
+                //Console.WriteLine("    " + taskId.ToString());
             }
-            Console.WriteLine("tasks not delted");
 
         }
+
 
         public static void TasksCompleted(Guid taskId)
         {
@@ -104,8 +104,8 @@ namespace StudyN.Utilities
                 string jsonString = JsonSerializer.Serialize(task, indent);
                 File.WriteAllText(completeFileName, jsonString);
                 // output, might be taken out later
-                Console.WriteLine("Tasks Completed:");
-                Console.WriteLine("    " + taskId.ToString());
+                //Console.WriteLine("Tasks Completed:");
+                //Console.WriteLine("    " + taskId.ToString());
             }
             catch (NullReferenceException exception)
             {
@@ -140,8 +140,22 @@ namespace StudyN.Utilities
 
         public static void TaskEdited(Guid taskId)
         {
-            Console.WriteLine("Task Edited:");
-            Console.WriteLine("    " + taskId.ToString());
+            TasksDeleted(taskId);
+            TasksAdded(taskId);
+            //Unneeded. Mainly just writes out files in directory for testing purposes. 
+            //LoadFileNames();
+        }
+
+        public static string[] LoadFileNames()
+        {
+            Console.WriteLine("WRITING OUT FILES");
+            string[] files = Directory.GetFiles(TASK_DIR);
+            foreach (string file in files)
+            {
+                Console.WriteLine("file:");
+                Console.WriteLine(file);
+            }
+            return files;
         }
     }
 }
