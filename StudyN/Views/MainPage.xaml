@@ -27,7 +27,7 @@
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
 
-        <Tab Title="Integrate" Icon="info">
+        <Tab Title="Import Calendar" Icon="info">
             <ShellContent ContentTemplate="{DataTemplate local:HomePage}" />
         </Tab>
 

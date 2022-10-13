@@ -12,7 +12,7 @@
                 <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto" Padding="20,15,20,15" RowSpacing="10" TranslationY ="200">
                     <Entry
                         Grid.ColumnSpan="1"
-                        Placeholder="Enter link to Google or Canvas Calendar(.ics)"
+                        Placeholder="Enter link to iCal file (.ics)"
                         ClearButtonVisibility="WhileEditing"
                         ReturnType="Go"
                         Keyboard="Url"

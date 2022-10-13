@@ -25,7 +25,7 @@ namespace StudyN.Models
 
     public class CalendarTasksData
     {
-        public string text = HomePage.content;
+        public string text = HomePage.Result;
         public string eventName = "";
         public int id = 1;
         public string eventType = "";
@@ -33,6 +33,10 @@ namespace StudyN.Models
         public string endDate = "";
         void GenerateCalendarTaskss()
         {
+            if (text == null)
+            {
+                text = "";
+            }
             using var sr = new StringReader(text);
             int count = 0;
             string line = "";

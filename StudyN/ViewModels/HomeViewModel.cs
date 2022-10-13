@@ -7,7 +7,7 @@ namespace StudyN.ViewModels
     {
         public HomeViewModel()
         {
-            Title = "Import Google Calendar";
+            Title = "Import External Calendar";
             //Items = new ObservableCollection<Item>();
         }
 

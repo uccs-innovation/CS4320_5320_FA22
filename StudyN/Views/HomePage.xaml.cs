@@ -8,7 +8,7 @@ namespace StudyN.Views
     public partial class HomePage : ContentPage
     {
         protected string link;
-        public static string content { get; set; }
+        public static string Result { get; set; }
         static readonly HttpClient client = new HttpClient();
 
         public HomePage()
@@ -26,15 +26,13 @@ namespace StudyN.Views
             ViewModel.OnAppearing();
         }
 
-        protected async void Button_OnClick(object sender, EventArgs e)
+        protected void Button_OnClick(object sender, EventArgs e)
         {
             Console.WriteLine(link);
             if (!string.IsNullOrEmpty(link))
             { 
-                HttpResponseMessage response = await client.GetAsync(link);
-                var content1 = client.GetStringAsync(link);
-                content = content1.Result;
-                Console.WriteLine(content1.Result);
+                var content = client.GetStringAsync(link);
+                Result = content.Result;
             }
         }
 
