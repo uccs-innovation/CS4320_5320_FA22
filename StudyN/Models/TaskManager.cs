@@ -122,15 +122,19 @@ namespace StudyN.Models
             }
         }
 
-
+        //This function will delete a given task from the normal TaskList
         public void DeleteTask(Guid taskId, bool updateFile = true)
         {
+            //Looking for the task based on TaskId
             foreach (TaskItem task in TaskList)
             {
+                //If found
                 if (task.TaskId == taskId)
                 {
+                    //Remove the task from list
                     TaskList.Remove(task);
 
+                    //Deleteing the associated file
                     sendFileUpdate(FileManager.Operation.DeleteTask, taskId, updateFile);
 
                     return;
@@ -138,17 +142,21 @@ namespace StudyN.Models
             }
         }
 
+
+        //This function will delete every task for the ids avalaible
         public void DeleteListOfTasks(List<Guid> taskIds, bool updateFile = true)
         {
+            //For each id available in taskIds, call the DeleteTask function to delete them
             foreach (Guid id in taskIds)
             {
                 DeleteTask(id);
             }
         }
 
-
+        //This function will interact with the file manager to preform the correct file action
         public void sendFileUpdate(FileManager.Operation op, Guid taskId, bool updateFile)
         {
+            //Provided we are allowed to update the file (using updatefile as an indicator), begin the interaction with the FileManager
             if (updateFile)
             {
                 // Send update to Filemanager
@@ -193,6 +201,7 @@ namespace StudyN.Models
         public ObservableCollection<TaskItem> TaskList { get; private set; }
         private ObservableCollection<TaskItem> CompletedTasks { get; set; }
 
+        //This constructor will create the normal TaskList and the list for completed tasks, CompletedTasks
         public TaskDataManager()
         {
             TaskList = new ObservableCollection<TaskItem>();

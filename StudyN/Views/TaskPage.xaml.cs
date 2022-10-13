@@ -18,6 +18,7 @@ namespace StudyN.Views
 
         HashSet<TaskItem> selectedTasks;
         HashSet<int> rowHandleList;
+        
         public TaskPage()
         {
             InitializeComponent();
@@ -48,6 +49,8 @@ namespace StudyN.Views
 
             ShowLongPressMenu(false);
         }
+
+        //This function will by the cancel button to reset the selection menu to its default state
         private void CancelButtonClicked(object sender, EventArgs e)
         {
             try
@@ -70,6 +73,7 @@ namespace StudyN.Views
             }
         }
 
+        //This function will be used by the trash button to delete selected tasks
         private void TrashButtonClicked(object sender, EventArgs e)
         {
             try
@@ -100,6 +104,8 @@ namespace StudyN.Views
                 Console.WriteLine(execption.Message);
             }
         }
+
+        //This function will be used by the complete task button to "complete" a task
         private void CompleteButtonClicked(object sender, EventArgs e)
         {
             try
@@ -127,7 +133,7 @@ namespace StudyN.Views
                 Console.WriteLine(execption.Message);
             }
         }
-
+        
 
         private void RowLongPressed(object sender, DataGridGestureEventArgs e)
         {
