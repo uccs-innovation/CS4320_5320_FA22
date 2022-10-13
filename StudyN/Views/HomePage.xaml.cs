@@ -31,8 +31,14 @@ namespace StudyN.Views
             Console.WriteLine(link);
             if (!string.IsNullOrEmpty(link))
             { 
-                var content = client.GetStringAsync(link);
-                Result = content.Result;
+                try
+                {
+                    var content = client.GetStringAsync(link);
+                    Result = content.Result;
+                } 
+                catch (Exception ex)
+                {
+                }
             }
         }
 

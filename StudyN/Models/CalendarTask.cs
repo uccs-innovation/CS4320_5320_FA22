@@ -25,13 +25,14 @@ namespace StudyN.Models
 
     public class CalendarTasksData
     {
-        public string text = HomePage.Result;
-        public string eventName = "";
-        public int id = 1;
-        public string eventType = "";
-        public string startDate = "";
-        public string endDate = "";
-        void GenerateCalendarTaskss()
+        protected string text = HomePage.Result;
+        protected string eventName = "";
+        protected int id = 1;
+        protected string eventType = "";
+        protected string startDate = "";
+        protected string endDate = "";
+        protected int estimatedTime = 0;
+        async void GenerateCalendarTaskss()
         {
             if (text == null)
             {
@@ -61,6 +62,9 @@ namespace StudyN.Models
                 }
                 if (line.Contains("END") == true)
                 {
+                    String userEstimation = await Application.Current.MainPage.DisplayPromptAsync(eventName, "How many hours will this take?");
+                    Int32.TryParse(userEstimation, out estimatedTime);
+
                     CalendarTasks.Add(
                             new CalendarTask(eventName)
                             {
@@ -72,8 +76,8 @@ namespace StudyN.Models
                                 EndTime = endDate,
                                 DueDate = DateTime.Today,
                                 TimeNeeded = 3,
-                                EstimateTime = 0
-                                
+                                EstimateTime = estimatedTime
+
                             }
                         );
                     id++;
