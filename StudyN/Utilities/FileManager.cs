@@ -71,10 +71,9 @@ namespace StudyN.Utilities
             string jsonString = JsonSerializer.Serialize(task, indent);
             File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
-            Console.WriteLine("Tasks Added:");
-            Console.WriteLine("    " + taskId.ToString());
+            //Console.WriteLine("Tasks Added:");
+            //Console.WriteLine("    " + taskId.ToString());
 
-            LoadFileNames();
         }
 
         public static void TasksDeleted(Guid taskId)
@@ -86,11 +85,11 @@ namespace StudyN.Utilities
             if (File.Exists(fileName))
             {
                 File.Delete(fileName);
-                Console.WriteLine("    " + taskId.ToString());
+                //Console.WriteLine("    " + taskId.ToString());
             }
 
-            LoadFileNames();
         }
+
 
         public static void TasksCompleted(Guid taskId)
         {
@@ -105,8 +104,8 @@ namespace StudyN.Utilities
                 string jsonString = JsonSerializer.Serialize(task, indent);
                 File.WriteAllText(completeFileName, jsonString);
                 // output, might be taken out later
-                Console.WriteLine("Tasks Completed:");
-                Console.WriteLine("    " + taskId.ToString());
+                //Console.WriteLine("Tasks Completed:");
+                //Console.WriteLine("    " + taskId.ToString());
             }
             catch (NullReferenceException exception)
             {
@@ -115,11 +114,28 @@ namespace StudyN.Utilities
             }
         }
 
+
+
+        public static string[] LoadTaskFileNames()
+        {
+            string[] files = Directory.GetFiles(TASK_DIR);
+            return files;
+        }
+
+        public static string[] LoadCompletedFileNames()
+        {
+            string[] files = Directory.GetFiles(COMPLETE_TASK_DIR);
+            return files; 
+        }
+
+
+
         public static void TaskEdited(Guid taskId)
         {
             TasksDeleted(taskId);
             TasksAdded(taskId);
-            LoadFileNames();
+            //Unneeded. Mainly just writes out files in directory for testing purposes. 
+            //LoadFileNames();
         }
 
         public static string[] LoadFileNames()

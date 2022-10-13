@@ -1,5 +1,6 @@
 ﻿using StudyN.Utilities;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace StudyN.Models
@@ -14,6 +15,7 @@ namespace StudyN.Models
                                 int TotalTimeNeeded,
                                 bool updateFile = true)
         {
+            //LoadFilesIntoLists();
             TaskItem newTask  = new TaskItem(name,
                                             description,
                                             dueTime,
@@ -24,6 +26,7 @@ namespace StudyN.Models
             TaskList.Add(newTask);
 
             sendFileUpdate(FileManager.Operation.AddTask, newTask.TaskId, updateFile);
+
 
             return newTask;
         }
@@ -125,6 +128,39 @@ namespace StudyN.Models
                 // Send update to Filemanager
                 FileManager.FILE_OP_QUEUE.Enquue(
                     new FileManager.FileOperation(op, taskId));
+            }
+        }
+
+        
+        public void LoadFilesIntoLists()
+        {
+            //string fileName = "WeatherForecast.json";
+            //string jsonString = File.ReadAllText(fileName);
+            //WeatherForecast weatherForecast = JsonSerializer.Deserialize<WeatherForecast>(jsonString)!;
+
+            string jsonfiletext;
+
+            string []taskfilelist = FileManager.LoadTaskFileNames();
+            string[] completedfiles = FileManager.LoadCompletedFileNames();
+            foreach (string file in taskfilelist)
+            {
+                //Console.WriteLine("WARNING CHECKING GUID COMPONENT. VOLATILE INFORMATION");
+                //Console.WriteLine(file);
+                jsonfiletext = File.ReadAllText(file);
+                TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                //Console.WriteLine($"TaskGUID: {task.TaskId}");
+                TaskList.Add(task);
+            }
+
+            //gets completed tasks
+            foreach (string file in completedfiles)
+            {
+                //Console.WriteLine("WARNING CHECKING GUID COMPONENT. VOLATILE INFORMATION");
+                //Console.WriteLine(file);
+                jsonfiletext = File.ReadAllText(file);
+                TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                //Console.WriteLine($"TaskGUID: {task.TaskId}");
+                CompletedTasks.Add(task);
             }
         }
 

@@ -11,6 +11,7 @@ namespace StudyN.Views
             BindingContext = new MainViewModel();
 
             GlobalTaskData.TaskManager = new TaskDataManager();
+            GlobalTaskData.TaskManager.LoadFilesIntoLists();
         }
     }
 }
