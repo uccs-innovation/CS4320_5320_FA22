@@ -42,7 +42,8 @@
                       Tap="CellClicked"
                       LongPress="RowLongPressed"
                       CustomCellStyle="HighlightSelectedRows"
-                      ColumnHeaderHeight="0">
+                      ColumnHeaderHeight="0"
+                      CalculateCustomSummary="CalculateTotalPercent">
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
             <dxg:TextColumn FieldName="Name" Caption="Task" />
@@ -61,5 +62,12 @@
         <dxg:DataGridView.ColumnHeaderStyle>
             <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
         </dxg:DataGridView.ColumnHeaderStyle>
+        <dxg:DataGridView.TotalSummaries>
+            <dxg:GridColumnSummary FieldName="Percent" Type="Custom" 
+                                   DisplayFormat="Total Completion: {0}%"/>
+        </dxg:DataGridView.TotalSummaries>
+        <dxg:DataGridView.TotalSummaryStyle>
+            <dxg:TotalSummaryStyle FontSize="16"/>
+        </dxg:DataGridView.TotalSummaryStyle>
     </dxg:DataGridView>
 </ContentPage>
