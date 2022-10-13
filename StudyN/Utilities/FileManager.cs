@@ -77,8 +77,15 @@ namespace StudyN.Utilities
 
         public static void TasksDeleted(Guid taskId)
         {
-            Console.WriteLine("Tasks Deleted:");
-            Console.WriteLine("    " + taskId.ToString());
+         
+            string fileName = TASK_DIR + taskId + ".json";
+
+      
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+                Console.WriteLine("    " + taskId.ToString());
+            }
         }
 
         public static void TasksCompleted(Guid taskId)
@@ -106,8 +113,8 @@ namespace StudyN.Utilities
 
         public static void TaskEdited(Guid taskId)
         {
-            Console.WriteLine("Task Edited:");
-            Console.WriteLine("    " + taskId.ToString());
+            TasksDeleted(taskId);
+            TasksAdded(taskId);
         }
     }
 }
