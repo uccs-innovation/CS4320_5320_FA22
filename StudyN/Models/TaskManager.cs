@@ -15,7 +15,7 @@ namespace StudyN.Models
                                 int TotalTimeNeeded,
                                 bool updateFile = true)
         {
-            LoadFilesIntoLists();
+            //LoadFilesIntoLists();
             TaskItem newTask  = new TaskItem(name,
                                             description,
                                             dueTime,

@@ -77,8 +77,18 @@ namespace StudyN.Utilities
 
         public static void TasksDeleted(Guid taskId)
         {
-            Console.WriteLine("Tasks Deleted:");
-            Console.WriteLine("    " + taskId.ToString());
+            string fileName = TASK_DIR + taskId + ".json";
+            Console.WriteLine(fileName);
+
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+                Console.WriteLine("    " + taskId.ToString());
+                Console.WriteLine("TASK HAS BEEN DELETED");
+                return;
+            }
+            Console.WriteLine("tasks not delted");
+
         }
 
         public static void TasksCompleted(Guid taskId)
