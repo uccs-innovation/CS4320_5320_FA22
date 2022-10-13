@@ -47,6 +47,7 @@ namespace StudyN.Views
                 }
             }
 
+            //Ensuring that the long press menu is not yet viable
             ShowLongPressMenu(false);
         }
 
@@ -60,7 +61,8 @@ namespace StudyN.Views
                 DataGridView gridView = contentPage.Content as DataGridView;
 
                 gridView.BeginUpdate();
-
+                
+                //Clearing the selected tasks and resetting the menu to its default setting
                 selectedTasks.Clear();
                 rowHandleList.Clear();
                 ShowLongPressMenu(false);
@@ -84,15 +86,17 @@ namespace StudyN.Views
 
                 gridView.BeginUpdate();
 
-                // Delete tasks
+                //We will first create a list of tasks before populating it with all of the selected tasks
                 List<Guid> taskIds = new List<Guid>();
                 foreach (TaskItem task in selectedTasks)
                 {
                     taskIds.Add(task.TaskId);
                 }
 
+                //Sending the created list to TaskManager's DeleteListOfTasks function for deletion
                 GlobalTaskData.TaskManager.DeleteListOfTasks(taskIds);
 
+                //Clearing the selected tasks and resetting the menu to its default setting
                 selectedTasks.Clear();
                 rowHandleList.Clear();
                 ShowLongPressMenu(false);
@@ -116,12 +120,13 @@ namespace StudyN.Views
 
                 gridView.BeginUpdate();
 
-                // Delete tasks
+                // For each of our selected tasks, we will "complete" them using TaskManager's CompleteTask function
                 foreach (TaskItem task in selectedTasks)
                 {
                     GlobalTaskData.TaskManager.CompleteTask(task.TaskId);
                 }
 
+                //Clear the selected tasks and reset the menu back to the default setting
                 selectedTasks.Clear();
                 rowHandleList.Clear();
                 ShowLongPressMenu(false);
@@ -134,9 +139,10 @@ namespace StudyN.Views
             }
         }
         
-        //This function will be used 
+        //This function will be used to preform certain actions when a row is pressed for a long amount of time
         private void RowLongPressed(object sender, DataGridGestureEventArgs e)
         {
+            //First checking to ensure the the item we have selected is neither null nor 
             if (e.Item != null && e.FieldName != "DueTime")
             {
                 TaskItem task = e.Item as TaskItem;
@@ -198,17 +204,22 @@ namespace StudyN.Views
             await Shell.Current.GoToAsync(nameof(AddTaskPage));
         }
 
-
+        //This function will be used to bring up more options on a long press
         void ShowLongPressMenu(bool setVisible)
         {
+            //If the menu is already what we are trying to make it (ie we want it to be viable, but it already is), return
             if (isLongPressMenuVisible == setVisible)
             {
                 return;
             }
 
+            //Set the menu to either inviable or visable
             isLongPressMenuVisible = setVisible;
+
+            //Setting all of the visablility acorrding to what we want
             if (setVisible)
             {
+                //If we want the tools to be available, clear the tool bar and add the trash, complete, and cancel buttons
                 ToolbarItems.Clear();
                 ToolbarItems.Add(trashToolbarItem);
                 ToolbarItems.Add(completeToolbarItem);
@@ -216,11 +227,13 @@ namespace StudyN.Views
             }
             else
             {
+                //If we want to remove the tools, clear the tool bar and add back the add task button
                 ToolbarItems.Clear();
                 ToolbarItems.Add(addToolbarItem);
             }
         }
 
+        //This function will be used to change the color of a selected task
         private void HighlightSelectedRows(object sender, CustomCellStyleEventArgs e)
         {
             if(rowHandleList.Contains(e.RowHandle))

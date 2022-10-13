@@ -62,12 +62,14 @@ namespace StudyN.Utilities
             }
         }
 
+        //This function will take a given task and save it to a new file
         public static void TasksAdded(Guid taskId)
         {
             // serialaize tasks into task file
             string fileName = TASK_DIR + taskId + ".json";
             var indent = new JsonSerializerOptions { WriteIndented = true };
             TaskItem task = GlobalTaskData.TaskManager.GetTask(taskId);
+            
             string jsonString = JsonSerializer.Serialize(task, indent);
             File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
@@ -76,12 +78,14 @@ namespace StudyN.Utilities
 
         }
 
+        //This function will take a task and delete the associated file
         public static void TasksDeleted(Guid taskId)
         {
          
+            //Creating the file name
             string fileName = TASK_DIR + taskId + ".json";
 
-      
+            //If the file exists, delete
             if (File.Exists(fileName))
             {
                 File.Delete(fileName);
@@ -90,7 +94,7 @@ namespace StudyN.Utilities
 
         }
 
-
+        //This function will save a task as a completed task
         public static void TasksCompleted(Guid taskId)
         {
             try
