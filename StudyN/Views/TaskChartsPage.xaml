@@ -4,7 +4,7 @@
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
              x:Class="StudyN.Views.TaskChartsPage" 
              xmlns:local="clr-namespace:StudyN.ViewModels"
-             Title="Task Charts">
+             Title="Task Visualization">
     <ContentPage.BindingContext>
         <local:TaskChartsViewModel/>
     </ContentPage.BindingContext>
@@ -71,7 +71,7 @@
             </dxc:NumericAxisY>
         </dxc:ChartView.AxisY>
         <dxc:ChartView.Legend>
-            <dxc:Legend VerticalPosition="BottomOutside" 
+            <dxc:Legend VerticalPosition="Top" 
                     HorizontalPosition="Center" 
                     Orientation="LeftToRight"/>
         </dxc:ChartView.Legend>
