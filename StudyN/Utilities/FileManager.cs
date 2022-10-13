@@ -71,23 +71,23 @@ namespace StudyN.Utilities
             string jsonString = JsonSerializer.Serialize(task, indent);
             File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
-            Console.WriteLine("Tasks Added:");
-            Console.WriteLine("    " + taskId.ToString());
+            //Console.WriteLine("Tasks Added:");
+            //Console.WriteLine("    " + taskId.ToString());
         }
 
         public static void TasksDeleted(Guid taskId)
         {
             string fileName = TASK_DIR + taskId + ".json";
-            Console.WriteLine(fileName);
+            //Console.WriteLine(fileName);
 
             if (File.Exists(fileName))
             {
                 File.Delete(fileName);
-                Console.WriteLine("    " + taskId.ToString());
-                Console.WriteLine("TASK HAS BEEN DELETED");
+                //Console.WriteLine("    " + taskId.ToString());
+                //Console.WriteLine("TASK HAS BEEN DELETED");
                 return;
             }
-            Console.WriteLine("tasks not delted");
+            //Console.WriteLine("tasks not delted");
 
         }
 
@@ -104,8 +104,8 @@ namespace StudyN.Utilities
                 string jsonString = JsonSerializer.Serialize(task, indent);
                 File.WriteAllText(completeFileName, jsonString);
                 // output, might be taken out later
-                Console.WriteLine("Tasks Completed:");
-                Console.WriteLine("    " + taskId.ToString());
+                //Console.WriteLine("Tasks Completed:");
+                //Console.WriteLine("    " + taskId.ToString());
             }
             catch (NullReferenceException exception)
             {
@@ -132,8 +132,8 @@ namespace StudyN.Utilities
 
         public static void TaskEdited(Guid taskId)
         {
-            Console.WriteLine("Task Edited:");
-            Console.WriteLine("    " + taskId.ToString());
+            //Console.WriteLine("Task Edited:");
+            //Console.WriteLine("    " + taskId.ToString());
         }
     }
 }
