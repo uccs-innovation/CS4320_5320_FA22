@@ -10,15 +10,15 @@
     <ContentPage.BindingContext>
         <ViewModels:TaskDataViewModel />
     </ContentPage.BindingContext>
-    <dxg:DataGridView ItemsSource="{Binding CalendarTasks}" Tap="CellClicked">
+    <dxg:DataGridView x:Name="grid" ItemsSource="{Binding CalendarTasks}" Tap="CellClicked">
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
             <dxg:CheckBoxColumn FieldName="Completed" Caption=" " Width="15" />
             <dxg:TextColumn FieldName="Name" Caption="Task Name" />
             <dxg:TextColumn FieldName="Description" Caption="Task Description" />
             <dxg:TextColumn FieldName="StartTime" Caption="Start Time" />
-            <dxg:TextColumn FieldName="End Time" Caption="EndTime" />
-            <dxg:TextColumn FieldName="EstimateTime" Caption="Estimate Time" />
+            <dxg:TextColumn FieldName="EndTime" Caption="End Time" />
+            <dxg:NumberColumn FieldName="EstimateTime" Caption="Estimate Time" />
             
 
 

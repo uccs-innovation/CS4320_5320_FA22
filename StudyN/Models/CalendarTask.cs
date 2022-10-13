@@ -18,6 +18,7 @@ namespace StudyN.Models
         public string StartTime { get; set; }
         public string EndTime { get; set; }
         public int TimeNeeded { get; set; }
+        public int EstimateTime { get; set; }
 
         public CalendarTasksData Parent { get; set; }
     }
@@ -66,7 +67,9 @@ namespace StudyN.Models
                                 StartTime = startDate,
                                 EndTime = endDate,
                                 DueDate = DateTime.Today,
-                                TimeNeeded = 3
+                                TimeNeeded = 3,
+                                EstimateTime = 0
+                                
                             }
                         );
                     id++;
