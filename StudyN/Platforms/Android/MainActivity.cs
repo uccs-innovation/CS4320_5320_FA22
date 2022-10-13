@@ -24,6 +24,10 @@ namespace StudyN
             Platform.OnResume(this);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="intent"></param>
         protected override void OnNewIntent(Android.Content.Intent intent)
         {
             base.OnNewIntent(intent);

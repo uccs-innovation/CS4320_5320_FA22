@@ -24,12 +24,20 @@ namespace StudyN
             CrossFirebasePushNotification.Current.OnTokenRefresh += Current_OnTokenRefresh;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
         private void Current_OnTokenRefresh(object source, FirebasePushNotificationTokenEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine($"Token: {e.Token}");
             Preferences.Set("DeviceToken", e.Token);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnStart()
         {
             _notificaitonService = new NotificationService.NotificationService();

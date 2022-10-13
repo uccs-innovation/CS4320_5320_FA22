@@ -149,7 +149,8 @@ namespace StudyN.Models
                 Subject = appointmentTitle,
                 LabelId = AppointmentCategories[rnd.Next(0, 5)].Id,
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
-                Location = string.Format("{0}", room)
+                Location = string.Format("{0}", room),
+                Description = string.Empty
             };
 
             return appt;

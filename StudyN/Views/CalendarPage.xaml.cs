@@ -156,11 +156,18 @@ namespace StudyN.Views
                 data = new AppData();
             }
 
+            /// <summary>
+            /// Uses static class DataAccess to load the notification database with AppointmentItems
+            /// </summary>
             public void LoadDataForNotification()
             {
                 LoadDataForNotification(Appointments);
             }
 
+            /// <summary>
+            /// Takes a collection of AppointmentItems and loads the notification database using static class DataAccess
+            /// </summary>
+            /// <param name="appointments"></param>
             public static void LoadDataForNotification(IReadOnlyList<AppointmentItem> appointments)
             {
                 DataAccess.LoadData(appointments);

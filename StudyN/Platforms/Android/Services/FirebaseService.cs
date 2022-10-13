@@ -6,6 +6,7 @@ using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Notification = FirebaseAdmin.Messaging.Notification;
 using FirebaseMessaging = FirebaseAdmin.Messaging.FirebaseMessaging;
+using System.Reflection;
 
 namespace StudyN.Platforms.Android.Services
 {
@@ -13,25 +14,30 @@ namespace StudyN.Platforms.Android.Services
     [IntentFilter(new[] {"com.google.firebase.MESSAGING_EVENT"})]
     public class FirebaseService : FirebaseMessagingService
     {
-        const string PATH = "StudyN.private_key.json";
-        //private const string FIREBASE_URL = @"https://fcm.googleapis.com/v1/projects/studyn-pushnotification/messages:send";
-        //private const string PUBLIC_SERVER_KEY = @"=BK-Koy1xEam6DavLn1W4s3953gKe93jECus11BPiy_4MPynD30sBZTWVuuS3U4Mhd3CGbHh33Ml_ffSNyDqM20I";
-        //private const string PUBLIC_SERVER_KEY = @"=BAR8oFBS50ueEeXpmxVbjzNEFpnabJX_vIgHAw0aDpVknS14yJs2AD8-XqIoDK5vYxETWvaXv9Lbvuk0kqWAgSE";
+        static readonly string _fileName = "StudyN.private_key.json";
 
+        /// <summary>
+        /// Service to send messages to Firebase Cloud Messaging service
+        /// for push notifications
+        /// </summary>
         public FirebaseService()
         {
+            CreateFirebaseApp();
         }
 
-        public static void Push(string subject, string description, IDictionary<string, string> data)
+        /// <summary>
+        /// Push a message to FCM
+        /// </summary>
+        /// <param name="subject">The title of the message<IsRequired>true</IsRequired></param>
+        /// <param name="description">The body of the message<IsRequired>false</IsRequired></param>
+        /// <param name="data">A collection of keyvalue pairs to indicate how the application should handle notification<IsRequired>false</IsRequired></param>
+        /// <returns></returns>
+        public static bool Push(string subject, string description, IDictionary<string, string> data)
         {
             try
             {
-                FirebaseApp.Create(new AppOptions
-                {
-                    Credential = GoogleCredential.FromFile(PATH)
-                });
-
-                // this registration token comes from the client FCM SDKs.
+                // this registration token comes from the client FCM SDKs
+                // and is stored in the application's preferences.
                 var registrationToken = Preferences.Get("DeviceToken", "");
 
                 var message = new Message
@@ -52,14 +58,22 @@ namespace StudyN.Platforms.Android.Services
                 // Send a message to the device corresponding to the provided 
                 // registration token.
                 var response = FirebaseMessaging.DefaultInstance.SendAsync(message).Result;
-                System.Diagnostics.Debug.WriteLine($"Successfully sent message: {response}");
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine($"Successfully sent message: {response}");// TODO: Remove from DEBUG if, and add to logging
+#endif
+                return response != null;
             }
             catch(Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine(e.Message);// TODO: Remove from DEBUG if, and add to logging
+                return false;
             }
         }
 
+        /// <summary>
+        /// Set new registration token in application preferences
+        /// </summary>
+        /// <param name="token">this registration token comes from the client FCM SDKs.<IsRequired>true</IsRequired></param>
         public override void OnNewToken(string token)
         {
             base.OnNewToken(token);
@@ -71,6 +85,32 @@ namespace StudyN.Platforms.Android.Services
 #if DEBUG
             System.Diagnostics.Debug.WriteLine($"Token: {token}");
 #endif
+        }
+
+        /// <summary>
+        /// Create default FirebaseApp
+        /// </summary>
+        private static void CreateFirebaseApp()
+        {
+            try
+            {
+                // Read from embedded resource file to obtain credentials to pass to 
+                // FirebaseApp
+                var assembly = Assembly.GetExecutingAssembly();
+                using Stream stream = assembly.GetManifestResourceStream(_fileName);
+                using StreamReader reader = new(stream);
+                var result = reader.ReadToEnd();
+
+
+                FirebaseApp.Create(new AppOptions
+                {
+                    Credential = GoogleCredential.FromJson(result)
+                });
+            }
+            catch(Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);// TODO: Remove from DEBUG if, and add to logging
+            }
         }
     }
 }
