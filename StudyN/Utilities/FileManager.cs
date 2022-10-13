@@ -73,6 +73,8 @@ namespace StudyN.Utilities
             // output, might be taken out later
             Console.WriteLine("Tasks Added:");
             Console.WriteLine("    " + taskId.ToString());
+
+            LoadFileNames();
         }
 
         public static void TasksDeleted(Guid taskId)
@@ -86,6 +88,8 @@ namespace StudyN.Utilities
                 File.Delete(fileName);
                 Console.WriteLine("    " + taskId.ToString());
             }
+
+            LoadFileNames();
         }
 
         public static void TasksCompleted(Guid taskId)
@@ -115,6 +119,19 @@ namespace StudyN.Utilities
         {
             TasksDeleted(taskId);
             TasksAdded(taskId);
+            LoadFileNames();
+        }
+
+        public static string[] LoadFileNames()
+        {
+            Console.WriteLine("WRITING OUT FILES");
+            string[] files = Directory.GetFiles(TASK_DIR);
+            foreach (string file in files)
+            {
+                Console.WriteLine("file:");
+                Console.WriteLine(file);
+            }
+            return files;
         }
     }
 }
