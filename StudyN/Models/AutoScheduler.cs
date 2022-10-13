@@ -4,7 +4,7 @@ using System.Diagnostics;
 using StudyN.Models;
 
 public class AutoScheduler
-{
+{ 
     public bool taskPastDue;
     public List<TaskItem> pastDueTasks;
     private ObservableCollection<TaskItem> Tasklist { get; set; }
@@ -25,7 +25,7 @@ public class AutoScheduler
         Array.Fill(weightAssoc, 0);
         Array.Fill(calPosAssoc, DateTime.Now);
     }
-
+   
     private void associateCalendarPositions()
     {
         for(int i = 0; i < Tasklist.Count; i++)
