@@ -134,7 +134,7 @@ namespace StudyN.Views
             }
         }
         
-
+        //This function will be used 
         private void RowLongPressed(object sender, DataGridGestureEventArgs e)
         {
             if (e.Item != null && e.FieldName != "DueTime")
@@ -170,9 +170,10 @@ namespace StudyN.Views
             }
         }
 
+        //This function will be used to intiate editing a task upon touching a given task
         private async void CellClicked(object sender, DataGridGestureEventArgs e)
         {
-
+            
             if (e.Item != null && e.FieldName != "DueTime")
             {
                 if (!isLongPressMenuVisible)
