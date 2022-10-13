@@ -31,6 +31,10 @@
                      Clicked="CompleteButtonClicked"
                      Priority="2"
                      IconImageSource="whitecheckbox" />
+        <ToolbarItem Text="Chart"
+                     Clicked="TaskChartsButtonClicked"
+                     Priority="3"
+                     IconImageSource="charts" />
 
     </ContentPage.ToolbarItems>
     <!-- DataGrid -->
