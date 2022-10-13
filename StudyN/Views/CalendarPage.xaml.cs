@@ -1,7 +1,6 @@
 ﻿using DevExpress.Maui.Scheduler;
-using DevExpress.Utils.Serializing;
+using StudyN.Common;
 using StudyN.Models; //Calls Calendar Data
-//using DevExpress.XamarinAndroid.Scheduler.Visual.Data;
 using StudyN.ViewModels;
 using System.ComponentModel;
 
@@ -12,12 +11,12 @@ namespace StudyN.Views
 
     public partial class CalendarPage : ContentPage
     {
+        readonly CalendarDataView _calendarDataView;
         public CalendarPage()
         {
-
             InitializeComponent();
             ViewModel = new CalendarViewModel();
-            BindingContext = new CalendarDataView(); //Use to pull data of CalendarData under Models
+            BindingContext = _calendarDataView  = new CalendarDataView(); //Use to pull data of CalendarData under Models
 
         }
 
@@ -49,6 +48,8 @@ namespace StudyN.Views
 
         protected override void OnAppearing()
         {
+            var notes = weekviewStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
+            CalendarDataView.LoadDataForNotification(notes.ToList());
             base.OnAppearing();
             ViewModel.OnAppearing();
         }
@@ -74,21 +75,20 @@ namespace StudyN.Views
 
                 if (answer == true)
                 {
-                    this.dayviewStorage.RemoveAppointment(appointment);
+                    dayviewStorage.RemoveAppointment(appointment);
                 }
             }
         }
 
         private void ShowAppointmentEditPage(AppointmentItem appointment)
         {
-            AppointmentEditPage appEditPage = new AppointmentEditPage(appointment, this.dayviewStorage);
+            AppointmentEditPage appEditPage = new(appointment, dayviewStorage);
             Navigation.PushAsync(appEditPage);
         }
 
         private void ShowNewAppointmentEditPage(IntervalInfo info)
         {
-            AppointmentEditPage appEditPage = new AppointmentEditPage(info.Start, info.End,
-                                                                     info.AllDay, this.dayviewStorage);
+            AppointmentEditPage appEditPage = new(info.Start, info.End, info.AllDay, dayviewStorage);
             Navigation.PushAsync(appEditPage);
         }
 
@@ -100,7 +100,7 @@ namespace StudyN.Views
             if (e.AppointmentInfo == null)
             {
                 ShowNewAppointmentEditPage_WeekView(e.IntervalInfo);
-                return;
+                //return;
             }
             AppointmentItem appointment = e.AppointmentInfo.Appointment;
             ShowAppointmentEditPage_WeekView(appointment);
@@ -116,21 +116,21 @@ namespace StudyN.Views
 
                 if (answer == true)
                 {
-                    this.weekviewStorage.RemoveAppointment(appointment);
+                    weekviewStorage.RemoveAppointment(appointment);
                 }
             }
         }
 
         private void ShowAppointmentEditPage_WeekView(AppointmentItem appointment)
         {
-            AppointmentEditPage appEditPage = new AppointmentEditPage(appointment, this.weekviewStorage);
+            AppointmentEditPage appEditPage = new(appointment, weekviewStorage);
             Navigation.PushAsync(appEditPage);
         }
 
         private void ShowNewAppointmentEditPage_WeekView(IntervalInfo info)
         {
-            AppointmentEditPage appEditPage = new AppointmentEditPage(info.Start, info.End,
-                                                                     info.AllDay, this.weekviewStorage);
+            AppointmentEditPage appEditPage = new(info.Start, info.End,
+                                                                     info.AllDay, weekviewStorage);
             Navigation.PushAsync(appEditPage);
         }
 
@@ -145,7 +145,7 @@ namespace StudyN.Views
             readonly AppData data;
 
             public event PropertyChangedEventHandler PropertyChanged;
-            public DateTime StartDate { get { return AppData.BaseDate; } }
+            public static DateTime StartDate { get { return AppData.BaseDate; } }
             
             public IReadOnlyList<Appointment> Appointments { get => data.Appointments; } 
             public IReadOnlyList<AppointmentCategory> AppointmentCategories { get => data.AppointmentCategories; }
@@ -156,11 +156,22 @@ namespace StudyN.Views
                 data = new AppData();
             }
 
+            public void LoadDataForNotification()
+            {
+                LoadDataForNotification(Appointments);
+            }
+
+            public static void LoadDataForNotification(IReadOnlyList<AppointmentItem> appointments)
+            {
+                DataAccess.LoadData(appointments);
+            }
+
             protected void RaisePropertyChanged(string name)
             {
                 if (PropertyChanged != null)
                 {
                     PropertyChanged(this, new PropertyChangedEventArgs(name));
+                    LoadDataForNotification();
                 }
             }
         }

@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using DevExpress.Maui.Scheduler;
+using DevExpress.Maui.Scheduler.Internal;
 using Microsoft.Maui.Controls;
 
 namespace StudyN.Models
 {
-    public class Appointment
-    {
-        public int Id { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public string Subject { get; set; }
-        public int LabelId { get; set; }
-        public string Location { get; set; }        
-        public int StatusId { get; set; }
-        public string RecurrenceInfo { get; set; }
+    public class Appointment : AppointmentItem
+    {    
         public string ReminderInfo { get; set; }
         public string Notes { get; set; }
 
@@ -147,14 +141,17 @@ namespace StudyN.Models
         Appointment CreateAppointment(int appointmentId, string appointmentTitle,
                                                     DateTime start, TimeSpan duration, int room)
         {
-            Appointment appt = new Appointment();
-            appt.Id = appointmentId;
-            appt.StartTime = start;
-            appt.EndTime = start.Add(duration);
-            appt.Subject = appointmentTitle;
-            appt.LabelId = AppointmentCategories[rnd.Next(0, 5)].Id;
-            appt.StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id;
-            appt.Location = string.Format("{0}", room);
+            Appointment appt = new()
+            {
+                Id = appointmentId,
+                Start = start,
+                End = start.Add(duration),
+                Subject = appointmentTitle,
+                LabelId = AppointmentCategories[rnd.Next(0, 5)].Id,
+                StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
+                Location = string.Format("{0}", room)
+            };
+
             return appt;
         }
 
