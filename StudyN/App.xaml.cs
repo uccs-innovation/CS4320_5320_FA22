@@ -10,8 +10,8 @@ namespace StudyN
             InitializeComponent();
 
             MainPage = new MainPage();
-            Routing.RegisterRoute(nameof(Views.AddTaskPage), typeof(Views.AddTaskPage));
 
+            Routing.RegisterRoute(nameof(Views.AddTaskPage), typeof(Views.AddTaskPage));
             Routing.RegisterRoute(nameof(Views.AddEventPage), typeof(Views.AddEventPage));
             Routing.RegisterRoute(nameof(Views.TaskPage), typeof(Views.TaskPage));
         }

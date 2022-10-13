@@ -104,17 +104,21 @@ namespace StudyN.Utilities
             }
         }
 
-        public static string[] LoadFileNames()
+
+
+        public static string[] LoadTaskFileNames()
         {
-            Console.WriteLine("WRITING OUT FILES");
             string[] files = Directory.GetFiles(TASK_DIR);
-            foreach (string file in files)
-            {
-                Console.WriteLine("file:");
-                Console.WriteLine(file);
-            }
-            return files;
+            return files = Directory.GetFiles(COMPLETE_TASK_DIR); ;
         }
+
+        public static string[] LoadCompletedFileNames()
+        {
+            string[] files = Directory.GetFiles(COMPLETE_TASK_DIR);
+            return files; 
+        }
+
+
 
         public static void TaskEdited(Guid taskId)
         {
