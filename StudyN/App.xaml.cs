@@ -35,19 +35,6 @@ namespace StudyN
             Preferences.Set("DeviceToken", e.Token);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        protected override void OnStart()
-        {
-            _notificaitonService = new NotificationService.NotificationService();
-            _notificaitonService.OnStart();
-            base.OnStart();
-        }
-
-        protected override void OnSleep()
-        {
-            base.OnSleep();
         }
     }
 }
