@@ -19,9 +19,12 @@ namespace StudyN.Views
 
         HashSet<TaskItem> selectedTasks;
         HashSet<int> rowHandleList;
+
         public TaskPage()
         {
             InitializeComponent();
+
+            Console.WriteLine("TaskPage initialized");
 
             selectedTasks = new HashSet<TaskItem>();
             rowHandleList = new HashSet<int>();
@@ -51,6 +54,7 @@ namespace StudyN.Views
             }
 
             ShowLongPressMenu(false);
+
         }
         private void CancelButtonClicked(object sender, EventArgs e)
         {
@@ -196,7 +200,6 @@ namespace StudyN.Views
             UIGlobal.ToEdit = null;
             await Shell.Current.GoToAsync(nameof(AddTaskPage));
         }
-
 
         void ShowLongPressMenu(bool setVisible)
         {

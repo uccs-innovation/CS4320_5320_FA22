@@ -18,6 +18,7 @@ namespace StudyN.ViewModels
 
         protected void RaisePropertyChanged(string name)
         {
+            Console.WriteLine("property changed");
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));

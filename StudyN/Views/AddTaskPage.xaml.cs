@@ -7,9 +7,12 @@ using StudyN.ViewModels;
 public partial class AddTaskPage : ContentPage
 {
     bool EditButtonsVisible;
+    AutoScheduler autoScheduler;
 	public AddTaskPage()
 	{
 		InitializeComponent();
+        autoScheduler = new AutoScheduler(UIGlobal.MainData.TaskList);
+
 
         if (UIGlobal.ToEdit != null)
         {
@@ -40,6 +43,7 @@ public partial class AddTaskPage : ContentPage
     {
         UIGlobal.ToEdit.Parent.CompleteTask(UIGlobal.ToEdit.TaskId);
         await Shell.Current.GoToAsync("..");
+        runAutoScheduler();
     }
 
     void HandleSliderValueChanged(object sender, ValueChangedEventArgs args)
@@ -76,6 +80,7 @@ public partial class AddTaskPage : ContentPage
         }
         
         await Shell.Current.GoToAsync("..");
+        runAutoScheduler();
     }
     void LoadValues()
     {
@@ -92,5 +97,19 @@ public partial class AddTaskPage : ContentPage
     {
         this.date.Date = DateTime.Now;
         this.time.Time = DateTime.Now;
+    }
+
+    void runAutoScheduler()
+    {
+        autoScheduler.run();
+        if (autoScheduler.taskPastDue)
+        {
+            string tasksString = "";
+            foreach (TaskItem task in autoScheduler.pastDueTasks)
+            {
+                tasksString += task.Name + ", ";
+            } 
+            DisplayAlert("The following tasks cannot be completed on-time!", tasksString, "OK");
+        }
     }
 }
