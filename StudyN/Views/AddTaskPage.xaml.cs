@@ -12,10 +12,10 @@ public partial class AddTaskPage : ContentPage
 	public AddTaskPage()
 	{
 		InitializeComponent();
-        autoScheduler = new AutoScheduler(UIGlobal.MainData.TaskList);
+        autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList);
 
         //This will check if we are editing an existing task or making a new one. We will know this based on if ToEdit is null or not
-        if (UIGlobal.ToEdit != null)
+        if (GlobalTaskData.ToEdit != null)
         {
             //If we are editing, we need to set the title and load in the values of the task
             Title = "Edit Task";
@@ -74,7 +74,6 @@ public partial class AddTaskPage : ContentPage
 
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-        double percent = 0;
     
         //Check to see if we are currently editing or adding a task
         if(editingExistingTask)

@@ -33,7 +33,5 @@ namespace StudyN
             System.Diagnostics.Debug.WriteLine($"Token: {e.Token}");
             Preferences.Set("DeviceToken", e.Token);
         }
-
-        }
     }
 }

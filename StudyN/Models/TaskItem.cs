@@ -25,6 +25,23 @@
         public int CompletionProgress { get; set; } = 0;
         public int TotalTimeNeeded { get; set; } = 0;
         public int Priority { get; set; } = 3;
+
+        public double Percent
+        {
+            get
+            {
+                if (TotalTimeNeeded != 0)
+                {
+                    double percentage = (double)CompletionProgress / (double)TotalTimeNeeded;
+                    if (percentage == Double.NaN)
+                        return 0;
+                    else
+                        return percentage;
+                }
+                else
+                    return 0;
+            }
+        }
     }
 }
 
