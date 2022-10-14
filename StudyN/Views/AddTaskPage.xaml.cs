@@ -56,16 +56,18 @@ public partial class AddTaskPage : ContentPage
         int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
         int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
 
-        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day, 
+        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-
+        double percent = 0;
+    
         UIGlobal.MainData.AddTask(
             this.name.Text,
             this.description.Text,
             dateTime,
             (int)this.priority.Value,
             timeLogged,
-            totalTime);
+            totalTime, 
+            (int)percent);
 
         if (UIGlobal.ToEdit != null)
         {

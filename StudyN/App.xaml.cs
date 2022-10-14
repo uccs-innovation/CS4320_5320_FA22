@@ -14,6 +14,7 @@ namespace StudyN
 
             Routing.RegisterRoute(nameof(Views.AddEventPage), typeof(Views.AddEventPage));
             Routing.RegisterRoute(nameof(Views.TaskPage), typeof(Views.TaskPage));
+            Routing.RegisterRoute(nameof(Views.TaskChartsPage), typeof(Views.TaskChartsPage));
         }
     }
 }
