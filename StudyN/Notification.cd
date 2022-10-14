@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="StudyN.App">
+    <Position X="0.5" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAUAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StudyN.Views.CalendarPage">
+    <Position X="4" Y="0.5" Width="3.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="StudyN.Views.CalendarPage.CalendarDataView">
+        <TypeIdentifier>
+          <NewMemberFileName>Views\CalendarPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AJAAAAAAAAgAAAIAAAAgAIAAEBAAEAAQEAEAAAAIAIA=</HashCode>
+      <FileName>Views\CalendarPage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StudyN.Models.Appointment">
+    <Position X="12" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAoIQAAEABAAAASAAAAAAAAAEABCIACAAAIAAGAJAA=</HashCode>
+      <FileName>Models\CalendarData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StudyN.Models.AppointmentCategory">
+    <Position X="8.25" Y="5.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAgAAAAAA=</HashCode>
+      <FileName>Models\CalendarData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StudyN.Models.AppointmentStatus">
+    <Position X="10.75" Y="5.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAgAAAAAA=</HashCode>
+      <FileName>Models\CalendarData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StudyN.Models.AppData">
+    <Position X="8" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAEAgAAAAAAAEAAIAAAAAAAQgAAKBAAAAAAQAAIQAI=</HashCode>
+      <FileName>Models\CalendarData.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Appointments" />
+      <Property Name="AppointmentCategories" />
+      <Property Name="AppointmentStatuses" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="StudyN.Common.DataAccess">
+    <Position X="10.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAFAAQAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\DataAccess.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StudyN.NotificationService.NotificationService">
+    <Position X="14.25" Y="6" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAABAEAAAMAAAAAAAAAAAAEAAAAAAEAA=</HashCode>
+      <FileName>NotificationService\NotificationService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StudyN.Platforms.Android.Services.FirebaseService">
+    <Position X="17" Y="6" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQQAAgAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Platforms\Android\Services\FirebaseService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StudyN.MainActivity">
+    <Position X="0.5" Y="4.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAIAAAAAAAACAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Platforms\Android\MainActivity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StudyN.MainApplication">
+    <Position X="0.5" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Platforms\Android\MainApplication.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "596751380350",
+    "project_id": "pushnotificationssample-c4d97",
+    "storage_bucket": "pushnotificationssample-c4d97.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:596751380350:android:1000f57141d636a1cf4d2f",
+        "android_client_info": {
+          "package_name": "com.companyname.StudyN"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "596751380350-cgco8bvul60fbcsto76u4dlf9fnvl036.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpAmAO6tP95reMzrlvUipXKYA_nk95PIw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "596751380350-cgco8bvul60fbcsto76u4dlf9fnvl036.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
