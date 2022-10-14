@@ -8,12 +8,14 @@ using StudyN.ViewModels;
 public partial class AddTaskPage : ContentPage
 {
     bool editingExistingTask;
+    AutoScheduler autoScheduler;
 	public AddTaskPage()
 	{
 		InitializeComponent();
-        
+        autoScheduler = new AutoScheduler(UIGlobal.MainData.TaskList);
+
         //This will check if we are editing an existing task or making a new one. We will know this based on if ToEdit is null or not
-        if (GlobalTaskData.ToEdit != null)
+        if (UIGlobal.ToEdit != null)
         {
             //If we are editing, we need to set the title and load in the values of the task
             Title = "Edit Task";
@@ -50,6 +52,7 @@ public partial class AddTaskPage : ContentPage
         GlobalTaskData.TaskManager.CompleteTask(GlobalTaskData.ToEdit.TaskId);
         GlobalTaskData.ToEdit = null;
         await Shell.Current.GoToAsync("..");
+        runAutoScheduler();
     }
 
     //This function will be used by the priority slider when its value has changed to set and keep track of the new value
@@ -69,9 +72,10 @@ public partial class AddTaskPage : ContentPage
         int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
         int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
 
-        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day, 
+        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-
+        double percent = 0;
+    
         //Check to see if we are currently editing or adding a task
         if(editingExistingTask)
         {
@@ -101,6 +105,7 @@ public partial class AddTaskPage : ContentPage
         
         //Returning to the previous page
         await Shell.Current.GoToAsync("..");
+        runAutoScheduler();
     }
 
     //This function will load the values held in each field of a task into the respective forms
@@ -120,5 +125,19 @@ public partial class AddTaskPage : ContentPage
     {
         this.date.Date = DateTime.Now;
         this.time.Time = DateTime.Now;
+    }
+
+    void runAutoScheduler()
+    {
+        autoScheduler.run();
+        if (autoScheduler.taskPastDue)
+        {
+            string tasksString = "";
+            foreach (TaskItem task in autoScheduler.pastDueTasks)
+            {
+                tasksString += task.Name + ", ";
+            } 
+            DisplayAlert("The following tasks cannot be completed on-time!", tasksString, "OK");
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using DevExpress.Maui.DataGrid;
 using StudyN.Models;
@@ -15,13 +15,16 @@ namespace StudyN.Views
         ToolbarItem cancelToolbarItem;
         ToolbarItem trashToolbarItem;
         ToolbarItem completeToolbarItem;
+        ToolbarItem chartToolbarItem;
 
         HashSet<TaskItem> selectedTasks;
         HashSet<int> rowHandleList;
-        
+
         public TaskPage()
         {
             InitializeComponent();
+
+            Console.WriteLine("TaskPage initialized");
 
             selectedTasks = new HashSet<TaskItem>();
             rowHandleList = new HashSet<int>();
@@ -42,6 +45,9 @@ namespace StudyN.Views
                     case "Complete":
                         completeToolbarItem = item;
                         break;
+                    case "Chart":
+                        chartToolbarItem = item;
+                        break;
                     default:
                         break;
                 }
@@ -49,6 +55,7 @@ namespace StudyN.Views
 
             //Ensuring that the long press menu is not yet viable
             ShowLongPressMenu(false);
+
         }
 
         //This function will by the cancel button to reset the selection menu to its default state
@@ -138,7 +145,13 @@ namespace StudyN.Views
                 Console.WriteLine(execption.Message);
             }
         }
-        
+
+        // Bringing up the Task Metrics Visualization Page
+        private async void TaskChartsButtonClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(TaskChartsPage));
+        }
+
         //This function will be used to preform certain actions when a row is pressed for a long amount of time
         private void RowLongPressed(object sender, DataGridGestureEventArgs e)
         {
@@ -231,6 +244,7 @@ namespace StudyN.Views
                 ToolbarItems.Clear();
                 ToolbarItems.Add(addToolbarItem);
             }
+            ToolbarItems.Add(chartToolbarItem);
         }
 
         //This function will be used to change the color of a selected task
@@ -245,6 +259,42 @@ namespace StudyN.Views
                 e.BackgroundColor = Color.FromArgb("#FFFFFF");
             }
             
+        }
+
+        // Method to calculate percent completion for all tasks in the Data Grid
+        private void CalculateTotalPercent(object sender, CustomSummaryEventArgs e)
+        {
+            // Gets the data grid as an object
+            DataGridView dataGrid = this.Content as DataGridView;
+
+            // Gets the number of rows in dataGrid
+            int rowCount = dataGrid.RowCount;
+
+            // Variables to store data in
+            float totalHoursWorked = 0;
+            float totalHoursNeeded = 0;
+
+            // Runs for each row in dataGrid
+            for (int i = 0; i < rowCount; i++)
+            {
+                // Gets hours worked and needed for TaskItem in row
+                TaskItem row = (TaskItem)dataGrid.GetItem(i);
+                totalHoursWorked = totalHoursWorked + row.CompletionProgress;
+                totalHoursNeeded = totalHoursNeeded + row.TotalTimeNeeded;
+            }
+
+            // Runs if there are assignments with hours needed to complete
+            if (totalHoursNeeded > 0)
+            {
+                // Calculates total percent completion
+                float totalPercentComplete = (totalHoursWorked / totalHoursNeeded) * 100;
+                e.TotalValue = Math.Round(totalPercentComplete);
+
+            }
+            else
+            {
+                e.TotalValue = 0;
+            }
         }
     }
 }

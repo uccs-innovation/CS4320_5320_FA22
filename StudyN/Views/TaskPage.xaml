@@ -18,6 +18,7 @@
         <ToolbarItem Text="Add" 
                      Clicked="AddButtonClicked"
                      IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+
         <!-- Press and hold options -->
         <ToolbarItem Text="Cancel"
                      Clicked="CancelButtonClicked"
@@ -31,6 +32,10 @@
                      Clicked="CompleteButtonClicked"
                      Priority="2"
                      IconImageSource="whitecheckbox" />
+        <ToolbarItem Text="Chart"
+                     Clicked="TaskChartsButtonClicked"
+                     Priority="3"
+                     IconImageSource="charts" />
 
     </ContentPage.ToolbarItems>
     <!-- DataGrid -->
@@ -38,11 +43,13 @@
                       Tap="CellClicked"
                       LongPress="RowLongPressed"
                       CustomCellStyle="HighlightSelectedRows"
-                      ColumnHeaderHeight="0">
+                      ColumnHeaderHeight="0"
+                      CalculateCustomSummary="CalculateTotalPercent">
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
             <dxg:TextColumn FieldName="Name" Caption="Task" />
             <dxg:DateColumn FieldName="DueTime" Caption="Due" DisplayFormat="h:mm tt" IsGrouped="True"/>
+            <dxg:TextColumn FieldName="Percent" Caption="Percent" DisplayFormat="P0" />
         </dxg:DataGridView.Columns>
         <!--Customize the appearance of group row.-->
         <dxg:DataGridView.GroupRowStyle>
@@ -56,5 +63,12 @@
         <dxg:DataGridView.ColumnHeaderStyle>
             <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
         </dxg:DataGridView.ColumnHeaderStyle>
+        <dxg:DataGridView.TotalSummaries>
+            <dxg:GridColumnSummary FieldName="Percent" Type="Custom" 
+                                   DisplayFormat="Total Completion: {0}%"/>
+        </dxg:DataGridView.TotalSummaries>
+        <dxg:DataGridView.TotalSummaryStyle>
+            <dxg:TotalSummaryStyle FontSize="16"/>
+        </dxg:DataGridView.TotalSummaryStyle>
     </dxg:DataGridView>
 </ContentPage>

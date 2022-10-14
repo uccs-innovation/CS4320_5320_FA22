@@ -9,10 +9,11 @@
 
     <ContentPage.ToolbarItems>
 
-        <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" IconImageSource="whitesave"/> 
+        <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" IconImageSource="whitesave"/>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
+
         <!--Grid for organizing -->
         <Grid Margin="10"
               Padding="5"
