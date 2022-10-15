@@ -20,7 +20,6 @@ namespace StudyN
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             Routing.RegisterRoute(nameof(AddEventPage), typeof(AddEventPage));
             Routing.RegisterRoute(nameof(TaskPage), typeof(TaskPage));
-
             CrossFirebasePushNotification.Current.OnTokenRefresh += Current_OnTokenRefresh;
         }
 
@@ -33,8 +32,6 @@ namespace StudyN
         {
             System.Diagnostics.Debug.WriteLine($"Token: {e.Token}");
             Preferences.Set("DeviceToken", e.Token);
-        }
-
         }
     }
 }

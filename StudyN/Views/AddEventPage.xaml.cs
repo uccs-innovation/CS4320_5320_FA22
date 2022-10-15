@@ -10,7 +10,6 @@ namespace StudyN.Views
         {
             InitializeComponent();
             BindingContext = ViewModel = new AddEventViewModel();
-            ViewModel.OnAppearing();
         }
 
         AddEventViewModel ViewModel { get; }
@@ -18,7 +17,6 @@ namespace StudyN.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ViewModel.OnAppearing();
         }
     }
 }

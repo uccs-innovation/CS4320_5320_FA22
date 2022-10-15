@@ -51,7 +51,6 @@ namespace StudyN.Views
             var notes = weekviewStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
             CalendarDataView.LoadDataForNotification(notes.ToList());
             base.OnAppearing();
-            ViewModel.OnAppearing();
         }
 
         private void Handle_onCalendarTap_FromDayView(object sender, SchedulerGestureEventArgs e)
