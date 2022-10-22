@@ -7,9 +7,10 @@ public class AutoScheduler
 { 
     public bool taskPastDue;
     public List<TaskItem> pastDueTasks;
+    private List<TaskItem> TaskBlockList;
     private ObservableCollection<TaskItem> Tasklist { get; set; }
-    private double[] weightAssoc;   //weightAssoc[0] corresponds to TaskList[0], weightAssoc[1] corresponds to TaskList[1]...
-    public DateTime[] calPosAssoc;  //calPosAssoc[0] corresponds to TaskList[0], calPosAssoc[1] corresponds to TaskList[1]...
+    private List<double> weightAssoc;   //weightAssoc[0] corresponds to TaskBlockList[0], weightAssoc[1] corresponds to TaskBlockList[1]...
+    public List<DateTime> calPosAssoc;  //calPosAssoc[0] corresponds to TaskBlockList[0], calPosAssoc[1] corresponds to TaskBlockList[1]...
 
                                     //calPosAssoc holds the START TIMES of each task. The end time can be calculated using 
                                     //task.TotalTimeNeeded * (1 - task.CompletionProgress / 100), and then adding that to the start time
@@ -19,16 +20,13 @@ public class AutoScheduler
         taskPastDue = false;
         pastDueTasks = new List<TaskItem>();
         Tasklist = TL;
-        weightAssoc = new double[Tasklist.Count];
-        calPosAssoc = new DateTime[Tasklist.Count];
-
-        Array.Fill(weightAssoc, 0);
-        Array.Fill(calPosAssoc, DateTime.Now);
+        //weightAssoc = new List<double>();
+        //calPosAssoc = new List<DateTime>();
     }
    
     private void associateCalendarPositions()
     {
-        for(int i = 0; i < Tasklist.Count; i++)
+        for(int i = 0; i < TaskBlockList.Count; i++)
         {
             calculateCalendarPosition(i);
         }
@@ -47,14 +45,14 @@ public class AutoScheduler
             //Or maybe I can check if the calendar position lets it get completed before its due date, and if not then we can schedule it so it gets done exactly on duetime.
         }
 
-        else { DateTime startTime = DateTime.Now.AddDays(7); } //If weight is really really small, then schedule it for a week from now. 
+        else { DateTime startTime = DateTime.Now.AddDays(7); calPosAssoc[index] = startTime; } //If weight is really really small, then schedule it for a week from now. 
     }
 
     private void associateWeights()
     {
-        for(int i = 0; i < Tasklist.Count; i++)
+        for(int i = 0; i < TaskBlockList.Count; i++)
         {
-            weightAssoc[i] = calculateWeight(Tasklist[i]);
+            weightAssoc[i] = calculateWeight(TaskBlockList[i]);
         }
     }
 
@@ -103,28 +101,57 @@ public class AutoScheduler
         Console.WriteLine("TODO: implement autoScheduler.addToCalendar");
     }
 
+    private void breakTasksIntoBlocks()
+    {
+        int numTask = Tasklist.Count;
+        TaskBlockList = new List<TaskItem>();
+        int totalNumBlocks = 0;
+
+        foreach(var task in Tasklist)
+        {
+            int length = task.TotalTimeNeeded; //TODO: update to be based on TIME REMAINING, once we figure out whether "completion progress" is how many hours have been logged, or a percent
+
+            //Assuming TotalTimeNeeded is in hours
+            int numBlocksForTask = length;
+            totalNumBlocks += numBlocksForTask;
+
+            for(int i = 0; i < numBlocksForTask; i++)
+            {
+                TaskItem taskBlock = new TaskItem(task.Name, task.Description, task.DueTime, task.Priority, task.CompletionProgress, 1); //1 = totalTimeNeeded (1 hour per block)
+                taskBlock.TaskId = task.TaskId;
+                
+                TaskBlockList.Add(taskBlock);
+            }
+        }
+
+        //Must initialize Assoc lists here, because they depend on the size of TaskBlockList
+        weightAssoc = new List<double>( new double[TaskBlockList.Count] ); 
+        calPosAssoc = new List<DateTime>( new DateTime[TaskBlockList.Count] );
+
+    }
+
     private void refreshArrays()
     {
         taskPastDue = false;
         pastDueTasks = new List<TaskItem>();
+        TaskBlockList = new List<TaskItem>();
 
-        weightAssoc = new double[Tasklist.Count];
-        calPosAssoc = new DateTime[Tasklist.Count];
-        Array.Fill(weightAssoc, 0);
-        Array.Fill(calPosAssoc, DateTime.Now);
+        weightAssoc = new List<double>();
+        calPosAssoc = new List<DateTime>();
     }
 
     public void run()
     {
         Console.WriteLine("started running auto scheduler");
         refreshArrays();
+        breakTasksIntoBlocks();
         associateWeights();
         associateCalendarPositions();
         addToCalendar();
 
-        for(int i = 0; i < Tasklist.Count; i++)
+        for(int i = 0; i < TaskBlockList.Count; i++)
         {
-            Console.WriteLine(Tasklist[i].Name + ", Weight: " + weightAssoc[i] + ", startTime: " + calPosAssoc[i]);
+            Console.WriteLine(TaskBlockList[i].Name + ", Weight: " + weightAssoc[i] + ", startTime: " + calPosAssoc[i]);
 
         }
 
