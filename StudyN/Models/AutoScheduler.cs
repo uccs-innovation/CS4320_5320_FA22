@@ -20,31 +20,60 @@ public class AutoScheduler
         taskPastDue = false;
         pastDueTasks = new List<TaskItem>();
         Tasklist = TL;
-        //weightAssoc = new List<double>();
-        //calPosAssoc = new List<DateTime>();
     }
    
     private void associateCalendarPositions()
     {
+
+        //If a multiple task blocks are apart of the same task (TaskId is the same), then add tolerance so they don't all get scheduled at the same time.
+        //Tolerance is based on how many TaskBlocks are apart of the same Task. If there are 10 TaskBlocks from the same Task, the first TaskBlock will get scheduled with
+        //a tolerance of 1, and the 10th TaskBlock will be scheduled with a Tolerance of 10 (so it will be placed farther from the "ideal" scheduled time).
+        Guid prevTaskId = Guid.Empty;
+        int numTaskIdMatches = 0;
         for(int i = 0; i < TaskBlockList.Count; i++)
         {
-            calculateCalendarPosition(i);
+            if(prevTaskId == TaskBlockList[i].TaskId)
+            {
+
+                numTaskIdMatches++;
+            }
+
+            int tolerance = numTaskIdMatches;
+            calculateCalendarPosition(i, tolerance);
+            prevTaskId = TaskBlockList[i].TaskId;
         }
     }
 
     //Compute each items calendar position based on its associated weight
-    private void calculateCalendarPosition(int index)
+    private void calculateCalendarPosition(int index, int tolerance)
     {
         double weight = weightAssoc[index];
         if (weight > 0)
         {
-            DateTime startTime = DateTime.Now.AddDays(1 / weight); //If the weight is small, schedule it far in the future
-            calPosAssoc[index] = startTime;                        //IE, if weight is 1, schedule it in 1 day. If weight is 10, schedule it in .1 days. If weight is HUGE, schedule it now.
-        
+            double spread = weight / tolerance; //Higher tolerance = lower spread = scheduled later
+            DateTime startTime = DateTime.Now.AddDays(1 / spread); //If the spread is small, schedule it far in the future
+                                                                   //IE, if spread is 1, schedule it in 1 day. If spread is 10, schedule it in .1 days. If spread is HUGE, schedule it now.
+
+            //If TaskBlock goes past dueDate, keep making the task block earlier until it fits
+            while(startTime.AddHours(1) > TaskBlockList[index].DueTime)
+            {
+                startTime = startTime.AddHours(-1); 
+                if(startTime < DateTime.Now)
+                {
+                    Console.WriteLine("ISSUE SCHEDULING TASK BLOCK");
+                    taskPastDue = true;
+                    pastDueTasks.Add( TaskBlockList[index] );
+                    break;
+                }
+            }
+
+            calPosAssoc[index] = startTime;
+
             //Maybe its better to calculate BACK from the duetime, rather than FORWARD from right now?
             //Or maybe I can check if the calendar position lets it get completed before its due date, and if not then we can schedule it so it gets done exactly on duetime.
         }
 
+        //Not sure if this will ever run. I don't think weight can be negative. Which is good. But just in case
         else { DateTime startTime = DateTime.Now.AddDays(7); calPosAssoc[index] = startTime; } //If weight is really really small, then schedule it for a week from now. 
     }
 
@@ -81,6 +110,7 @@ public class AutoScheduler
                                              //If an item has a large dueDistance, it will still have a large weight if it has a high priority
         }                                    //Think of it like this: If an item is super far away in dueDistance, essentially it gets sorted by its priority.
 
+        //THIS CHECK MIGHT NO LONGER BE NECESSARY BECAUSE THERE IS A PAST DUE CHECK IN calculateCalendarPosition()
         else //Item is NOT possible to complete before deadline. Assign it highest priority. 
         {
             taskPastDue = true;
