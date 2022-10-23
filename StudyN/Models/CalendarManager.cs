@@ -5,6 +5,7 @@ using AndroidX.Fragment.App.StrictMode;
 using DevExpress.Maui.Scheduler;
 using DevExpress.Maui.Scheduler.Internal;
 using Microsoft.Maui.Controls;
+using StudyN.Utilities;
 
 namespace StudyN.Models
 {
@@ -113,6 +114,10 @@ namespace StudyN.Models
             };
 
             Appointments.Add(appt);
+
+            // Publish appointment add event
+            EventBus.PublishEvent(
+                        new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
 
             return appt;
         }

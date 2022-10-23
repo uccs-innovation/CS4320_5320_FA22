@@ -31,7 +31,7 @@ namespace StudyN.Models
 
             // Publish task add event
             EventBus.PublishEvent(
-                        new StudynEvent(newTask.TaskId, StudynEvent.EventType.AddTask));
+                        new StudynEvent(newTask.TaskId, StudynEvent.StudynEventType.AddTask));
 
             return newTask;
         }
@@ -91,7 +91,7 @@ namespace StudyN.Models
 
             // Publish task edit event
             EventBus.PublishEvent(
-                        new StudynEvent(taskId, StudynEvent.EventType.EditTask));
+                        new StudynEvent(taskId, StudynEvent.StudynEventType.EditTask));
 
             return true;
         }
@@ -113,7 +113,7 @@ namespace StudyN.Models
 
                     // Publish task complete event
                     EventBus.PublishEvent(
-                        new StudynEvent(taskId, StudynEvent.EventType.CompleteTask));
+                        new StudynEvent(taskId, StudynEvent.StudynEventType.CompleteTask));
 
                     return;
                 }
@@ -134,7 +134,7 @@ namespace StudyN.Models
 
                     // Publish task delete event
                     EventBus.PublishEvent(
-                        new StudynEvent(taskId, StudynEvent.EventType.DeleteTask));
+                        new StudynEvent(taskId, StudynEvent.StudynEventType.DeleteTask));
 
                     return;
                 }
