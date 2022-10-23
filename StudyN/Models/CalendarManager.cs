@@ -169,7 +169,7 @@ namespace StudyN.Models
 
             CreateAppointmentCategories();
             CreateAppointmentStatuses();
-            CreateAppointments();
+            //CreateAppointments();
         }
     }
 }

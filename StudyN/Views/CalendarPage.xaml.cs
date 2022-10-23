@@ -4,6 +4,7 @@ using StudyN.Models; //Calls Calendar Data
 using StudyN.Utilities;
 using StudyN.ViewModels;
 using System.ComponentModel;
+using static StudyN.Utilities.StudynEvent;
 
 namespace StudyN.Views
 {
@@ -18,7 +19,9 @@ namespace StudyN.Views
             InitializeComponent();
             ViewModel = new CalendarViewModel();
             BindingContext = _calendarDataView = new CalendarDataView(); //Use to pull data of CalendarData under Models
-            
+
+            EventBus.Subscribe(this);
+
             // Reuse data storage between all the views
             weekView.DataStorage = dayView.DataStorage;
             monthView.DataStorage = dayView.DataStorage;
@@ -52,7 +55,7 @@ namespace StudyN.Views
 
         protected override void OnAppearing()
         {
-            var notes = SchdulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
+            var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
             CalendarDataView.LoadDataForNotification(notes.ToList());
             base.OnAppearing();
         }
@@ -78,20 +81,20 @@ namespace StudyN.Views
 
                 if (answer == true)
                 {
-                    SchdulerStorage.RemoveAppointment(appointment);
+                    SchedulerStorage.RemoveAppointment(appointment);
                 }
             }
         }
 
         private void ShowAppointmentEditPage(AppointmentItem appointment)
         {
-            AppointmentEditPage appEditPage = new(appointment, SchdulerStorage);
+            AppointmentEditPage appEditPage = new(appointment, SchedulerStorage);
             Navigation.PushAsync(appEditPage);
         }
 
         private void ShowNewAppointmentEditPage(IntervalInfo info)
         {
-            AppointmentEditPage appEditPage = new(info.Start, info.End, info.AllDay, SchdulerStorage);
+            AppointmentEditPage appEditPage = new(info.Start, info.End, info.AllDay, SchedulerStorage);
             Navigation.PushAsync(appEditPage);
         }
 
@@ -119,27 +122,38 @@ namespace StudyN.Views
 
                 if (answer == true)
                 {
-                    SchdulerStorage.RemoveAppointment(appointment);
+                    SchedulerStorage.RemoveAppointment(appointment);
                 }
             }
         }
 
         private void ShowAppointmentEditPage_WeekView(AppointmentItem appointment)
         {
-            AppointmentEditPage appEditPage = new(appointment, SchdulerStorage);
+            AppointmentEditPage appEditPage = new(appointment, SchedulerStorage);
             Navigation.PushAsync(appEditPage);
         }
 
         private void ShowNewAppointmentEditPage_WeekView(IntervalInfo info)
         {
             AppointmentEditPage appEditPage = new(info.Start, info.End,
-                                                                     info.AllDay, SchdulerStorage);
+                                                                     info.AllDay, SchedulerStorage);
             Navigation.PushAsync(appEditPage);
         }
 
         private void Handle_onCalendarTap_FromMonthView(object sender, SchedulerGestureEventArgs e)
         {
             //OnDailyClicked(sender, e); // estepanek: not sure if this is causing the devexpress.maui.navigation assembly not found error, because it seems to go away when I comment this out
+        }
+
+        public void OnNewStudynEvent(StudynEvent sEvent)
+        {
+            // On any appointment event, refresh the data
+            if (sEvent.EventType == StudynEventType.AppointmentAdd
+                || sEvent.EventType == StudynEventType.AppointmentEdit
+                || sEvent.EventType == StudynEventType.AppointmentDelete)
+            {
+                SchedulerStorage.RefreshData();
+            }
         }
 
         //View of events 
@@ -186,9 +200,6 @@ namespace StudyN.Views
             }
         }
 
-        public void OnNewStudynEvent(StudynEvent sEvent)
-        {
 
-        }
     }
 } 

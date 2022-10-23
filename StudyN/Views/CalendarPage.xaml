@@ -48,7 +48,7 @@
                            Tap="Handle_onCalendarTap_FromDayView"
                            LongPress="Handle_onCalendarHold_FromDayView">
                 <dxsch:DayView.DataStorage>
-                    <dxsch:SchedulerDataStorage x:Name="dayviewStorage">
+                    <dxsch:SchedulerDataStorage x:Name="SchedulerStorage">
                         <dxsch:SchedulerDataStorage.DataSource>
                             <dxsch:DataSource AppointmentsSource="{Binding Appointments}"
                                               AppointmentLabelsSource="{Binding AppointmentCategories}"
