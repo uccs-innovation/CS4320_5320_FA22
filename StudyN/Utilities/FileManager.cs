@@ -8,7 +8,7 @@ using static StudyN.Utilities.StudynEvent;
 
 namespace StudyN.Utilities
 {
-    public class FileManager : TaskSubscriber
+    public class FileManager : StudynSubscriber
     {
         static string DIR = FileSystem.AppDataDirectory;
         static string TASK_DIR = DIR + "/tasks/";
@@ -24,7 +24,7 @@ namespace StudyN.Utilities
 
         }
 
-        public override void OnNewTaskEvent(StudynEvent taskEvent)
+        public void OnNewStudynEvent(StudynEvent taskEvent)
         {
             if(taskEvent.EventType == StudynEventType.AddTask)
             {

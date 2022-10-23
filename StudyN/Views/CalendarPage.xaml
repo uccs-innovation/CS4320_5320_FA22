@@ -86,44 +86,9 @@
             <dxsch:WeekView x:Name="weekView"
                             Tap="Handle_onCalendarTap_FromWeekView"
                             LongPress="Handle_onCalendarHold_FromWeekView">
-                <dxsch:WeekView.DataStorage>
-                    <dxsch:SchedulerDataStorage x:Name="weekviewStorage">
-                        <dxsch:SchedulerDataStorage.DataSource>
-                            <dxsch:DataSource AppointmentsSource="{Binding Appointments}"
-                                              AppointmentLabelsSource="{Binding AppointmentTypes}">
-                                <dxsch:DataSource.AppointmentMappings>
-                                    <dxsch:AppointmentMappings 
-                                    Id="Id" 
-                                    Start="Start" 
-                                    End="End" 
-                                    Subject="Subject"
-                                    LabelId="LabelId"
-                                    Location="Location"
-                                    />
-                                </dxsch:DataSource.AppointmentMappings>
-                            </dxsch:DataSource>
-                        </dxsch:SchedulerDataStorage.DataSource>
-                    </dxsch:SchedulerDataStorage>
-                </dxsch:WeekView.DataStorage>
             </dxsch:WeekView>
             <dxsch:MonthView x:Name="monthView"
                              Tap="Handle_onCalendarTap_FromMonthView">
-                <dxsch:MonthView.DataStorage>
-                    <dxsch:SchedulerDataStorage>
-                        <dxsch:SchedulerDataStorage.DataSource>
-                            <dxsch:DataSource AppointmentsSource="{Binding Items}">
-                                <dxsch:DataSource.AppointmentMappings>
-                                    <dxsch:AppointmentMappings 
-                                    Id="Id" 
-                                    Start="Start" 
-                                    End="End" 
-                                    Subject="Text"
-                                    />
-                                </dxsch:DataSource.AppointmentMappings>
-                            </dxsch:DataSource>
-                        </dxsch:SchedulerDataStorage.DataSource>
-                    </dxsch:SchedulerDataStorage>
-                </dxsch:MonthView.DataStorage>
             </dxsch:MonthView>
         </StackLayout>
         </ContentPage.Content>

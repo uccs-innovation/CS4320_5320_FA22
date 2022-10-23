@@ -12,14 +12,14 @@ namespace StudyN.Utilities
     {
         static private AsyncQueue<StudynEvent> EventQueue = new AsyncQueue<StudynEvent>();
         
-        static private List<Subscriber> Subscribers = new List<Subscriber>();
+        static private List<StudynSubscriber> Subscribers = new List<StudynSubscriber>();
 
         public static void PublishEvent(StudynEvent sEvent)
         {
             EventQueue.Enquue(sEvent);
         }
 
-        public static void Subscribe(Subscriber subscriber)
+        public static void Subscribe(StudynSubscriber subscriber)
         {
             Subscribers.Add(subscriber);
         }
@@ -28,9 +28,9 @@ namespace StudyN.Utilities
         {
             await foreach (StudynEvent taskEvent in EventQueue)
             {
-                foreach (Subscriber subscriber in Subscribers)
+                foreach (StudynSubscriber subscriber in Subscribers)
                 {
-                    subscriber.OnNewTaskEvent(taskEvent);
+                    subscriber.OnNewStudynEvent(taskEvent);
                 }
             }
         }

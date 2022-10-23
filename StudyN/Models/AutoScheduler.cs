@@ -5,7 +5,7 @@ using StudyN.Models;
 using StudyN.Utilities;
 using static StudyN.Utilities.StudynEvent;
 
-public class AutoScheduler : TaskSubscriber
+public class AutoScheduler : StudynSubscriber
 { 
     public bool taskPastDue;
     public List<TaskItem> pastDueTasks;
@@ -144,7 +144,7 @@ public class AutoScheduler : TaskSubscriber
         Console.WriteLine("done running auto scheduler");
     }
 
-    public override void OnNewTaskEvent(StudynEvent taskEvent)
+    public void OnNewStudynEvent(StudynEvent taskEvent)
     {
         if (taskEvent.EventType == StudynEventType.AddTask)
         {

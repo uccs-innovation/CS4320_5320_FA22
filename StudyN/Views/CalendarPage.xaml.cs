@@ -1,6 +1,7 @@
 ﻿using DevExpress.Maui.Scheduler;
 using StudyN.Common;
 using StudyN.Models; //Calls Calendar Data
+using StudyN.Utilities;
 using StudyN.ViewModels;
 using System.ComponentModel;
 
@@ -9,15 +10,18 @@ namespace StudyN.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
 
 
-    public partial class CalendarPage : ContentPage
+    public partial class CalendarPage : ContentPage, StudynSubscriber
     {
         readonly CalendarDataView _calendarDataView;
         public CalendarPage()
         {
             InitializeComponent();
             ViewModel = new CalendarViewModel();
-            BindingContext = _calendarDataView  = new CalendarDataView(); //Use to pull data of CalendarData under Models
-
+            BindingContext = _calendarDataView = new CalendarDataView(); //Use to pull data of CalendarData under Models
+            
+            // Reuse data storage between all the views
+            weekView.DataStorage = dayView.DataStorage;
+            monthView.DataStorage = dayView.DataStorage;
         }
 
         CalendarViewModel ViewModel { get; }
@@ -48,7 +52,7 @@ namespace StudyN.Views
 
         protected override void OnAppearing()
         {
-            var notes = weekviewStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
+            var notes = SchdulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
             CalendarDataView.LoadDataForNotification(notes.ToList());
             base.OnAppearing();
         }
@@ -74,20 +78,20 @@ namespace StudyN.Views
 
                 if (answer == true)
                 {
-                    dayviewStorage.RemoveAppointment(appointment);
+                    SchdulerStorage.RemoveAppointment(appointment);
                 }
             }
         }
 
         private void ShowAppointmentEditPage(AppointmentItem appointment)
         {
-            AppointmentEditPage appEditPage = new(appointment, dayviewStorage);
+            AppointmentEditPage appEditPage = new(appointment, SchdulerStorage);
             Navigation.PushAsync(appEditPage);
         }
 
         private void ShowNewAppointmentEditPage(IntervalInfo info)
         {
-            AppointmentEditPage appEditPage = new(info.Start, info.End, info.AllDay, dayviewStorage);
+            AppointmentEditPage appEditPage = new(info.Start, info.End, info.AllDay, SchdulerStorage);
             Navigation.PushAsync(appEditPage);
         }
 
@@ -115,21 +119,21 @@ namespace StudyN.Views
 
                 if (answer == true)
                 {
-                    weekviewStorage.RemoveAppointment(appointment);
+                    SchdulerStorage.RemoveAppointment(appointment);
                 }
             }
         }
 
         private void ShowAppointmentEditPage_WeekView(AppointmentItem appointment)
         {
-            AppointmentEditPage appEditPage = new(appointment, weekviewStorage);
+            AppointmentEditPage appEditPage = new(appointment, SchdulerStorage);
             Navigation.PushAsync(appEditPage);
         }
 
         private void ShowNewAppointmentEditPage_WeekView(IntervalInfo info)
         {
             AppointmentEditPage appEditPage = new(info.Start, info.End,
-                                                                     info.AllDay, weekviewStorage);
+                                                                     info.AllDay, SchdulerStorage);
             Navigation.PushAsync(appEditPage);
         }
 
@@ -145,8 +149,8 @@ namespace StudyN.Views
 
             public event PropertyChangedEventHandler PropertyChanged;
             public static DateTime StartDate { get { return CalendarManager.BaseDate; } }
-            
-            public IReadOnlyList<Appointment> Appointments { get => data.Appointments; } 
+
+            public IReadOnlyList<Appointment> Appointments { get => data.Appointments; }
             public IReadOnlyList<AppointmentCategory> AppointmentCategories { get => data.AppointmentCategories; }
             public IReadOnlyList<AppointmentStatus> AppointmentStatuses { get => data.AppointmentStatuses; }
 
@@ -182,5 +186,9 @@ namespace StudyN.Views
             }
         }
 
+        public void OnNewStudynEvent(StudynEvent sEvent)
+        {
+
+        }
     }
 } 

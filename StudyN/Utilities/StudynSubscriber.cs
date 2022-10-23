@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace StudyN.Utilities
 {
-    abstract public class Subscriber
+    interface StudynSubscriber
     {
-        public abstract void OnNewStudynEvent(StudynEvent sEvent);
+        public void OnNewStudynEvent(StudynEvent sEvent);
     }
 }
