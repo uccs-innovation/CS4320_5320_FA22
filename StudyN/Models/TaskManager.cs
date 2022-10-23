@@ -31,7 +31,7 @@ namespace StudyN.Models
 
             // Publish task add event
             EventBus.PublishEvent(
-                        new TaskEvent(newTask.TaskId, TaskEvent.TaskEventType.AddTask));
+                        new StudynEvent(newTask.TaskId, StudynEvent.EventType.AddTask));
 
             return newTask;
         }
@@ -91,7 +91,7 @@ namespace StudyN.Models
 
             // Publish task edit event
             EventBus.PublishEvent(
-                        new TaskEvent(taskId, TaskEvent.TaskEventType.EditTask));
+                        new StudynEvent(taskId, StudynEvent.EventType.EditTask));
 
             return true;
         }
@@ -113,7 +113,7 @@ namespace StudyN.Models
 
                     // Publish task complete event
                     EventBus.PublishEvent(
-                        new TaskEvent(taskId, TaskEvent.TaskEventType.CompleteTask));
+                        new StudynEvent(taskId, StudynEvent.EventType.CompleteTask));
 
                     return;
                 }
@@ -123,7 +123,7 @@ namespace StudyN.Models
         //This function will delete a given task from the normal TaskList
         public void DeleteTask(Guid taskId, bool updateFile = true)
         {
-            //Looking for the task based on TaskId
+            //Looking for the task based on Id
             foreach (TaskItem task in TaskList)
             {
                 //If found
@@ -134,7 +134,7 @@ namespace StudyN.Models
 
                     // Publish task delete event
                     EventBus.PublishEvent(
-                        new TaskEvent(taskId, TaskEvent.TaskEventType.DeleteTask));
+                        new StudynEvent(taskId, StudynEvent.EventType.DeleteTask));
 
                     return;
                 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StudyN.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,30 +10,30 @@ namespace StudyN.Utilities
 {
     static class EventBus
     {
-        static private AsyncQueue<TaskEvent> EventQueue = new AsyncQueue<TaskEvent>();
-        static private List<TaskSubscriber> Subscribers = new List<TaskSubscriber>();
+        static private AsyncQueue<StudynEvent> EventQueue = new AsyncQueue<StudynEvent>();
+        
+        static private List<Subscriber> Subscribers = new List<Subscriber>();
 
-        public static void PublishEvent(TaskEvent taskEvent)
+        public static void PublishEvent(StudynEvent sEvent)
         {
-            EventQueue.Enquue(taskEvent);
+            EventQueue.Enquue(sEvent);
         }
 
-        public static void Subscribe(TaskSubscriber subscriber)
+        public static void Subscribe(Subscriber subscriber)
         {
             Subscribers.Add(subscriber);
         }
 
-        public static async Task WaitForTaskEvent()
+        public static async Task WaitForStudynEvent()
         {
-            await foreach (TaskEvent taskEvent in EventQueue)
+            await foreach (StudynEvent taskEvent in EventQueue)
             {
-                foreach (TaskSubscriber subscriber in Subscribers)
+                foreach (Subscriber subscriber in Subscribers)
                 {
                     subscriber.OnNewTaskEvent(taskEvent);
                 }
             }
         }
-
 
     }
 }

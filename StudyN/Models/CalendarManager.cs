@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Xml;
 using AndroidX.Fragment.App.StrictMode;
 using DevExpress.Maui.Scheduler;
 using DevExpress.Maui.Scheduler.Internal;
@@ -91,12 +92,12 @@ namespace StudyN.Models
             }
         }
 
-        Appointment CreateAppointment(int appointmentId,
-                                        string appointmentTitle,
-                                        DateTime start,
-                                        TimeSpan duration,
-                                        int room,
-                                        Guid guid = new Guid())
+        public Appointment CreateAppointment(int appointmentId,
+                                            string appointmentTitle,
+                                            DateTime start,
+                                            TimeSpan duration,
+                                            int room,
+                                            Guid guid = new Guid())
         {
             Appointment appt = new()
             {

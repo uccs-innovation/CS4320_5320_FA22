@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using StudyN.Models;
-using static StudyN.Utilities.TaskEvent;
+using static StudyN.Utilities.StudynEvent;
 
 namespace StudyN.Utilities
 {
@@ -24,23 +24,23 @@ namespace StudyN.Utilities
 
         }
 
-        public override void OnNewTaskEvent(TaskEvent taskEvent)
+        public override void OnNewTaskEvent(StudynEvent taskEvent)
         {
-            if(taskEvent.EventType == TaskEventType.AddTask)
+            if(taskEvent.EventType == StudynEventType.AddTask)
             {
-                TasksAdded(taskEvent.TaskId);
+                TasksAdded(taskEvent.Id);
             }
-            else if (taskEvent.EventType == TaskEventType.EditTask)
+            else if (taskEvent.EventType == StudynEventType.EditTask)
             {
-                TaskEdited(taskEvent.TaskId);
+                TaskEdited(taskEvent.Id);
             }
-            else if (taskEvent.EventType == TaskEventType.DeleteTask)
+            else if (taskEvent.EventType == StudynEventType.DeleteTask)
             {
-                TasksDeleted(taskEvent.TaskId);
+                TasksDeleted(taskEvent.Id);
             }
-            else if (taskEvent.EventType == TaskEventType.CompleteTask)
+            else if (taskEvent.EventType == StudynEventType.CompleteTask)
             {
-                TasksCompleted(taskEvent.TaskId);
+                TasksCompleted(taskEvent.Id);
             }
         }
 

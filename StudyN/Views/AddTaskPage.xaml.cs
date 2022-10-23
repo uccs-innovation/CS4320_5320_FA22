@@ -52,7 +52,6 @@ public partial class AddTaskPage : ContentPage
         GlobalTaskData.TaskManager.CompleteTask(GlobalTaskData.ToEdit.TaskId);
         GlobalTaskData.ToEdit = null;
         await Shell.Current.GoToAsync("..");
-        runAutoScheduler();
     }
 
     //This function will be used by the priority slider when its value has changed to set and keep track of the new value
@@ -74,7 +73,9 @@ public partial class AddTaskPage : ContentPage
 
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-    
+
+        TaskItem task;
+
         //Check to see if we are currently editing or adding a task
         if(editingExistingTask)
         {
@@ -88,23 +89,24 @@ public partial class AddTaskPage : ContentPage
                 timeLogged,
                 totalTime);
 
+            task = GlobalTaskData.ToEdit;
             GlobalTaskData.ToEdit = null;
         }
         else
         {
             //If we are not editing, use TaskManager's AddTask function to create and save the task
-            GlobalTaskData.TaskManager.AddTask(
-                this.name.Text,
-                this.description.Text,
-                dateTime,
-                (int)this.priority.Value,
-                timeLogged,
-                totalTime);
+            task = GlobalTaskData.TaskManager.AddTask(
+                    this.name.Text,
+                    this.description.Text,
+                    dateTime,
+                    (int)this.priority.Value,
+                    timeLogged,
+                    totalTime);
         }
         
         //Returning to the previous page
         await Shell.Current.GoToAsync("..");
-        runAutoScheduler();
+        runAutoScheduler(task.TaskId);
     }
 
     //This function will load the values held in each field of a task into the respective forms
@@ -126,9 +128,9 @@ public partial class AddTaskPage : ContentPage
         this.time.Time = DateTime.Now;
     }
 
-    void runAutoScheduler()
+    void runAutoScheduler(Guid taskId)
     {
-        autoScheduler.run();
+        autoScheduler.run(taskId);
         if (autoScheduler.taskPastDue)
         {
             string tasksString = "";
