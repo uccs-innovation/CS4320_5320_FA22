@@ -2,8 +2,10 @@ namespace StudyN.Models;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using StudyN.Models;
+using StudyN.Utilities;
+using static StudyN.Utilities.TaskEvent;
 
-public class AutoScheduler
+public class AutoScheduler : TaskSubscriber
 { 
     public bool taskPastDue;
     public List<TaskItem> pastDueTasks;
@@ -21,6 +23,8 @@ public class AutoScheduler
         Tasklist = TL;
         weightAssoc = new double[Tasklist.Count];
         calPosAssoc = new DateTime[Tasklist.Count];
+
+        EventBus.Subscribe(this);
 
         Array.Fill(weightAssoc, 0);
         Array.Fill(calPosAssoc, DateTime.Now);
@@ -131,5 +135,23 @@ public class AutoScheduler
         Console.WriteLine("done running auto scheduler");
     }
 
-
+    public override void OnNewTaskEvent(TaskEvent taskEvent)
+    {
+        if (taskEvent.EventType == TaskEventType.AddTask)
+        {
+            // Implement Later
+        }
+        else if (taskEvent.EventType == TaskEventType.EditTask)
+        {
+            // Implement later
+        }
+        else if (taskEvent.EventType == TaskEventType.DeleteTask)
+        {
+            // Implement later
+        }
+        else if (taskEvent.EventType == TaskEventType.CompleteTask)
+        {
+            Console.WriteLine("Scheduler Has CompleteTask Events!");
+        }
+    }
 }
