@@ -11,9 +11,5 @@ namespace StudyN.ViewModels
             Title = "Dashboard";
         }
 
-        async public void OnAppearing()
-        {
-            await EventBus.WaitForTaskEvent();
-        }
     }
 }

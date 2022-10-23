@@ -16,6 +16,12 @@ namespace StudyN
 
             MainPage = new MainPage();
 
+            // Set the EventBus to asyncronously wait for task events
+            Task.Run(async () => await EventBus.WaitForTaskEvent());
+
+            // This will subscribe to event bus and live on that way
+            new FileManager();
+
             DependencyService.Register<NotificationService.NotificationService>();
             Routing.RegisterRoute(nameof(AddTaskPage), typeof(AddTaskPage));
             Routing.RegisterRoute(nameof(CalendarPage), typeof(CalendarPage));
