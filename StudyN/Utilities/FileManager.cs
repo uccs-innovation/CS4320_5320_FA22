@@ -4,61 +4,43 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using StudyN.Models;
+using static StudyN.Utilities.TaskEvent;
 
 namespace StudyN.Utilities
 {
-    public static class FileManager
+    public class FileManager : TaskSubscriber
     {
-        public enum Operation
-        {
-            AddTask,
-            EditTask,
-            DeleteTask,
-            CompleteTask
-        }
-        public class FileOperation
-        {
-            public FileOperation(Operation operation, Guid id)
-            {
-                TaskId = id;
-                Operation = operation;
-                // create directories
-                System.IO.Directory.CreateDirectory(TASK_DIR);
-                System.IO.Directory.CreateDirectory(COMPLETE_TASK_DIR);
-            }
-
-            public Guid TaskId { get; set; }
-            public Operation Operation { get; set; }
-            
-        }
-
         static string DIR = FileSystem.AppDataDirectory;
         static string TASK_DIR = DIR + "/tasks/";
         static string COMPLETE_TASK_DIR = DIR + "/completedTask/";
-        
 
-        public static AsyncQueue<FileOperation> FILE_OP_QUEUE = new AsyncQueue<FileOperation>();
-        
-        public static async Task WaitForFileOp()
+        public FileManager()
         {
-            await foreach(FileOperation op in FILE_OP_QUEUE)
+            EventBus.Subscribe(this);
+
+            // create directories
+            System.IO.Directory.CreateDirectory(TASK_DIR);
+            System.IO.Directory.CreateDirectory(COMPLETE_TASK_DIR);
+
+        }
+
+        public override void OnNewTaskEvent(TaskEvent taskEvent)
+        {
+            if(taskEvent.EventType == TaskEventType.AddTask)
             {
-                if(op.Operation == Operation.AddTask)
-                {
-                    TasksAdded(op.TaskId);
-                }
-                else if (op.Operation == Operation.EditTask)
-                {
-                    TaskEdited(op.TaskId);
-                }
-                else if (op.Operation == Operation.DeleteTask)
-                {
-                    TasksDeleted(op.TaskId);
-                }
-                else if (op.Operation == Operation.CompleteTask)
-                {
-                    TasksCompleted(op.TaskId);
-                }
+                TasksAdded(taskEvent.TaskId);
+            }
+            else if (taskEvent.EventType == TaskEventType.EditTask)
+            {
+                TaskEdited(taskEvent.TaskId);
+            }
+            else if (taskEvent.EventType == TaskEventType.DeleteTask)
+            {
+                TasksDeleted(taskEvent.TaskId);
+            }
+            else if (taskEvent.EventType == TaskEventType.CompleteTask)
+            {
+                TasksCompleted(taskEvent.TaskId);
             }
         }
 
