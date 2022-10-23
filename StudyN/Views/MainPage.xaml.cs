@@ -13,6 +13,8 @@ namespace StudyN.Views
 
             GlobalTaskData.TaskManager = new TaskDataManager();
             GlobalTaskData.TaskManager.LoadFilesIntoLists();
+
+            GlobalAppointmentData.CalendarManager = new CalendarManager();
         }
     }
 }

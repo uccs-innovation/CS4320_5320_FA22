@@ -141,10 +141,10 @@ namespace StudyN.Views
         //View of events 
         public class CalendarDataView : INotifyPropertyChanged
         {
-            readonly AppData data;
+            readonly CalendarManager data;
 
             public event PropertyChangedEventHandler PropertyChanged;
-            public static DateTime StartDate { get { return AppData.BaseDate; } }
+            public static DateTime StartDate { get { return CalendarManager.BaseDate; } }
             
             public IReadOnlyList<Appointment> Appointments { get => data.Appointments; } 
             public IReadOnlyList<AppointmentCategory> AppointmentCategories { get => data.AppointmentCategories; }
@@ -152,7 +152,7 @@ namespace StudyN.Views
 
             public CalendarDataView()
             {
-                data = new AppData();
+                data = GlobalAppointmentData.CalendarManager;
             }
 
             /// <summary>

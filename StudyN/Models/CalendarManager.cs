@@ -1,61 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using AndroidX.Fragment.App.StrictMode;
 using DevExpress.Maui.Scheduler;
 using DevExpress.Maui.Scheduler.Internal;
 using Microsoft.Maui.Controls;
 
 namespace StudyN.Models
 {
-    public class Appointment : AppointmentItem
-    {    
-        public string ReminderInfo { get; set; }
-        public string Notes { get; set; }
-
-        // properties for StudyN_Time category
-        public bool IsGeneratedStudyNTime { get; set; }
-        public int ParentTaskId { get; set; }
-        public int StudyNBlock_Minutes { get; set; }         
-        public bool WasEdited { get; set; }
-        public bool IsOrphan { get; set; }
-
-        // properties for Assignment category
-        public int EstimatedCompletionTime_Hours { get; set; }
-
-        // properties for Exam category
-        public bool IsExamTakehome { get; set; }
-        public int ExamTime_Minutes { get; set; }
-
-        // StudyN Time Algorithm properties
-        public int BeforePadding_Minutes { get; set; }
-        public int AfterPadding_Minutes { get; set; }
-        public int MaxBlockTime_Minutes { get; set; }
-        public int MinBlockTime_Minutes { get; set; }
-        public int BreakTime_Minutes { get; set; }
-        public bool AllowBackToBackStudyNSessions { get; set; }
-        public bool UseFreeTimeBlocks { get; set; }
-
-        // properties for data import
-        public bool IsCanvasImport { get; set; }
-        public bool IsExternalCalendarImport { get; set; }
-    }
-
-
-    public class AppointmentCategory
-    {
-        public int Id { get; set; }
-        public string Caption { get; set; }
-        public Color Color { get; set; }
-    }
-
-    public class AppointmentStatus
-    {
-        public int Id { get; set; }
-        public string Caption { get; set; }
-        public Color Color { get; set; }
-    }
-
-
-    public class AppData
+    public class CalendarManager
     {
         public static DateTime BaseDate = DateTime.Today;
 
@@ -98,8 +50,11 @@ namespace StudyN.Models
                     int room = rnd.Next(1, 100);
                     start = BaseDate.AddDays(i).AddHours(rnd.Next(8, 17)).AddMinutes(rnd.Next(0, 40));
                     duration = TimeSpan.FromMinutes(rnd.Next(20, 30));
-                    result.Add(CreateAppointment(appointmentId, AppointmentTitles[appointmentListIndex],
-                                                      start, duration, room));
+                    result.Add(CreateAppointment(appointmentId,
+                                                    AppointmentTitles[appointmentListIndex],
+                                                    start,
+                                                    duration,
+                                                    room));
                     appointmentId++;
                     appointmentListIndex++;
                     if (appointmentListIndex >= AppointmentTitles.Length - 1)
@@ -138,8 +93,12 @@ namespace StudyN.Models
             AppointmentStatuses = result;
         }
 
-        Appointment CreateAppointment(int appointmentId, string appointmentTitle,
-                                                    DateTime start, TimeSpan duration, int room)
+        Appointment CreateAppointment(int appointmentId,
+                                        string appointmentTitle,
+                                        DateTime start,
+                                        TimeSpan duration,
+                                        int room,
+                                        Guid guid = new Guid())
         {
             Appointment appt = new()
             {
@@ -150,18 +109,41 @@ namespace StudyN.Models
                 LabelId = AppointmentCategories[rnd.Next(0, 5)].Id,
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
-                Description = string.Empty
+                Description = string.Empty,
+                UniqueId = guid
             };
 
             return appt;
         }
+
+        // Remove appointments after "now" that have this id
+        public void TaskCompleted(Guid uniqueId)
+        {
+            // Get list of all potentiall affected appointments
+            var affectedAppointments = new List<Appointment>();
+            foreach(Appointment apt in Appointments)
+            {
+                if(apt.UniqueId == uniqueId)
+                {
+                    affectedAppointments.Add(apt);
+                }
+            }
+
+            foreach (Appointment apt in affectedAppointments)
+            {
+                // If Start is after now, remove appointment
+                if(apt.Start > DateTime.Now)
+                {
+                    Appointments.Remove(apt);
+                }
+            }
 
         public ObservableCollection<Appointment> Appointments { get; private set; }
         public ObservableCollection<AppointmentCategory> AppointmentCategories { get; private set; }
         public ObservableCollection<AppointmentStatus> AppointmentStatuses { get; private set; }
 
 
-        public AppData()
+        public CalendarManager()
         {
             CreateAppointmentCategories();
             CreateAppointmentStatuses();

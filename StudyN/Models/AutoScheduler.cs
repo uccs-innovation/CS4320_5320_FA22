@@ -129,7 +129,6 @@ public class AutoScheduler : TaskSubscriber
         for(int i = 0; i < Tasklist.Count; i++)
         {
             Console.WriteLine(Tasklist[i].Name + ", Weight: " + weightAssoc[i] + ", startTime: " + calPosAssoc[i]);
-
         }
 
         Console.WriteLine("done running auto scheduler");
@@ -152,6 +151,7 @@ public class AutoScheduler : TaskSubscriber
         else if (taskEvent.EventType == TaskEventType.CompleteTask)
         {
             Console.WriteLine("Scheduler Has CompleteTask Events!");
+            GlobalAppointmentData.CalendarManager.TaskCompleted(taskEvent.TaskId);
         }
     }
 }
