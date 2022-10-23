@@ -58,7 +58,9 @@ namespace StudyN.Models
                     appointmentId++;
                     appointmentListIndex++;
                     if (appointmentListIndex >= AppointmentTitles.Length - 1)
+                    {
                         appointmentListIndex = 1;
+                    }
                 }
             }
         }
@@ -155,6 +157,10 @@ namespace StudyN.Models
 
         public CalendarManager()
         {
+            Appointments = new ObservableCollection<Appointment>();
+            AppointmentCategories = new ObservableCollection<AppointmentCategory>();
+            AppointmentStatuses = new ObservableCollection<AppointmentStatus>();
+
             CreateAppointmentCategories();
             CreateAppointmentStatuses();
             CreateAppointments();

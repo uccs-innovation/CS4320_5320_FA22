@@ -150,6 +150,7 @@ public class AutoScheduler : TaskSubscriber
         }
         else if (taskEvent.EventType == TaskEventType.CompleteTask)
         {
+            // Console Logging just so we can see in the output something is happening
             Console.WriteLine("Scheduler Has CompleteTask Events!");
             GlobalAppointmentData.CalendarManager.TaskCompleted(taskEvent.TaskId);
         }
