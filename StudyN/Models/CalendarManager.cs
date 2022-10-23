@@ -43,29 +43,28 @@ namespace StudyN.Models
             int appointmentListIndex = 0;
             DateTime start;
             TimeSpan duration;
-            ObservableCollection<Appointment> result = new ObservableCollection<Appointment>();
             for (int i = -20; i < 20; i++)
+            {
                 for (int j = 0; j < 15; j++)
                 {
                     int room = rnd.Next(1, 100);
                     start = BaseDate.AddDays(i).AddHours(rnd.Next(8, 17)).AddMinutes(rnd.Next(0, 40));
                     duration = TimeSpan.FromMinutes(rnd.Next(20, 30));
-                    result.Add(CreateAppointment(appointmentId,
-                                                    AppointmentTitles[appointmentListIndex],
-                                                    start,
-                                                    duration,
-                                                    room));
+                    CreateAppointment(appointmentId,
+                                        AppointmentTitles[appointmentListIndex],
+                                        start,
+                                        duration,
+                                        room);
                     appointmentId++;
                     appointmentListIndex++;
                     if (appointmentListIndex >= AppointmentTitles.Length - 1)
                         appointmentListIndex = 1;
                 }
-            Appointments = result;
+            }
         }
 
         void CreateAppointmentCategories()
         {
-            ObservableCollection<AppointmentCategory> result = new ObservableCollection<AppointmentCategory>();
             int count = AppointmentCategoryTitles.Length;
             for (int i = 0; i < count; i++)
             {
@@ -73,14 +72,12 @@ namespace StudyN.Models
                 cat.Id = i;
                 cat.Caption = AppointmentCategoryTitles[i];
                 cat.Color = AppointmentCategoryColors[i];
-                result.Add(cat);
+                AppointmentCategories.Add(cat);
             }
-            AppointmentCategories = result;
         }
 
         void CreateAppointmentStatuses()
         {
-            ObservableCollection<AppointmentStatus> result = new ObservableCollection<AppointmentStatus>();
             int count = AppointmentStatusTitles.Length;
             for (int i = 0; i < count; i++)
             {
@@ -88,9 +85,8 @@ namespace StudyN.Models
                 stat.Id = i;
                 stat.Caption = AppointmentStatusTitles[i];
                 stat.Color = AppointmentStatusColors[i];
-                result.Add(stat);
+                AppointmentStatuses.Add(stat);
             }
-            AppointmentStatuses = result;
         }
 
         Appointment CreateAppointment(int appointmentId,
@@ -113,30 +109,44 @@ namespace StudyN.Models
                 UniqueId = guid
             };
 
+            Appointments.Add(appt);
+
             return appt;
         }
 
-        // Remove appointments after "now" that have this id
+        // Properly handle appointments associated with a newly completed task
         public void TaskCompleted(Guid uniqueId)
         {
             // Get list of all potentiall affected appointments
             var affectedAppointments = new List<Appointment>();
-            foreach(Appointment apt in Appointments)
+            foreach (Appointment apt in Appointments)
             {
-                if(apt.UniqueId == uniqueId)
+                if (apt.UniqueId == uniqueId)
                 {
                     affectedAppointments.Add(apt);
                 }
             }
 
+            // Now take the list of associated appointments and deal with
+            // them as needed. Can't do this above because out iterator
+            // will become invalid the second we have to remove an appoinment
             foreach (Appointment apt in affectedAppointments)
             {
                 // If Start is after now, remove appointment
-                if(apt.Start > DateTime.Now)
+                if (apt.Start > DateTime.Now)
                 {
                     Appointments.Remove(apt);
                 }
+
+                // If event is currently happening,
+                // truncate the appointments time to now
+                if (apt.Start < DateTime.Now
+                    && apt.End > DateTime.Now)
+                {
+                    apt.End = DateTime.Now;
+                }
             }
+        }
 
         public ObservableCollection<Appointment> Appointments { get; private set; }
         public ObservableCollection<AppointmentCategory> AppointmentCategories { get; private set; }
