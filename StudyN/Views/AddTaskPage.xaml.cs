@@ -1,5 +1,6 @@
 namespace StudyN.Views;
 
+using System;
 using Microsoft.Maui.Animations;
 using StudyN.Models;
 using StudyN.Utilities;
@@ -137,6 +138,123 @@ public partial class AddTaskPage : ContentPage
                 tasksString += task.Name + ", ";
             } 
             DisplayAlert("The following tasks cannot be completed on-time!", tasksString, "OK");
+        }
+    }
+
+
+    //These functions will be used to add recurrence of a selected task for day/week/month
+    private void HandleRecurrenceDay(object sender, EventArgs e)
+    {
+        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
+        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
+            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
+        for (int i = 1; i <= 365; i++)
+        {
+            dateTime = dateTime.AddDays(i); //every day
+            if (editingExistingTask)
+            {
+                //If we are editing, we will use the TaskManager's EditTask function to save the changes
+                GlobalTaskData.TaskManager.EditTask(
+                    GlobalTaskData.ToEdit.TaskId,
+                    this.name.Text,
+                    this.description.Text,
+                    dateTime,
+                    (int)this.priority.Value,
+                    timeLogged,
+                    totalTime);
+
+                GlobalTaskData.ToEdit = null;
+            }
+            else
+            {
+                //If we are not editing, use TaskManager's AddTask function to create and save the task
+                GlobalTaskData.TaskManager.AddTask(
+                    this.name.Text,
+                    this.description.Text,
+                    dateTime,
+                    (int)this.priority.Value,
+                    timeLogged,
+                    totalTime);
+            }
+        }
+
+    }
+    private void HandleRecurrenceWeek(object sender, EventArgs e)
+    {
+        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
+        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
+            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
+
+        for (int i = 1; i <= 52; i++)
+        {
+            dateTime = dateTime.AddDays(i*7); //every week
+
+            if (editingExistingTask)
+            {
+                //If we are editing, we will use the TaskManager's EditTask function to save the changes
+                GlobalTaskData.TaskManager.EditTask(
+                    GlobalTaskData.ToEdit.TaskId,
+                    this.name.Text,
+                    this.description.Text,
+                    dateTime,
+                    (int)this.priority.Value,
+                    timeLogged,
+                    totalTime);
+
+                GlobalTaskData.ToEdit = null;
+            }
+            else
+            {
+                //If we are not editing, use TaskManager's AddTask function to create and save the task
+                GlobalTaskData.TaskManager.AddTask(
+                    this.name.Text,
+                    this.description.Text,
+                    dateTime,
+                    (int)this.priority.Value,
+                    timeLogged,
+                    totalTime);
+            }
+        }
+    }
+    private void HandleRecurrenceMonth(object sender, EventArgs e)
+    {
+        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
+        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
+            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
+        dateTime = dateTime.AddMonths(1);
+
+        for (int i = 1; i <= 12; i++)
+        {
+            dateTime = dateTime.AddMonths(i); //months
+
+            if (editingExistingTask)
+            {
+                //If we are editing, we will use the TaskManager's EditTask function to save the changes
+                GlobalTaskData.TaskManager.EditTask(
+                    GlobalTaskData.ToEdit.TaskId,
+                    this.name.Text,
+                    this.description.Text,
+                    dateTime,
+                    (int)this.priority.Value,
+                    timeLogged,
+                    totalTime);
+
+                GlobalTaskData.ToEdit = null;
+            }
+            else
+            {
+                //If we are not editing, use TaskManager's AddTask function to create and save the task
+                GlobalTaskData.TaskManager.AddTask(
+                    this.name.Text,
+                    this.description.Text,
+                    dateTime,
+                    (int)this.priority.Value,
+                    timeLogged,
+                    totalTime);
+            }
         }
     }
 }
