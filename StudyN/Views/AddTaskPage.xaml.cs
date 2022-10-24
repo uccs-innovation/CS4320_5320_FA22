@@ -9,9 +9,9 @@ public partial class AddTaskPage : ContentPage
 {
     bool editingExistingTask;
     AutoScheduler autoScheduler;
-	public AddTaskPage()
-	{
-		InitializeComponent();
+    public AddTaskPage()
+    {
+        InitializeComponent();
         autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList);
 
         //This will check if we are editing an existing task or making a new one. We will know this based on if ToEdit is null or not
