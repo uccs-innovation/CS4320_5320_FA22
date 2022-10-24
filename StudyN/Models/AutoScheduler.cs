@@ -1,6 +1,9 @@
 namespace StudyN.Models;
+
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using DevExpress.Utils;
 using StudyN.Models;
 
 public class AutoScheduler
@@ -8,6 +11,8 @@ public class AutoScheduler
     public bool taskPastDue;
     public List<TaskItem> pastDueTasks;
     private List<TaskItem> TaskBlockList;
+
+    //public ObservableCollection<CalendarAppointment> CalendarList { get; set; }
     private ObservableCollection<TaskItem> Tasklist { get; set; }
     private List<double> weightAssoc;   //weightAssoc[0] corresponds to TaskBlockList[0], weightAssoc[1] corresponds to TaskBlockList[1]...
     public List<DateTime> calPosAssoc;  //calPosAssoc[0] corresponds to TaskBlockList[0], calPosAssoc[1] corresponds to TaskBlockList[1]...
@@ -20,6 +25,7 @@ public class AutoScheduler
         taskPastDue = false;
         pastDueTasks = new List<TaskItem>();
         Tasklist = TL;
+        //CalendarList = GlobalData.cs.calendarManager
     }
    
     private void associateCalendarPositions()
@@ -34,7 +40,6 @@ public class AutoScheduler
         {
             if(prevTaskId == TaskBlockList[i].TaskId)
             {
-
                 numTaskIdMatches++;
             }
 
@@ -68,13 +73,17 @@ public class AutoScheduler
             }
 
             calPosAssoc[index] = startTime;
+            //handleTaskBlockOverlaps(index);
 
             //Maybe its better to calculate BACK from the duetime, rather than FORWARD from right now?
             //Or maybe I can check if the calendar position lets it get completed before its due date, and if not then we can schedule it so it gets done exactly on duetime.
         }
 
-        //Not sure if this will ever run. I don't think weight can be negative. Which is good. But just in case
-        else { DateTime startTime = DateTime.Now.AddDays(7); calPosAssoc[index] = startTime; } //If weight is really really small, then schedule it for a week from now. 
+        //Task Cannot be scheduled. Schedule it in the past I guess
+        else 
+        {
+            calPosAssoc[index] = DateTime.Now.AddDays(-2);
+        } 
     }
 
     private void associateWeights()
@@ -110,12 +119,11 @@ public class AutoScheduler
                                              //If an item has a large dueDistance, it will still have a large weight if it has a high priority
         }                                    //Think of it like this: If an item is super far away in dueDistance, essentially it gets sorted by its priority.
 
-        //THIS CHECK MIGHT NO LONGER BE NECESSARY BECAUSE THERE IS A PAST DUE CHECK IN calculateCalendarPosition()
         else //Item is NOT possible to complete before deadline. Assign it highest priority. 
         {
             taskPastDue = true;
             pastDueTasks.Add(task);
-            weight = 9999999999; 
+            weight = -1; 
         } 
 
         return weight;
@@ -160,6 +168,52 @@ public class AutoScheduler
 
     }
 
+    private void handleTaskBlockOverlap(int index)
+    {
+        for(int i = 0; i < calPosAssoc.Count; i++)
+        {
+            //https://stackoverflow.com/questions/5672862/check-if-datetime-instance-falls-in-between-other-two-datetime-objects
+            //https://www.geeksforgeeks.org/insert-in-sorted-and-non-overlapping-interval-array/
+
+            //If TaskBlock overlaps (and isn't itself), put the one with higher weight first and rerun if you swapped an already scheduled TaskBlock 
+            if( (calPosAssoc[i] < calPosAssoc[index] && calPosAssoc[index] < calPosAssoc[i].AddHours(1)) || (calPosAssoc[index] < calPosAssoc[i] && calPosAssoc[i] < calPosAssoc[index].AddHours(1)) && i != index)
+            {
+
+                //The TaskBlock with a higher weight will maintain its startTime, while the one with lower weight (lowerPriority) will move after the one with higher weight
+                int lowerPriority;
+                int higherPriority; 
+                if (weightAssoc[i] < weightAssoc[index]) { lowerPriority = i; higherPriority = index; }
+                else { lowerPriority = index; higherPriority = i; }
+                calPosAssoc[lowerPriority] = calPosAssoc[higherPriority].AddHours(2); //Place the lower priority taskBlock RIGHT AFTER the higherPriority taskblock 
+
+                //TODO: Handle case where changing a TaskBlock's start time makes the Task fail its duedate
+
+                handleTaskBlockOverlap(lowerPriority); //We moved a taskblock, so we must check if moving it also created an overlap. I feel like this has a potential for an infinite loop :/
+                                                        //this is also realllllyyyyyyy inefficient... but shhhhh. We can figure out the complex math later 
+            }
+        }    
+    }
+
+    private void handleAllTaskBlockOverlaps()
+    {
+        for(int i = 0; i < TaskBlockList.Count; i++)
+        {
+            handleTaskBlockOverlap(i);
+        }
+    }
+
+    private void handleMaxTasksInADay()
+    {
+        //Loop through TaskBlockList
+          //Check if more than 4 TaskItems have the same GUID in one day
+            //If they do, spread them apart more if possible
+            //If not possible, dont change it
+
+        //NOTES:
+        //calPosAssoc is a list of the startTimes for each taskBlock.
+
+    }
+
     private void refreshArrays()
     {
         taskPastDue = false;
@@ -177,6 +231,7 @@ public class AutoScheduler
         breakTasksIntoBlocks();
         associateWeights();
         associateCalendarPositions();
+        handleAllTaskBlockOverlaps();
         addToCalendar();
 
         for(int i = 0; i < TaskBlockList.Count; i++)
