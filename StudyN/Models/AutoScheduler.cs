@@ -2,8 +2,10 @@ namespace StudyN.Models;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using StudyN.Models;
+using StudyN.Utilities;
+using static StudyN.Utilities.StudynEvent;
 
-public class AutoScheduler
+public class AutoScheduler : StudynSubscriber
 { 
     public bool taskPastDue;
     public List<TaskItem> pastDueTasks;
@@ -21,6 +23,8 @@ public class AutoScheduler
         Tasklist = TL;
         weightAssoc = new double[Tasklist.Count];
         calPosAssoc = new DateTime[Tasklist.Count];
+
+        EventBus.Subscribe(this);
 
         Array.Fill(weightAssoc, 0);
         Array.Fill(calPosAssoc, DateTime.Now);
@@ -114,7 +118,7 @@ public class AutoScheduler
         Array.Fill(calPosAssoc, DateTime.Now);
     }
 
-    public void run()
+    public void run(Guid taskId)
     {
         Console.WriteLine("started running auto scheduler");
         refreshArrays();
@@ -125,11 +129,40 @@ public class AutoScheduler
         for(int i = 0; i < Tasklist.Count; i++)
         {
             Console.WriteLine(Tasklist[i].Name + ", Weight: " + weightAssoc[i] + ", startTime: " + calPosAssoc[i]);
-
+            if(Tasklist[i].TaskId == taskId)
+            {
+                GlobalAppointmentData.CalendarManager.CreateAppointment(
+                    taskId.GetHashCode(), // Id
+                    Tasklist[i].Name, // AppointmentName
+                    calPosAssoc[i], // Start Time
+                    Tasklist[i].TotalTimeNeeded > 0 ? new TimeSpan(Tasklist[i].TotalTimeNeeded,0,0) : new TimeSpan(0, 15, 0),
+                    0,
+                    taskId);
+            }
         }
 
         Console.WriteLine("done running auto scheduler");
     }
 
-
+    public void OnNewStudynEvent(StudynEvent taskEvent)
+    {
+        if (taskEvent.EventType == StudynEventType.AddTask)
+        {
+            // Implement Later
+        }
+        else if (taskEvent.EventType == StudynEventType.EditTask)
+        {
+            // Implement later
+        }
+        else if (taskEvent.EventType == StudynEventType.DeleteTask)
+        {
+            // Implement later
+        }
+        else if (taskEvent.EventType == StudynEventType.CompleteTask)
+        {
+            // Console Logging just so we can see in the output something is happening
+            Console.WriteLine("Scheduler Has CompleteTask Events!");
+            GlobalAppointmentData.CalendarManager.TaskCompleted(taskEvent.Id);
+        }
+    }
 }

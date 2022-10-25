@@ -1,61 +1,15 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Xml;
+using AndroidX.Fragment.App.StrictMode;
 using DevExpress.Maui.Scheduler;
 using DevExpress.Maui.Scheduler.Internal;
 using Microsoft.Maui.Controls;
+using StudyN.Utilities;
 
 namespace StudyN.Models
 {
-    public class Appointment : AppointmentItem
-    {    
-        public string ReminderInfo { get; set; }
-        public string Notes { get; set; }
-
-        // properties for StudyN_Time category
-        public bool IsGeneratedStudyNTime { get; set; }
-        public int ParentTaskId { get; set; }
-        public int StudyNBlock_Minutes { get; set; }         
-        public bool WasEdited { get; set; }
-        public bool IsOrphan { get; set; }
-
-        // properties for Assignment category
-        public int EstimatedCompletionTime_Hours { get; set; }
-
-        // properties for Exam category
-        public bool IsExamTakehome { get; set; }
-        public int ExamTime_Minutes { get; set; }
-
-        // StudyN Time Algorithm properties
-        public int BeforePadding_Minutes { get; set; }
-        public int AfterPadding_Minutes { get; set; }
-        public int MaxBlockTime_Minutes { get; set; }
-        public int MinBlockTime_Minutes { get; set; }
-        public int BreakTime_Minutes { get; set; }
-        public bool AllowBackToBackStudyNSessions { get; set; }
-        public bool UseFreeTimeBlocks { get; set; }
-
-        // properties for data import
-        public bool IsCanvasImport { get; set; }
-        public bool IsExternalCalendarImport { get; set; }
-    }
-
-
-    public class AppointmentCategory
-    {
-        public int Id { get; set; }
-        public string Caption { get; set; }
-        public Color Color { get; set; }
-    }
-
-    public class AppointmentStatus
-    {
-        public int Id { get; set; }
-        public string Caption { get; set; }
-        public Color Color { get; set; }
-    }
-
-
-    public class AppData
+    public class CalendarManager
     {
         public static DateTime BaseDate = DateTime.Today;
 
@@ -91,26 +45,30 @@ namespace StudyN.Models
             int appointmentListIndex = 0;
             DateTime start;
             TimeSpan duration;
-            ObservableCollection<Appointment> result = new ObservableCollection<Appointment>();
             for (int i = -20; i < 20; i++)
+            {
                 for (int j = 0; j < 15; j++)
                 {
                     int room = rnd.Next(1, 100);
                     start = BaseDate.AddDays(i).AddHours(rnd.Next(8, 17)).AddMinutes(rnd.Next(0, 40));
                     duration = TimeSpan.FromMinutes(rnd.Next(20, 30));
-                    result.Add(CreateAppointment(appointmentId, AppointmentTitles[appointmentListIndex],
-                                                      start, duration, room));
+                    CreateAppointment(appointmentId,
+                                        AppointmentTitles[appointmentListIndex],
+                                        start,
+                                        duration,
+                                        room);
                     appointmentId++;
                     appointmentListIndex++;
                     if (appointmentListIndex >= AppointmentTitles.Length - 1)
+                    {
                         appointmentListIndex = 1;
+                    }
                 }
-            Appointments = result;
+            }
         }
 
         void CreateAppointmentCategories()
         {
-            ObservableCollection<AppointmentCategory> result = new ObservableCollection<AppointmentCategory>();
             int count = AppointmentCategoryTitles.Length;
             for (int i = 0; i < count; i++)
             {
@@ -118,14 +76,12 @@ namespace StudyN.Models
                 cat.Id = i;
                 cat.Caption = AppointmentCategoryTitles[i];
                 cat.Color = AppointmentCategoryColors[i];
-                result.Add(cat);
+                AppointmentCategories.Add(cat);
             }
-            AppointmentCategories = result;
         }
 
         void CreateAppointmentStatuses()
         {
-            ObservableCollection<AppointmentStatus> result = new ObservableCollection<AppointmentStatus>();
             int count = AppointmentStatusTitles.Length;
             for (int i = 0; i < count; i++)
             {
@@ -133,13 +89,16 @@ namespace StudyN.Models
                 stat.Id = i;
                 stat.Caption = AppointmentStatusTitles[i];
                 stat.Color = AppointmentStatusColors[i];
-                result.Add(stat);
+                AppointmentStatuses.Add(stat);
             }
-            AppointmentStatuses = result;
         }
 
-        Appointment CreateAppointment(int appointmentId, string appointmentTitle,
-                                                    DateTime start, TimeSpan duration, int room)
+        public Appointment CreateAppointment(int appointmentId,
+                                            string appointmentTitle,
+                                            DateTime start,
+                                            TimeSpan duration,
+                                            int room,
+                                            Guid guid = new Guid())
         {
             Appointment appt = new()
             {
@@ -150,10 +109,51 @@ namespace StudyN.Models
                 LabelId = AppointmentCategories[rnd.Next(0, 5)].Id,
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
-                Description = string.Empty
+                Description = string.Empty,
+                UniqueId = guid
             };
 
+            Appointments.Add(appt);
+
+            // Publish appointment add event
+            EventBus.PublishEvent(
+                        new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
+
             return appt;
+        }
+
+        // Properly handle appointments associated with a newly completed task
+        public void TaskCompleted(Guid uniqueId)
+        {
+            // Get list of all potentiall affected appointments
+            var affectedAppointments = new List<Appointment>();
+            foreach (Appointment apt in Appointments)
+            {
+                if (apt.UniqueId == uniqueId)
+                {
+                    affectedAppointments.Add(apt);
+                }
+            }
+
+            // Now take the list of associated appointments and deal with
+            // them as needed. Can't do this above because out iterator
+            // will become invalid the second we have to remove an appoinment
+            foreach (Appointment apt in affectedAppointments)
+            {
+                // If Start is after now, remove appointment
+                if (apt.Start > DateTime.Now)
+                {
+                    Appointments.Remove(apt);
+                }
+
+                // If event is currently happening,
+                // truncate the appointments time to now
+                if (apt.Start < DateTime.Now
+                    && apt.End > DateTime.Now)
+                {
+                    apt.End = DateTime.Now;
+                }
+            }
         }
 
         public ObservableCollection<Appointment> Appointments { get; private set; }
@@ -161,11 +161,15 @@ namespace StudyN.Models
         public ObservableCollection<AppointmentStatus> AppointmentStatuses { get; private set; }
 
 
-        public AppData()
+        public CalendarManager()
         {
+            Appointments = new ObservableCollection<Appointment>();
+            AppointmentCategories = new ObservableCollection<AppointmentCategory>();
+            AppointmentStatuses = new ObservableCollection<AppointmentStatus>();
+
             CreateAppointmentCategories();
             CreateAppointmentStatuses();
-            CreateAppointments();
+            //CreateAppointments();
         }
     }
 }
