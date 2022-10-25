@@ -63,26 +63,15 @@ public class AutoScheduler
             while(startTime.AddHours(1) > TaskBlockList[index].DueTime)
             {
                 startTime = startTime.AddHours(-1); 
-                if(startTime < DateTime.Now)
-                {
-                    Console.WriteLine("ISSUE SCHEDULING TASK BLOCK");
-                    taskPastDue = true;
-                    pastDueTasks.Add( TaskBlockList[index] );
-                    break;
-                }
             }
 
             calPosAssoc[index] = startTime;
-            //handleTaskBlockOverlaps(index);
-
-            //Maybe its better to calculate BACK from the duetime, rather than FORWARD from right now?
-            //Or maybe I can check if the calendar position lets it get completed before its due date, and if not then we can schedule it so it gets done exactly on duetime.
         }
 
-        //Task Cannot be scheduled. Schedule it in the past I guess
+        //Task Cannot be scheduled. Schedule it past its duetime so it can be detected as unschedulable.
         else 
         {
-            calPosAssoc[index] = DateTime.Now.AddDays(-2);
+            calPosAssoc[index] = TaskBlockList[index].DueTime.AddHours(1);
         } 
     }
 
@@ -119,12 +108,12 @@ public class AutoScheduler
                                              //If an item has a large dueDistance, it will still have a large weight if it has a high priority
         }                                    //Think of it like this: If an item is super far away in dueDistance, essentially it gets sorted by its priority.
 
-        else //Item is NOT possible to complete before deadline. Assign it highest priority. 
+        else //Item is NOT possible to complete before deadline. Give it negative weight so it will be scheduled past its deadline, and be detected as unscheduable.
         {
-            taskPastDue = true;
-            pastDueTasks.Add(task);
+            //taskPastDue = true;
+            //pastDueTasks.Add(task);
             weight = -1; 
-        } 
+        }
 
         return weight;
     }
@@ -168,37 +157,61 @@ public class AutoScheduler
 
     }
 
-    private void handleTaskBlockOverlap(int index)
-    {
-        for(int i = 0; i < calPosAssoc.Count; i++)
+   
+    private Tuple<int, int> findOverlap() 
+    { 
+        for (int i = 0; i < calPosAssoc.Count; i++)
         {
-            //https://stackoverflow.com/questions/5672862/check-if-datetime-instance-falls-in-between-other-two-datetime-objects
-            //https://www.geeksforgeeks.org/insert-in-sorted-and-non-overlapping-interval-array/
-
-            //If TaskBlock overlaps (and isn't itself), put the one with higher weight first and rerun if you swapped an already scheduled TaskBlock 
-            if( (calPosAssoc[i] < calPosAssoc[index] && calPosAssoc[index] < calPosAssoc[i].AddHours(1)) || (calPosAssoc[index] < calPosAssoc[i] && calPosAssoc[i] < calPosAssoc[index].AddHours(1)) && i != index)
+            for (int j = 0; j < calPosAssoc.Count; j++)
             {
-
-                //The TaskBlock with a higher weight will maintain its startTime, while the one with lower weight (lowerPriority) will move after the one with higher weight
-                int lowerPriority;
-                int higherPriority; 
-                if (weightAssoc[i] < weightAssoc[index]) { lowerPriority = i; higherPriority = index; }
-                else { lowerPriority = index; higherPriority = i; }
-                calPosAssoc[lowerPriority] = calPosAssoc[higherPriority].AddHours(2); //Place the lower priority taskBlock RIGHT AFTER the higherPriority taskblock 
-
-                //TODO: Handle case where changing a TaskBlock's start time makes the Task fail its duedate
-
-                handleTaskBlockOverlap(lowerPriority); //We moved a taskblock, so we must check if moving it also created an overlap. I feel like this has a potential for an infinite loop :/
-                                                        //this is also realllllyyyyyyy inefficient... but shhhhh. We can figure out the complex math later 
+                if (calPosAssoc[j] <= calPosAssoc[i] && calPosAssoc[i] <= calPosAssoc[j].AddHours(1) && i != j)
+                {
+                    return Tuple.Create(i, j);
+                }
             }
-        }    
+        }
+
+        return null;
     }
 
-    private void handleAllTaskBlockOverlaps()
+    private void fixOverlap(int i, int j, int randomness)
     {
-        for(int i = 0; i < TaskBlockList.Count; i++)
+        int lowerWeighted;
+        int higherWeighted;
+        if (weightAssoc[i] < weightAssoc[j]) { lowerWeighted = i; higherWeighted = j; }
+        else { lowerWeighted = j; higherWeighted = i; }
+        
+        calPosAssoc[higherWeighted] = calPosAssoc[lowerWeighted].AddHours(-1 - randomness); //Add in randomness incase a task block keeps getting scheduled back and forth between two blocks infinitely
+
+
+                /*
+                else //we cannot move the higherWeigthed one earlier, or move the lowerWeighted one later, therefore the lowerWeighted one cannot be scheduled
+                {
+                    Console.WriteLine("ISSUE SCHEDULING TASK BLOCK");
+                    calPosAssoc[lowerWeighted] = DateTime.Now.AddDays(-2); //idk where to schedule tasks that cant be completed ontime, so im just putting them in the past for now
+                    taskPastDue = true;
+                    pastDueTasks.Add(TaskBlockList[lowerWeighted]);
+                }*/
+    }
+
+    private void driveOverlapCorrection()
+    {
+        //Using Random() somewhat like simulated annealing. To deal with cases where a TaskBlock gets sandwiched between a higher and lower weighted one (when that happens it will just move up and down on the schedule infinitely)
+        Random random = new Random(); 
+        Tuple<int, int> overlaps = findOverlap();
+        int findOverlapCalls = 1;
+        while (overlaps != null)
         {
-            handleTaskBlockOverlap(i);
+            Console.WriteLine("Fixing overlap");
+
+            if (findOverlapCalls % 10 == 0)
+            {
+                fixOverlap(overlaps.Item1, overlaps.Item2, random.Next(0, findOverlapCalls/100)); //If a taskblock gets stuck between a higherWeight and lowerWeight block, this should very slowly increase the distance it is rescheduled (eventually getting it unstuck)
+            } 
+            else { fixOverlap(overlaps.Item1, overlaps.Item2, 0); }
+
+            overlaps = findOverlap();
+            findOverlapCalls++;
         }
     }
 
@@ -231,7 +244,7 @@ public class AutoScheduler
         breakTasksIntoBlocks();
         associateWeights();
         associateCalendarPositions();
-        handleAllTaskBlockOverlaps();
+        driveOverlapCorrection();
         addToCalendar();
 
         for(int i = 0; i < TaskBlockList.Count; i++)
