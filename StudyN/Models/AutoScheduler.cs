@@ -156,7 +156,11 @@ public class AutoScheduler
         calPosAssoc = new List<DateTime>( new DateTime[TaskBlockList.Count] );
 
     }
+    //Before? or After? or during?? a rightPush blocks should be compressed! The leftPush inherently compresses the blocks, as it only incrementally pushes them left
+    private void compressBlocks()
+    {
 
+    }
    
     private Tuple<int, int> findOverlap() 
     { 
@@ -174,7 +178,7 @@ public class AutoScheduler
         return null;
     }
 
-    private void fixOverlap(int i, int j, int randomness)
+    private void pushLeft(int i, int j, int randomness)
     {
         int lowerWeighted;
         int higherWeighted;
@@ -182,16 +186,37 @@ public class AutoScheduler
         else { lowerWeighted = j; higherWeighted = i; }
         
         calPosAssoc[higherWeighted] = calPosAssoc[lowerWeighted].AddHours(-1 - randomness); //Add in randomness incase a task block keeps getting scheduled back and forth between two blocks infinitely
+    }
 
+    private void pushRight()
+    {
+        DateTime now = DateTime.Now;
+        DateTime farthestLeft = now;
+        for(int i = 0; i < calPosAssoc.Count; i++)
+        {
+            if(calPosAssoc[i] < farthestLeft) { farthestLeft = calPosAssoc[i]; }
+        }
 
-                /*
-                else //we cannot move the higherWeigthed one earlier, or move the lowerWeighted one later, therefore the lowerWeighted one cannot be scheduled
-                {
-                    Console.WriteLine("ISSUE SCHEDULING TASK BLOCK");
-                    calPosAssoc[lowerWeighted] = DateTime.Now.AddDays(-2); //idk where to schedule tasks that cant be completed ontime, so im just putting them in the past for now
-                    taskPastDue = true;
-                    pastDueTasks.Add(TaskBlockList[lowerWeighted]);
-                }*/
+        TimeSpan rightPush = DateTime.Now - farthestLeft;
+
+        if(rightPush.Ticks > 0)
+        {
+            for(int i = 0; i < calPosAssoc.Count; i++)
+            {
+                calPosAssoc[i] = calPosAssoc[i] + rightPush;
+            }
+        }
+
+        for(int i = 0; i < calPosAssoc.Count; i++)
+        {
+            if(calPosAssoc[i].AddHours(1) > TaskBlockList[i].DueTime)
+            {
+                Console.WriteLine("ISSUE SCHEDULING TASK BLOCK");
+                calPosAssoc[i] = DateTime.Now.AddDays(-2); //idk where to schedule tasks that cant be completed ontime, so im just putting them in the past for now
+                taskPastDue = true;
+                pastDueTasks.Add(TaskBlockList[i]);
+            }
+        }
     }
 
     private void driveOverlapCorrection()
@@ -206,12 +231,28 @@ public class AutoScheduler
 
             if (findOverlapCalls % 10 == 0)
             {
-                fixOverlap(overlaps.Item1, overlaps.Item2, random.Next(0, findOverlapCalls/100)); //If a taskblock gets stuck between a higherWeight and lowerWeight block, this should very slowly increase the distance it is rescheduled (eventually getting it unstuck)
+                pushLeft(overlaps.Item1, overlaps.Item2, random.Next(0, findOverlapCalls/100)); //If a taskblock gets stuck between a higherWeight and lowerWeight block, this should very slowly increase the distance it is rescheduled (eventually getting it unstuck)
             } 
-            else { fixOverlap(overlaps.Item1, overlaps.Item2, 0); }
+            else { pushLeft(overlaps.Item1, overlaps.Item2, 0); }
 
             overlaps = findOverlap();
             findOverlapCalls++;
+        }
+
+        pushRight();
+    }
+
+    private void checkForUnscheduables()
+    {
+        for(int i = 0; i < TaskBlockList.Count; i++)
+        {
+            if (calPosAssoc[i].AddHours(1) > TaskBlockList[i].DueTime)
+            {
+                Console.WriteLine("ISSUE SCHEDULING TASK BLOCK");
+                calPosAssoc[i] = DateTime.Now.AddDays(-2); //idk where to schedule tasks that cant be completed ontime, so im just putting them in the past for now
+                taskPastDue = true;
+                pastDueTasks.Add(TaskBlockList[i]);
+            }
         }
     }
 
@@ -245,6 +286,7 @@ public class AutoScheduler
         associateWeights();
         associateCalendarPositions();
         driveOverlapCorrection();
+        checkForUnscheduables();
         addToCalendar();
 
         for(int i = 0; i < TaskBlockList.Count; i++)
