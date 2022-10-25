@@ -2,27 +2,36 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
+             xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
              x:Class="StudyN.Views.HomePage"
-             Title="{Binding Title}"
+             Title="Today's View"
              IconImageSource="charts">
-    <ContentPage.Content>
-        <Grid>
-        <dxc:PieChartView x:Name="chart">
-            <dxc:PieChartView.Series>
-                <dxc:DonutSeries>
-                    <dxc:DonutSeries.Data>
-                        <dxc:PieSeriesDataAdapter DataSource="{Binding Items}"
-                                              LabelDataMember="Text"
-                                              ValueDataMember="Value"/>
-                    </dxc:DonutSeries.Data>
-                </dxc:DonutSeries>
-            </dxc:PieChartView.Series>
-            <dxc:PieChartView.Legend>
-                <dxc:Legend Orientation="TopToBottom"
-                        HorizontalPosition="RightOutside"
-                        VerticalPosition="Center"/>
-            </dxc:PieChartView.Legend>
-        </dxc:PieChartView>
-        </Grid>
-    </ContentPage.Content>
+    <dxg:DataGridView ItemsSource="{Binding TaskList}"
+                      ShowAutoFilterRow="True"
+                      ColumnHeaderHeight="0">
+        <!--Set the Columns to use.-->
+        <dxg:DataGridView.Columns>
+            <dxg:TextColumn FieldName="Name" Caption="Task" AutoFilterCondition="Contains" />
+            <dxg:DateColumn x:Name="DateFilter" FieldName="DueTime" Caption="Due" DisplayFormat="h:mm tt" AutoFilterCondition="Equals" AutoFilterValue=""/>
+        </dxg:DataGridView.Columns>
+        <!--Customize the appearance of group row.-->
+        <dxg:DataGridView.GroupRowStyle>
+            <dxg:GroupRowStyle FontSize="16" />
+        </dxg:DataGridView.GroupRowStyle>
+        <!--Customize the appearance of grid cells.-->
+        <dxg:DataGridView.CellStyle>
+            <dxg:CellStyle Padding="10" FontSize="24"/>
+        </dxg:DataGridView.CellStyle>
+        <!--Customize the appearance of column headers.-->
+        <dxg:DataGridView.ColumnHeaderStyle>
+            <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
+        </dxg:DataGridView.ColumnHeaderStyle>
+        <dxg:DataGridView.TotalSummaries>
+            <dxg:GridColumnSummary FieldName="Percent" Type="Custom" 
+                                   DisplayFormat="Total Completion: {0}%"/>
+        </dxg:DataGridView.TotalSummaries>
+        <dxg:DataGridView.TotalSummaryStyle>
+            <dxg:TotalSummaryStyle FontSize="16"/>
+        </dxg:DataGridView.TotalSummaryStyle>
+    </dxg:DataGridView>
 </ContentPage>

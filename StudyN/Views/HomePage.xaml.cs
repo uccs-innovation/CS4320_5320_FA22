@@ -5,9 +5,11 @@ namespace StudyN.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HomePage : ContentPage
     {
+
         public HomePage()
         {
             InitializeComponent();
+            DateFilter.AutoFilterValue = DateTime.Today;
             BindingContext = ViewModel = new HomeViewModel();
             ViewModel.OnAppearing();
         }
@@ -18,6 +20,7 @@ namespace StudyN.Views
         {
             base.OnAppearing();
             ViewModel.OnAppearing();
+            DateFilter.AutoFilterValue = DateTime.Today;
         }
     }
 }

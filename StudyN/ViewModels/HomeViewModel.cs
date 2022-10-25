@@ -6,6 +6,8 @@ namespace StudyN.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {
+        public ObservableCollection<TaskItem> TaskList { get => GlobalTaskData.TaskManager.TaskList; }
+
         public HomeViewModel()
         {
             Title = "Dashboard";
