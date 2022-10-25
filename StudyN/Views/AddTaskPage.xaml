@@ -121,32 +121,36 @@
             <Label x:Name="RecurrenceLabel"
                Text="Recurrence"
                HorizontalOptions="Start"
-               VerticalOptions="Center" 
                Grid.Row="5"
                Grid.ColumnSpan="1"
+               VerticalOptions="End"
                FontSize="16" />
             <Button
                 x:Name="RecurrenceDay"
                 Text="Day"
                 Grid.Row="6"
-                CornerRadius="1"
+                Grid.Column="1"
+                
                 Margin="1"
+                HorizontalOptions="StartAndExpand"
                 Clicked="HandleRecurrenceDay"/>
             <Button
                 x:Name="RecurrenceWeek"
                 Text="Week"
                 Grid.Row="6"
-                Grid.Column="1"
-                CornerRadius="2"
+                Grid.Column="2"
+                
                 Margin="1"
+                HorizontalOptions="CenterAndExpand"
                 Clicked="HandleRecurrenceWeek"/>
             <Button
                 x:Name="RecurrenceMonth"
                 Text="Month"
                 Grid.Row="6"
-                Grid.Column="2"
-                CornerRadius="3"
+                Grid.Column="3"
+                
                 Margin="1"
+                HorizontalOptions="EndAndExpand"
                 Clicked="HandleRecurrenceMonth"/>
             
             <!--Buttons for completing/deleting tasks-->
