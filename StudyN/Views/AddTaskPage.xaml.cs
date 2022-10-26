@@ -152,31 +152,15 @@ public partial class AddTaskPage : ContentPage
         for (int i = 1; i <= 365; i++)
         {
             dateTime = dateTime.AddDays(i); //every day
-            if (editingExistingTask)
-            {
-                //If we are editing, we will use the TaskManager's EditTask function to save the changes
-                GlobalTaskData.TaskManager.EditTask(
-                    GlobalTaskData.ToEdit.TaskId,
-                    this.name.Text,
-                    this.description.Text,
-                    dateTime,
-                    (int)this.priority.Value,
-                    timeLogged,
-                    totalTime);
-
-                GlobalTaskData.ToEdit = null;
-            }
-            else
-            {
-                //If we are not editing, use TaskManager's AddTask function to create and save the task
-                GlobalTaskData.TaskManager.AddTask(
-                    this.name.Text,
-                    this.description.Text,
-                    dateTime,
-                    (int)this.priority.Value,
-                    timeLogged,
-                    totalTime);
-            }
+            //If we are not editing, use TaskManager's AddTask function to create and save the task
+            GlobalTaskData.TaskManager.AddTask(
+                this.name.Text,
+                this.description.Text,
+                dateTime,
+                (int)this.priority.Value,
+                timeLogged,
+                totalTime);
+            
         }
 
     }
@@ -190,33 +174,17 @@ public partial class AddTaskPage : ContentPage
         for (int i = 1; i <= 52; i++)
         {
             dateTime = dateTime.AddDays(i*7); //every week
-
-            if (editingExistingTask)
-            {
-                //If we are editing, we will use the TaskManager's EditTask function to save the changes
-                GlobalTaskData.TaskManager.EditTask(
-                    GlobalTaskData.ToEdit.TaskId,
-                    this.name.Text,
-                    this.description.Text,
-                    dateTime,
-                    (int)this.priority.Value,
-                    timeLogged,
-                    totalTime);
-
-                GlobalTaskData.ToEdit = null;
-            }
-            else
-            {
-                //If we are not editing, use TaskManager's AddTask function to create and save the task
-                GlobalTaskData.TaskManager.AddTask(
-                    this.name.Text,
-                    this.description.Text,
-                    dateTime,
-                    (int)this.priority.Value,
-                    timeLogged,
-                    totalTime);
-            }
+            //If we are not editing, use TaskManager's AddTask function to create and save the task
+            GlobalTaskData.TaskManager.AddTask(
+                this.name.Text,
+                this.description.Text,
+                dateTime,
+                (int)this.priority.Value,
+                timeLogged,
+                totalTime);
+            
         }
+
     }
     private void HandleRecurrenceMonth(object sender, EventArgs e)
     {
@@ -229,10 +197,20 @@ public partial class AddTaskPage : ContentPage
         for (int i = 1; i <= 12; i++)
         {
             dateTime = dateTime.AddMonths(i); //months
+            //If we are not editing, use TaskManager's AddTask function to create and save the task
+            GlobalTaskData.TaskManager.AddTask(
+                this.name.Text,
+                this.description.Text,
+                dateTime,
+                (int)this.priority.Value,
+                timeLogged,
+                totalTime);
 
-            if (editingExistingTask)
+        }
+        if (editingExistingTask)
+        {
+            if (this.description.Text != this.description.Text || timeLogged != timeLogged || totalTime != totalTime)
             {
-                //If we are editing, we will use the TaskManager's EditTask function to save the changes
                 GlobalTaskData.TaskManager.EditTask(
                     GlobalTaskData.ToEdit.TaskId,
                     this.name.Text,
@@ -241,20 +219,10 @@ public partial class AddTaskPage : ContentPage
                     (int)this.priority.Value,
                     timeLogged,
                     totalTime);
-
                 GlobalTaskData.ToEdit = null;
             }
-            else
-            {
-                //If we are not editing, use TaskManager's AddTask function to create and save the task
-                GlobalTaskData.TaskManager.AddTask(
-                    this.name.Text,
-                    this.description.Text,
-                    dateTime,
-                    (int)this.priority.Value,
-                    timeLogged,
-                    totalTime);
-            }
         }
+
     }
+
 }

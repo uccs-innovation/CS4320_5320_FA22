@@ -119,27 +119,27 @@
 
             <!--Buttons for Recurrance tasks-->
             <Label x:Name="RecurrenceLabel"
-               Text="Recurrence"
+               Text="Recurrence:"
                HorizontalOptions="Start"
-               Grid.Row="5"
-               Grid.ColumnSpan="1"
-               VerticalOptions="End"
+               VerticalOptions="Center" 
+               Grid.Row="6"
+               Grid.ColumnSpan="2"
                FontSize="16" />
             <Button
                 x:Name="RecurrenceDay"
                 Text="Day"
                 Grid.Row="6"
                 Grid.Column="1"
-                
+                CornerRadius="3"
                 Margin="1"
-                HorizontalOptions="StartAndExpand"
+                HorizontalOptions="Start"
                 Clicked="HandleRecurrenceDay"/>
             <Button
                 x:Name="RecurrenceWeek"
                 Text="Week"
                 Grid.Row="6"
                 Grid.Column="2"
-                
+                CornerRadius="3"
                 Margin="1"
                 HorizontalOptions="CenterAndExpand"
                 Clicked="HandleRecurrenceWeek"/>
@@ -148,7 +148,7 @@
                 Text="Month"
                 Grid.Row="6"
                 Grid.Column="3"
-                
+                CornerRadius="3"
                 Margin="1"
                 HorizontalOptions="EndAndExpand"
                 Clicked="HandleRecurrenceMonth"/>
@@ -157,7 +157,7 @@
             <Button 
                 x:Name="DeleteTaskButton"
                 Text="Delete Task"
-                Grid.Row="7"
+                Grid.Row="6"
                 CornerRadius="7"
                 Margin="1"
                 Clicked="HandleDeleteTaskClicked" />
@@ -165,7 +165,7 @@
             <Button
                 x:Name="CompleteTaskButton"
                 Text="Mark Complete"
-                Grid.Row="7"
+                Grid.Row="6"
                 Grid.Column="1"
                 CornerRadius="7"
                 Margin="1"
