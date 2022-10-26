@@ -275,7 +275,8 @@ public class AutoScheduler
 
 
             AllCurBlocks = new List<int>();
-
+            numPerDate = new List<int>();
+            currentDates = new List<DateTime>();
             for (int i = 0; i < TaskBlockList.Count; i++)
             {
                 if(TaskBlockList[i].TaskId == curId)
@@ -289,13 +290,13 @@ public class AutoScheduler
 
                 Console.WriteLine(TaskBlockList[AllCurBlocks[i]].Name + ", Weight: " + weightAssoc[AllCurBlocks[i]] + ", startTime: " + calPosAssoc[AllCurBlocks[i]] + ", date:" + calPosAssoc[AllCurBlocks[i]]);
                 
-                /*bool dateCaptured = false;
+                bool dateCaptured = false;
                 for(int j = 0; j < currentDates.Count; j++)
                 {
-                    if(calPosAssoc[AllCurBlocks[i]].Date == currentDates[j].Date)
+                    if(calPosAssoc[AllCurBlocks[i]].Date == currentDates[j].Date && dateCaptured == false)
                     {
                         dateCaptured = true;
-                        numPerDate[j] = numPerDate[j]++;
+                        numPerDate[j] = numPerDate[j]+1;
                     }
                 }
 
@@ -303,13 +304,13 @@ public class AutoScheduler
                 {
                     currentDates.Add(calPosAssoc[AllCurBlocks[i]].Date);
                     numPerDate.Add(1);
-                }*/
+                }
             }
 
-           /* for (int i = 0; i < currentDates.Count; i++)
+           for (int i = 0; i < currentDates.Count; i++)
             {
                 Console.WriteLine("CURRENT DATE: " + currentDates[i] + ", NUMBER OF BLOCKS: " + numPerDate[i]);
-            }*/
+            }
         }
     }
 
