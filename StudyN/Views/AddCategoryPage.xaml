@@ -4,6 +4,7 @@
              x:Class="StudyN.Views.AddCategoryPage"
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
              xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
+             xmlns:dxu="clr-namespace:DevExpress.Utils;assembly=DevExpress.Maui.Core"
              xmlns:dxee="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              Title="{Binding Title}">
     <!-- Saves the category -->
@@ -30,7 +31,6 @@
                 Margin="1"
                 x:Name="name" />
             <!-- Get color of category from user -->
-            
         </Grid>
     </ContentPage.Content>
 </ContentPage>
