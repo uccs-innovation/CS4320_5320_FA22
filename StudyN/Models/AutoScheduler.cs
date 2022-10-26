@@ -20,7 +20,8 @@ public class AutoScheduler
     //calPosAssoc holds the START TIMES of each task. The end time can be calculated using 
     //task.TotalTimeNeeded * (1 - task.CompletionProgress / 100), and then adding that to the start time
     private List<int> AllCurBlocks;
-
+    public List<DateTime> currentDates;
+    private List<int> numPerDate;
     public AutoScheduler( ObservableCollection<TaskItem> TL )
 	{
         taskPastDue = false;
@@ -272,8 +273,6 @@ public class AutoScheduler
         {
             Guid curId = task.TaskId;
 
-            int numInDay = 0;
-            DateTime curDate = new DateTime();
 
             AllCurBlocks = new List<int>();
 
@@ -289,9 +288,34 @@ public class AutoScheduler
             {
 
                 Console.WriteLine(TaskBlockList[AllCurBlocks[i]].Name + ", Weight: " + weightAssoc[AllCurBlocks[i]] + ", startTime: " + calPosAssoc[AllCurBlocks[i]] + ", date:" + calPosAssoc[AllCurBlocks[i]]);
+                
+                /*bool dateCaptured = false;
+                for(int j = 0; j < currentDates.Count; j++)
+                {
+                    if(calPosAssoc[AllCurBlocks[i]].Date == currentDates[j].Date)
+                    {
+                        dateCaptured = true;
+                        numPerDate[j] = numPerDate[j]++;
+                    }
+                }
 
+                if(!dateCaptured)
+                {
+                    currentDates.Add(calPosAssoc[AllCurBlocks[i]].Date);
+                    numPerDate.Add(1);
+                }*/
             }
+
+           /* for (int i = 0; i < currentDates.Count; i++)
+            {
+                Console.WriteLine("CURRENT DATE: " + currentDates[i] + ", NUMBER OF BLOCKS: " + numPerDate[i]);
+            }*/
         }
+    }
+
+    private void sortDateList()
+    {
+
     }
 
     private void refreshArrays()
