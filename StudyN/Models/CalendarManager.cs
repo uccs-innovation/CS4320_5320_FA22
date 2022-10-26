@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Xml;
 using AndroidX.Fragment.App.StrictMode;
 using DevExpress.Maui.Scheduler;
@@ -141,8 +142,8 @@ namespace StudyN.Models
                 Caption = categoryName,
                 Color = categoryColor,
             };
-            // Adds category to category list
-            AppointmentCategories.Add(cat);
+            // Adds category to category list, make sure uncategorized is at bottom
+            AppointmentCategories.Insert(AppointmentCategories.Count - 2 ,cat);
             return cat;
         }
 
