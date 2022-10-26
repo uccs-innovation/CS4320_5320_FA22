@@ -1,10 +1,14 @@
 namespace StudyN.Views;
 
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Microsoft.Maui.Animations;
 using StudyN.Models;
 using StudyN.Utilities;
 using StudyN.ViewModels;
+using static Android.Provider.Settings;
 
 public partial class AddTaskPage : ContentPage
 {
@@ -75,21 +79,11 @@ public partial class AddTaskPage : ContentPage
 
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-    
-        //Check to see if we are currently editing or adding a task
-        if(editingExistingTask)
-        {
-            //If we are editing, we will use the TaskManager's EditTask function to save the changes
-            GlobalTaskData.TaskManager.EditTask(
-                GlobalTaskData.ToEdit.TaskId,
-                this.name.Text,
-                this.description.Text,
-                dateTime,
-                (int)this.priority.Value,
-                timeLogged,
-                totalTime);
 
-            GlobalTaskData.ToEdit = null;
+        //Check to see if we are currently editing or adding a task
+        if (editingExistingTask)
+        {
+            HandleEditRecurrence(GlobalTaskData.ToEdit.TaskId);
         }
         else
         {
@@ -192,7 +186,6 @@ public partial class AddTaskPage : ContentPage
         int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-        dateTime = dateTime.AddMonths(1);
 
         for (int i = 1; i <= 12; i++)
         {
@@ -207,22 +200,47 @@ public partial class AddTaskPage : ContentPage
                 totalTime);
 
         }
-        if (editingExistingTask)
-        {
-            if (this.description.Text != this.description.Text || timeLogged != timeLogged || totalTime != totalTime)
-            {
-                GlobalTaskData.TaskManager.EditTask(
-                    GlobalTaskData.ToEdit.TaskId,
-                    this.name.Text,
-                    this.description.Text,
-                    dateTime,
-                    (int)this.priority.Value,
-                    timeLogged,
-                    totalTime);
-                GlobalTaskData.ToEdit = null;
-            }
-        }
+    }
+    void HandleEditRecurrence(Guid id)
+    {
+        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
+        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
+            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
 
+        //Gets task list
+        ObservableCollection<TaskItem> task = new ObservableCollection<TaskItem>();
+        for (int i = 0; i < task.Count; i++)
+        {
+            //If information is not the same, then it gets saved for all
+            if (task[i].Description != this.description.Text)
+            {
+                task[i].Description =this.description.Text;
+            }
+            if(task[i].DueTime != dateTime)
+            {
+                task[i].DueTime = dateTime;
+            }
+            if(task[i].CompletionProgress != timeLogged)
+            {
+                task[i].CompletionProgress = timeLogged;
+            }
+            if (task[i].TotalTimeNeeded != totalTime)
+            {
+                task[i].TotalTimeNeeded = totalTime;
+            }
+
+        }
+        //Saves the informatiom when editing
+        GlobalTaskData.TaskManager.EditTask(
+            GlobalTaskData.ToEdit.TaskId,
+            this.name.Text,
+            this.description.Text,
+            dateTime,
+            (int)this.priority.Value,
+            timeLogged,
+            totalTime);
+        GlobalTaskData.ToEdit = null;
     }
 
 }
