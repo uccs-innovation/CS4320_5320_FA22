@@ -17,8 +17,9 @@ public class AutoScheduler
     private List<double> weightAssoc;   //weightAssoc[0] corresponds to TaskBlockList[0], weightAssoc[1] corresponds to TaskBlockList[1]...
     public List<DateTime> calPosAssoc;  //calPosAssoc[0] corresponds to TaskBlockList[0], calPosAssoc[1] corresponds to TaskBlockList[1]...
 
-                                    //calPosAssoc holds the START TIMES of each task. The end time can be calculated using 
-                                    //task.TotalTimeNeeded * (1 - task.CompletionProgress / 100), and then adding that to the start time
+    //calPosAssoc holds the START TIMES of each task. The end time can be calculated using 
+    //task.TotalTimeNeeded * (1 - task.CompletionProgress / 100), and then adding that to the start time
+    private List<int> AllCurBlocks;
 
     public AutoScheduler( ObservableCollection<TaskItem> TL )
 	{
@@ -148,6 +149,7 @@ public class AutoScheduler
                 taskBlock.TaskId = task.TaskId;
                 
                 TaskBlockList.Add(taskBlock);
+
             }
         }
 
@@ -259,13 +261,37 @@ public class AutoScheduler
     private void handleMaxTasksInADay()
     {
         //Loop through TaskBlockList
-          //Check if more than 4 TaskItems have the same GUID in one day
-            //If they do, spread them apart more if possible
-            //If not possible, dont change it
+        //Check if more than 4 TaskItems have the same GUID in one day
+        //If they do, spread them apart more if possible
+        //If not possible, dont change it
 
         //NOTES:
         //calPosAssoc is a list of the startTimes for each taskBlock.
 
+        foreach (var task in Tasklist)
+        {
+            Guid curId = task.TaskId;
+
+            int numInDay = 0;
+            DateTime curDate = new DateTime();
+
+            AllCurBlocks = new List<int>();
+
+            for (int i = 0; i < TaskBlockList.Count; i++)
+            {
+                if(TaskBlockList[i].TaskId == curId)
+                {
+                    AllCurBlocks.Add(i);
+                }
+            }
+
+            for (int i = 0; i < AllCurBlocks.Count; i++)
+            {
+
+                Console.WriteLine(TaskBlockList[AllCurBlocks[i]].Name + ", Weight: " + weightAssoc[AllCurBlocks[i]] + ", startTime: " + calPosAssoc[AllCurBlocks[i]] + ", date:" + calPosAssoc[AllCurBlocks[i]]);
+
+            }
+        }
     }
 
     private void refreshArrays()
@@ -287,6 +313,7 @@ public class AutoScheduler
         associateCalendarPositions();
         driveOverlapCorrection();
         checkForUnscheduables();
+        handleMaxTasksInADay();
         addToCalendar();
 
         for(int i = 0; i < TaskBlockList.Count; i++)
