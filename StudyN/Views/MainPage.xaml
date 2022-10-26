@@ -23,7 +23,7 @@
             <ShellContent ContentTemplate="{DataTemplate local:TaskPage}"/>
         </Tab>
 
-        <Tab Title="Categories" Icon="whitecheckbox">
+        <Tab Title="Categories" Icon="popup">
             <ShellContent ContentTemplate="{DataTemplate local:CategoriesPage}"/>
         </Tab>
 
