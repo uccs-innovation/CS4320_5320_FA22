@@ -4,6 +4,22 @@
              xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
              x:Class="StudyN.Views.CategoriesPage"
              Title="Categories">
-    <dxg:DataGridView ItemsSource="{Binding AppointmentCategories}">
+    <!-- DataGrid of Categories -->
+    <dxg:DataGridView ItemsSource="{Binding AppointmentCategories}"
+                      ColumnHeaderHeight="0">
+        <dxg:DataGridView.Columns>
+            <!-- Doesn't work unfortunatly -->
+            <!-- <dxg:TemplateColumn FieldName="Color" Caption="Color" BackgroundColor="{Binding FieldName}" Width ="75" /> -->
+            <dxg:TextColumn FieldName="Caption" Caption="Name" />
+        </dxg:DataGridView.Columns>
+        <dxg:DataGridView.GroupRowStyle>
+            <dxg:GroupRowStyle FontSize="16" />
+        </dxg:DataGridView.GroupRowStyle>
+        <dxg:DataGridView.CellStyle>
+            <dxg:CellStyle Padding="10" FontSize="24"/>
+        </dxg:DataGridView.CellStyle>
+        <dxg:DataGridView.ColumnHeaderStyle>
+            <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
+        </dxg:DataGridView.ColumnHeaderStyle>
     </dxg:DataGridView>
 </ContentPage>
