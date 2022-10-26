@@ -70,6 +70,26 @@ namespace StudyN.Views
             AppointmentItem appointment = e.AppointmentInfo.Appointment;
             ShowAppointmentEditPage(appointment);
         }
+        private void Handle_onCalendarTap_FromWeekView1(object sender, SchedulerGestureEventArgs e)
+        {
+            if (e.AppointmentInfo == null)
+            {
+                ShowNewAppointmentEditPage(e.IntervalInfo);
+                return;
+            }
+            AppointmentItem appointment = e.AppointmentInfo.Appointment;
+            ShowAppointmentEditPage(appointment);
+        }
+        private void Handle_onCalendarTap_FromMonthView(object sender, SchedulerGestureEventArgs e)
+        {
+            if (e.AppointmentInfo == null)
+            {
+                ShowNewAppointmentEditPage(e.IntervalInfo);
+                return;
+            }
+            AppointmentItem appointment = e.AppointmentInfo.Appointment;
+            ShowAppointmentEditPage(appointment);
+        }
 
         private async void Handle_onCalendarHold_FromDayView(object sender, SchedulerGestureEventArgs e)
         {
@@ -85,7 +105,34 @@ namespace StudyN.Views
                 }
             }
         }
+        private async void Handle_onCalendarHold_FromMonthView(object sender, SchedulerGestureEventArgs e)
+        {
+            if (e.AppointmentInfo != null)
+            {
+                AppointmentItem appointment = e.AppointmentInfo.Appointment;
+                bool answer = await DisplayAlert("Are you sure?",
+                    appointment.Subject + " will be deleted.", "Yes", "No");
 
+                if (answer == true)
+                {
+                    SchedulerStorage.RemoveAppointment(appointment);
+                }
+            }
+        }
+        private async void Handle_onCalendarHold_FromView(object sender, SchedulerGestureEventArgs e)
+        {
+            if (e.AppointmentInfo != null)
+            {
+                AppointmentItem appointment = e.AppointmentInfo.Appointment;
+                bool answer = await DisplayAlert("Are you sure?",
+                    appointment.Subject + " will be deleted.", "Yes", "No");
+
+                if (answer == true)
+                {
+                    SchedulerStorage.RemoveAppointment(appointment);
+                }
+            }
+        }
         private void ShowAppointmentEditPage(AppointmentItem appointment)
         {
             AppointmentEditPage appEditPage = new(appointment, SchedulerStorage);
@@ -100,7 +147,7 @@ namespace StudyN.Views
 
         // estep: I know there must be a better way to do this, but I just want to try it
         //        since it won't let me use the same storage name for both SchedulerDataStorage objects
-        //        (so I have to have this kind of repeated code)
+       //        (so I have to have this kind of repeated code)
         private void Handle_onCalendarTap_FromWeekView(object sender, SchedulerGestureEventArgs e)
         {
             if (e.AppointmentInfo == null)
@@ -140,10 +187,7 @@ namespace StudyN.Views
             Navigation.PushAsync(appEditPage);
         }
 
-        private void Handle_onCalendarTap_FromMonthView(object sender, SchedulerGestureEventArgs e)
-        {
-            //OnDailyClicked(sender, e); // estepanek: not sure if this is causing the devexpress.maui.navigation assembly not found error, because it seems to go away when I comment this out
-        }
+       
 
         public void OnNewStudynEvent(StudynEvent sEvent)
         {
