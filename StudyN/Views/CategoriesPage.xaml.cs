@@ -12,5 +12,15 @@ namespace StudyN.Views
 			InitializeComponent();
 			BindingContext = new CategoriesViewModel();
 		}
+
+		private async void AddButtonClicked(object sender, EventArgs e)
+		{
+
+		}
+
+		private async void CellClicked(object sender, DataGridGestureEventArgs e)
+		{
+
+		}
 	}
 }

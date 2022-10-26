@@ -4,8 +4,15 @@
              xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
              x:Class="StudyN.Views.CategoriesPage"
              Title="Categories">
+    <!-- Takes user to add category page -->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add"
+                     Clicked="AddButtonClicked"
+                     IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+    </ContentPage.ToolbarItems>
     <!-- DataGrid of Categories -->
     <dxg:DataGridView ItemsSource="{Binding AppointmentCategories}"
+                      Tap="CellClicked"
                       ColumnHeaderHeight="0">
         <dxg:DataGridView.Columns>
             <!-- Doesn't work unfortunatly -->

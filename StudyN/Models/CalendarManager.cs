@@ -13,7 +13,7 @@ namespace StudyN.Models
     {
         public static DateTime BaseDate = DateTime.Today;
 
-        public static string[] AppointmentCategoryTitles = { "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work"};
+        public static string[] AppointmentCategoryTitles = { "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work", "Uncategorized"};
         public static Color[] AppointmentCategoryColors = { Color.FromArgb("#3333FF"),   // dark blue
                                                         Color.FromArgb("#008A00"),   // green                                                        
                                                         Color.FromArgb("#D80073"),   // dark pink
@@ -21,7 +21,8 @@ namespace StudyN.Models
                                                         Color.FromArgb("#1BA1E2"),   // medium blue                                                        
                                                         Color.FromArgb("FF8000"),    // orange
                                                         Color.FromArgb("#A20025"),   // burgundy                                                         
-                                                        Color.FromArgb("#6A00FF") };   // purple
+                                                        Color.FromArgb("#6A00FF"),   // purple
+                                                        Color.FromArgb("#D9D9D9")};  // grey
                                                                                       
         public static string[] AppointmentStatusTitles = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
         public static Color[] AppointmentStatusColors = { Color.FromArgb("00FF80"),   // light green
@@ -73,7 +74,7 @@ namespace StudyN.Models
             for (int i = 0; i < count; i++)
             {
                 AppointmentCategory cat = new AppointmentCategory();
-                cat.Id = i;
+                cat.Id = Guid.NewGuid();
                 cat.Caption = AppointmentCategoryTitles[i];
                 cat.Color = AppointmentCategoryColors[i];
                 AppointmentCategories.Add(cat);
@@ -120,6 +121,29 @@ namespace StudyN.Models
                         new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
 
             return appt;
+        }
+
+        /// <summary>
+        /// Function for creating a new category and adding it to category list
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <param name="categoryColor"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public AppointmentCategory CreateCategory(string categoryName, 
+                                                   Color categoryColor,
+                                                   Guid id = new Guid())
+        {
+            // Makes a new category
+            AppointmentCategory cat = new()
+            {
+                Id = id,
+                Caption = categoryName,
+                Color = categoryColor,
+            };
+            // Adds category to category list
+            AppointmentCategories.Add(cat);
+            return cat;
         }
 
         // Properly handle appointments associated with a newly completed task
