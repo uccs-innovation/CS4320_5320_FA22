@@ -135,6 +135,16 @@
                 Margin="1"
                 Clicked="HandleCompleteTaskClicked"
                 Command="{Binding ButtonVisibility}"/>
+
+            <Button
+                x:Name="TimerButton"
+                Text="{Binding IsStartOrStop}"
+                Grid.Row="7"
+                Grid.ColumnSpan="2"
+                CornerRadius="7"
+                Margin="1"
+                Clicked="HandleTimerOnOff"
+                Command="{Binding ButtonVisibility}"/>
         </Grid>
     </ContentPage.Content>
 

@@ -1,9 +1,11 @@
 namespace StudyN.Views;
 
+using Java.Security;
 using Microsoft.Maui.Animations;
 using StudyN.Models;
 using StudyN.Utilities;
 using StudyN.ViewModels;
+using static Android.Util.EventLogTags;
 
 public partial class AddTaskPage : ContentPage
 {
@@ -34,6 +36,20 @@ public partial class AddTaskPage : ContentPage
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
         DeleteTaskButton.IsVisible = editingExistingTask;
         CompleteTaskButton.IsVisible = editingExistingTask;
+
+        //Makes timer button visible
+        TimerButton.IsVisible = editingExistingTask;
+    }
+
+
+    private async void HandleTimerOnOff(object sender, EventArgs args)
+    {
+        //gets the current time
+        DateTime gettime = DateTime.Now;
+        //gets current taskid
+        //Guid taskid = GlobalTaskData.ToEdit.TaskId;
+
+        await Shell.Current.GoToAsync("..");
     }
 
     //This function will be used by the delete task button to delete the given task
