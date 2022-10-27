@@ -1,18 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
              xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
-             x:Class="StudyN.Views.HomePage"
-             Title="Today's View"
-             IconImageSource="charts">
-    <dxg:DataGridView ItemsSource="{Binding TaskList}"
-                      ShowAutoFilterRow="True"
-                      ColumnHeaderHeight="0">
+             xmlns:ViewModels="clr-namespace:StudyN.ViewModels"
+             xmlns:local="clr-namespace:StudyN.Views"
+             Title="Todays View"
+             IconImageSource="grid"
+             x:Class="StudyN.Views.HomePage">
+
+    <ContentPage.BindingContext>
+        <ViewModels:HomeViewModel />
+    </ContentPage.BindingContext>
+
+    <dxg:DataGridView x:Name ="myList" ItemsSource="{Binding TaskList}"
+                      ShowAutoFilterRow="False"
+                      DoubleTap="EditAppointment"
+                      ColumnHeaderHeight="60">
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
-            <dxg:TextColumn FieldName="Name" Caption="Task" AutoFilterCondition="Contains" />
-            <dxg:DateColumn x:Name="DateFilter" FieldName="DueTime" Caption="Due" DisplayFormat="h:mm tt" AutoFilterCondition="Equals" AutoFilterValue=""/>
+            <!-- AutoFilter is not shown to user to prevent them from manually filtering the Todays View. AutoFilterCondition is set to Equal so that any task that has the same day as today will be shown.-->
+            <dxg:TextColumn FieldName="Name" Caption="Task">
+                <dxg:TextColumn.HeaderContentTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Label Text="Task" />
+                        </StackLayout>
+                    </DataTemplate>
+                </dxg:TextColumn.HeaderContentTemplate>
+            </dxg:TextColumn>
+            <dxg:DateColumn AllowAutoFilter="False" FieldName="StartTime" Caption="Start" DisplayFormat="hh:mmtt">
+                <dxg:DateColumn.HeaderContentTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Label Text="Start Time" />
+                        </StackLayout>
+                    </DataTemplate>
+                </dxg:DateColumn.HeaderContentTemplate>
+            </dxg:DateColumn>
+            <dxg:DateColumn x:Name="DateFilter" FieldName="DueTime" Caption="Due" DisplayFormat="hh:mm tt" AutoFilterCondition="Equals" AutoFilterValue="">
+                <dxg:DateColumn.HeaderContentTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Label Text="Due Time" />
+                        </StackLayout>
+                    </DataTemplate>
+                </dxg:DateColumn.HeaderContentTemplate>
+            </dxg:DateColumn>
         </dxg:DataGridView.Columns>
         <!--Customize the appearance of group row.-->
         <dxg:DataGridView.GroupRowStyle>
@@ -26,12 +59,5 @@
         <dxg:DataGridView.ColumnHeaderStyle>
             <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
         </dxg:DataGridView.ColumnHeaderStyle>
-        <dxg:DataGridView.TotalSummaries>
-            <dxg:GridColumnSummary FieldName="Percent" Type="Custom" 
-                                   DisplayFormat="Total Completion: {0}%"/>
-        </dxg:DataGridView.TotalSummaries>
-        <dxg:DataGridView.TotalSummaryStyle>
-            <dxg:TotalSummaryStyle FontSize="16"/>
-        </dxg:DataGridView.TotalSummaryStyle>
     </dxg:DataGridView>
 </ContentPage>
