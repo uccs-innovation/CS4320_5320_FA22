@@ -14,9 +14,9 @@ public partial class AddTaskPage : ContentPage
 {
     bool editingExistingTask;
     AutoScheduler autoScheduler;
-	public AddTaskPage()
-	{
-		InitializeComponent();
+    public AddTaskPage()
+    {
+        InitializeComponent();
         autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList);
 
         //This will check if we are editing an existing task or making a new one. We will know this based on if ToEdit is null or not
@@ -57,7 +57,6 @@ public partial class AddTaskPage : ContentPage
         GlobalTaskData.TaskManager.CompleteTask(GlobalTaskData.ToEdit.TaskId);
         GlobalTaskData.ToEdit = null;
         await Shell.Current.GoToAsync("..");
-        runAutoScheduler();
     }
 
     //This function will be used by the priority slider when its value has changed to set and keep track of the new value
@@ -80,27 +79,61 @@ public partial class AddTaskPage : ContentPage
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
 
+        TaskItem task;
 
         //Check to see if we are currently editing or adding a task
         if (editingExistingTask)
         {
-            HandleEditRecurrence(GlobalTaskData.ToEdit.TaskId);
-        }
-        else
-        {
-            //If we are not editing, use TaskManager's AddTask function to create and save the task
-            GlobalTaskData.TaskManager.AddTask(
+           
+            //Gets task list
+            ObservableCollection<TaskItem> taskList = new ObservableCollection<TaskItem>();
+            for (int i = 0; i < taskList.Count; i++)
+            {
+                //If information is not the same, then it gets saved for all
+                if (taskList[i].Description != this.description.Text)
+                {
+                    taskList[i].Description = this.description.Text;
+                }
+                if (taskList[i].DueTime != dateTime)
+                {
+                    taskList[i].DueTime = dateTime;
+                }
+                if (taskList[i].CompletionProgress != timeLogged)
+                {
+                    taskList[i].CompletionProgress = timeLogged;
+                }
+                if (taskList[i].TotalTimeNeeded != totalTime)
+                {
+                    taskList[i].TotalTimeNeeded = totalTime;
+                }
+            }
+            //Saves the informatiom when editing
+            GlobalTaskData.TaskManager.EditTask(
+                GlobalTaskData.ToEdit.TaskId,
                 this.name.Text,
                 this.description.Text,
                 dateTime,
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime);
+            task = GlobalTaskData.ToEdit;
+            GlobalTaskData.ToEdit = null;
+        }
+        else
+        {
+            //If we are not editing, use TaskManager's AddTask function to create and save the task
+            task = GlobalTaskData.TaskManager.AddTask(
+                    this.name.Text,
+                    this.description.Text,
+                    dateTime,
+                    (int)this.priority.Value,
+                    timeLogged,
+                    totalTime);
         }
         
         //Returning to the previous page
         await Shell.Current.GoToAsync("..");
-        runAutoScheduler();
+        runAutoScheduler(task.TaskId);
     }
 
     //This function will load the values held in each field of a task into the respective forms
@@ -122,9 +155,9 @@ public partial class AddTaskPage : ContentPage
         this.time.Time = DateTime.Now;
     }
 
-    void runAutoScheduler()
+    void runAutoScheduler(Guid taskId)
     {
-        autoScheduler.run();
+        autoScheduler.run(taskId);
         if (autoScheduler.taskPastDue)
         {
             string tasksString = "";
@@ -219,46 +252,4 @@ public partial class AddTaskPage : ContentPage
 
         }
     }
-    void HandleEditRecurrence(Guid id)
-    {
-        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
-        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
-        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
-            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-
-        //Gets task list
-        ObservableCollection<TaskItem> task = new ObservableCollection<TaskItem>();
-        for (int i = 0; i < task.Count; i++)
-        {
-            //If information is not the same, then it gets saved for all
-            if (task[i].Description != this.description.Text)
-            {
-                task[i].Description =this.description.Text;
-            }
-            if(task[i].DueTime != dateTime)
-            {
-                task[i].DueTime = dateTime;
-            }
-            if(task[i].CompletionProgress != timeLogged)
-            {
-                task[i].CompletionProgress = timeLogged;
-            }
-            if (task[i].TotalTimeNeeded != totalTime)
-            {
-                task[i].TotalTimeNeeded = totalTime;
-            }
-
-        }
-        //Saves the informatiom when editing
-        GlobalTaskData.TaskManager.EditTask(
-            GlobalTaskData.ToEdit.TaskId,
-            this.name.Text,
-            this.description.Text,
-            dateTime,
-            (int)this.priority.Value,
-            timeLogged,
-            totalTime);
-        GlobalTaskData.ToEdit = null;
-    }
-
 }

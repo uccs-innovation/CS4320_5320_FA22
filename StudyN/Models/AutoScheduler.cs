@@ -5,8 +5,10 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using DevExpress.Utils;
 using StudyN.Models;
+using StudyN.Utilities;
+using static StudyN.Utilities.StudynEvent;
 
-public class AutoScheduler
+public class AutoScheduler : StudynSubscriber
 { 
     public bool taskPastDue;
     public List<TaskItem> pastDueTasks;
@@ -23,7 +25,7 @@ public class AutoScheduler
     public List<DateTime> currentDates;
     private List<int> numPerDate;
     public AutoScheduler( ObservableCollection<TaskItem> TL )
-	{
+	  {
         taskPastDue = false;
         pastDueTasks = new List<TaskItem>();
         Tasklist = TL;
@@ -381,7 +383,7 @@ public class AutoScheduler
         calPosAssoc = new List<DateTime>();
     }
 
-    public void run()
+    public void run(Guid taskId)
     {
         Console.WriteLine("started running auto scheduler");
         refreshArrays();
@@ -396,11 +398,30 @@ public class AutoScheduler
         for(int i = 0; i < TaskBlockList.Count; i++)
         {
             Console.WriteLine(TaskBlockList[i].Name + ", Weight: " + weightAssoc[i] + ", startTime: " + calPosAssoc[i]);
-
         }
 
         Console.WriteLine("done running auto scheduler");
     }
 
-
+    public void OnNewStudynEvent(StudynEvent taskEvent)
+    {
+        if (taskEvent.EventType == StudynEventType.AddTask)
+        {
+            // Implement Later
+        }
+        else if (taskEvent.EventType == StudynEventType.EditTask)
+        {
+            // Implement later
+        }
+        else if (taskEvent.EventType == StudynEventType.DeleteTask)
+        {
+            // Implement later
+        }
+        else if (taskEvent.EventType == StudynEventType.CompleteTask)
+        {
+            // Console Logging just so we can see in the output something is happening
+            Console.WriteLine("Scheduler Has CompleteTask Events!");
+            GlobalAppointmentData.CalendarManager.TaskCompleted(taskEvent.Id);
+        }
+    }
 }

@@ -9,14 +9,7 @@ namespace StudyN.ViewModels
         public HomeViewModel()
         {
             Title = "Dashboard";
-            //Items = new ObservableCollection<Item>();
         }
 
-        //public ObservableCollection<Item> Items { get; private set; }
-
-        async public void OnAppearing()
-        {
-            await FileManager.WaitForFileOp();
-        }
     }
 }
