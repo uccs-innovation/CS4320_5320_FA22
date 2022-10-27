@@ -27,5 +27,10 @@
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
     </TabBar>
+    <FlyoutItem Title="Import Calendar">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate local:AddIcsPage}" />
+        </Tab>
+    </FlyoutItem>
 
 </Shell>
