@@ -1,4 +1,5 @@
-﻿using StudyN.Utilities;
+﻿using Newtonsoft.Json;
+using StudyN.Utilities;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -24,6 +25,9 @@ namespace StudyN.Models
                                             priority,
                                             CompletionProgress,
                                             TotalTimeNeeded);
+
+
+
 
             //This will add the tasks to the list
             TaskList.Add(newTask);
@@ -69,8 +73,11 @@ namespace StudyN.Models
                                 int priority,
                                 int CompletionProgress,
                                 int TotalTimeNeeded,
+                                List<TaskItemTime> TimeList = null,
                                 bool updateFile = true)
         {
+
+
             //Retrieving the task
             TaskItem task = GetTask(taskId);
 
@@ -86,10 +93,10 @@ namespace StudyN.Models
             task.Priority = priority;
             task.CompletionProgress = CompletionProgress;
             task.TotalTimeNeeded = TotalTimeNeeded;
+            task.TimeList = TimeList;
 
             //Updating the tasks's file
             sendFileUpdate(FileManager.Operation.EditTask, taskId, updateFile);
-
             return true;
         }
 
@@ -169,7 +176,9 @@ namespace StudyN.Models
             foreach (string file in taskfilelist)
             {
                 jsonfiletext = File.ReadAllText(file);
-                TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                //Console.WriteLine(jsonfiletext);
+                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext); 
+                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
                 TaskList.Add(task);
             }
 
@@ -178,7 +187,9 @@ namespace StudyN.Models
             foreach (string file in completedfiles)
             {
                 jsonfiletext = File.ReadAllText(file);
-                TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+
+                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
                 CompletedTasks.Add(task);
             }
         }
