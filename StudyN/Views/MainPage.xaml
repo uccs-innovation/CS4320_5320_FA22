@@ -22,9 +22,13 @@
         <Tab Title="Tasks" Icon="grid">
             <ShellContent ContentTemplate="{DataTemplate local:TaskPage}"/>
         </Tab>
-
+        
         <Tab Title="Analytics" Icon="charts">
             <ShellContent ContentTemplate="{DataTemplate local:AnalyticsPage}" />
+        </Tab>
+        
+        <Tab Title="Categories" Icon="popup">
+            <ShellContent ContentTemplate="{DataTemplate local:CategoriesPage}"/>
         </Tab>
         
         <Tab Title="Settings" Icon="info">
