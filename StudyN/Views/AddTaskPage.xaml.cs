@@ -79,11 +79,45 @@ public partial class AddTaskPage : ContentPage
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
 
+        TaskItem task;
 
         //Check to see if we are currently editing or adding a task
         if (editingExistingTask)
         {
-            HandleEditRecurrence(GlobalTaskData.ToEdit.TaskId);
+
+            //Gets task list
+            ObservableCollection<TaskItem> taskList = new ObservableCollection<TaskItem>();
+            for (int i = 0; i < taskList.Count; i++)
+            {
+                //If information is not the same, then it gets saved for all
+                if (taskList[i].Description != this.description.Text)
+                {
+                    taskList[i].Description = this.description.Text;
+                }
+                if (taskList[i].DueTime != dateTime)
+                {
+                    taskList[i].DueTime = dateTime;
+                }
+                if (taskList[i].CompletionProgress != timeLogged)
+                {
+                    taskList[i].CompletionProgress = timeLogged;
+                }
+                if (taskList[i].TotalTimeNeeded != totalTime)
+                {
+                    taskList[i].TotalTimeNeeded = totalTime;
+                }
+            }
+            //Saves the informatiom when editing
+            GlobalTaskData.TaskManager.EditTask(
+                GlobalTaskData.ToEdit.TaskId,
+                this.name.Text,
+                this.description.Text,
+                dateTime,
+                (int)this.priority.Value,
+                timeLogged,
+                totalTime);
+            task = GlobalTaskData.ToEdit;
+            GlobalTaskData.ToEdit = null;
         }
         else
         {
@@ -96,7 +130,7 @@ public partial class AddTaskPage : ContentPage
                     timeLogged,
                     totalTime);
         }
-        
+
         //Returning to the previous page
         await Shell.Current.GoToAsync("..");
         runAutoScheduler(task.TaskId);
@@ -130,28 +164,11 @@ public partial class AddTaskPage : ContentPage
             foreach (TaskItem task in autoScheduler.pastDueTasks)
             {
                 tasksString += task.Name + ", ";
-            } 
+            }
             DisplayAlert("The following tasks cannot be completed on-time!", tasksString, "OK");
         }
     }
 
-    void OnCheckBoxDueDateChanged(object sender, CheckedChangedEventArgs e)
-    {
-        if(e.Value == true)
-        {
-            this.date.Date = DateTime.MaxValue;
-            this.time.Time = DateTime.MaxValue;
-            date.IsVisible = false;
-            time.IsVisible = false;
-        }
-        else if(e.Value == false)
-        {
-            this.date.Date = DateTime.Now;
-            this.time.Time = DateTime.Now;
-            date.IsVisible = true;
-            time.IsVisible = true;
-        }
-    }
 
     //These functions will be used to add recurrence of a selected task for day/week/month
     private void HandleRecurrenceDay(object sender, EventArgs e)
@@ -171,7 +188,7 @@ public partial class AddTaskPage : ContentPage
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime);
-            
+
         }
 
     }
@@ -184,7 +201,7 @@ public partial class AddTaskPage : ContentPage
 
         for (int i = 1; i <= 52; i++)
         {
-            dateTime = dateTime.AddDays(i*7); //every week
+            dateTime = dateTime.AddDays(i * 7); //every week
             //If we are not editing, use TaskManager's AddTask function to create and save the task
             GlobalTaskData.TaskManager.AddTask(
                 this.name.Text,
@@ -193,7 +210,7 @@ public partial class AddTaskPage : ContentPage
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime);
-            
+
         }
 
     }
@@ -218,46 +235,4 @@ public partial class AddTaskPage : ContentPage
 
         }
     }
-    void HandleEditRecurrence(Guid id)
-    {
-        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
-        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
-        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
-            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-
-        //Gets task list
-        ObservableCollection<TaskItem> task = new ObservableCollection<TaskItem>();
-        for (int i = 0; i < task.Count; i++)
-        {
-            //If information is not the same, then it gets saved for all
-            if (task[i].Description != this.description.Text)
-            {
-                task[i].Description =this.description.Text;
-            }
-            if(task[i].DueTime != dateTime)
-            {
-                task[i].DueTime = dateTime;
-            }
-            if(task[i].CompletionProgress != timeLogged)
-            {
-                task[i].CompletionProgress = timeLogged;
-            }
-            if (task[i].TotalTimeNeeded != totalTime)
-            {
-                task[i].TotalTimeNeeded = totalTime;
-            }
-
-        }
-        //Saves the informatiom when editing
-        GlobalTaskData.TaskManager.EditTask(
-            GlobalTaskData.ToEdit.TaskId,
-            this.name.Text,
-            this.description.Text,
-            dateTime,
-            (int)this.priority.Value,
-            timeLogged,
-            totalTime);
-        GlobalTaskData.ToEdit = null;
-    }
-
 }
