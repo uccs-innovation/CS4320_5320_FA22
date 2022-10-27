@@ -22,7 +22,7 @@ namespace StudyN.Models
         public void UpdateTaskItemTime(DateTime datetimetaken, Guid taskid)
         {
             if(this.TaskIsBeingTimed)
-            {
+            { //
                 this.taskitemtime.StopTime(datetimetaken);
                 this.TaskIsBeingTimed = false;
                 AddNewTimeTaskItemListOfTimes();
