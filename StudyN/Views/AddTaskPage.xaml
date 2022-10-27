@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyN.Views.AddTaskPage"
@@ -77,28 +77,28 @@
                 Margin="1"
                 x:Name="date" />
             
-            <!--Time Spent On Task So far Entry box-->
+            <!--Estimated Time to Complete Task-->
             <dxe:NumericEdit 
                 AllowNullValue="True"
                 DisplayFormat="n0"
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
-                LabelText="Hours Logged"
+                LabelText="Estimated Time"
                 IsLabelFloating="True"
                 Margin="1"
-                x:Name="tSpent"/>
+                x:Name="tComplete"/>
 
-            <!--Time Needed to Complete Task-->
+            <!--Actual Time to Complete Task-->
             <dxe:NumericEdit 
                 AllowNullValue="True"
                 DisplayFormat="n0"
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
                 Grid.Column="1"
-                LabelText="Total Hours Needed"
+                LabelText="Actual Time"
                 IsLabelFloating="True"
                 Margin="1"
-                x:Name="tComplete"/>
+                x:Name="tSpent"/>
 
             <!--Priority Slider and Label-->
             <Label x:Name="displayLabel"
