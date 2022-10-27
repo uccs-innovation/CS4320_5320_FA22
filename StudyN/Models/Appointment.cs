@@ -44,7 +44,7 @@ namespace StudyN.Models
 
     public class AppointmentCategory
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Caption { get; set; }
         public Color Color { get; set; }
     }
