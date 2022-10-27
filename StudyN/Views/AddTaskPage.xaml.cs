@@ -39,17 +39,32 @@ public partial class AddTaskPage : ContentPage
 
         //Makes timer button visible
         TimerButton.IsVisible = editingExistingTask;
+        //checks text of timer button. If it's not being tracked we want to see 
+        //track task. Otherwise we want to see stop tracking
+        if (!GlobalTaskData.ToEdit.BeingTimed) {
+            TimerButton.Text = "Track Task";
+        }
+        else {
+            TimerButton.Text = "Stop Trackking";
+        }
     }
 
 
-    private async void HandleTimerOnOff(object sender, EventArgs args)
+    void HandleTimerOnOff(object sender, EventArgs args)
     {
         //gets the current time
         DateTime gettime = DateTime.Now;
-        //gets current taskid
-        //Guid taskid = GlobalTaskData.ToEdit.TaskId;
 
-        await Shell.Current.GoToAsync("..");
+        //checks if current task is not being timed on button click
+        //if it is not being timed we want to change the text and change the property
+        if (!GlobalTaskData.ToEdit.BeingTimed) {
+            TimerButton.Text = "Stop Tracking";
+            GlobalTaskData.ToEdit.BeingTimed = true;
+        } else {
+            TimerButton.Text = "Track Task";
+            GlobalTaskData.ToEdit.BeingTimed = false;
+        }
+
     }
 
     //This function will be used by the delete task button to delete the given task

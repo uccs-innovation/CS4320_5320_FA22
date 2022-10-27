@@ -25,6 +25,7 @@
         public int CompletionProgress { get; set; } = 0;
         public int TotalTimeNeeded { get; set; } = 0;
         public int Priority { get; set; } = 3;
+        public bool BeingTimed { get; set; } = false;
 
         public double Percent
         {
