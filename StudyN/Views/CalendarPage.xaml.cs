@@ -20,6 +20,7 @@ namespace StudyN.Views
             ViewModel = new CalendarViewModel();
             BindingContext = _calendarDataView = new CalendarDataView(); //Use to pull data of CalendarData under Models
 
+
             EventBus.Subscribe(this);
 
             // Reuse data storage between all the views
@@ -80,7 +81,7 @@ namespace StudyN.Views
             AppointmentItem appointment = e.AppointmentInfo.Appointment;
             ShowAppointmentEditPage(appointment);
         }
-        private void Handle_onCalendarTap_FromMonthView(object sender, SchedulerGestureEventArgs e)
+        private async void Handle_onCalendarTap_FromMonthView(object sender, SchedulerGestureEventArgs e)
         {
             if (e.AppointmentInfo == null)
             {
@@ -88,7 +89,17 @@ namespace StudyN.Views
                 return;
             }
             AppointmentItem appointment = e.AppointmentInfo.Appointment;
-            ShowAppointmentEditPage(appointment);
+            bool answer = await DisplayAlert("Are you sure?",
+                    appointment.Subject + " will be edited.", "Yes", "No");
+            if (answer == true)
+            {
+                ShowAppointmentEditPage(appointment);
+            }
+            if (answer == false)
+            {
+                return;
+            }
+
         }
 
         private async void Handle_onCalendarHold_FromDayView(object sender, SchedulerGestureEventArgs e)
@@ -147,8 +158,8 @@ namespace StudyN.Views
 
         // estep: I know there must be a better way to do this, but I just want to try it
         //        since it won't let me use the same storage name for both SchedulerDataStorage objects
-       //        (so I have to have this kind of repeated code)
-        
+        //        (so I have to have this kind of repeated code)
+
 
         private async void Handle_onCalendarHold_FromWeekView(object sender, SchedulerGestureEventArgs e)
         {
@@ -178,7 +189,7 @@ namespace StudyN.Views
             Navigation.PushAsync(appEditPage);
         }
 
-       
+
 
         public void OnNewStudynEvent(StudynEvent sEvent)
         {
@@ -237,4 +248,4 @@ namespace StudyN.Views
 
 
     }
-} 
+}
