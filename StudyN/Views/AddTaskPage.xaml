@@ -30,7 +30,7 @@
             <!--Grid rows definitions-->
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
-                <RowDefinition Height="250" />
+                <RowDefinition Height="100" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="20" />
@@ -38,7 +38,7 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="20" />
-                <RowDefinition Height="250" />
+                <RowDefinition Height="150" />
             </Grid.RowDefinitions>
 
             <!--Grid column definitions-->
@@ -165,6 +165,7 @@
                 FontSize="16" />
             
             <CollectionView ItemsSource="{Binding TimeList}"
+                            x:Name="TimeListLog"
                             ItemsLayout="VerticalList"                            
                             Grid.Row="9"
                             Grid.ColumnSpan="2"
@@ -201,7 +202,7 @@
                                 FontAttributes="Italic" />
                             <Label 
                                 Grid.Column="3"
-                                Text="{Binding Duration}"
+                                Text="{Binding span}"
                                 FontAttributes="Italic" />
                         </Grid>
                     </DataTemplate>

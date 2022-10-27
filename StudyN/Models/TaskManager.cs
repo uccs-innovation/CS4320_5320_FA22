@@ -180,7 +180,22 @@ namespace StudyN.Models
                 TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext); 
                 //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
                 TaskList.Add(task);
+
+                if (task.TimeList != null)
+                {
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine("Writing out task times");
+                    foreach (TaskItemTime tasktime in task.TimeList)
+                    {
+                        Console.WriteLine("Time Start" + tasktime.start);
+                        Console.WriteLine("TimeStop" + tasktime.stop);
+                        Console.WriteLine("Timespanned" + tasktime.span);
+                    }
+                }
             }
+
+
 
             // gets completed tasks
             string[] completedfiles = FileManager.LoadCompletedFileNames();

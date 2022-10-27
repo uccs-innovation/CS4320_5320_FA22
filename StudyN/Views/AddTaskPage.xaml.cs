@@ -20,6 +20,8 @@ public partial class AddTaskPage : ContentPage
 		InitializeComponent();
         autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList);
 
+
+
         //This will check if we are editing an existing task or making a new one. We will know this based on if ToEdit is null or not
         if (GlobalTaskData.ToEdit != null)
         {
@@ -29,6 +31,28 @@ public partial class AddTaskPage : ContentPage
             BindingContext = new EditTaskViewModel();
             editingExistingTask = true;
             //CreateDummyTaskTimeLogData();
+            TimeListLog.ItemsSource = GlobalTaskData.ToEdit.TimeList;
+
+
+
+            //Debugging time log
+            Console.WriteLine("_____________________________");
+            Console.WriteLine("Task Name " + GlobalTaskData.ToEdit.Name);
+            Console.WriteLine("Task Times available:");
+            if(GlobalTaskData.ToEdit.TimeList != null)
+            {
+                foreach (TaskItemTime tasktime in GlobalTaskData.ToEdit.TimeList)
+                {
+                    Console.WriteLine("Start Time: " + tasktime.start);
+                    Console.WriteLine("Stop Time: " + tasktime.stop);
+                    Console.WriteLine("Time Span: " + tasktime.span);
+                }
+                Console.WriteLine("End of Edit Tasks Times");
+                Console.WriteLine("_____________________________");
+            }
+
+
+
         }
         else
         {
@@ -37,6 +61,8 @@ public partial class AddTaskPage : ContentPage
             editingExistingTask = false;
             SetValues();            
         }
+
+
 
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
         DeleteTaskButton.IsVisible = editingExistingTask;
