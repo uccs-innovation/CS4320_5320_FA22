@@ -17,9 +17,11 @@ public class AutoScheduler
     private List<double> weightAssoc;   //weightAssoc[0] corresponds to TaskBlockList[0], weightAssoc[1] corresponds to TaskBlockList[1]...
     public List<DateTime> calPosAssoc;  //calPosAssoc[0] corresponds to TaskBlockList[0], calPosAssoc[1] corresponds to TaskBlockList[1]...
 
-                                    //calPosAssoc holds the START TIMES of each task. The end time can be calculated using 
-                                    //task.TotalTimeNeeded * (1 - task.CompletionProgress / 100), and then adding that to the start time
-
+    //calPosAssoc holds the START TIMES of each task. The end time can be calculated using 
+    //task.TotalTimeNeeded * (1 - task.CompletionProgress / 100), and then adding that to the start time
+    private List<int> AllCurBlocks;
+    public List<DateTime> currentDates;
+    private List<int> numPerDate;
     public AutoScheduler( ObservableCollection<TaskItem> TL )
 	{
         taskPastDue = false;
@@ -148,6 +150,7 @@ public class AutoScheduler
                 taskBlock.TaskId = task.TaskId;
                 
                 TaskBlockList.Add(taskBlock);
+
             }
         }
 
@@ -259,13 +262,113 @@ public class AutoScheduler
     private void handleMaxTasksInADay()
     {
         //Loop through TaskBlockList
-          //Check if more than 4 TaskItems have the same GUID in one day
-            //If they do, spread them apart more if possible
-            //If not possible, dont change it
+        //Check if more than 4 TaskItems have the same GUID in one day
+        //If they do, spread them apart more if possible
+        //If not possible, dont change it
 
         //NOTES:
         //calPosAssoc is a list of the startTimes for each taskBlock.
 
+        foreach (var task in Tasklist)
+        {
+            Guid curId = task.TaskId;
+            
+
+            AllCurBlocks = new List<int>();
+            numPerDate = new List<int>();
+            currentDates = new List<DateTime>();
+            
+            //First, we need to find all instances of the current task
+            for (int i = 0; i < TaskBlockList.Count; i++)
+            {
+                if(TaskBlockList[i].TaskId == curId)
+                {
+                    AllCurBlocks.Add(i);
+                }
+            }
+
+            //This loop will count how many of this task is in each day
+            for (int i = 0; i < AllCurBlocks.Count; i++)
+            {
+
+                bool dateCaptured = false;
+                
+                //This loop will check to see if the current blocks date has already been found, and add to the amount of times its been found if so
+                for(int j = 0; j < currentDates.Count; j++)
+                {
+                    if(calPosAssoc[AllCurBlocks[i]].Date == currentDates[j].Date && dateCaptured == false)
+                    {
+                        dateCaptured = true;
+                        numPerDate[j] = numPerDate[j]+1;
+                    }
+                }
+
+                //If the date is not found, it will be added to the list
+                if(!dateCaptured)
+                {
+                    currentDates.Add(calPosAssoc[AllCurBlocks[i]].Date);
+                    numPerDate.Add(1);
+                }
+            }
+
+            //Displaying information
+            Console.WriteLine("CURRENT TASK: " + task.Name);
+            for (int i = 0; i < currentDates.Count; i++)
+            {
+                Console.WriteLine("CURRENT DATE: " + currentDates[i]);
+                Console.WriteLine("NUMBER OF BLOCKS ON THIS DAY: " + numPerDate[i]);
+                if(numPerDate[i] > 4)
+                {
+                    Console.WriteLine("WARNING: THERE ARE TOO MANY BLOCKS IN THIS DAY!!!");
+                }
+            }
+
+                /*bool foundNew = false;
+                bool foundCur = false;
+                bool canMove = true;
+                int howMany = 0;
+                int curTask = -1;
+
+               for (int i = 0; i < numPerDate.Count; i++)
+                {
+                    if (numPerDate[i] > 4)
+                    {
+                        howMany = numPerDate[i] - 4;
+                        while ((howMany > 0) && canMove == true)
+                        {
+                            for (int j = 0; j < TaskBlockList.Count && (foundNew != true); j++)
+                            {
+                                if (TaskBlockList[j].TaskId == curId && calPosAssoc[AllCurBlocks[j]].Date == currentDates[i].Date && foundCur != true)
+                                {
+                                    curTask = j;
+                                    foundCur = true;
+                                }
+                            }
+
+
+
+                            for (int j = 0; j < currentDates.Count && curTask > -1 && foundNew != true; j++)
+                            {
+                                if (numPerDate[j] < 4)
+                                {
+                                    calPosAssoc[curTask] = currentDates[j].Date;
+                                    foundNew = true;
+                                }
+                            }
+
+                            if(foundNew == false)
+                            {
+                                canMove = false;
+                            }
+                            else
+                            {
+                                howMany--;
+                            }
+                            Console.WriteLine("A");
+                        }
+                    }
+                }*/
+            }
     }
 
     private void refreshArrays()
@@ -287,6 +390,7 @@ public class AutoScheduler
         associateCalendarPositions();
         driveOverlapCorrection();
         checkForUnscheduables();
+        handleMaxTasksInADay();
         addToCalendar();
 
         for(int i = 0; i < TaskBlockList.Count; i++)
