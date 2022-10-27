@@ -4,10 +4,11 @@
     public static class GlobalTaskTimeData
     {
         //This is for the object that stores all of our tasks
-        //public static TaskTimeDataManager TaskManager { get; set; }
+        public static TaskTimeDataManager TaskTimeManager { get; set; }
 
         //This will be used to keep track of a task we are currently editing
         public static TaskItemTime CurrentlyTiming { get; set; }
+        
     }
 }
 

@@ -8,13 +8,16 @@ namespace StudyN.Models
     public class TaskTimeDataManager
     {
         //lets us know if a task is being timed
-        public bool itembeingtimed;
+        public bool TaskIsBeingTimed;
+        public Guid TaskidBeingTimed;
 
         //initializes the object
         public TaskTimeDataManager()
         {
-            this.itembeingtimed = false;
+            this.TaskIsBeingTimed = false;
         }
+
+
     }
     
     

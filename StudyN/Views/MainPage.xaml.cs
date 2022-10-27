@@ -12,6 +12,7 @@ namespace StudyN.Views
 
             GlobalTaskData.TaskManager = new TaskDataManager();
             GlobalTaskData.TaskManager.LoadFilesIntoLists();
+            GlobalTaskTimeData.TaskTimeManager  = new TaskTimeDataManager();
         }
     }
 }
