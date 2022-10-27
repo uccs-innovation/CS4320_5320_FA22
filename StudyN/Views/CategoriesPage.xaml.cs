@@ -21,6 +21,7 @@ namespace StudyN.Views
 		private async void AddButtonClicked(object sender, EventArgs e)
 		{
 			GlobalAppointmentData.EditCategory = null;
+			Routing.RegisterRoute(nameof(Views.AddCategoryPage), typeof(Views.AddCategoryPage));
 			await Shell.Current.GoToAsync(nameof(AddCategoryPage));
 		}
 
@@ -36,7 +37,8 @@ namespace StudyN.Views
 				// Get selected category for editing
 				AppointmentCategory cat = (AppointmentCategory)e.Item;
 				GlobalAppointmentData.EditCategory = cat;
-				await Shell.Current.GoToAsync(nameof(AddCategoryPage));
+                Routing.RegisterRoute(nameof(Views.AddCategoryPage), typeof(Views.AddCategoryPage));
+                await Shell.Current.GoToAsync(nameof(AddCategoryPage));
 			}
 		}
 	}

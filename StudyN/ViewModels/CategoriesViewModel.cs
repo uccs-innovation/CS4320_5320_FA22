@@ -2,15 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace StudyN.ViewModels
 {
-    public class CategoriesViewModel : BaseViewModel
+    public class CategoriesViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<AppointmentCategory> AppointmentCategories { get; private set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public ObservableCollection<AppointmentCategory> AppointmentCategories { get => GlobalAppointmentData.CalendarManager.AppointmentCategories; }
 
         void SetCategoriesList()
         {
@@ -22,8 +24,15 @@ namespace StudyN.ViewModels
         }
         public CategoriesViewModel()
         {
-            AppointmentCategories = new ObservableCollection<AppointmentCategory>();
-            SetCategoriesList();
+        }
+
+        protected void RaisePropertyChanged(string name)
+        {
+            Console.WriteLine("property changed");
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
         }
     }
 }

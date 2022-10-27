@@ -58,6 +58,7 @@ namespace StudyN.Views
 				cat = GlobalAppointmentData.EditCategory;
 				GlobalAppointmentData.EditCategory = null;
 			}
+			Routing.RegisterRoute(nameof(Views.CategoriesPage), typeof(Views.CategoriesPage));
 			await Shell.Current.GoToAsync("..");
 		}
 
@@ -80,7 +81,8 @@ namespace StudyN.Views
 		{
 			GlobalAppointmentData.CalendarManager.RemoveCategory(GlobalAppointmentData.EditCategory.Id);
 			GlobalAppointmentData.EditCategory= null;
-			await Shell.Current.GoToAsync("..");
+            Routing.RegisterRoute(nameof(Views.CategoriesPage), typeof(Views.CategoriesPage));
+            await Shell.Current.GoToAsync("..");
 		}
 	}
 }

@@ -143,9 +143,7 @@ namespace StudyN.Models
                 Color = categoryColor,
             };
             // Adds category to category list, make sure uncategorized is at bottom
-            AppointmentCategory uncategorized = AppointmentCategories[AppointmentCategories.Count - 1];
             AppointmentCategories.Insert(AppointmentCategories.Count - 1, cat);
-            AppointmentCategories.Add(uncategorized);
             return cat;
         }
 

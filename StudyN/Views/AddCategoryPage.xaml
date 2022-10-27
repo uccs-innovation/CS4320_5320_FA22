@@ -46,6 +46,7 @@
                 LabelText="Color (Write Hexedecimal)"
                 IsLabelFloating="True"
                 Margin="1"
+                Grid.Row="1"
                 x:Name="color" />
             <!-- Button for deleting category -->
             <Button
