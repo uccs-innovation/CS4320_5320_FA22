@@ -70,7 +70,7 @@ namespace StudyN.Views
             AppointmentItem appointment = e.AppointmentInfo.Appointment;
             ShowAppointmentEditPage(appointment);
         }
-        private void Handle_onCalendarTap_FromWeekView1(object sender, SchedulerGestureEventArgs e)
+        private void Handle_onCalendarTap_FromWeekView(object sender, SchedulerGestureEventArgs e)
         {
             if (e.AppointmentInfo == null)
             {
@@ -148,16 +148,7 @@ namespace StudyN.Views
         // estep: I know there must be a better way to do this, but I just want to try it
         //        since it won't let me use the same storage name for both SchedulerDataStorage objects
        //        (so I have to have this kind of repeated code)
-        private void Handle_onCalendarTap_FromWeekView(object sender, SchedulerGestureEventArgs e)
-        {
-            if (e.AppointmentInfo == null)
-            {
-                ShowNewAppointmentEditPage_WeekView(e.IntervalInfo);
-                //return;
-            }
-            AppointmentItem appointment = e.AppointmentInfo.Appointment;
-            ShowAppointmentEditPage_WeekView(appointment);
-        }
+        
 
         private async void Handle_onCalendarHold_FromWeekView(object sender, SchedulerGestureEventArgs e)
         {
