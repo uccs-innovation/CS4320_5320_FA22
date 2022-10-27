@@ -11,6 +11,8 @@ public partial class AddTaskPage : ContentPage
 {
     bool editingExistingTask;
     AutoScheduler autoScheduler;
+
+    //initialize add task page
 	public AddTaskPage()
 	{
 		InitializeComponent();
@@ -52,8 +54,7 @@ public partial class AddTaskPage : ContentPage
 
     void HandleTimerOnOff(object sender, EventArgs args)
     {
-        //gets the current time
-        DateTime gettime = DateTime.Now;
+
 
         //Checks if other task is being timed. If it is we want to send an alert to turn off
         //timing of the other task May make popup window have buttons that does this for user
@@ -61,6 +62,9 @@ public partial class AddTaskPage : ContentPage
         {
 
         } else {
+            //gets the current time
+            DateTime gettime = DateTime.Now;
+            Guid taskid = GlobalTaskData.ToEdit.TaskId;
 
             //checks if current task is not being timed on button click
             //if it is not being timed we want to change the text and change the property
@@ -69,8 +73,7 @@ public partial class AddTaskPage : ContentPage
                 //update button text
                 TimerButton.Text = "Stop Tracking";
                 //flag for which task is being timed
-                GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed = GlobalTaskData.ToEdit.TaskId;
-                GlobalTaskTimeData.TaskTimeManager.TaskIsBeingTimed = true;
+                GlobalTaskTimeData.TaskTimeManager.UpdateTaskItemTime(gettime, taskid);
             }
             else
             {

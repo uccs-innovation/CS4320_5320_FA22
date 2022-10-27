@@ -9,12 +9,27 @@ namespace StudyN.Models
     {
         //lets us know if a task is being timed
         public bool TaskIsBeingTimed;
-        public Guid TaskidBeingTimed;
+        public Guid TheTaskidBeingTimed;
+        public TaskItemTime taskitemtime;
 
         //initializes the object
         public TaskTimeDataManager()
         {
             this.TaskIsBeingTimed = false;
+        }
+
+        public void UpdateTaskItemTime(DateTime datetimetaken, Guid task)
+        {
+            if(this.TaskIsBeingTimed)
+            {
+                this.taskitemtime.StopTime(datetimetaken);
+                this.TaskIsBeingTimed = false;
+                //add to list of task times here
+            } else {
+                this.taskitemtime = new TaskItemTime(datetimetaken);
+                this.TaskIsBeingTimed = true;
+                this.TheTaskidBeingTimed = task;
+            }
         }
 
 
