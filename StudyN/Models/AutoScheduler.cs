@@ -277,6 +277,8 @@ public class AutoScheduler
             AllCurBlocks = new List<int>();
             numPerDate = new List<int>();
             currentDates = new List<DateTime>();
+            
+            //First, we need to find all instances of the current task
             for (int i = 0; i < TaskBlockList.Count; i++)
             {
                 if(TaskBlockList[i].TaskId == curId)
@@ -285,12 +287,13 @@ public class AutoScheduler
                 }
             }
 
+            //This loop will count how many of this task is in each day
             for (int i = 0; i < AllCurBlocks.Count; i++)
             {
 
-                Console.WriteLine(TaskBlockList[AllCurBlocks[i]].Name + ", Weight: " + weightAssoc[AllCurBlocks[i]] + ", startTime: " + calPosAssoc[AllCurBlocks[i]] + ", date:" + calPosAssoc[AllCurBlocks[i]]);
-                
                 bool dateCaptured = false;
+                
+                //This loop will check to see if the current blocks date has already been found, and add to the amount of times its been found if so
                 for(int j = 0; j < currentDates.Count; j++)
                 {
                     if(calPosAssoc[AllCurBlocks[i]].Date == currentDates[j].Date && dateCaptured == false)
@@ -300,12 +303,15 @@ public class AutoScheduler
                     }
                 }
 
+                //If the date is not found, it will be added to the list
                 if(!dateCaptured)
                 {
                     currentDates.Add(calPosAssoc[AllCurBlocks[i]].Date);
                     numPerDate.Add(1);
                 }
             }
+
+            //Displaying information
             Console.WriteLine("CURRENT TASK: " + task.Name);
             for (int i = 0; i < currentDates.Count; i++)
             {
