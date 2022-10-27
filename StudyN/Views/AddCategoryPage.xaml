@@ -20,7 +20,9 @@
             <!-- Grid Row Definition -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
                 <RowDefinition Height="500" />
+                <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <!-- Get name of category from user -->
@@ -49,7 +51,7 @@
             <Button
                 x:Name="RemoveButton"
                 Text="Remove Category"
-                Grid.Row="2"
+                Grid.Row="3"
                 CornerRadius="7"
                 Margin="1"
                 Clicked="RemoveButtonClicked"
