@@ -27,6 +27,7 @@
         public int Priority { get; set; } = 3;
         public bool BeingTimed { get; set; } = false;
 
+
         public double Percent
         {
             get

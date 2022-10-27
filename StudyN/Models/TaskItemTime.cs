@@ -3,7 +3,7 @@
     public class TaskItemTime
     {
         //gets start time of a newly timed item
-        public TaskItemTime(DateTime start)
+        public TaskItemTime(DateTime start, Guid taskid)
         {
             Console.WriteLine("Starting task tieming");
             this.start = start;
@@ -19,6 +19,7 @@
 
         public DateTime start { get; set; }
         public DateTime stop { get; set; }
+        public Guid taskid { get; set; }
 
 
 

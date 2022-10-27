@@ -18,7 +18,7 @@ namespace StudyN.Models
             this.TaskIsBeingTimed = false;
         }
 
-        public void UpdateTaskItemTime(DateTime datetimetaken, Guid task)
+        public void UpdateTaskItemTime(DateTime datetimetaken, Guid taskid)
         {
             if(this.TaskIsBeingTimed)
             {
@@ -26,9 +26,9 @@ namespace StudyN.Models
                 this.TaskIsBeingTimed = false;
                 //add to list of task times here
             } else {
-                this.taskitemtime = new TaskItemTime(datetimetaken);
+                this.taskitemtime = new TaskItemTime(datetimetaken, taskid);
                 this.TaskIsBeingTimed = true;
-                this.TheTaskidBeingTimed = task;
+                this.TheTaskidBeingTimed = taskid;
             }
         }
 

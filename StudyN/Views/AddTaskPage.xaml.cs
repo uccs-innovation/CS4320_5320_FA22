@@ -54,17 +54,19 @@ public partial class AddTaskPage : ContentPage
 
     void HandleTimerOnOff(object sender, EventArgs args)
     {
-
+        Guid currenttaskid = GlobalTaskData.ToEdit.TaskId;
 
         //Checks if other task is being timed. If it is we want to send an alert to turn off
         //timing of the other task May make popup window have buttons that does this for user
         if (GlobalTaskTimeData.TaskTimeManager.TaskIsBeingTimed)
         {
+            if(currenttaskid == GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed)
+            {
 
+            }
         } else {
             //gets the current time
             DateTime gettime = DateTime.Now;
-            Guid taskid = GlobalTaskData.ToEdit.TaskId;
 
             //checks if current task is not being timed on button click
             //if it is not being timed we want to change the text and change the property
@@ -73,7 +75,7 @@ public partial class AddTaskPage : ContentPage
                 //update button text
                 TimerButton.Text = "Stop Tracking";
                 //flag for which task is being timed
-                GlobalTaskTimeData.TaskTimeManager.UpdateTaskItemTime(gettime, taskid);
+                GlobalTaskTimeData.TaskTimeManager.UpdateTaskItemTime(gettime, currenttaskid);
             }
             else
             {
