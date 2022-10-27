@@ -169,6 +169,23 @@ public partial class AddTaskPage : ContentPage
         }
     }
 
+    void OnCheckBoxDueDateChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if(e.Value == true)
+        {
+            this.date.Date = DateTime.MaxValue;
+            this.time.Time = DateTime.MaxValue;
+            date.IsVisible = false;
+            time.IsVisible = false;
+        }
+        else if(e.Value == false)
+        {
+            this.date.Date = DateTime.Now;
+            this.time.Time = DateTime.Now;
+            date.IsVisible = true;
+            time.IsVisible = true;
+        }
+    }
 
     //These functions will be used to add recurrence of a selected task for day/week/month
     private void HandleRecurrenceDay(object sender, EventArgs e)
