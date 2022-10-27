@@ -86,11 +86,11 @@
             
             <dxsch:WeekView x:Name="weekView"
                             Tap="Handle_onCalendarTap_FromWeekView"
-                            LongPress="Handle_onCalendarTap_FromWeekView">
+                            LongPress="Handle_onCalendarHold_FromWeekView">
             </dxsch:WeekView>
             <dxsch:MonthView x:Name="monthView"
                              Tap="Handle_onCalendarTap_FromMonthView"
-                             LongPress="Handle_onCalendarTap_FromMonthView">
+                             LongPress="Handle_onCalendarHold_FromMonthView">
             </dxsch:MonthView>
         </StackLayout>
         </ContentPage.Content>
