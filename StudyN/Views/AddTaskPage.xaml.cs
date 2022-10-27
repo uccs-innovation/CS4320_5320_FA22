@@ -1,9 +1,11 @@
 namespace StudyN.Views;
 
+using Java.Security;
 using Microsoft.Maui.Animations;
 using StudyN.Models;
 using StudyN.Utilities;
 using StudyN.ViewModels;
+using static Android.Util.EventLogTags;
 using System.Collections.ObjectModel;
 
 public partial class AddTaskPage : ContentPage
@@ -11,7 +13,9 @@ public partial class AddTaskPage : ContentPage
     bool editingExistingTask;
     AutoScheduler autoScheduler;
 
-    public AddTaskPage()
+    //initialize add task page
+	public AddTaskPage()
+
 	{
 		InitializeComponent();
         autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList);
@@ -37,6 +41,102 @@ public partial class AddTaskPage : ContentPage
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
         DeleteTaskButton.IsVisible = editingExistingTask;
         CompleteTaskButton.IsVisible = editingExistingTask;
+
+        //Makes timer button visible
+        TimerButton.IsVisible = editingExistingTask;
+        //checks text of timer button. If it's not being tracked we want to see 
+        //track task. Otherwise we want to see stop tracking
+        SetTimerButton();
+    }   
+
+    void SetTimerButton()
+    {
+        if (editingExistingTask)
+        {
+            Guid currenttaskid = GlobalTaskData.ToEdit.TaskId;
+            Guid taskbeingtimed = GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed;
+            Console.WriteLine("ALERT ALERT ALERT ");
+            //if task isn't being tracked or task is not task being tracked
+            if (currenttaskid != taskbeingtimed || !GlobalTaskTimeData.TaskTimeManager.TaskIsBeingTimed)
+            {
+                TimerButton.Text = "Track Task";
+                Console.WriteLine("ALERT Setting text to track task");
+            }
+            //if a task is being tracked and this is the task being tracked
+            else
+            {
+                Console.WriteLine("ALTERT setting text to stop tracking");
+                TimerButton.Text = "Stop Tracking";
+            }
+        }
+    }
+
+
+    async void HandleTimerOnOff(object sender, EventArgs args)
+    {
+        //gets guid of the current task.
+        Guid currenttaskid = GlobalTaskData.ToEdit.TaskId;
+        //gets the current time
+        DateTime gettime = DateTime.Now;
+
+        //Checks if other task is being timed. If it is we want to send an alert to turn off
+        //timing of the other task May make popup window have buttons that does this for user
+        if (GlobalTaskTimeData.TaskTimeManager.TaskIsBeingTimed)
+        {
+            //if the task is being time and the current task id matches the task being timed
+            if(currenttaskid == GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed)
+            {
+                TimerButton.Text = "Track Task";
+                GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
+                AlertUserOfTimeSpent();
+                await Shell.Current.GoToAsync("..");
+
+            }
+            //send alert to user that a different task is being tracked
+            else
+            {
+                AlertUserTaskTracking(gettime, currenttaskid);
+            }
+        } else {
+            //update button
+            TimerButton.Text = "Stop Tracking";
+            //start new timer
+            GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid);
+
+
+        }
+
+
+    }
+
+
+    async void AlertUserOfTimeSpent()
+    {
+        String alertstr = "You spent " +
+        GlobalTaskTimeData.TaskTimeManager.taskitemtime.span.Minutes +
+        " minutes on task " +
+        GlobalTaskData.TaskManager.GetTask(GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed).Name;
+        await DisplayAlert("Great Job!", alertstr, "OK");
+
+    }
+
+    private async void AlertUserTaskTracking(DateTime gettime, Guid currenttaskid)
+    {
+        //alert currently tracking
+        string alertstr = "Would you like to stop tracking task " +
+        GlobalTaskData.TaskManager.GetTask(GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed).Name
+        + " and begin tracking " + GlobalTaskData.ToEdit.Name;
+        bool tracknew = await DisplayAlert("Task Already Being Tracked", alertstr, "Yes", "No");
+
+        //if user wants to stop tracking old and start tracking new
+        if (tracknew)
+        {
+            TimerButton.Text = "Stop Tracking";
+            GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
+            AlertUserOfTimeSpent();
+            GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid);
+
+        }
     }
 
     // create some dummy data for now
