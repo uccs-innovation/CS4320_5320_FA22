@@ -35,7 +35,9 @@ namespace StudyN.Models
             TaskItem taskitem = GlobalTaskData.TaskManager.GetTask(TheTaskidBeingTimed);
 
             TimeSpan difference = this.taskitemtime.stop - this.taskitemtime.start;
+            this.taskitemtime.span = difference;
             taskitem.CompletionProgress += difference.Minutes;
+
             GlobalTaskData.TaskManager.EditTask(taskitem.TaskId,
                                                 taskitem.Name,
                                                 taskitem.Description,

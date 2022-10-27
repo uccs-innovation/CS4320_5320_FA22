@@ -19,6 +19,7 @@
 
         public DateTime start { get; set; }
         public DateTime stop { get; set; }
+        public TimeSpan span { get; set; }
 
 
 

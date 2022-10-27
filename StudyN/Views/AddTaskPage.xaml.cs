@@ -85,6 +85,7 @@ public partial class AddTaskPage : ContentPage
             {
                 TimerButton.Text = "Track Task";
                 GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
+                AlertUserOfTimeSpent();
                 await Shell.Current.GoToAsync("..");
 
             }
@@ -105,6 +106,17 @@ public partial class AddTaskPage : ContentPage
 
     }
 
+
+    async void AlertUserOfTimeSpent()
+    {
+        String alertstr = "You spent " +
+        GlobalTaskTimeData.TaskTimeManager.taskitemtime.span.Minutes +
+        " minutes on task " +
+        GlobalTaskData.TaskManager.GetTask(GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed).Name;
+        await DisplayAlert("Great Job!", alertstr, "OK");
+
+    }
+
     private async void AlertUserTaskTracking(DateTime gettime, Guid currenttaskid)
     {
         //alert currently tracking
@@ -118,6 +130,7 @@ public partial class AddTaskPage : ContentPage
         {
             TimerButton.Text = "Stop Tracking";
             GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
+            AlertUserOfTimeSpent();
             GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid);
 
         }
