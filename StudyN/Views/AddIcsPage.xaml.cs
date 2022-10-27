@@ -77,6 +77,13 @@ public partial class AddIcsPage : ContentPage
 
     //break massive string to individual appointments
     class GetAppointFromString {
+        private string line;
+        private int id;
+        private string name;
+        private DateTime start;
+        private TimeSpan duration;
+
+
         //constructor that takes string and calls convert to break it
         public GetAppointFromString(string r) {
             convert(r);        }
@@ -88,9 +95,31 @@ public partial class AddIcsPage : ContentPage
          * repeat with next event
         */
         private void convert(string response) {
+            //shit whole intro into the ether
             string sPattern = "BEGIN:VEVENT";
             int location = response.IndexOf(sPattern) + sPattern.Length + 1;
-            
+            response = response.Substring(location);
+
+            //split string into individual lines
+            string[] lines = response.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+
+            //search remaining lines
+            for (int i = 1; i < lines.Length; i++) {
+                //grab id of the appointment
+                if (lines[i].Contains("UID")) {
+                    line = lines[i];
+                    line = line.Substring(21);
+                    id = Convert.ToInt32(line);
+                }
+                //grab start time if only contains starttime
+                if (lines[i].Contains("DTSTART;"))
+                {
+                    line = lines[i];
+                    line = line.Substring(30);
+                    int time = Convert.ToInt32(line);
+
+                }
+            }
         }
     }
 }
