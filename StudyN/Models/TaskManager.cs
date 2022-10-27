@@ -38,7 +38,7 @@ namespace StudyN.Models
         //This will return a requested task using its id
         public TaskItem GetTask(Guid taskId)
         {
-            
+            Console.WriteLine("taskId=" + taskId);
             //Checking each item in the current task list
             foreach (TaskItem task in TaskList)
             {

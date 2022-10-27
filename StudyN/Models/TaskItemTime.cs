@@ -20,7 +20,14 @@
         public DateTime start { get; set; }
         public DateTime stop { get; set; }
 
-
+        //public String Duration
+        //{
+        //    get
+        //    {
+        //        TimeSpan duration = (stop - start);
+        //        return duration.ToString("hh':'mm");
+        //    }
+        //}
 
     }
 }
