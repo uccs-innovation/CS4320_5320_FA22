@@ -18,7 +18,7 @@
         <Tab Title="Add Event" Icon="image2vector">
             <ShellContent ContentTemplate="{DataTemplate local:AddEventPage}" />
         </Tab>
-        
+
         <Tab Title="Tasks" Icon="grid">
             <ShellContent ContentTemplate="{DataTemplate local:TaskPage}"/>
         </Tab>
@@ -27,10 +27,5 @@
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
     </TabBar>
-    <FlyoutItem Title="Import Calendar">
-        <Tab>
-            <ShellContent ContentTemplate="{DataTemplate local:AddIcsPage}" />
-        </Tab>
-    </FlyoutItem>
 
 </Shell>

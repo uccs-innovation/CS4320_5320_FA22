@@ -14,21 +14,21 @@
              ios:Page.UseSafeArea="true"
              x:Class="StudyN.Views.SettingsPage">
     <ContentPage.Content>
-        
-        
-        <Grid RowDefinitions="100,*,Auto">
-            <Image Source="background" HorizontalOptions="FillAndExpand" Aspect="Fill"/>
-                <StackLayout VerticalOptions="Center" Margin="0,10,0,10" Spacing="5">
-                    <!-- Buttons in settings page to change the colors, of just the buttons for now-->
-                    <Button
+        <StackLayout VerticalOptions="Center" Margin="0,10,0,10" Spacing="5">
+            <!-- Buttons in settings page to change the colors, of just the buttons for now-->
+            <Button
                         Text="Light mode"
                         Style="{StaticResource PrimaryButton}"
                         Clicked="Button_ClickedLight"/>
-                    <Button
+            <Button
                         Text="Dark Mode"
                         Style="{StaticResource PrimaryButton}"
                         Clicked="Button_ClickedDark"/>
-                </StackLayout>
-            </Grid>
+            <Button
+                        Text="Import Calendar"
+                        Style="{StaticResource PrimaryButton}"
+                        Clicked="Button_ClickedIcs" />
+
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

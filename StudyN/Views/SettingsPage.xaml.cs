@@ -31,5 +31,10 @@ namespace StudyN.Views
                 mergedDictionaries.Add(new Dictionary1());
             }
         }
+
+        private async void Button_ClickedIcs(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(AddIcsPage));
+        }
     }
 }
