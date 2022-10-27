@@ -179,6 +179,33 @@ namespace StudyN.Models
             return true;
         }
 
+        /// <summary>
+        /// Removes a category
+        /// </summary>
+        /// <param name="id"></param>
+        public void RemoveCategory(Guid id)
+        {
+            // Search for category
+            foreach (AppointmentCategory category in AppointmentCategories)
+            {
+                if(category.Id == id)
+                {
+                    // go through the appointments with the category
+                    foreach(Appointment appointment in Appointments)
+                    {
+                        if(appointment.LabelId == category)
+                        {
+                            // Make appointment uncategorized
+                            appointment.LabelId = AppointmentCategories[AppointmentCategories.Count-1];
+                        }
+                    }
+                    // Remove category
+                    AppointmentCategories.Remove(category);
+                    return;
+                }
+            }
+        }
+
         // Properly handle appointments associated with a newly completed task
         public void TaskCompleted(Guid uniqueId)
         {
