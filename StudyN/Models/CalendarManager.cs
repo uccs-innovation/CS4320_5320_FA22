@@ -143,8 +143,40 @@ namespace StudyN.Models
                 Color = categoryColor,
             };
             // Adds category to category list, make sure uncategorized is at bottom
-            AppointmentCategories.Insert(AppointmentCategories.Count - 2 ,cat);
+            AppointmentCategory uncategorized = AppointmentCategories[AppointmentCategories.Count - 1];
+            AppointmentCategories.Insert(AppointmentCategories.Count - 1, cat);
+            AppointmentCategories.Add(uncategorized);
             return cat;
+        }
+
+        /// <summary>
+        /// Edits an existing category
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <param name="categoryColor"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool EditCategory(string categoryName, 
+                                 Color categoryColor,
+                                 Guid id)
+        {
+            // Get the category
+            AppointmentCategory cat = null;
+            foreach (AppointmentCategory category in AppointmentCategories)
+            {
+                if(category.Id == id)
+                {
+                    cat = category;
+                }
+            }
+            if(cat == null)
+            {
+                return false;
+            }
+            // add new elements to category
+            cat.Caption = categoryName;
+            cat.Color = categoryColor;
+            return true;
         }
 
         // Properly handle appointments associated with a newly completed task
