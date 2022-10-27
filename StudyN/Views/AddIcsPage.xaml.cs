@@ -58,7 +58,7 @@ public partial class AddIcsPage : ContentPage
                 GetAppointFromString convert = new GetAppointFromString(responseBody);
 
                 //go to calanders page to show off new appointments
-                await Shell.Current.GoToAsync(nameof(CalendarPage));
+                //await Shell.Current.GoToAsync(nameof(CalendarPage));
             }
             catch (HttpRequestException ex) {
                 //what went wrong
@@ -66,7 +66,7 @@ public partial class AddIcsPage : ContentPage
                 Console.WriteLine("Message :{0} ", ex.Message);
 
                 //jump ship (so no breaky)
-                await Shell.Current.GoToAsync(nameof(SettingsPage));
+                //await Shell.Current.GoToAsync(nameof(SettingsPage));
             }
         }
     }
