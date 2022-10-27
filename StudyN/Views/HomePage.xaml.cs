@@ -9,7 +9,6 @@ namespace StudyN.Views
         {
             InitializeComponent();
             BindingContext = ViewModel = new HomeViewModel();
-            ViewModel.OnAppearing();
         }
 
         HomeViewModel ViewModel { get; }
@@ -17,7 +16,6 @@ namespace StudyN.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ViewModel.OnAppearing();
         }
     }
 }

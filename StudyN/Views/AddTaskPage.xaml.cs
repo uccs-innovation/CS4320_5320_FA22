@@ -14,9 +14,9 @@ public partial class AddTaskPage : ContentPage
 {
     bool editingExistingTask;
     AutoScheduler autoScheduler;
-	public AddTaskPage()
-	{
-		InitializeComponent();
+    public AddTaskPage()
+    {
+        InitializeComponent();
         autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList);
 
         //This will check if we are editing an existing task or making a new one. We will know this based on if ToEdit is null or not
@@ -57,7 +57,6 @@ public partial class AddTaskPage : ContentPage
         GlobalTaskData.TaskManager.CompleteTask(GlobalTaskData.ToEdit.TaskId);
         GlobalTaskData.ToEdit = null;
         await Shell.Current.GoToAsync("..");
-        runAutoScheduler();
     }
 
     //This function will be used by the priority slider when its value has changed to set and keep track of the new value
@@ -88,18 +87,18 @@ public partial class AddTaskPage : ContentPage
         else
         {
             //If we are not editing, use TaskManager's AddTask function to create and save the task
-            GlobalTaskData.TaskManager.AddTask(
-                this.name.Text,
-                this.description.Text,
-                dateTime,
-                (int)this.priority.Value,
-                timeLogged,
-                totalTime);
+            task = GlobalTaskData.TaskManager.AddTask(
+                    this.name.Text,
+                    this.description.Text,
+                    dateTime,
+                    (int)this.priority.Value,
+                    timeLogged,
+                    totalTime);
         }
         
         //Returning to the previous page
         await Shell.Current.GoToAsync("..");
-        runAutoScheduler();
+        runAutoScheduler(task.TaskId);
     }
 
     //This function will load the values held in each field of a task into the respective forms
@@ -121,9 +120,9 @@ public partial class AddTaskPage : ContentPage
         this.time.Time = DateTime.Now;
     }
 
-    void runAutoScheduler()
+    void runAutoScheduler(Guid taskId)
     {
-        autoScheduler.run();
+        autoScheduler.run(taskId);
         if (autoScheduler.taskPastDue)
         {
             string tasksString = "";

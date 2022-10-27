@@ -1,5 +1,7 @@
-﻿using Plugin.FirebasePushNotification;
+﻿using Android.App;
+using Plugin.FirebasePushNotification;
 using StudyN.Views;
+using StudyN.Utilities;
 using Application = Microsoft.Maui.Controls.Application;
 
 namespace StudyN
@@ -8,12 +10,18 @@ namespace StudyN
     {
         //private string _deviceToken;
         private NotificationService.NotificationService _notificaitonService;
-
         public App()
         {
             InitializeComponent();
 
             MainPage = new MainPage();
+
+            // Set the EventBus to asyncronously wait for task events
+            Task.Run(async () => await EventBus.WaitForStudynEvent());
+
+            // This will subscribe to event bus and live on that way
+            new FileManager();
+
             DependencyService.Register<NotificationService.NotificationService>();
             Routing.RegisterRoute(nameof(AddTaskPage), typeof(AddTaskPage));
             Routing.RegisterRoute(nameof(CalendarPage), typeof(CalendarPage));
@@ -22,6 +30,7 @@ namespace StudyN
             Routing.RegisterRoute(nameof(TaskPage), typeof(TaskPage));
             CrossFirebasePushNotification.Current.OnTokenRefresh += Current_OnTokenRefresh;
         }
+
 
         /// <summary>
         /// 
