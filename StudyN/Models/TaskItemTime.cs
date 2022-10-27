@@ -19,7 +19,6 @@
 
         public DateTime start { get; set; }
         public DateTime stop { get; set; }
-        public Guid taskid { get; set; }
 
 
 

@@ -43,13 +43,18 @@ public partial class AddTaskPage : ContentPage
         TimerButton.IsVisible = editingExistingTask;
         //checks text of timer button. If it's not being tracked we want to see 
         //track task. Otherwise we want to see stop tracking
+        SetTimerButton();
+    }   
+
+    void SetTimerButton()
+    {
         if (editingExistingTask)
         {
             Guid currenttaskid = GlobalTaskData.ToEdit.TaskId;
             Guid taskbeingtimed = GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed;
             Console.WriteLine("ALERT ALERT ALERT ");
             //if task isn't being tracked or task is not task being tracked
-            if (GlobalTaskData.ToEdit.BeingTimed || currenttaskid != taskbeingtimed)
+            if (currenttaskid != taskbeingtimed)
             {
                 TimerButton.Text = "Track Task";
                 Console.WriteLine("ALERT Setting text to track task");
@@ -61,7 +66,7 @@ public partial class AddTaskPage : ContentPage
                 TimerButton.Text = "Stop Tracking";
             }
         }
-    }   
+    }
 
 
     void HandleTimerOnOff(object sender, EventArgs args)
