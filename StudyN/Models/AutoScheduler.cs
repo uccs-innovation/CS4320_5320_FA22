@@ -306,15 +306,63 @@ public class AutoScheduler
                     numPerDate.Add(1);
                 }
             }
-
-           for (int i = 0; i < currentDates.Count; i++)
+            Console.WriteLine("CURRENT TASK: " + task.Name);
+            for (int i = 0; i < currentDates.Count; i++)
             {
-                if (numPerDate[i] > 4)
+                Console.WriteLine("CURRENT DATE: " + currentDates[i]);
+                Console.WriteLine("NUMBER OF BLOCKS ON THIS DAY: " + numPerDate[i]);
+                if(numPerDate[i] > 4)
                 {
-
+                    Console.WriteLine("WARNING: THERE ARE TOO MANY BLOCKS IN THIS DAY!!!");
                 }
             }
-        }
+
+                /*bool foundNew = false;
+                bool foundCur = false;
+                bool canMove = true;
+                int howMany = 0;
+                int curTask = -1;
+
+               for (int i = 0; i < numPerDate.Count; i++)
+                {
+                    if (numPerDate[i] > 4)
+                    {
+                        howMany = numPerDate[i] - 4;
+                        while ((howMany > 0) && canMove == true)
+                        {
+                            for (int j = 0; j < TaskBlockList.Count && (foundNew != true); j++)
+                            {
+                                if (TaskBlockList[j].TaskId == curId && calPosAssoc[AllCurBlocks[j]].Date == currentDates[i].Date && foundCur != true)
+                                {
+                                    curTask = j;
+                                    foundCur = true;
+                                }
+                            }
+
+
+
+                            for (int j = 0; j < currentDates.Count && curTask > -1 && foundNew != true; j++)
+                            {
+                                if (numPerDate[j] < 4)
+                                {
+                                    calPosAssoc[curTask] = currentDates[j].Date;
+                                    foundNew = true;
+                                }
+                            }
+
+                            if(foundNew == false)
+                            {
+                                canMove = false;
+                            }
+                            else
+                            {
+                                howMany--;
+                            }
+                            Console.WriteLine("A");
+                        }
+                    }
+                }*/
+            }
     }
 
     private void refreshArrays()
