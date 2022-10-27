@@ -23,11 +23,7 @@ namespace StudyN.Views
 		{
 			this.name.Text = this.name.Text == null ? "No Name" : this.name.Text;
 			// if input is invalid than make color black
-			if (this.color.Text == null)
-			{
-				this.color.Text = "#000000";
-			}
-			else if (!this.color.Text.StartsWith('#'))
+			if (this.color.Text == null || !this.color.Text.StartsWith('#'))
 			{
 				this.color.Text = "#000000";
 			}

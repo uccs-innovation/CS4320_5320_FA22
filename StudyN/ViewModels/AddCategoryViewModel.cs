@@ -9,4 +9,8 @@ namespace StudyN.ViewModels
     public class AddCategoryViewModel: BaseViewModel
     {
     }
+
+    public class EditCategoryViewModel: AddCategoryViewModel
+    {
+    }
 }
