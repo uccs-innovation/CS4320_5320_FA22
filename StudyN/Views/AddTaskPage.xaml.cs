@@ -24,7 +24,7 @@ public partial class AddTaskPage : ContentPage
             LoadValues();
             BindingContext = new EditTaskViewModel();
             editingExistingTask = true;
-            CreateDummyTaskTimeLogData();
+            //CreateDummyTaskTimeLogData();
         }
         else
         {
@@ -40,48 +40,48 @@ public partial class AddTaskPage : ContentPage
     }
 
     // create some dummy data for now
-    public ObservableCollection<TaskTimeItem> TaskTimeLog { get; private set; }
-    public class TaskTimeItem
-    {
-        public Guid TaskId { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+    //public ObservableCollection<TaskTimeItem> TaskTimeLog { get; private set; }
+    //public class TaskTimeItem
+    //{
+    //    public Guid TaskId { get; set; }
+    //    public DateTime StartTime { get; set; }
+    //    public DateTime EndTime { get; set; }
 
-        public String Duration
-        {
-            get
-            {
-                TimeSpan duration = (EndTime - StartTime);
-                return duration.ToString("hh':'mm");
-            }
-        }
+    //    public String Duration
+    //    {
+    //        get
+    //        {
+    //            TimeSpan duration = (EndTime - StartTime);
+    //            return duration.ToString("hh':'mm");
+    //        }
+    //    }
 
 
-        // Constructor
-        public TaskTimeItem(Guid taskId, DateTime startTime, DateTime endTime)
-        {
-            Console.WriteLine("In the TaskTimeItem constructor");
-            this.TaskId = taskId;
-            Console.WriteLine(taskId);
-            this.StartTime = startTime;
-            Console.WriteLine(startTime);
-            this.EndTime = endTime;
-            Console.WriteLine(endTime);
-        }
-    }
+    //    // Constructor
+    //    public TaskTimeItem(Guid taskId, DateTime startTime, DateTime endTime)
+    //    {
+    //        Console.WriteLine("In the TaskTimeItem constructor");
+    //        this.TaskId = taskId;
+    //        Console.WriteLine(taskId);
+    //        this.StartTime = startTime;
+    //        Console.WriteLine(startTime);
+    //        this.EndTime = endTime;
+    //        Console.WriteLine(endTime);
+    //    }
+    //}
 
-    private void CreateDummyTaskTimeLogData()
-    {
-        Console.WriteLine("=================================Creating dummy data for Task Time Log================================");
-        DateTime currentTime = DateTime.Now;        
-        TaskTimeLog = new ObservableCollection<TaskTimeItem>()
-        {
-            new TaskTimeItem(GlobalTaskData.ToEdit.TaskId, currentTime.AddHours(-4), currentTime.AddHours(-3)),
-            new TaskTimeItem(GlobalTaskData.ToEdit.TaskId, currentTime.AddHours(-2.5), currentTime.AddHours(-1.5)),
-            new TaskTimeItem(GlobalTaskData.ToEdit.TaskId, currentTime.AddHours(-1), currentTime)
-        };
+    //private void CreateDummyTaskTimeLogData()
+    //{
+    //    Console.WriteLine("=================================Creating dummy data for Task Time Log================================");
+    //    DateTime currentTime = DateTime.Now;        
+    //    TaskTimeLog = new ObservableCollection<TaskTimeItem>()
+    //    {
+    //        new TaskTimeItem(GlobalTaskData.ToEdit.TaskId, currentTime.AddHours(-4), currentTime.AddHours(-3)),
+    //        new TaskTimeItem(GlobalTaskData.ToEdit.TaskId, currentTime.AddHours(-2.5), currentTime.AddHours(-1.5)),
+    //        new TaskTimeItem(GlobalTaskData.ToEdit.TaskId, currentTime.AddHours(-1), currentTime)
+    //    };
 
-    }
+    //}
 
     //This function will be used by the delete task button to delete the given task
     private async void HandleDeleteTaskClicked(object sender, EventArgs args)
