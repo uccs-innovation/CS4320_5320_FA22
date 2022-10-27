@@ -136,50 +136,56 @@
                 Margin="1"
                 Clicked="HandleCompleteTaskClicked"
                 Command="{Binding ButtonVisibility}"/>
+
             <CollectionView ItemsSource="{Binding TaskTimeLog}"
-                Grid.Row="9"
-                Grid.ColumnSpan="2"
-                BackgroundColor="WhiteSmoke" 
-                VerticalScrollBarVisibility="Always"
-                Header="Time Tracker Log">
+                            EmptyView="No items to display"
+                            Grid.Row="8"
+                            Grid.ColumnSpan="2"
+                            BackgroundColor="WhiteSmoke"
+                            VerticalScrollBarVisibility="Always"
+                            Header="Time Tracker Log">  
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="4">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="20" />
-                                <RowDefinition Height="20" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="20" />
-                                <ColumnDefinition Width="100" />
-                                <ColumnDefinition Width="100" />
-                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Label 
-                                Grid.Row ="0" 
+                                Grid.Row="1" 
                                 Grid.Column="1"
                                 Text="Start Time" />
                             <Label 
-                                Grid.Row ="0" 
+                                Grid.Row="1" 
                                 Grid.Column="2"
                                 Text="End Time" />
                             <Label 
-                                Grid.Row ="0"
+                                Grid.Row="1"
                                 Grid.Column="3"
                                 Text="Duration" />
-                            <Image Grid.Column="0"
-                                Source="{Binding clock-svgrepo-com}"
+                            <Image                                
+                                Grid.Column="1"
+                                Source="{Binding clock_svgrepo}"
                                 Aspect="AspectFill"
                                 HeightRequest="10"
                                 WidthRequest="10" />
-                            <Label Grid.Column="1"
+                            <Label                                 
+                                Grid.Column="2"
                                 Text="{Binding StartTime}"
                                 FontAttributes="Italic" />
-                            <Label Grid.Column="2"
+                            <Label 
+                                Grid.Column="3"
                                 Text="{Binding EndTime}"
                                 FontAttributes="Italic" />
-                            <Label Grid.Column="3"
+                            <Label 
+                                Grid.Column="4"
                                 Text="{Binding Duration}"
                                 FontAttributes="Italic" />
                         </Grid>
