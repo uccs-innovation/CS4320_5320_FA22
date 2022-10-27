@@ -1,4 +1,5 @@
-﻿using DevExpress.Maui.Scheduler;
+﻿using Android.Gms.Tasks;
+using DevExpress.Maui.Scheduler;
 using StudyN.Utilities;
 using System.Collections.ObjectModel;
 using System.Text.Json;
@@ -19,31 +20,30 @@ namespace StudyN.Models
             this.TaskIsBeingTimed = false;
         }
 
-        public void UpdateTaskItemTime(DateTime datetimetaken, Guid taskid)
+        public void StartNew(DateTime datetimetaken, Guid taskid)
         {
-            if(this.TaskIsBeingTimed)
-            { //
-                this.taskitemtime.StopTime(datetimetaken);
-                this.TaskIsBeingTimed = false;
-                AddNewTimeTaskItemListOfTimes();
+            this.taskitemtime = new TaskItemTime(datetimetaken, taskid);
+            this.TaskIsBeingTimed = true;
+            this.TheTaskidBeingTimed = taskid;
+        }
 
-                TaskItem taskitem = GlobalTaskData.TaskManager.GetTask(TheTaskidBeingTimed);
-                GlobalTaskData.TaskManager.EditTask(taskitem.TaskId,
-                                                    taskitem.Name,
-                                                    taskitem.Description,
-                                                    taskitem.DueTime,
-                                                    taskitem.Priority,
-                                                    taskitem.CompletionProgress,
-                                                    taskitem.TotalTimeNeeded,
-                                                    taskitem.TimeList);
+        public void StopCurrent(DateTime datetimetaken)
+        {
+            this.taskitemtime.StopTime(datetimetaken);
+            this.TaskIsBeingTimed = false;
+            AddNewTimeTaskItemListOfTimes();
+            TaskItem taskitem = GlobalTaskData.TaskManager.GetTask(TheTaskidBeingTimed);
 
-
-                //add to list of task times here
-            } else {
-                this.taskitemtime = new TaskItemTime(datetimetaken, taskid);
-                this.TaskIsBeingTimed = true;
-                this.TheTaskidBeingTimed = taskid;
-            }
+            TimeSpan difference = this.taskitemtime.stop - this.taskitemtime.start;
+            taskitem.CompletionProgress += difference.Minutes;
+            GlobalTaskData.TaskManager.EditTask(taskitem.TaskId,
+                                                taskitem.Name,
+                                                taskitem.Description,
+                                                taskitem.DueTime,
+                                                taskitem.Priority,
+                                                taskitem.CompletionProgress,
+                                                taskitem.TotalTimeNeeded,
+                                                taskitem.TimeList);
         }
 
         public void AddNewTimeTaskItemListOfTimes()

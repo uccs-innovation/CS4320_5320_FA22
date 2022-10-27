@@ -54,7 +54,7 @@ public partial class AddTaskPage : ContentPage
             Guid taskbeingtimed = GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed;
             Console.WriteLine("ALERT ALERT ALERT ");
             //if task isn't being tracked or task is not task being tracked
-            if (currenttaskid != taskbeingtimed)
+            if (currenttaskid != taskbeingtimed || !GlobalTaskTimeData.TaskTimeManager.TaskIsBeingTimed)
             {
                 TimerButton.Text = "Track Task";
                 Console.WriteLine("ALERT Setting text to track task");
@@ -69,12 +69,13 @@ public partial class AddTaskPage : ContentPage
     }
 
 
-    void HandleTimerOnOff(object sender, EventArgs args)
+    async void HandleTimerOnOff(object sender, EventArgs args)
     {
         //gets guid of the current task.
         Guid currenttaskid = GlobalTaskData.ToEdit.TaskId;
         //gets the current time
         DateTime gettime = DateTime.Now;
+
         //Checks if other task is being timed. If it is we want to send an alert to turn off
         //timing of the other task May make popup window have buttons that does this for user
         if (GlobalTaskTimeData.TaskTimeManager.TaskIsBeingTimed)
@@ -83,30 +84,43 @@ public partial class AddTaskPage : ContentPage
             if(currenttaskid == GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed)
             {
                 TimerButton.Text = "Track Task";
-                GlobalTaskTimeData.TaskTimeManager.UpdateTaskItemTime(gettime, currenttaskid);
-            } 
+                GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
+                await Shell.Current.GoToAsync("..");
+
+            }
             //send alert to user that a different task is being tracked
             else
             {
-                int x = 2 + 1;
+                AlertUserTaskTracking(gettime, currenttaskid);
             }
         } else {
-            //checks if current task is not being timed on button click
-            //if it is not being timed we want to change the text and change the property
-            if (!GlobalTaskData.ToEdit.BeingTimed)
-            {
-                //update button text
-                TimerButton.Text = "Stop Tracking";
-                //flag for which task is being timed
-                GlobalTaskTimeData.TaskTimeManager.UpdateTaskItemTime(gettime, currenttaskid);
-            }
-            else
-            {
-                GlobalTaskTimeData.TaskTimeManager.TaskIsBeingTimed = false;
-            }
+            //update button
+            TimerButton.Text = "Stop Tracking";
+            //start new timer
+            GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid);
+
+
         }
 
 
+    }
+
+    private async void AlertUserTaskTracking(DateTime gettime, Guid currenttaskid)
+    {
+        //alert currently tracking
+        string alertstr = "Would you like to stop tracking task " +
+        GlobalTaskData.TaskManager.GetTask(GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed).Name
+        + " and begin tracking " + GlobalTaskData.ToEdit.Name;
+        bool tracknew = await DisplayAlert("Task Already Being Tracked", alertstr, "Yes", "No");
+
+        //if user wants to stop tracking old and start tracking new
+        if (tracknew)
+        {
+            TimerButton.Text = "Stop Tracking";
+            GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
+            GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid);
+
+        }
     }
 
     //This function will be used by the delete task button to delete the given task

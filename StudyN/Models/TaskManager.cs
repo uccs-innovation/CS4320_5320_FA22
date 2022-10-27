@@ -26,6 +26,9 @@ namespace StudyN.Models
                                             CompletionProgress,
                                             TotalTimeNeeded);
 
+
+
+
             //This will add the tasks to the list
             TaskList.Add(newTask);
 
@@ -73,6 +76,8 @@ namespace StudyN.Models
                                 List<TaskItemTime> TimeList = null,
                                 bool updateFile = true)
         {
+
+
             //Retrieving the task
             TaskItem task = GetTask(taskId);
 
@@ -92,7 +97,6 @@ namespace StudyN.Models
 
             //Updating the tasks's file
             sendFileUpdate(FileManager.Operation.EditTask, taskId, updateFile);
-
             return true;
         }
 
@@ -172,7 +176,7 @@ namespace StudyN.Models
             foreach (string file in taskfilelist)
             {
                 jsonfiletext = File.ReadAllText(file);
-                Console.WriteLine(jsonfiletext);
+                //Console.WriteLine(jsonfiletext);
                 TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext); 
                 //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
                 TaskList.Add(task);
