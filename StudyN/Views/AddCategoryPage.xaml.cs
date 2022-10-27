@@ -78,6 +78,8 @@ namespace StudyN.Views
 		/// <param name="e"></param>
 		private async void RemoveButtonClicked(object sender, EventArgs e)
 		{
+			GlobalAppointmentData.CalendarManager.RemoveCategory(GlobalAppointmentData.EditCategory.Id);
+			GlobalAppointmentData.EditCategory= null;
 			await Shell.Current.GoToAsync("..");
 		}
 	}
