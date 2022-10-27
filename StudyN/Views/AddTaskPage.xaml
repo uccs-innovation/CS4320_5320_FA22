@@ -54,8 +54,7 @@
                 IsLabelFloating="True"
                 Grid.Row="1"
                 x:Name="description" />
-
-
+            
             <!--Time Entry Box GridRow 3 Spans 1 Column-->
             <dxe:TimeEdit 
                 TimeFormatMode="HourFormat12"
@@ -65,6 +64,29 @@
                 IsLabelFloating="True"
                 Margin="1"
                 x:Name="time" />
+            <CheckBox x:Name="checkBoxDueDate" 
+                CheckedChanged="OnCheckBoxDueDateChanged"
+                Grid.Row="4"
+                Grid.Column="0"
+                Grid.ColumnSpan="1"
+                Margin="1"/>
+            <Label Text="No Due Date"
+                   Grid.Row="4"
+                Grid.Column="0"
+                Grid.ColumnSpan="1"
+                   Margin="0">
+                
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label"
+         
+                     Binding="{Binding Source={x:Reference checkBoxDueDate}, Path=IsChecked}"
+                     Value="true">
+                        <Setter Property="FontAttributes"
+                    Value="Italic, Bold" />
+
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
 
             <!--Date Entry box GridRow 3 Spans 1 Column-->
             <dxe:DateEdit 
@@ -76,7 +98,7 @@
                 IsLabelFloating="True"
                 Margin="1"
                 x:Name="date" />
-            
+          
             <!--Time Spent On Task So far Entry box-->
             <dxe:NumericEdit 
                 AllowNullValue="True"
