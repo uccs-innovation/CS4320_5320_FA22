@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyN.Views.AddTaskPage"
@@ -116,6 +116,42 @@
                 Grid.Row="5"
                 Grid.ColumnSpan="2"
                 x:Name="priority" />
+
+            <!--Buttons for Recurrance tasks-->
+            <Label x:Name="RecurrenceLabel"
+               Text="Recurrence:"
+               HorizontalOptions="Start"
+               VerticalOptions="Center" 
+               Grid.Row="6"
+               Grid.ColumnSpan="2"
+               FontSize="16" />
+            <Button
+                x:Name="RecurrenceDay"
+                Text="Day"
+                Grid.Row="6"
+                Grid.Column="1"
+                CornerRadius="3"
+                Margin="1"
+                HorizontalOptions="Start"
+                Clicked="HandleRecurrenceDay"/>
+            <Button
+                x:Name="RecurrenceWeek"
+                Text="Week"
+                Grid.Row="6"
+                Grid.Column="2"
+                CornerRadius="3"
+                Margin="1"
+                HorizontalOptions="CenterAndExpand"
+                Clicked="HandleRecurrenceWeek"/>
+            <Button
+                x:Name="RecurrenceMonth"
+                Text="Month"
+                Grid.Row="6"
+                Grid.Column="3"
+                CornerRadius="3"
+                Margin="1"
+                HorizontalOptions="EndAndExpand"
+                Clicked="HandleRecurrenceMonth"/>
             
             <!--Buttons for completing/deleting tasks-->
             <Button 
