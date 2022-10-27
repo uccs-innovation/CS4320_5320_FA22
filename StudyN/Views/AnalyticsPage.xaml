@@ -25,7 +25,7 @@
                 <dxc:PieChartView.Series>
                     <dxc:PieSeries>
                         <dxc:PieSeries.Label>
-                            <dxc:PieSeriesLabel TextPattern="{}{V}" Position="Inside">
+                            <dxc:PieSeriesLabel TextPattern="{}{VP}%" Position="Inside">
                                 <dxc:PieSeriesLabel.Style>
                                     <dxc:PieSeriesLabelStyle>
                                         <dxc:PieSeriesLabelStyle.TextStyle>

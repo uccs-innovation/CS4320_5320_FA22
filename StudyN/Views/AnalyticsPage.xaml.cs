@@ -1,22 +1,26 @@
 using DevExpress.Maui.Charts;
 using StudyN.ViewModels;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace StudyN.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+
     public partial class AnalyticsPage : ContentPage
     {
+
         public AnalyticsPage()
         {
             InitializeComponent();
             BindingContext = ViewModel = new AnalyticsViewModel();
+
         }
 
-        AnalyticsViewModel ViewModel { get; }
+        AnalyticsViewModel ViewModel { get; set; }
 
         protected override void OnAppearing()
         {
-            base.OnAppearing();
+            BindingContext = ViewModel = new AnalyticsViewModel();
         }
     }
 }
