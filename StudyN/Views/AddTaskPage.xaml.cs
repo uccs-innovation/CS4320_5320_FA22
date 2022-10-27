@@ -1,9 +1,14 @@
 namespace StudyN.Views;
 
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Microsoft.Maui.Animations;
 using StudyN.Models;
 using StudyN.Utilities;
 using StudyN.ViewModels;
+using static Android.Provider.Settings;
 
 public partial class AddTaskPage : ContentPage
 {
@@ -77,9 +82,32 @@ public partial class AddTaskPage : ContentPage
         TaskItem task;
 
         //Check to see if we are currently editing or adding a task
-        if(editingExistingTask)
+        if (editingExistingTask)
         {
-            //If we are editing, we will use the TaskManager's EditTask function to save the changes
+           
+            //Gets task list
+            ObservableCollection<TaskItem> taskList = new ObservableCollection<TaskItem>();
+            for (int i = 0; i < taskList.Count; i++)
+            {
+                //If information is not the same, then it gets saved for all
+                if (taskList[i].Description != this.description.Text)
+                {
+                    taskList[i].Description = this.description.Text;
+                }
+                if (taskList[i].DueTime != dateTime)
+                {
+                    taskList[i].DueTime = dateTime;
+                }
+                if (taskList[i].CompletionProgress != timeLogged)
+                {
+                    taskList[i].CompletionProgress = timeLogged;
+                }
+                if (taskList[i].TotalTimeNeeded != totalTime)
+                {
+                    taskList[i].TotalTimeNeeded = totalTime;
+                }
+            }
+            //Saves the informatiom when editing
             GlobalTaskData.TaskManager.EditTask(
                 GlobalTaskData.ToEdit.TaskId,
                 this.name.Text,
@@ -88,7 +116,6 @@ public partial class AddTaskPage : ContentPage
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime);
-
             task = GlobalTaskData.ToEdit;
             GlobalTaskData.ToEdit = null;
         }
@@ -139,6 +166,90 @@ public partial class AddTaskPage : ContentPage
                 tasksString += task.Name + ", ";
             } 
             DisplayAlert("The following tasks cannot be completed on-time!", tasksString, "OK");
+        }
+    }
+
+    void OnCheckBoxDueDateChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if(e.Value == true)
+        {
+            this.date.Date = DateTime.MaxValue;
+            this.time.Time = DateTime.MaxValue;
+            date.IsVisible = false;
+            time.IsVisible = false;
+        }
+        else if(e.Value == false)
+        {
+            this.date.Date = DateTime.Now;
+            this.time.Time = DateTime.Now;
+            date.IsVisible = true;
+            time.IsVisible = true;
+        }
+    }
+
+    //These functions will be used to add recurrence of a selected task for day/week/month
+    private void HandleRecurrenceDay(object sender, EventArgs e)
+    {
+        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
+        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
+            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
+        for (int i = 1; i <= 365; i++)
+        {
+            dateTime = dateTime.AddDays(i); //every day
+            //If we are not editing, use TaskManager's AddTask function to create and save the task
+            GlobalTaskData.TaskManager.AddTask(
+                this.name.Text,
+                this.description.Text,
+                dateTime,
+                (int)this.priority.Value,
+                timeLogged,
+                totalTime);
+            
+        }
+
+    }
+    private void HandleRecurrenceWeek(object sender, EventArgs e)
+    {
+        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
+        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
+            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
+
+        for (int i = 1; i <= 52; i++)
+        {
+            dateTime = dateTime.AddDays(i*7); //every week
+            //If we are not editing, use TaskManager's AddTask function to create and save the task
+            GlobalTaskData.TaskManager.AddTask(
+                this.name.Text,
+                this.description.Text,
+                dateTime,
+                (int)this.priority.Value,
+                timeLogged,
+                totalTime);
+            
+        }
+
+    }
+    private void HandleRecurrenceMonth(object sender, EventArgs e)
+    {
+        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
+        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
+            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
+
+        for (int i = 1; i <= 12; i++)
+        {
+            dateTime = dateTime.AddMonths(i); //months
+            //If we are not editing, use TaskManager's AddTask function to create and save the task
+            GlobalTaskData.TaskManager.AddTask(
+                this.name.Text,
+                this.description.Text,
+                dateTime,
+                (int)this.priority.Value,
+                timeLogged,
+                totalTime);
+
         }
     }
 }

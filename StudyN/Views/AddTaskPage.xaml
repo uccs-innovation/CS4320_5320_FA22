@@ -54,8 +54,7 @@
                 IsLabelFloating="True"
                 Grid.Row="1"
                 x:Name="description" />
-
-
+            
             <!--Time Entry Box GridRow 3 Spans 1 Column-->
             <dxe:TimeEdit 
                 TimeFormatMode="HourFormat12"
@@ -65,6 +64,29 @@
                 IsLabelFloating="True"
                 Margin="1"
                 x:Name="time" />
+            <CheckBox x:Name="checkBoxDueDate" 
+                CheckedChanged="OnCheckBoxDueDateChanged"
+                Grid.Row="4"
+                Grid.Column="0"
+                Grid.ColumnSpan="1"
+                Margin="1"/>
+            <Label Text="No Due Date"
+                   Grid.Row="4"
+                Grid.Column="0"
+                Grid.ColumnSpan="1"
+                   Margin="0">
+                
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label"
+         
+                     Binding="{Binding Source={x:Reference checkBoxDueDate}, Path=IsChecked}"
+                     Value="true">
+                        <Setter Property="FontAttributes"
+                    Value="Italic, Bold" />
+
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
 
             <!--Date Entry box GridRow 3 Spans 1 Column-->
             <dxe:DateEdit 
@@ -116,6 +138,42 @@
                 Grid.Row="5"
                 Grid.ColumnSpan="2"
                 x:Name="priority" />
+
+            <!--Buttons for Recurrance tasks-->
+            <Label x:Name="RecurrenceLabel"
+               Text="Recurrence:"
+               HorizontalOptions="Start"
+               VerticalOptions="Center" 
+               Grid.Row="6"
+               Grid.ColumnSpan="2"
+               FontSize="16" />
+            <Button
+                x:Name="RecurrenceDay"
+                Text="Day"
+                Grid.Row="6"
+                Grid.Column="1"
+                CornerRadius="3"
+                Margin="1"
+                HorizontalOptions="Start"
+                Clicked="HandleRecurrenceDay"/>
+            <Button
+                x:Name="RecurrenceWeek"
+                Text="Week"
+                Grid.Row="6"
+                Grid.Column="2"
+                CornerRadius="3"
+                Margin="1"
+                HorizontalOptions="CenterAndExpand"
+                Clicked="HandleRecurrenceWeek"/>
+            <Button
+                x:Name="RecurrenceMonth"
+                Text="Month"
+                Grid.Row="6"
+                Grid.Column="3"
+                CornerRadius="3"
+                Margin="1"
+                HorizontalOptions="EndAndExpand"
+                Clicked="HandleRecurrenceMonth"/>
             
             <!--Buttons for completing/deleting tasks-->
             <Button 
