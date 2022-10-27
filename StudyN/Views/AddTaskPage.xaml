@@ -164,7 +164,7 @@
                 FontAttributes="Bold"    
                 FontSize="16" />
             
-            <CollectionView ItemsSource="{Binding TimeList}"
+            <CollectionView ItemsSource="{Binding TaskLog}"
                             ItemsLayout="VerticalList"                            
                             Grid.Row="9"
                             Grid.ColumnSpan="2"
@@ -193,11 +193,11 @@
                                 WidthRequest="10" />
                             <Label                                 
                                 Grid.Column="1"
-                                Text="{Binding start}"
+                                Text="{Binding StartTime}"
                                 FontAttributes="Italic" />
                             <Label 
                                 Grid.Column="2"
-                                Text="{Binding stop}"
+                                Text="{Binding EndTime}"
                                 FontAttributes="Italic" />
                             <Label 
                                 Grid.Column="3"

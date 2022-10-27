@@ -6,14 +6,32 @@
         public TaskItemTime(DateTime start, Guid taskid)
         {
             Console.WriteLine("Starting task tieming: datetime gotten: " + start);
-            this.start = start;
+            try
+            {
+                this.start = start;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                throw;
+            }
+            Console.WriteLine("After start set.");
         }
 
         //gets stop time of a newly timed item
         public void StopTime(DateTime stop)
         {
             Console.WriteLine("ending task timing: datetime gotten: " + stop);
-            this.stop = stop;
+            try
+            {
+                this.stop = stop;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                throw;
+            }
+            Console.WriteLine("After stop set.");
         }
 
 

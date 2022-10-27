@@ -7,18 +7,24 @@ using StudyN.Utilities;
 using StudyN.ViewModels;
 using static Android.Util.EventLogTags;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using static StudyN.Views.CalendarPage;
 
 public partial class AddTaskPage : ContentPage
 {
     bool editingExistingTask;
     AutoScheduler autoScheduler;
 
-    //initialize add task page
-	public AddTaskPage()
+    readonly TaskLogDataView _taskLogDataView;
 
-	{
-		InitializeComponent();
+    //initialize add task page
+    public AddTaskPage()
+
+    {
+        InitializeComponent();
         autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList);
+        BindingContext = _taskLogDataView = new TaskLogDataView(); 
+
 
         //This will check if we are editing an existing task or making a new one. We will know this based on if ToEdit is null or not
         if (GlobalTaskData.ToEdit != null)
@@ -28,14 +34,13 @@ public partial class AddTaskPage : ContentPage
             LoadValues();
             BindingContext = new EditTaskViewModel();
             editingExistingTask = true;
-            //CreateDummyTaskTimeLogData();
         }
         else
         {
             //If we are just creating a new task, we need to set the title and set the time and date so they are not null
             Title = "Add Task";
             editingExistingTask = false;
-            SetValues();            
+            SetValues();
         }
 
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
@@ -47,7 +52,7 @@ public partial class AddTaskPage : ContentPage
         //checks text of timer button. If it's not being tracked we want to see 
         //track task. Otherwise we want to see stop tracking
         SetTimerButton();
-    }   
+    }
 
     void SetTimerButton()
     {
@@ -84,7 +89,7 @@ public partial class AddTaskPage : ContentPage
         if (GlobalTaskTimeData.TaskTimeManager.TaskIsBeingTimed)
         {
             //if the task is being time and the current task id matches the task being timed
-            if(currenttaskid == GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed)
+            if (currenttaskid == GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed)
             {
                 TimerButton.Text = "Track Task";
                 GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
@@ -139,50 +144,6 @@ public partial class AddTaskPage : ContentPage
         }
     }
 
-    // create some dummy data for now
-    //public ObservableCollection<TaskTimeItem> TaskTimeLog { get; private set; }
-    //public class TaskTimeItem
-    //{
-    //    public Guid TaskId { get; set; }
-    //    public DateTime StartTime { get; set; }
-    //    public DateTime EndTime { get; set; }
-
-    //    public String Duration
-    //    {
-    //        get
-    //        {
-    //            TimeSpan duration = (EndTime - StartTime);
-    //            return duration.ToString("hh':'mm");
-    //        }
-    //    }
-
-
-    //    // Constructor
-    //    public TaskTimeItem(Guid taskId, DateTime startTime, DateTime endTime)
-    //    {
-    //        Console.WriteLine("In the TaskTimeItem constructor");
-    //        this.TaskId = taskId;
-    //        Console.WriteLine(taskId);
-    //        this.StartTime = startTime;
-    //        Console.WriteLine(startTime);
-    //        this.EndTime = endTime;
-    //        Console.WriteLine(endTime);
-    //    }
-    //}
-
-    //private void CreateDummyTaskTimeLogData()
-    //{
-    //    Console.WriteLine("=================================Creating dummy data for Task Time Log================================");
-    //    DateTime currentTime = DateTime.Now;        
-    //    TaskTimeLog = new ObservableCollection<TaskTimeItem>()
-    //    {
-    //        new TaskTimeItem(GlobalTaskData.ToEdit.TaskId, currentTime.AddHours(-4), currentTime.AddHours(-3)),
-    //        new TaskTimeItem(GlobalTaskData.ToEdit.TaskId, currentTime.AddHours(-2.5), currentTime.AddHours(-1.5)),
-    //        new TaskTimeItem(GlobalTaskData.ToEdit.TaskId, currentTime.AddHours(-1), currentTime)
-    //    };
-
-    //}
-
     //This function will be used by the delete task button to delete the given task
     private async void HandleDeleteTaskClicked(object sender, EventArgs args)
     {
@@ -221,10 +182,11 @@ public partial class AddTaskPage : ContentPage
 
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-    
+
         //Check to see if we are currently editing or adding a task
-        if(editingExistingTask)
+        if (editingExistingTask)
         {
+            Console.WriteLine("In if editingExistingTask");
             //If we are editing, we will use the TaskManager's EditTask function to save the changes
             GlobalTaskData.TaskManager.EditTask(
                 GlobalTaskData.ToEdit.TaskId,
@@ -239,6 +201,7 @@ public partial class AddTaskPage : ContentPage
         }
         else
         {
+            Console.WriteLine("In if adding new task");
             //If we are not editing, use TaskManager's AddTask function to create and save the task
             GlobalTaskData.TaskManager.AddTask(
                 this.name.Text,
@@ -248,7 +211,7 @@ public partial class AddTaskPage : ContentPage
                 timeLogged,
                 totalTime);
         }
-        
+
         //Returning to the previous page
         await Shell.Current.GoToAsync("..");
         runAutoScheduler();
@@ -264,8 +227,9 @@ public partial class AddTaskPage : ContentPage
         this.priority.Value = (GlobalTaskData.ToEdit.Priority);
         this.tComplete.Value = GlobalTaskData.ToEdit.TotalTimeNeeded;
         this.tSpent.Value = GlobalTaskData.ToEdit.CompletionProgress;
+        _taskLogDataView.BuildTaskTimeLogData();
     }
-
+      
     //This function will set the date and time forms to the current time
     void SetValues()
     {
@@ -282,8 +246,93 @@ public partial class AddTaskPage : ContentPage
             foreach (TaskItem task in autoScheduler.pastDueTasks)
             {
                 tasksString += task.Name + ", ";
-            } 
+            }
             DisplayAlert("The following tasks cannot be completed on-time!", tasksString, "OK");
         }
     }
+
+    public class TaskLogDataView : INotifyPropertyChanged
+    {
+        // development in progress trying to get the xaml
+        // file data bindings to work        
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        
+        public ObservableCollection<TaskLogItem> TaskLog { get; private set; }
+
+        public TaskLogDataView()
+        {
+
+        }
+        public class TaskLogItem
+        {
+            public Guid TaskId { get; set; }
+            public DateTime StartTime { get; set; }
+            public DateTime EndTime { get; set; }
+
+            // read_only property to display
+            // total time logged
+            public String Duration
+            {
+                get
+                {
+                    TimeSpan duration = (EndTime - StartTime);
+                    return duration.ToString("hh':'mm");
+                }
+            }
+
+            // Constructor
+            public TaskLogItem(Guid taskId, DateTime startTime, DateTime endTime)
+            {
+                Console.WriteLine("In the TaskLogItem constructor");
+                this.TaskId = taskId;
+                Console.WriteLine(taskId);
+                this.StartTime = startTime;
+                Console.WriteLine(startTime);
+                this.EndTime = endTime;
+                Console.WriteLine(endTime);
+
+            }
+        }
+
+        // get all the TaskItemTimes from
+        // the global TimeList for this task
+        // and build a local collection to
+        // bind to the CollectionView
+        public void BuildTaskTimeLogData()
+        {
+            Console.WriteLine("=================================Build Task Time Log Data================================");
+
+            // instantiate a list and retrieve from
+            // from the global task data TimeList
+
+            List<TaskItemTime> list = new List<TaskItemTime>();
+            list = GlobalTaskData.ToEdit.TimeList;
+
+            if (list != null)
+            {
+                Console.WriteLine("list=" + list.ToString());
+
+                //list.ForEach(delegate (TaskItemTime t) // this is causing exception
+                foreach (TaskItemTime t in list)
+                {
+                    TaskLog.Add(new TaskLogItem(GlobalTaskData.ToEdit.TaskId, t.start, t.stop));
+                }
+                //});
+            }
+            else
+            {
+                Console.WriteLine("list was null");
+            }
+        } // end BuildTaskTimeLogData
+
+        protected void RaisePropertyChanged(string name)
+        {
+            Console.WriteLine("property changed");
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+    } // end TaslLogDataView
 }

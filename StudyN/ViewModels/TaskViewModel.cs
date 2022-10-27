@@ -9,6 +9,7 @@ namespace StudyN.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<TaskItem> TaskList { get => GlobalTaskData.TaskManager.TaskList; }
+        public List<TaskItemTime> TimeList { get => GlobalTaskData.TaskManager.GetTask(GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed).TimeList; }
 
         public TaskDataViewModel()
         {
