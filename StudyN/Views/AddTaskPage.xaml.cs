@@ -6,6 +6,7 @@ using StudyN.Models;
 using StudyN.Utilities;
 using StudyN.ViewModels;
 using static Android.Util.EventLogTags;
+using System.Collections.ObjectModel;
 
 public partial class AddTaskPage : ContentPage
 {
@@ -14,6 +15,7 @@ public partial class AddTaskPage : ContentPage
 
     //initialize add task page
 	public AddTaskPage()
+
 	{
 		InitializeComponent();
         autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList);
@@ -26,13 +28,14 @@ public partial class AddTaskPage : ContentPage
             LoadValues();
             BindingContext = new EditTaskViewModel();
             editingExistingTask = true;
+            //CreateDummyTaskTimeLogData();
         }
         else
         {
             //If we are just creating a new task, we need to set the title and set the time and date so they are not null
             Title = "Add Task";
             editingExistingTask = false;
-            SetValues();
+            SetValues();            
         }
 
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
@@ -135,6 +138,50 @@ public partial class AddTaskPage : ContentPage
 
         }
     }
+
+    // create some dummy data for now
+    //public ObservableCollection<TaskTimeItem> TaskTimeLog { get; private set; }
+    //public class TaskTimeItem
+    //{
+    //    public Guid TaskId { get; set; }
+    //    public DateTime StartTime { get; set; }
+    //    public DateTime EndTime { get; set; }
+
+    //    public String Duration
+    //    {
+    //        get
+    //        {
+    //            TimeSpan duration = (EndTime - StartTime);
+    //            return duration.ToString("hh':'mm");
+    //        }
+    //    }
+
+
+    //    // Constructor
+    //    public TaskTimeItem(Guid taskId, DateTime startTime, DateTime endTime)
+    //    {
+    //        Console.WriteLine("In the TaskTimeItem constructor");
+    //        this.TaskId = taskId;
+    //        Console.WriteLine(taskId);
+    //        this.StartTime = startTime;
+    //        Console.WriteLine(startTime);
+    //        this.EndTime = endTime;
+    //        Console.WriteLine(endTime);
+    //    }
+    //}
+
+    //private void CreateDummyTaskTimeLogData()
+    //{
+    //    Console.WriteLine("=================================Creating dummy data for Task Time Log================================");
+    //    DateTime currentTime = DateTime.Now;        
+    //    TaskTimeLog = new ObservableCollection<TaskTimeItem>()
+    //    {
+    //        new TaskTimeItem(GlobalTaskData.ToEdit.TaskId, currentTime.AddHours(-4), currentTime.AddHours(-3)),
+    //        new TaskTimeItem(GlobalTaskData.ToEdit.TaskId, currentTime.AddHours(-2.5), currentTime.AddHours(-1.5)),
+    //        new TaskTimeItem(GlobalTaskData.ToEdit.TaskId, currentTime.AddHours(-1), currentTime)
+    //    };
+
+    //}
 
     //This function will be used by the delete task button to delete the given task
     private async void HandleDeleteTaskClicked(object sender, EventArgs args)
