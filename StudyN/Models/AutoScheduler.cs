@@ -272,7 +272,7 @@ public class AutoScheduler
         foreach (var task in Tasklist)
         {
             Guid curId = task.TaskId;
-
+            
 
             AllCurBlocks = new List<int>();
             numPerDate = new List<int>();
@@ -309,14 +309,12 @@ public class AutoScheduler
 
            for (int i = 0; i < currentDates.Count; i++)
             {
-                Console.WriteLine("CURRENT DATE: " + currentDates[i] + ", NUMBER OF BLOCKS: " + numPerDate[i]);
+                if (numPerDate[i] > 4)
+                {
+
+                }
             }
         }
-    }
-
-    private void sortDateList()
-    {
-
     }
 
     private void refreshArrays()
