@@ -20,7 +20,7 @@
             <!-- Grid Row Definition -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="500" />
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <!-- Get name of category from user -->
@@ -30,7 +30,31 @@
                 IsLabelFloating="True"
                 Margin="1"
                 x:Name="name" />
-            <!-- Get color of category from user -->
+            <!-- Get color of category from user, doesn't work -->
+            <!--<dxe:ColorEdit
+                Grid.ColumnSpan="2"
+                ColumnCount ="10"
+                DefaultColor="Black"
+                MoreColorsButtonContent="Color picker"
+                ChipSize="Medium"
+                Grid.Row="1"
+                x:Name="color" /> -->
+            <dxe:TextEdit
+                Grid.ColumnSpan="2"
+                LabelText="Color"
+                IsLabelFloating="True"
+                Margin="1"
+                x:Name="color" />
+            <!-- Button for deleting category -->
+            <Button
+                x:Name="RemoveButton"
+                Text="Remove Category"
+                Grid.Row="2"
+                CornerRadius="7"
+                Margin="1"
+                Clicked="RemoveButtonClicked"
+                Command="{Binding ButtonVisibility}"/>
         </Grid>
+        
     </ContentPage.Content>
 </ContentPage>

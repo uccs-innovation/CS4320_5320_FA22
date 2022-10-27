@@ -9,6 +9,7 @@ namespace StudyN.Views
 		{
 			InitializeComponent();
 			BindingContext = new AddCategoryViewModel();
+			Title = "Add Category";
 		}
 	}
 }
