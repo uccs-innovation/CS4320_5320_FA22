@@ -43,7 +43,7 @@
                 x:Name="color" /> -->
             <dxe:TextEdit
                 Grid.ColumnSpan="2"
-                LabelText="Color"
+                LabelText="Color (Write Hexedecimal)"
                 IsLabelFloating="True"
                 Margin="1"
                 x:Name="color" />

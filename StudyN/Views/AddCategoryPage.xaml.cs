@@ -9,9 +9,21 @@ namespace StudyN.Views
 		public AddCategoryPage()
 		{
 			InitializeComponent();
-			BindingContext = new AddCategoryViewModel();
-			Title = "Add Category";
-			RemoveButton.IsVisible = false;
+			if(GlobalAppointmentData.EditCategory == null)
+			{
+				// Pulls up Add Category Page
+				BindingContext = new AddCategoryViewModel();
+				Title = "Add Category";
+				RemoveButton.IsVisible = false;
+			}
+			else
+			{
+				// Pulls up Edit Category Page
+				BindingContext = new EditCategoryViewModel();
+				Title = "Edit Category";
+				LoadValues();
+				RemoveButton.IsVisible = true;
+			}
 		}
 
 		/// <summary>
@@ -33,10 +45,30 @@ namespace StudyN.Views
 			}
 			// turns color string input into color
 			Color useColor = Color.FromArgb(this.color.Text);
-			// creates the category
 			AppointmentCategory cat;
-			cat = GlobalAppointmentData.CalendarManager.CreateCategory(this.name.Text, useColor);
+			if (GlobalAppointmentData.EditCategory == null) {
+				// creates the category
+				cat = GlobalAppointmentData.CalendarManager.CreateCategory(this.name.Text, useColor);
+			}
+			else
+			{
+				// edit the category
+				GlobalAppointmentData.CalendarManager.EditCategory(this.name.Text, useColor, 
+																	GlobalAppointmentData.EditCategory.Id);
+				cat = GlobalAppointmentData.EditCategory;
+				GlobalAppointmentData.EditCategory = null;
+			}
 			await Shell.Current.GoToAsync("..");
+		}
+
+		/// <summary>
+		/// Gets Values from passed in category
+		/// </summary>
+		void LoadValues()
+		{
+			this.name.Text = GlobalAppointmentData.EditCategory.Caption;
+			string colorHex = GlobalAppointmentData.EditCategory.Color.ToHex();
+			this.color.Text = colorHex;
 		}
 
 		/// <summary>
