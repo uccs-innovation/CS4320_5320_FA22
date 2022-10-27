@@ -14,7 +14,7 @@ namespace StudyN.Models
     {
         public static DateTime BaseDate = DateTime.Today;
 
-        public static string[] AppointmentCategoryTitles = { "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work", "Uncategorized"};
+        public static string[] AppointmentCategoryTitles = { "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work"};
         public static Color[] AppointmentCategoryColors = { Color.FromArgb("#3333FF"),   // dark blue
                                                         Color.FromArgb("#008A00"),   // green                                                        
                                                         Color.FromArgb("#D80073"),   // dark pink
@@ -22,8 +22,14 @@ namespace StudyN.Models
                                                         Color.FromArgb("#1BA1E2"),   // medium blue                                                        
                                                         Color.FromArgb("FF8000"),    // orange
                                                         Color.FromArgb("#A20025"),   // burgundy                                                         
-                                                        Color.FromArgb("#6A00FF"),   // purple
-                                                        Color.FromArgb("#D9D9D9")};  // grey
+                                                        Color.FromArgb("#6A00FF") };   // purple
+        // Uncategorized category
+        public static AppointmentCategory Uncategorized = new()
+        {
+            Id = Guid.NewGuid(),
+            Caption = "Uncategorized",
+            Color = Color.FromArgb("#D9D9D9")
+        };
                                                                                       
         public static string[] AppointmentStatusTitles = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
         public static Color[] AppointmentStatusColors = { Color.FromArgb("00FF80"),   // light green
@@ -142,8 +148,8 @@ namespace StudyN.Models
                 Caption = categoryName,
                 Color = categoryColor,
             };
-            // Adds category to category list, make sure uncategorized is at bottom
-            AppointmentCategories.Insert(AppointmentCategories.Count - 1, cat);
+            // Adds category to category list
+            AppointmentCategories.Add(cat);
             return cat;
         }
 
@@ -194,7 +200,7 @@ namespace StudyN.Models
                         if(appointment.LabelId == category)
                         {
                             // Make appointment uncategorized
-                            appointment.LabelId = AppointmentCategories[AppointmentCategories.Count-1];
+                            appointment.LabelId = Uncategorized;
                         }
                     }
                     // Remove category

@@ -13,15 +13,6 @@ namespace StudyN.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<AppointmentCategory> AppointmentCategories { get => GlobalAppointmentData.CalendarManager.AppointmentCategories; }
-
-        void SetCategoriesList()
-        {
-            // make sure uncatigorized doesn't get into Categories page
-            for(int i = 0; i < GlobalAppointmentData.CalendarManager.AppointmentCategories.Count - 1; i++)
-            {
-                AppointmentCategories.Add(GlobalAppointmentData.CalendarManager.AppointmentCategories[i]);
-            }
-        }
         public CategoriesViewModel()
         {
         }

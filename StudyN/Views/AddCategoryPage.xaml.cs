@@ -41,7 +41,7 @@ namespace StudyN.Views
 			}
 			else
 			{
-				this.color.Text = this.color.Text.Substring(7);
+				this.color.Text = this.color.Text;
 			}
 			// turns color string input into color
 			Color useColor = Color.FromArgb(this.color.Text);
@@ -81,8 +81,8 @@ namespace StudyN.Views
 		{
 			GlobalAppointmentData.CalendarManager.RemoveCategory(GlobalAppointmentData.EditCategory.Id);
 			GlobalAppointmentData.EditCategory= null;
-            Routing.RegisterRoute(nameof(Views.CategoriesPage), typeof(Views.CategoriesPage));
-            await Shell.Current.GoToAsync("..");
+			Routing.RegisterRoute(nameof(Views.CategoriesPage), typeof(Views.CategoriesPage));
+			await Shell.Current.GoToAsync("..");
 		}
 	}
 }
