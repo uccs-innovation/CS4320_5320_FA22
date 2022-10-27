@@ -42,5 +42,15 @@ namespace StudyN.Views
 			cat = GlobalAppointmentData.CalendarManager.CreateCategory(this.name.Text, useColor);
 			await Shell.Current.GoToAsync("..");
 		}
+
+		/// <summary>
+		/// Removes the category
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private async void RemoveButtonClicked(object sender, EventArgs e)
+		{
+			await Shell.Current.GoToAsync("..");
+		}
 	}
 }
