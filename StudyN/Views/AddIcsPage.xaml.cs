@@ -20,7 +20,9 @@ namespace StudyN.Views;
 
 using System.Net;
 using Android.Media;
+using Android.Service.Autofill;
 using StudyN.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 public partial class AddIcsPage : ContentPage
 {
@@ -75,13 +77,16 @@ public partial class AddIcsPage : ContentPage
     private void Entry_TextChanged(object sender, TextChangedEventArgs e) {
         link = e.NewTextValue;    }
 
+    static Random rnd = new Random();
+
     //break massive string to individual appointments
     class GetAppointFromString {
         private string line;
         private int id;
         private string name;
-        private DateTime start;
-        private TimeSpan duration;
+        private DateTime start = new DateTime();
+        private DateTime end = new DateTime();
+        //private TimeSpan duration;
 
 
         //constructor that takes string and calls convert to break it
@@ -94,31 +99,51 @@ public partial class AddIcsPage : ContentPage
          * create appointment from compatable pieces
          * repeat with next event
         */
-        private void convert(string response) {
-            //shit whole intro into the ether
-            string sPattern = "BEGIN:VEVENT";
-            int location = response.IndexOf(sPattern) + sPattern.Length + 1;
-            response = response.Substring(location);
-
-            //split string into individual lines
-            string[] lines = response.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-
-            //search remaining lines
-            for (int i = 1; i < lines.Length; i++) {
-                //grab id of the appointment
-                if (lines[i].Contains("UID")) {
-                    line = lines[i];
-                    line = line.Substring(21);
+        private void convert(string response)
+        {
+            using var sr = new StringReader(response);
+            int count = 0;
+            while ((line = sr.ReadLine()) != null)
+            {
+                TimeSpan duration = new TimeSpan();
+                count++;
+                if (line.Contains("SUMMARY") == true)
+                {
+                    //line = line.Substring(8);
+                    name = line;
+                }
+                if (line.Contains("UID") == true)
+                {
+                    //line = line.Substring(21);
                     id = Convert.ToInt32(line);
                 }
-                //grab start time if only contains starttime
-                if (lines[i].Contains("DTSTART;"))
+                if (line.Contains("DTSTART;") == true)
                 {
-                    line = lines[i];
-                    line = line.Substring(30);
-                    int time = Convert.ToInt32(line);
+                    //line = line.Substring(30);
+                    int date = Convert.ToInt32(line);
 
                 }
+                if (line.Contains("DTSTART:") == true)
+                {
+                    line = line.Substring(8);
+                    int date = Convert.ToInt32(line);
+
+                }
+                if (line.Contains("DTEND") == true)
+                {
+                    line = line.Substring(6);
+                    int date = Convert.ToInt32(line);
+
+
+                    duration = end - start;
+                }
+                if (line.Contains("END:VEVENT") == true)
+                {
+                    int room = rnd.Next(1000, 2000);
+                    CalendarManager calendarManager = new CalendarManager();
+                    calendarManager.CreateAppointment(id, name, start, duration, room);
+                }
+                
             }
         }
     }
