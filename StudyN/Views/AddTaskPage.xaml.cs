@@ -62,8 +62,11 @@ public partial class AddTaskPage : ContentPage
         {
             Console.WriteLine("In the TaskTimeItem constructor");
             this.TaskId = taskId;
+            Console.WriteLine(taskId);
             this.StartTime = startTime;
-            this.EndTime = endTime;            
+            Console.WriteLine(startTime);
+            this.EndTime = endTime;
+            Console.WriteLine(endTime);
         }
     }
 

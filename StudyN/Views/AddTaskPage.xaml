@@ -29,8 +29,8 @@
                 <RowDefinition Height="20" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="50" />
-                <RowDefinition Height="50" />
-                <RowDefinition Height="200" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="250" />
             </Grid.RowDefinitions>
 
             <!--Grid column definitions-->
@@ -136,14 +136,23 @@
                 Margin="1"
                 Clicked="HandleCompleteTaskClicked"
                 Command="{Binding ButtonVisibility}"/>
-
+            
+            <Label 
+                Text="Task Time Log"
+                HorizontalOptions="Start"
+                VerticalOptions="Center" 
+                Grid.Row="7"
+                Grid.ColumnSpan="1"
+                FontAttributes="Bold"    
+                FontSize="16" />
+            
             <CollectionView ItemsSource="{Binding TaskTimeLog}"
-                            EmptyView="No items to display"
+                            ItemsLayout="VerticalList"                            
                             Grid.Row="8"
                             Grid.ColumnSpan="2"
                             BackgroundColor="WhiteSmoke"
                             VerticalScrollBarVisibility="Always"
-                            Header="Time Tracker Log">  
+                            EmptyView="No items to display">
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -158,18 +167,6 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <Label 
-                                Grid.Row="1" 
-                                Grid.Column="1"
-                                Text="Start Time" />
-                            <Label 
-                                Grid.Row="1" 
-                                Grid.Column="2"
-                                Text="End Time" />
-                            <Label 
-                                Grid.Row="1"
-                                Grid.Column="3"
-                                Text="Duration" />
                             <Image                                
                                 Grid.Column="1"
                                 Source="{Binding clock_svgrepo}"
@@ -193,6 +190,7 @@
                 </CollectionView.ItemTemplate>
 
             </CollectionView>
+
         </Grid>
     </ContentPage.Content>
 
