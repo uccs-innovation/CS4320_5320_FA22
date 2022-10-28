@@ -1,15 +1,11 @@
 ﻿using StudyN.Models;
 using StudyN.Utilities;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace StudyN.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public ObservableCollection<TaskItem> TaskList { get => GlobalTaskData.TaskManager.TaskList; }
-
         public HomeViewModel()
         {
             Title = "Dashboard";

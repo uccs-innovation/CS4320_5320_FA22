@@ -1,63 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
-             xmlns:ViewModels="clr-namespace:StudyN.ViewModels"
-             xmlns:local="clr-namespace:StudyN.Views"
-             Title="Todays View"
-             IconImageSource="grid"
-             x:Class="StudyN.Views.HomePage">
-
-    <ContentPage.BindingContext>
-        <ViewModels:HomeViewModel />
-    </ContentPage.BindingContext>
-
-    <dxg:DataGridView x:Name ="myList" ItemsSource="{Binding TaskList}"
-                      ShowAutoFilterRow="False"
-                      DoubleTap="EditAppointment"
-                      ColumnHeaderHeight="60">
-        <!--Set the Columns to use.-->
-        <dxg:DataGridView.Columns>
-            <!-- AutoFilter is not shown to user to prevent them from manually filtering the Todays View. AutoFilterCondition is set to Equal so that any task that has the same day as today will be shown.-->
-            <dxg:TextColumn FieldName="Name" Caption="Task">
-                <dxg:TextColumn.HeaderContentTemplate>
-                    <DataTemplate>
-                        <StackLayout>
-                            <Label Text="Task" />
-                        </StackLayout>
-                    </DataTemplate>
-                </dxg:TextColumn.HeaderContentTemplate>
-            </dxg:TextColumn>
-            <dxg:DateColumn AllowAutoFilter="False" FieldName="StartTime" Caption="Start" DisplayFormat="hh:mmtt">
-                <dxg:DateColumn.HeaderContentTemplate>
-                    <DataTemplate>
-                        <StackLayout>
-                            <Label Text="Start Time" />
-                        </StackLayout>
-                    </DataTemplate>
-                </dxg:DateColumn.HeaderContentTemplate>
-            </dxg:DateColumn>
-            <dxg:DateColumn x:Name="DateFilter" FieldName="DueTime" Caption="Due" DisplayFormat="hh:mm tt" AutoFilterCondition="Equals" AutoFilterValue="">
-                <dxg:DateColumn.HeaderContentTemplate>
-                    <DataTemplate>
-                        <StackLayout>
-                            <Label Text="Due Time" />
-                        </StackLayout>
-                    </DataTemplate>
-                </dxg:DateColumn.HeaderContentTemplate>
-            </dxg:DateColumn>
-        </dxg:DataGridView.Columns>
-        <!--Customize the appearance of group row.-->
-        <dxg:DataGridView.GroupRowStyle>
-            <dxg:GroupRowStyle FontSize="16" />
-        </dxg:DataGridView.GroupRowStyle>
-        <!--Customize the appearance of grid cells.-->
-        <dxg:DataGridView.CellStyle>
-            <dxg:CellStyle Padding="10" FontSize="24"/>
-        </dxg:DataGridView.CellStyle>
-        <!--Customize the appearance of column headers.-->
-        <dxg:DataGridView.ColumnHeaderStyle>
-            <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
-        </dxg:DataGridView.ColumnHeaderStyle>
-    </dxg:DataGridView>
+             xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
+             x:Class="StudyN.Views.HomePage"
+             Title="{Binding Title}"
+             IconImageSource="charts">
+    <ContentPage.Content>
+        <Grid>
+        <dxc:PieChartView x:Name="chart">
+            <dxc:PieChartView.Series>
+                <dxc:DonutSeries>
+                    <dxc:DonutSeries.Data>
+                        <dxc:PieSeriesDataAdapter DataSource="{Binding Items}"
+                                              LabelDataMember="Text"
+                                              ValueDataMember="Value"/>
+                    </dxc:DonutSeries.Data>
+                </dxc:DonutSeries>
+            </dxc:PieChartView.Series>
+            <dxc:PieChartView.Legend>
+                <dxc:Legend Orientation="TopToBottom"
+                        HorizontalPosition="RightOutside"
+                        VerticalPosition="Center"/>
+            </dxc:PieChartView.Legend>
+        </dxc:PieChartView>
+        </Grid>
+    </ContentPage.Content>
 </ContentPage>
