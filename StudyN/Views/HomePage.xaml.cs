@@ -27,7 +27,6 @@ namespace StudyN.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ViewModel.OnAppearing();
             myList.RefreshData();
         }
 
