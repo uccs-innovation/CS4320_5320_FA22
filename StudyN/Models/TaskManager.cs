@@ -97,9 +97,6 @@ namespace StudyN.Models
             task.TotalTimeNeeded = TotalTimeNeeded;
             task.TimeList = TimeList;
 
-            //Updating the tasks's file
-            sendFileUpdate(FileManager.Operation.EditTask, taskId, updateFile);
-
             // Publish task edit event
             EventBus.PublishEvent(
                         new StudynEvent(taskId, StudynEvent.StudynEventType.EditTask));

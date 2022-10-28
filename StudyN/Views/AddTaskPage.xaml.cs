@@ -10,7 +10,6 @@ using StudyN.Models;
 using StudyN.Utilities;
 using StudyN.ViewModels;
 using static Android.Util.EventLogTags;
-using System.Collections.ObjectModel;
 using static Android.Provider.Settings;
 
 public partial class AddTaskPage : ContentPage

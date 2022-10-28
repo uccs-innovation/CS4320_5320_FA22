@@ -15,12 +15,6 @@ namespace StudyN.ViewModels
             Title = "Dashboard";
         }
 
-
-        async public void OnAppearing()
-        {
-            await FileManager.WaitForFileOp();
-        }
-
         protected void RaisePropertyChanged(string name)
         {
             Console.WriteLine("property changed");
