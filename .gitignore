@@ -6,3 +6,4 @@ StudyN/.vs
 
 ### File types to Ignore ###
 *.user
+.DS_Store
