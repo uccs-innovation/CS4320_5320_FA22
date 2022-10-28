@@ -53,6 +53,8 @@ namespace StudyN.Utilities
             TaskItem task = GlobalTaskData.TaskManager.GetTask(taskId);
             
             string jsonString = JsonSerializer.Serialize(task, indent);
+
+
             File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
             //Console.WriteLine("Tasks Added:");
