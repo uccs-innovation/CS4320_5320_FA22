@@ -13,7 +13,6 @@ namespace StudyN.ViewModels
         public HomeViewModel()
         {
             Title = "Dashboard";
-            //Items = new ObservableCollection<Item>();
         }
 
 
@@ -30,5 +29,6 @@ namespace StudyN.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
+
     }
 }

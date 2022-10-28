@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+﻿using Android.Gms.Tasks;
+using Android.Service.Autofill;
 using StudyN.Utilities;
 using System.Collections.ObjectModel;
 using System.Text.Json;
@@ -15,8 +17,7 @@ namespace StudyN.Models
                                 DateTime dueTime,
                                 int priority,
                                 int CompletionProgress,
-                                int TotalTimeNeeded,
-                                bool updateFile = true)
+                                int TotalTimeNeeded)
         {
             //Creating new task with sent parameters
             TaskItem newTask  = new TaskItem(name,
@@ -32,8 +33,9 @@ namespace StudyN.Models
             //This will add the tasks to the list
             TaskList.Add(newTask);
 
-            //Creating a new file to store the task with
-            sendFileUpdate(FileManager.Operation.AddTask, newTask.TaskId, updateFile);
+            // Publish task add event
+            EventBus.PublishEvent(
+                        new StudynEvent(newTask.TaskId, StudynEvent.StudynEventType.AddTask));
 
             return newTask;
         }
@@ -97,6 +99,11 @@ namespace StudyN.Models
 
             //Updating the tasks's file
             sendFileUpdate(FileManager.Operation.EditTask, taskId, updateFile);
+
+            // Publish task edit event
+            EventBus.PublishEvent(
+                        new StudynEvent(taskId, StudynEvent.StudynEventType.EditTask));
+
             return true;
         }
 
@@ -115,8 +122,9 @@ namespace StudyN.Models
                     CompletedTasks.Add(task);
                     TaskList.Remove(task);
 
-                    //Update the files
-                    sendFileUpdate(FileManager.Operation.CompleteTask, taskId, updateFile);
+                    // Publish task complete event
+                    EventBus.PublishEvent(
+                        new StudynEvent(taskId, StudynEvent.StudynEventType.CompleteTask));
 
                     return;
                 }
@@ -126,7 +134,7 @@ namespace StudyN.Models
         //This function will delete a given task from the normal TaskList
         public void DeleteTask(Guid taskId, bool updateFile = true)
         {
-            //Looking for the task based on TaskId
+            //Looking for the task based on Id
             foreach (TaskItem task in TaskList)
             {
                 //If found
@@ -135,8 +143,9 @@ namespace StudyN.Models
                     //Remove the task from list
                     TaskList.Remove(task);
 
-                    //Deleteing the associated file
-                    sendFileUpdate(FileManager.Operation.DeleteTask, taskId, updateFile);
+                    // Publish task delete event
+                    EventBus.PublishEvent(
+                        new StudynEvent(taskId, StudynEvent.StudynEventType.DeleteTask));
 
                     return;
                 }
@@ -145,24 +154,11 @@ namespace StudyN.Models
         
 
         //This function will delete every task for the ids avalaible
-        public void DeleteListOfTasks(List<Guid> taskIds, bool updateFile = true)
+        public void DeleteListOfTasks(List<Guid> taskIds)
         {
             foreach (Guid id in taskIds)
             {
                 DeleteTask(id);
-            }
-        }
-
-        //This function will interact with the file manager to preform the correct file action
-        public void sendFileUpdate(FileManager.Operation op, Guid taskId, bool updateFile)
-        {
-            //Provided we are allowed to update the file (using updatefile as an indicator),
-            // begin the interaction with the FileManager
-            if (updateFile)
-            {
-                // Send update to Filemanager
-                FileManager.FILE_OP_QUEUE.Enquue(
-                    new FileManager.FileOperation(op, taskId));
             }
         }
 

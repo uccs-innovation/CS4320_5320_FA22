@@ -41,6 +41,7 @@ namespace StudyN.Views
                 // Get it in here
                 await Shell.Current.GoToAsync(nameof(AddTaskPage));
             }
+
         }
     }
 }
