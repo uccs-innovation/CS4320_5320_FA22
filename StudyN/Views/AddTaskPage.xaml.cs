@@ -34,25 +34,6 @@ public partial class AddTaskPage : ContentPage
             TimeListLog.ItemsSource = GlobalTaskData.ToEdit.TimeList;
 
 
-
-            //Debugging time log
-            Console.WriteLine("_____________________________");
-            Console.WriteLine("Task Name " + GlobalTaskData.ToEdit.Name);
-            Console.WriteLine("Task Times available:");
-            if(GlobalTaskData.ToEdit.TimeList != null)
-            {
-                foreach (TaskItemTime tasktime in GlobalTaskData.ToEdit.TimeList)
-                {
-                    Console.WriteLine("Start Time: " + tasktime.start);
-                    Console.WriteLine("Stop Time: " + tasktime.stop);
-                    Console.WriteLine("Time Span: " + tasktime.span);
-                }
-                Console.WriteLine("End of Edit Tasks Times");
-                Console.WriteLine("_____________________________");
-            }
-
-
-
         }
         else
         {
@@ -81,17 +62,17 @@ public partial class AddTaskPage : ContentPage
         {
             Guid currenttaskid = GlobalTaskData.ToEdit.TaskId;
             Guid taskbeingtimed = GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed;
-            Console.WriteLine("ALERT ALERT ALERT ");
+            //Console.WriteLine("ALERT ALERT ALERT ");
             //if task isn't being tracked or task is not task being tracked
             if (currenttaskid != taskbeingtimed || !GlobalTaskTimeData.TaskTimeManager.TaskIsBeingTimed)
             {
                 TimerButton.Text = "Track Task";
-                Console.WriteLine("ALERT Setting text to track task");
+                //Console.WriteLine("ALERT Setting text to track task");
             }
             //if a task is being tracked and this is the task being tracked
             else
             {
-                Console.WriteLine("ALTERT setting text to stop tracking");
+                //Console.WriteLine("ALTERT setting text to stop tracking");
                 TimerButton.Text = "Stop Tracking";
             }
         }
