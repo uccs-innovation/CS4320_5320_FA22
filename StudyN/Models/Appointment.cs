@@ -15,7 +15,7 @@ namespace StudyN.Models
 
         // properties for StudyN_Time category
         public bool IsGeneratedStudyNTime { get; set; }
-        public int ParentTaskId { get; set; }
+        public Guid ParentTaskId { get; set; }
         public int StudyNBlock_Minutes { get; set; }
         public bool WasEdited { get; set; }
         public bool IsOrphan { get; set; }

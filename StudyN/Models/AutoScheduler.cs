@@ -16,6 +16,7 @@ public class AutoScheduler : StudynSubscriber
 
     //public ObservableCollection<CalendarAppointment> CalendarList { get; set; }
     private ObservableCollection<TaskItem> Tasklist { get; set; }
+    private ObservableCollection<Appointment> Appointments { get; set; }
     private List<double> weightAssoc;   //weightAssoc[0] corresponds to TaskBlockList[0], weightAssoc[1] corresponds to TaskBlockList[1]...
     public List<DateTime> calPosAssoc;  //calPosAssoc[0] corresponds to TaskBlockList[0], calPosAssoc[1] corresponds to TaskBlockList[1]...
 
@@ -24,11 +25,12 @@ public class AutoScheduler : StudynSubscriber
     private List<int> AllCurBlocks;
     public List<DateTime> currentDates;
     private List<int> numPerDate;
-    public AutoScheduler( ObservableCollection<TaskItem> TL )
+    public AutoScheduler( ObservableCollection<TaskItem> TL, ObservableCollection<Appointment> APPNTMNT )
 	  {
         taskPastDue = false;
         pastDueTasks = new List<TaskItem>();
         Tasklist = TL;
+        Appointments = APPNTMNT;
         //CalendarList = GlobalData.cs.calendarManager
     }
    
@@ -127,9 +129,54 @@ public class AutoScheduler : StudynSubscriber
     //available slot after blackout time.
     //If two things get scheduled at the same time or overlapping, put the one with more weight first.
     //If two things have the same weight (realllyyyyyy unlikely), just randomly put one before the other.
+
+/*  public Guid UniqueId { get; set; }
+    public string ReminderInfo { get; set; }
+    public string Notes { get; set; }
+
+    // properties for StudyN_Time category
+    public bool IsGeneratedStudyNTime { get; set; }
+    public int ParentTaskId { get; set; }
+    public int StudyNBlock_Minutes { get; set; }
+    public bool WasEdited { get; set; }
+    public bool IsOrphan { get; set; }
+
+    // properties for Assignment category
+    public int EstimatedCompletionTime_Hours { get; set; }
+
+    // properties for Exam category
+    public bool IsExamTakehome { get; set; }
+    public int ExamTime_Minutes { get; set; }
+
+    // StudyN Time Algorithm properties
+    public int BeforePadding_Minutes { get; set; }
+    public int AfterPadding_Minutes { get; set; }
+    public int MaxBlockTime_Minutes { get; set; }
+    public int MinBlockTime_Minutes { get; set; }
+    public int BreakTime_Minutes { get; set; }
+    public bool AllowBackToBackStudyNSessions { get; set; }
+    public bool UseFreeTimeBlocks { get; set; }
+
+    // properties for data import
+    public bool IsCanvasImport { get; set; }
+    public bool IsExternalCalendarImport { get; set; }*/
     private void addToCalendar()
     {
-        Console.WriteLine("TODO: implement autoScheduler.addToCalendar");
+        Console.WriteLine("Adding taskBlocks to calendar");
+        for(int i = 0; i < TaskBlockList.Count; i++) { 
+            Appointment TaskBlockAppointment = new Appointment();
+            //TaskBlockAppointment.UniqueId = taskBlock.TaskId; //This should probably be parentTaskId
+            
+            TaskBlockAppointment.Notes = TaskBlockList[i].Name; //Assuming notes is the name? Idk
+            TaskBlockAppointment.IsGeneratedStudyNTime = true;
+            TaskBlockAppointment.ParentTaskId = TaskBlockList[i].TaskId;
+            TaskBlockAppointment.StudyNBlock_Minutes = 60; //Assuming each block is 60 minutes
+            TaskBlockAppointment.EstimatedCompletionTime_Hours = TaskBlockList[i].TotalTimeNeeded;
+            TaskBlockAppointment.Start = calPosAssoc[i];
+            TaskBlockAppointment.End = calPosAssoc[i].AddHours(1); //Assuming the task block is 1 hour
+            Appointments.Add(TaskBlockAppointment);
+        }
+
     }
 
     private void breakTasksIntoBlocks()
