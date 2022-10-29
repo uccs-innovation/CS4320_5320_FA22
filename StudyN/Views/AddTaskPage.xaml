@@ -59,6 +59,7 @@
             <dxe:TimeEdit 
                 TimeFormatMode="HourFormat12"
                 Grid.Row="2"
+                Grid.Column="1"
                 Grid.ColumnSpan="1"
                 LabelText="Time Due"
                 IsLabelFloating="True"
@@ -92,7 +93,6 @@
             <dxe:DateEdit 
                 DisplayFormat="d"
                 Grid.Row="2"
-                Grid.Column="1"
                 Grid.ColumnSpan="1"
                 LabelText="Date Due"
                 IsLabelFloating="True"
