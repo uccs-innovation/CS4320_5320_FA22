@@ -3,6 +3,7 @@ namespace StudyN.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using DevExpress.CodeParser;
 using DevExpress.Utils;
 using StudyN.Models;
 using StudyN.Utilities;
@@ -16,7 +17,8 @@ public class AutoScheduler : StudynSubscriber
 
     //public ObservableCollection<CalendarAppointment> CalendarList { get; set; }
     private ObservableCollection<TaskItem> Tasklist { get; set; }
-    private ObservableCollection<Appointment> Appointments { get; set; }
+    //private ObservableCollection<Appointment> Appointments { get; set; }
+    private CalendarManager calendarManager;
     private List<double> weightAssoc;   //weightAssoc[0] corresponds to TaskBlockList[0], weightAssoc[1] corresponds to TaskBlockList[1]...
     public List<DateTime> calPosAssoc;  //calPosAssoc[0] corresponds to TaskBlockList[0], calPosAssoc[1] corresponds to TaskBlockList[1]...
 
@@ -25,13 +27,14 @@ public class AutoScheduler : StudynSubscriber
     private List<int> AllCurBlocks;
     public List<DateTime> currentDates;
     private List<int> numPerDate;
-    public AutoScheduler( ObservableCollection<TaskItem> TL, ObservableCollection<Appointment> APPNTMNT )
-	  {
+    //public AutoScheduler( ObservableCollection<TaskItem> TL, ObservableCollection<Appointment> APPNTMNT )
+    public AutoScheduler(ObservableCollection<TaskItem> TL, CalendarManager CALMNGR)
+    {
         taskPastDue = false;
         pastDueTasks = new List<TaskItem>();
         Tasklist = TL;
-        Appointments = APPNTMNT;
-        //CalendarList = GlobalData.cs.calendarManager
+        //Appointments = APPNTMNT;
+        calendarManager = CALMNGR;
     }
    
     private void associateCalendarPositions()
@@ -124,57 +127,11 @@ public class AutoScheduler : StudynSubscriber
         return weight;
     }
 
-
-    //This is where conflict resolution will happen. If an event gets scheduled during blackout time, put it in the first
-    //available slot after blackout time.
-    //If two things get scheduled at the same time or overlapping, put the one with more weight first.
-    //If two things have the same weight (realllyyyyyy unlikely), just randomly put one before the other.
-
-/*  public Guid UniqueId { get; set; }
-    public string ReminderInfo { get; set; }
-    public string Notes { get; set; }
-
-    // properties for StudyN_Time category
-    public bool IsGeneratedStudyNTime { get; set; }
-    public int ParentTaskId { get; set; }
-    public int StudyNBlock_Minutes { get; set; }
-    public bool WasEdited { get; set; }
-    public bool IsOrphan { get; set; }
-
-    // properties for Assignment category
-    public int EstimatedCompletionTime_Hours { get; set; }
-
-    // properties for Exam category
-    public bool IsExamTakehome { get; set; }
-    public int ExamTime_Minutes { get; set; }
-
-    // StudyN Time Algorithm properties
-    public int BeforePadding_Minutes { get; set; }
-    public int AfterPadding_Minutes { get; set; }
-    public int MaxBlockTime_Minutes { get; set; }
-    public int MinBlockTime_Minutes { get; set; }
-    public int BreakTime_Minutes { get; set; }
-    public bool AllowBackToBackStudyNSessions { get; set; }
-    public bool UseFreeTimeBlocks { get; set; }
-
-    // properties for data import
-    public bool IsCanvasImport { get; set; }
-    public bool IsExternalCalendarImport { get; set; }*/
     private void addToCalendar()
     {
         Console.WriteLine("Adding taskBlocks to calendar");
         for(int i = 0; i < TaskBlockList.Count; i++) { 
-            Appointment TaskBlockAppointment = new Appointment();
-            //TaskBlockAppointment.UniqueId = taskBlock.TaskId; //This should probably be parentTaskId
-            
-            TaskBlockAppointment.Notes = TaskBlockList[i].Name; //Assuming notes is the name? Idk
-            TaskBlockAppointment.IsGeneratedStudyNTime = true;
-            TaskBlockAppointment.ParentTaskId = TaskBlockList[i].TaskId;
-            TaskBlockAppointment.StudyNBlock_Minutes = 60; //Assuming each block is 60 minutes
-            TaskBlockAppointment.EstimatedCompletionTime_Hours = TaskBlockList[i].TotalTimeNeeded;
-            TaskBlockAppointment.Start = calPosAssoc[i];
-            TaskBlockAppointment.End = calPosAssoc[i].AddHours(1); //Assuming the task block is 1 hour
-            Appointments.Add(TaskBlockAppointment);
+            calendarManager.CreateAppointment(-1, TaskBlockList[i].Name, calPosAssoc[i], calPosAssoc[i].AddHours(1) - calPosAssoc[i], -1, TaskBlockList[i].TaskId); //Assuming task block is 1 hour. IDK what "room" is. The GUID is set to be the overall task's GUID
         }
 
     }
@@ -208,6 +165,7 @@ public class AutoScheduler : StudynSubscriber
         calPosAssoc = new List<DateTime>( new DateTime[TaskBlockList.Count] );
 
     }
+
     //Before? or After? or during?? a rightPush blocks should be compressed! The leftPush inherently compresses the blocks, as it only incrementally pushes them left
     private void compressBlocks()
     {
@@ -371,53 +329,7 @@ public class AutoScheduler : StudynSubscriber
                     Console.WriteLine("WARNING: THERE ARE TOO MANY BLOCKS IN THIS DAY!!!");
                 }
             }
-
-                /*bool foundNew = false;
-                bool foundCur = false;
-                bool canMove = true;
-                int howMany = 0;
-                int curTask = -1;
-
-               for (int i = 0; i < numPerDate.Count; i++)
-                {
-                    if (numPerDate[i] > 4)
-                    {
-                        howMany = numPerDate[i] - 4;
-                        while ((howMany > 0) && canMove == true)
-                        {
-                            for (int j = 0; j < TaskBlockList.Count && (foundNew != true); j++)
-                            {
-                                if (TaskBlockList[j].TaskId == curId && calPosAssoc[AllCurBlocks[j]].Date == currentDates[i].Date && foundCur != true)
-                                {
-                                    curTask = j;
-                                    foundCur = true;
-                                }
-                            }
-
-
-
-                            for (int j = 0; j < currentDates.Count && curTask > -1 && foundNew != true; j++)
-                            {
-                                if (numPerDate[j] < 4)
-                                {
-                                    calPosAssoc[curTask] = currentDates[j].Date;
-                                    foundNew = true;
-                                }
-                            }
-
-                            if(foundNew == false)
-                            {
-                                canMove = false;
-                            }
-                            else
-                            {
-                                howMany--;
-                            }
-                            Console.WriteLine("A");
-                        }
-                    }
-                }*/
-            }
+        }
     }
 
     private void refreshArrays()
