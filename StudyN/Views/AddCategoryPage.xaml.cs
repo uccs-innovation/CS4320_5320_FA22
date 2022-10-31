@@ -25,6 +25,11 @@ namespace StudyN.Views
 			}
 		}
 
+		void HandelRedValueChanged(object sender, ValueChangedEventArgs args)
+		{
+
+		}
+
 		/// <summary>
 		/// Either creates a new category or make changes to existing category
 		/// </summary>
@@ -33,16 +38,7 @@ namespace StudyN.Views
 		private async void SaveButtonClicked(object sender, EventArgs e)
 		{
 			this.name.Text = this.name.Text == null ? "No Name" : this.name.Text;
-			// if input is invalid than make color black
-			if (this.color.Text == null || !this.color.Text.StartsWith('#'))
-			{
-				this.color.Text = "#000000";
-			}
-			else
-			{
-				this.color.Text = this.color.Text;
-			}
-			// turns color string input into color
+			// turns color input into color
 			Color useColor = Color.FromArgb(this.color.Text);
 			AppointmentCategory cat;
 			if (GlobalAppointmentData.EditCategory == null) {
@@ -67,8 +63,6 @@ namespace StudyN.Views
 		void LoadValues()
 		{
 			this.name.Text = GlobalAppointmentData.EditCategory.Caption;
-			string colorHex = GlobalAppointmentData.EditCategory.Color.ToHex();
-			this.color.Text = colorHex;
 		}
 
 		/// <summary>

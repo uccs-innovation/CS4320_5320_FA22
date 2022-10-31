@@ -19,10 +19,14 @@
               ColumnSpacing="10">
             <!-- Grid Row Definition -->
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" />
-                <RowDefinition Height="50" />
-                <RowDefinition Height="400" />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="50" /> <!-- Name Row -->
+                <RowDefinition Height="20" /> <!-- Red Label -->
+                <RowDefinition Height="30" /> <!-- Red Slider -->
+                <RowDefinition Height="20" /> <!-- Green Label -->
+                <RowDefinition Height="30" /> <!-- Green Slider-->
+                <RowDefinition Height="20" /> <!-- Blue Label -->
+                <RowDefinition Height="30" /> <!-- Blue Slider -->
+                <RowDefinition Height="50" /> <!-- Remove Button -->
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <!-- Get name of category from user -->
@@ -41,18 +45,56 @@
                 ChipSize="Medium"
                 Grid.Row="1"
                 x:Name="color" /> -->
-            <dxe:TextEdit
-                Grid.ColumnSpan="2"
-                LabelText="Color (Write Hexedecimal)"
-                IsLabelFloating="True"
-                Margin="1"
-                Grid.Row="1"
-                x:Name="color" />
+            <!-- Slider for red color -->
+            <Label x:Name="redLabel"
+                   Text="Red Slider"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Grid.Row="1"
+                   Grid.ColumnSpan="2"
+                   FontSize="16" />
+            <Slider Maximum="255"
+                    Minimum="0"
+                    Value="0"
+                    ValueChanged="HandelRedValueChanged"
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    x:Name="red" />
+            <!-- Slider for green color -->
+            <Label x:Name="greenLabel"
+                   Text="Green Slider"
+                   HorizontalOptions="Center"
+                   VerticalTextAlignment="Center"
+                   Grid.Row="3"
+                   Grid.ColumnSpan="2"
+                   FontSize="16" />
+            <Slider Maximum="255"
+                    Minimum="0"
+                    Value="0"
+                    ValueChanged="HandelGreenValueChanged"
+                    Grid.Row="4"
+                    Grid.ColumnSpan="2"
+                    x:Name="green" />
+            <!-- Slider for blue slider -->
+            <Label x:Name="blueLabel"
+                   Text="Blue Slider"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Grid.Row="5"
+                   Grid.ColumnSpan="2"
+                   FontSize="16" />
+            <Slider Maximum="255"
+                    Minimum="0"
+                    Value="0"
+                    ValueChanged="HandelBlueValueChanged"
+                    Grid.Row="6"
+                    Grid.ColumnSpan="2"
+                    x:Name="blue" />
             <!-- Button for deleting category -->
             <Button
                 x:Name="RemoveButton"
                 Text="Remove Category"
-                Grid.Row="3"
+                Grid.Row="7"
                 CornerRadius="7"
                 Margin="1"
                 Clicked="RemoveButtonClicked"
