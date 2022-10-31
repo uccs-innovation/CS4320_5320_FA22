@@ -63,6 +63,7 @@
 		<PackageReference Include="DevExpress.Maui.Scheduler" Version="22.1.4" />
 		<PackageReference Include="FirebaseAdmin" Version="2.3.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="nor0x.Maui.ColorPicker" Version="1.0.1" />
 		<PackageReference Include="Plugin.FirebasePushNotification" Version="3.4.35" />
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
 		<PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.0" />
