@@ -134,6 +134,8 @@ public class AutoScheduler : StudynSubscriber
             calendarManager.CreateAppointment(-1, TaskBlockList[i].Name, calPosAssoc[i], calPosAssoc[i].AddHours(1) - calPosAssoc[i], -1, TaskBlockList[i].TaskId); //Assuming task block is 1 hour. IDK what "room" is. The GUID is set to be the overall task's GUID
         }
 
+        
+
     }
 
     private void breakTasksIntoBlocks()

@@ -55,8 +55,10 @@ namespace StudyN.Views
 
         protected override void OnAppearing()
         {
+            Console.WriteLine("CalendarPage OnAppearing");
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
             CalendarDataView.LoadDataForNotification(notes.ToList());
+            SchedulerStorage.RefreshData();
             base.OnAppearing();
         }
 
