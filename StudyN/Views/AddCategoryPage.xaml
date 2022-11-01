@@ -50,7 +50,7 @@
                 PointerRingBorderUnits="0.3"
                 PointerRingDiameterUnits="0.7"
                 Grid.Row="2"
-                x:Name="ColorPicker" />
+                x:Name="colorPicker" />
             <!-- Button for deleting category -->
             <Button
                 x:Name="RemoveButton"
