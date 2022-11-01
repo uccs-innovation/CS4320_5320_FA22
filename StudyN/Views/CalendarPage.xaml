@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dxsch="clr-namespace:DevExpress.Maui.Scheduler;assembly=DevExpress.Maui.Scheduler"
+             xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
              Title="Calendar Page"
              IconImageSource="scheduler"
              BackgroundColor="{StaticResource NormalBackgroundColor}"
@@ -9,16 +10,11 @@
              ios:Page.UseSafeArea="true"
              x:Class="StudyN.Views.CalendarPage">
     <Shell.TitleView>
-        <dxe:ComboBoxEdit>
-            <dxe:ComboBoxEdit.ItemSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Daily</x:String>
-                    <x:String>Weekly</x:String>
-                    <x:String>Monthly</x:String>
-                </x:Array>
-            </dxe:ComboBoxEdit.ItemSource>
-        </dxe:ComboBoxEdit>
-        <ContentPage.Content>
+        <dxe:ComboBoxEdit x:Name="viewSelectComboBox"
+                          ItemsSource="{Binding ViewList}" 
+                          SelectionChanged="OnViewSelectionChanged" />
+    </Shell.TitleView>
+    <ContentPage.Content>
         <StackLayout>
             <dxsch:DayView x:Name="dayView"                           
                            Tap="Handle_onCalendarTap_FromDayView"

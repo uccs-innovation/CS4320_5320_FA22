@@ -20,6 +20,9 @@ namespace StudyN.Views
             ViewModel = new CalendarViewModel();
             BindingContext = _calendarDataView = new CalendarDataView(); //Use to pull data of CalendarData under Models
 
+            // Set comob to the first index by default
+            viewSelectComboBox.SelectedIndex = 0;
+
             EventBus.Subscribe(this);
 
             // Reuse data storage between all the views
@@ -58,6 +61,11 @@ namespace StudyN.Views
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
             CalendarDataView.LoadDataForNotification(notes.ToList());
             base.OnAppearing();
+        }
+
+        private void OnViewSelectionChanged()
+        {
+            // Function for changed combo box
         }
 
         private void Handle_onCalendarTap_FromDayView(object sender, SchedulerGestureEventArgs e)
@@ -203,9 +211,11 @@ namespace StudyN.Views
             public IReadOnlyList<AppointmentCategory> AppointmentCategories { get => data.AppointmentCategories; }
             public IReadOnlyList<AppointmentStatus> AppointmentStatuses { get => data.AppointmentStatuses; }
 
+            public List<string> ViewList { get; }
             public CalendarDataView()
             {
                 data = GlobalAppointmentData.CalendarManager;
+                ViewList = new List<string>() { "Day", "Week", "Month" };
             }
 
             /// <summary>
