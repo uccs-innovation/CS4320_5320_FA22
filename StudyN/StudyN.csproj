@@ -74,9 +74,6 @@
 	  <Compile Update="NotificationService\NotificationService.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Compile>
-	  <Compile Update="Views\AddEventPage.xaml.cs">
-	    <DependentUpon>AddEventPage.xaml</DependentUpon>
-	  </Compile>
 	  <Compile Update="Views\TaskChartsPage.xaml.cs">
 	    <DependentUpon>TaskChartsPage.xaml</DependentUpon>
 	  </Compile>
@@ -97,9 +94,6 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\AddCategoryPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\AddEventPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\AddTaskPage.xaml">
