@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
+             x:Class="StudyN.Views.CategoriesPage"
+             Title="Categories">
+    <!-- Takes user to add category page -->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add"
+                     Clicked="AddButtonClicked"
+                     IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+    </ContentPage.ToolbarItems>
+    <!-- DataGrid of Categories -->
+    <dxg:DataGridView ItemsSource="{Binding AppointmentCategories}"
+                      Tap="CellClicked"
+                      ColumnHeaderHeight="0">
+        <dxg:DataGridView.Columns>
+            <!-- Doesn't work unfortunatly -->
+            <!-- <dxg:TemplateColumn FieldName="Color" Caption="Color" BackgroundColor="{Binding FieldName}" Width ="75" /> -->
+            <dxg:TextColumn FieldName="Caption" Caption="Name" />
+        </dxg:DataGridView.Columns>
+        <dxg:DataGridView.GroupRowStyle>
+            <dxg:GroupRowStyle FontSize="16" />
+        </dxg:DataGridView.GroupRowStyle>
+        <dxg:DataGridView.CellStyle>
+            <dxg:CellStyle Padding="10" FontSize="24"/>
+        </dxg:DataGridView.CellStyle>
+        <dxg:DataGridView.ColumnHeaderStyle>
+            <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
+        </dxg:DataGridView.ColumnHeaderStyle>
+    </dxg:DataGridView>
+</ContentPage>
