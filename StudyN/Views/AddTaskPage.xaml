@@ -38,10 +38,9 @@
                 <RowDefinition Height="50" /><!--recurrence                       6-->
                 <RowDefinition Height="50" /><!--Delete And Complete              7-->
                 <RowDefinition Height="50" /><!--Timer                            8-->
-                <RowDefinition Height="20" /><!--Time List Log Label              9-->
-                <RowDefinition Height="20" /><!--Time List Log Label              9-->
-                <RowDefinition Height="14" /><!--Time List Log Label              10-->
-                <RowDefinition Height="130" /><!--Time List Log                   11-->
+                <RowDefinition Height="20" /><!--Time List Log Label              9-->                
+                <RowDefinition Height="14" /><!--Time List Log Header             10-->
+                <RowDefinition Height="70"/><!--Time List Log                    11-->
             </Grid.RowDefinitions>
 
             <!--Grid column definitions-->
@@ -233,7 +232,7 @@
 
             <!--Labels for column headers for Task Time Log, row 10-->
             <Label 
-                Text="Start Time" 
+                Text="  Start Time" 
                 Grid.Row="10"
                 Grid.ColumnSpan="2" 
                 HorizontalTextAlignment="Start"
@@ -249,9 +248,9 @@
                 FontAttributes="Bold"    
                 FontSize="10" />
             <Label 
-                Text="Duration"                 
+                Text="Duration     "                 
                 Grid.Row="10"
-                Grid.ColumnSpan="2"
+                Grid.ColumnSpan="2"                
                 HorizontalTextAlignment="End"
                 VerticalTextAlignment="Center"
                 FontAttributes="Bold"    
@@ -270,7 +269,7 @@
                     <DataTemplate>
                         <Grid Padding="4">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="30" />
+                                <RowDefinition Height="14" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
@@ -278,14 +277,14 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <Label         
-                                Text="{Binding start}" 
+                                Text="{Binding start}"                                 
                                 Grid.Column="0"
                                 VerticalTextAlignment="Center" 
                                 HorizontalTextAlignment="Start"
                                 FontSize="10"
                                 FontAttributes="Italic" />
                             <Label                                 
-                                Text="{Binding stop}"
+                                Text="{Binding stop}"                                
                                 Grid.Column="1"
                                 VerticalTextAlignment="Center"
                                 HorizontalTextAlignment="Center"
