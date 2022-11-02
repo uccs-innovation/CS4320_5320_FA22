@@ -57,20 +57,13 @@
 	<ItemGroup>
 		<PackageReference Include="DevExpress.Maui.Charts" Version="22.1.4" />
 		<PackageReference Include="DevExpress.Maui.CollectionView" Version="22.1.4" />
-		<PackageReference Include="DevExpress.Maui.Controls" Version="22.1.4" />
 		<PackageReference Include="DevExpress.Maui.Core" Version="22.1.4" />
 		<PackageReference Include="DevExpress.Maui.DataGrid" Version="22.1.4" />
 		<PackageReference Include="DevExpress.Maui.Editors" Version="22.1.4" />
 		<PackageReference Include="DevExpress.Maui.Scheduler" Version="22.1.4" />
 		<PackageReference Include="FirebaseAdmin" Version="2.3.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="nor0x.Maui.ColorPicker" Version="1.0.1" />
 		<PackageReference Include="Plugin.FirebasePushNotification" Version="3.4.35" />
-		<PackageReference Include="SkiaSharp" Version="2.88.3" />
-		<PackageReference Include="SkiaSharp.Views" Version="2.88.3" />
-		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.3" />
-		<PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.3" />
-		<PackageReference Include="SkiaSharp.Views.Maui.Core" Version="2.88.3" />
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
 		<PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.0" />
 		<PackageReference Include="XtraEditor.Controls" Version="18.2.4" />

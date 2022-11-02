@@ -6,7 +6,6 @@
              xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
              xmlns:dxu="clr-namespace:DevExpress.Utils;assembly=DevExpress.Maui.Core"
              xmlns:dxee="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-             xmlns:controls="clr-namespace:Maui.ColorPicker;assembly=Maui.ColorPicker"
              Title="{Binding Title}">
     <!-- Saves the category -->
     <ContentPage.ToolbarItems>
@@ -21,7 +20,7 @@
             <!-- Grid Row Definition -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
-                <RowDefinition Height="20" />
+                <RowDefinition Height="50" />
                 <RowDefinition Height="400" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
@@ -33,24 +32,22 @@
                 IsLabelFloating="True"
                 Margin="1"
                 x:Name="name" />
-            <!-- Get color of category from user, package created by nor0x -->
-            <Label 
-                x:Name="displayLabel"
-                Text="Pick Color"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
+            <!-- Get color of category from user, doesn't work -->
+            <!--<dxe:ColorEdit
+                Grid.ColumnSpan="2"
+                ColumnCount ="10"
+                DefaultColor="Black"
+                MoreColorsButtonContent="Color picker"
+                ChipSize="Medium"
                 Grid.Row="1"
+                x:Name="color" /> -->
+            <dxe:TextEdit
                 Grid.ColumnSpan="2"
-                FontSize="16" />
-            <controls:ColorPicker
-                Grid.ColumnSpan="2"
-                ColorFlowDirection="Horizontal"
-                ColorSpectrumStyle="HueOnlyStyle"
-                PickedColorChanged="PickedColorChanged"
-                PointerRingBorderUnits="0.3"
-                PointerRingDiameterUnits="0.7"
-                Grid.Row="2"
-                x:Name="colorPicker" />
+                LabelText="Color (Write Hexedecimal)"
+                IsLabelFloating="True"
+                Margin="1"
+                Grid.Row="1"
+                x:Name="color" />
             <!-- Button for deleting category -->
             <Button
                 x:Name="RemoveButton"
