@@ -17,7 +17,9 @@ public partial class AddTaskPage : ContentPage
     public AddTaskPage()
     {
         InitializeComponent();
-        autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList, GlobalAppointmentData.CalendarManager.Appointments);
+        //autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList, GlobalAppointmentData.CalendarManager.Appointments);
+        autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList, GlobalAppointmentData.CalendarManager);
+
 
         //This will check if we are editing an existing task or making a new one. We will know this based on if ToEdit is null or not
         if (GlobalTaskData.ToEdit != null)
@@ -130,9 +132,25 @@ public partial class AddTaskPage : ContentPage
                     timeLogged,
                     totalTime);
         }
-        
+
+
+        // Handles recurrence after everything is added into the task
+        if (dailyRadioButton.IsChecked == true)
+        {
+            HandleRecurrenceDay(sender, e);
+        }
+        else if (weeklyRadioButton.IsChecked == true)
+        {
+            HandleRecurrenceWeek(sender, e);
+        }
+        else if (monthlyRadioButton.IsChecked == true)
+        {
+            HandleRecurrenceMonth(sender, e);
+        }
+
         //Returning to the previous page
         await Shell.Current.GoToAsync("..");
+
         runAutoScheduler(task.TaskId);
     }
 
@@ -205,9 +223,7 @@ public partial class AddTaskPage : ContentPage
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime);
-            
         }
-
     }
     private void HandleRecurrenceWeek(object sender, EventArgs e)
     {
@@ -227,7 +243,6 @@ public partial class AddTaskPage : ContentPage
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime);
-            
         }
 
     }
@@ -237,7 +252,6 @@ public partial class AddTaskPage : ContentPage
         int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-
         for (int i = 1; i <= 12; i++)
         {
             dateTime = dateTime.AddMonths(i); //months
@@ -249,7 +263,7 @@ public partial class AddTaskPage : ContentPage
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime);
-
         }
+        
     }
 }

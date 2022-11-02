@@ -59,6 +59,7 @@
             <dxe:TimeEdit 
                 TimeFormatMode="HourFormat12"
                 Grid.Row="2"
+                Grid.Column="1"
                 Grid.ColumnSpan="1"
                 LabelText="Time Due"
                 IsLabelFloating="True"
@@ -92,7 +93,6 @@
             <dxe:DateEdit 
                 DisplayFormat="d"
                 Grid.Row="2"
-                Grid.Column="1"
                 Grid.ColumnSpan="1"
                 LabelText="Date Due"
                 IsLabelFloating="True"
@@ -147,33 +147,33 @@
                Grid.Row="6"
                Grid.ColumnSpan="2"
                FontSize="16" />
-            <Button
-                x:Name="RecurrenceDay"
-                Text="Day"
+            <RadioButton
+                x:Name="dailyRadioButton"
+                Content="Day"
                 Grid.Row="6"
                 Grid.Column="1"
                 CornerRadius="3"
                 Margin="1"
                 HorizontalOptions="Start"
-                Clicked="HandleRecurrenceDay"/>
-            <Button
-                x:Name="RecurrenceWeek"
-                Text="Week"
+                IsChecked="False"/>
+            <RadioButton
+                x:Name="weeklyRadioButton"
+                Content="Week"
                 Grid.Row="6"
                 Grid.Column="2"
                 CornerRadius="3"
                 Margin="1"
                 HorizontalOptions="CenterAndExpand"
-                Clicked="HandleRecurrenceWeek"/>
-            <Button
-                x:Name="RecurrenceMonth"
-                Text="Month"
+                IsChecked="False"/>
+            <RadioButton
+                x:Name="monthlyRadioButton"
+                Content="Month"
                 Grid.Row="6"
                 Grid.Column="3"
                 CornerRadius="3"
                 Margin="1"
                 HorizontalOptions="EndAndExpand"
-                Clicked="HandleRecurrenceMonth"/>
+                IsChecked="False"/>
             
             <!--Buttons for completing/deleting tasks-->
             <Button 
