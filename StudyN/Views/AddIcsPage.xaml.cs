@@ -60,7 +60,7 @@ public partial class AddIcsPage : ContentPage
                 GetAppointFromString convert = new GetAppointFromString(responseBody);
 
                 //go to calanders page to show off new appointments
-                //await Shell.Current.GoToAsync(nameof(CalendarPage));
+                await Shell.Current.GoToAsync(nameof(CalendarPage));
             }
             catch (HttpRequestException ex) {
                 //what went wrong
@@ -68,7 +68,7 @@ public partial class AddIcsPage : ContentPage
                 Console.WriteLine("Message :{0} ", ex.Message);
 
                 //jump ship (so no breaky)
-                //await Shell.Current.GoToAsync(nameof(SettingsPage));
+                await Shell.Current.GoToAsync(nameof(SettingsPage));
             }
         }
     }
@@ -86,6 +86,8 @@ public partial class AddIcsPage : ContentPage
         private string name;
         private DateTime start = new DateTime();
         private DateTime end = new DateTime();
+        private DateTime zdate = new DateTime();
+        private TimeSpan duration = new TimeSpan();
         //private TimeSpan duration;
 
 
@@ -104,22 +106,24 @@ public partial class AddIcsPage : ContentPage
             //use stringreader to convert big string into 
             using var sr = new StringReader(response);
 
-            TimeSpan duration = new TimeSpan();
 
             line = sr.ReadLine();
             while (line != null)
             {
-                end = new DateTime();
-
-
+                //parse out each individual piece
                 if (line.Contains("SUMMARY") == true)
                 {
                     line = line.Substring(8);
                     name = line;
                 }
-                if (line.Contains("UID") == true)
+                if (line.Contains("UID:event-assignment") == true)
                 {
                     line = line.Substring(21);
+                    id = Convert.ToInt32(line);
+                }
+                if (line.Contains("UID:event-calendar") == true)
+                {
+                    line = line.Substring(25);
                     id = Convert.ToInt32(line);
                 }
                 if (line.Contains("DTSTART;") == true)
@@ -142,9 +146,7 @@ public partial class AddIcsPage : ContentPage
                     day = Convert.ToInt32(line);
 
                     //insert into datetime
-                    start.AddYears(year);
-                    start.AddMonths(month);
-                    start.AddDays(day);
+                    start = new DateTime(year, month, day);
                 }
                 if (line.Contains("DTSTART:") == true)
                 {
@@ -158,7 +160,8 @@ public partial class AddIcsPage : ContentPage
 
                     line = line.Substring(8);
                     string date = line.Substring(0, 8);
-                    string time = line.Substring(10, 15);
+                    line = line.Substring(9);
+                    string time = line.Substring(0, 6);
 
                     //get year
                     year = Convert.ToInt32(date);
@@ -175,7 +178,7 @@ public partial class AddIcsPage : ContentPage
                     hour = Convert.ToInt32(time);
                     hour = hour / 10000;
                     //get month
-                    time = time.Substring(4);
+                    time = time.Substring(2);
                     minute = Convert.ToInt32(time);
                     minute = minute / 100;
                     //get day
@@ -183,30 +186,61 @@ public partial class AddIcsPage : ContentPage
                     second = Convert.ToInt32(time);
 
                     //insert into datetime
-                    start.AddYears(year);
-                    start.AddMonths(month);
-                    start.AddDays(day);
-                    start.AddHours(hour);
-                    start.AddMinutes(minute);
-                    start.AddSeconds(second);
+                    start = new DateTime(year, month, day, hour, minute, second);
                 }
                 if (line.Contains("DTEND") == true)
                 {
+                    //set some variables
+                    int year = 0;
+                    int month = 0;
+                    int day = 0;
+                    int hour = 0;
+                    int minute = 0;
+                    int second = 0;
+
                     line = line.Substring(6);
-                    int date = Convert.ToInt32(line);
+                    string date = line.Substring(0, 8);
+                    line = line.Substring(9);
+                    string time = line.Substring(0, 6);
 
+                    //get year
+                    year = Convert.ToInt32(date);
+                    year = year / 10000;
+                    //get month
+                    date = date.Substring(4);
+                    month = Convert.ToInt32(date);
+                    month = month / 100;
+                    //get day
+                    date = date.Substring(2);
+                    day = Convert.ToInt32(date);
 
-                    
+                    //get year
+                    hour = Convert.ToInt32(time);
+                    hour = hour / 10000;
+                    //get month
+                    time = time.Substring(2);
+                    minute = Convert.ToInt32(time);
+                    minute = minute / 100;
+                    //get day
+                    time = time.Substring(2);
+                    second = Convert.ToInt32(time);
+
+                    //insert into datetime
+                    end = new DateTime(year, month, day, hour, minute, second);
                 }
 
                 //set duration, to 0 if no end date
-                duration = end - start;
+                if (!end.Equals(zdate))
+                    duration = end - start;
 
                 if (line.Contains("END:VEVENT") == true)
                 {
                     int room = rnd.Next(1000, 2000);
                     CalendarManager calendarManager = new CalendarManager();
                     calendarManager.CreateAppointment(id, name, start, duration, room);
+                    start = new DateTime();
+                    end = new DateTime();
+                    duration = new TimeSpan();
                 }
 
                 //read another line
