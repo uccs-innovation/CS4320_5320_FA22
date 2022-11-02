@@ -40,7 +40,7 @@
                 <RowDefinition Height="50" /><!--Timer                            8-->
                 <RowDefinition Height="20" /><!--Time List Log Label              9-->                
                 <RowDefinition Height="14" /><!--Time List Log Header             10-->
-                <RowDefinition Height="70"/><!--Time List Log                    11-->
+                <RowDefinition Height="70"/><!--Time List Log                     11-->
             </Grid.RowDefinitions>
 
             <!--Grid column definitions-->
@@ -256,6 +256,7 @@
                 FontAttributes="Bold"    
                 FontSize="10" />
 
+            <!--Task Time Log Collection View, row 11-->
             <CollectionView ItemsSource="{Binding TimeList}"
                             x:Name="TimeListLog"
                             ItemsLayout="VerticalList"                            
