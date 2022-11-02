@@ -1,5 +1,5 @@
-
-
+using DevExpress.XtraRichEdit.Model;
+using StudyN.Common;
 using StudyN.Models;
 using System.Collections.ObjectModel;
 
@@ -24,14 +24,14 @@ namespace StudyN.ViewModels
             foreach (var item in data.Appointments)
             {
                 numOfEvents++;
-                string category = data.AppointmentCategories[(int)item.LabelId].Caption;
-                if (!tempDict.ContainsKey(category))
+                string caption = data.GetAppointmentCategory((Guid)item.LabelId).Caption;
+                if (!tempDict.ContainsKey(caption))
                 {
-                    tempDict.Add(category, 1);
+                    tempDict.Add(caption, 1);
                 }
                 else
                 {
-                    tempDict[category] += 1;
+                    tempDict[caption] += 1;
                 }
             }
             foreach (var key in tempDict.Keys)

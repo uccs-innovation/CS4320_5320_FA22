@@ -1,10 +1,11 @@
 using StudyN.ViewModels;
 using StudyN.Models;
 using DevExpress.Maui.DataGrid;
+using StudyN.Common;
 
 namespace StudyN.Views
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class CategoriesPage : ContentPage
 	{
 		public CategoriesPage()

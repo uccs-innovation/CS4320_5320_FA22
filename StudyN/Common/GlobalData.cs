@@ -1,4 +1,6 @@
-﻿namespace StudyN.Models
+﻿using StudyN.Models;
+
+namespace StudyN.Common
 {
     //This class is used to create an object that will allow us to identify where data is held and retrieve/store it 
     public static class GlobalTaskData

@@ -1,9 +1,10 @@
 using StudyN.ViewModels;
 using StudyN.Models;
+using StudyN.Common;
 
 namespace StudyN.Views
 {
-	public partial class AddCategoryPage : ContentPage
+    public partial class AddCategoryPage : ContentPage
 	{
 		public AddCategoryPage()
 		{
