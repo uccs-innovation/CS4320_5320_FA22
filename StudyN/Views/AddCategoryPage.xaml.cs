@@ -52,13 +52,15 @@ namespace StudyN.Views
 			if (GlobalAppointmentData.EditCategory == null) {
 				// creates the category
 				cat = GlobalAppointmentData.CalendarManager.CreateCategory(this.name.Text, this.color, 
-																			this.colorPicker.X, this.colorPicker.Y);
+																			((double)this.colorPicker.PointerRingPositionXUnits), 
+																			((double)this.colorPicker.PointerRingPositionYUnits));
 			}
 			else
 			{
 				// edit the category
 				GlobalAppointmentData.CalendarManager.EditCategory(this.name.Text, this.color, 
-																	this.colorPicker.X, this.colorPicker.Y,
+																	((double)this.colorPicker.PointerRingPositionXUnits), 
+																	((double)this.colorPicker.PointerRingPositionYUnits),
 																	GlobalAppointmentData.EditCategory.Id);
 				cat = GlobalAppointmentData.EditCategory;
 				GlobalAppointmentData.EditCategory = null;
