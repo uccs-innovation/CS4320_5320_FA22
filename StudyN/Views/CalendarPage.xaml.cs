@@ -13,6 +13,9 @@ namespace StudyN.Views
 
     public partial class CalendarPage : ContentPage, StudynSubscriber
     {
+        // Flag to prevent multiple child pages opening
+        bool isChildPageOpening = false;
+
         readonly CalendarDataView _calendarDataView;
         public CalendarPage()
         {
@@ -55,6 +58,8 @@ namespace StudyN.Views
 
         protected override void OnAppearing()
         {
+            isChildPageOpening = false;
+
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
             CalendarDataView.LoadDataForNotification(notes.ToList());
             base.OnAppearing();
@@ -135,14 +140,22 @@ namespace StudyN.Views
         }
         private void ShowAppointmentEditPage(AppointmentItem appointment)
         {
-            AppointmentEditPage appEditPage = new(appointment, SchedulerStorage);
-            Navigation.PushAsync(appEditPage);
+            if (!isChildPageOpening)
+            {
+                isChildPageOpening = true;
+                AppointmentEditPage appEditPage = new(appointment, SchedulerStorage);
+                Navigation.PushAsync(appEditPage);
+            }
         }
 
         private void ShowNewAppointmentEditPage(IntervalInfo info)
         {
-            AppointmentEditPage appEditPage = new(info.Start, info.End, info.AllDay, SchedulerStorage);
-            Navigation.PushAsync(appEditPage);
+            if (!isChildPageOpening)
+            {
+                isChildPageOpening = true;
+                AppointmentEditPage appEditPage = new(info.Start, info.End, info.AllDay, SchedulerStorage);
+                Navigation.PushAsync(appEditPage);
+            }
         }
 
         // estep: I know there must be a better way to do this, but I just want to try it

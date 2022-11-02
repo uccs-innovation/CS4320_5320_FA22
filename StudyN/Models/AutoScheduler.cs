@@ -128,7 +128,7 @@ public class AutoScheduler : StudynSubscriber
     //If two things get scheduled at the same time or overlapping, put the one with more weight first.
     //If two things have the same weight (realllyyyyyy unlikely), just randomly put one before the other.
     private void addToCalendar()
-    {
+    { 
         Console.WriteLine("TODO: implement autoScheduler.addToCalendar");
     }
 

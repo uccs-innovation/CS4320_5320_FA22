@@ -238,7 +238,7 @@ public partial class AddTaskPage : ContentPage
                     timeLogged,
                     totalTime);
         }
-        
+
         //Returning to the previous page
         await Shell.Current.GoToAsync("..");
         runAutoScheduler(task.TaskId);
