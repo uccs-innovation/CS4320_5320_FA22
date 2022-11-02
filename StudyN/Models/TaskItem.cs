@@ -26,7 +26,8 @@
         public int TotalTimeNeeded { get; set; } = 0;
         public int Priority { get; set; } = 3;
 
-        public double Percent
+        //Method for each task %
+        public double? Percent
         {
             get
             {
@@ -39,7 +40,8 @@
                         return percentage;
                 }
                 else
-                    return 0;
+                    //If the total time is empty then it does not display %
+                    return null;
             }
         }
     }
