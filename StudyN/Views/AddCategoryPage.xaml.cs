@@ -34,7 +34,7 @@ namespace StudyN.Views
 		/// <param name="colorPicked"></param>
 		private void PickedColorChanged(object sender, Color colorPicked)
 		{
-			Color value = colorPicked;
+			this.color = colorPicked;
 			displayLabel.Text = String.Format("Pick Color");
 		}
 
@@ -46,7 +46,6 @@ namespace StudyN.Views
 		private async void SaveButtonClicked(object sender, EventArgs e)
 		{
 			// Gets input values, if there are none, give default values
-			this.color = colorPicker.PickedColor;
 			this.name.Text = this.name.Text == null ? "No Name" : this.name.Text;
 			this.color = this.color == null ? Color.FromArgb("#000000") : this.color;
 			AppointmentCategory cat;
