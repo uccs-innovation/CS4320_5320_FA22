@@ -20,6 +20,9 @@ namespace StudyN.Views
             ViewModel = new CalendarViewModel();
             BindingContext = _calendarDataView = new CalendarDataView(); //Use to pull data of CalendarData under Models
 
+            // Set comob to the first index by default
+            viewSelectComboBox.SelectedIndex = 0;
+
             EventBus.Subscribe(this);
 
             // Reuse data storage between all the views
@@ -29,35 +32,39 @@ namespace StudyN.Views
 
         CalendarViewModel ViewModel { get; }
 
-
-        void OnDailyClicked(object sender, EventArgs args)
-        {
-            dayView.IsVisible = true;
-            weekView.IsVisible = false;
-            monthView.IsVisible = false;
-
-        }
-
-        void OnWeeklyClicked(object sender, EventArgs args)
-        {
-            dayView.IsVisible = false;
-            weekView.IsVisible = true;
-            monthView.IsVisible = false;
-
-        }
-
-        void OnMonthlyClicked(object sender, EventArgs args)
-        {
-            dayView.IsVisible = false;
-            weekView.IsVisible = false;
-            monthView.IsVisible = true;
-        }
-
         protected override void OnAppearing()
         {
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
             CalendarDataView.LoadDataForNotification(notes.ToList());
             base.OnAppearing();
+        }
+
+        protected void OnViewSelectionChanged(object sender, EventArgs args)
+        {
+            // Changed to Day View
+            if(CalendarDataView.DayText
+                        == _calendarDataView.ViewList[viewSelectComboBox.SelectedIndex])
+            {
+                dayView.IsVisible = true;
+                weekView.IsVisible = false;
+                monthView.IsVisible = false;
+            }
+            // Changed to Week View
+            else if (CalendarDataView.WeekText
+                        == _calendarDataView.ViewList[viewSelectComboBox.SelectedIndex])
+            {
+                dayView.IsVisible = false;
+                weekView.IsVisible = true;
+                monthView.IsVisible = false;
+            }
+            // Chanaged to Month View
+            else if (CalendarDataView.MonthText 
+                        == _calendarDataView.ViewList[viewSelectComboBox.SelectedIndex])
+            {
+                dayView.IsVisible = false;
+                weekView.IsVisible = false;
+                monthView.IsVisible = true;
+            }
         }
 
         private void Handle_onCalendarTap_FromDayView(object sender, SchedulerGestureEventArgs e)
@@ -203,9 +210,15 @@ namespace StudyN.Views
             public IReadOnlyList<AppointmentCategory> AppointmentCategories { get => data.AppointmentCategories; }
             public IReadOnlyList<AppointmentStatus> AppointmentStatuses { get => data.AppointmentStatuses; }
 
+            public List<string> ViewList { get; }
+
+            static public string DayText = "Day";
+            static public string WeekText = "Week";
+            static public string MonthText = "Month";
             public CalendarDataView()
             {
                 data = GlobalAppointmentData.CalendarManager;
+                ViewList = new List<string>() { DayText, WeekText, MonthText };
             }
 
             /// <summary>
