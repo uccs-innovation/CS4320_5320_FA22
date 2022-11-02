@@ -15,14 +15,9 @@ using static Android.Provider.Settings;
 public partial class AddTaskPage : ContentPage
 {
     bool editingExistingTask;
-    AutoScheduler autoScheduler;
-
     public AddTaskPage()
     {
         InitializeComponent();
-        autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList);
-
-
 
         //This will check if we are editing an existing task or making a new one. We will know this based on if ToEdit is null or not
         if (GlobalTaskData.ToEdit != null)
@@ -34,7 +29,7 @@ public partial class AddTaskPage : ContentPage
             editingExistingTask = true;
             //CreateDummyTaskTimeLogData();
             TimeListLog.ItemsSource = GlobalTaskData.ToEdit.TimeList;
-
+            this.displayLabel.Text = String.Format("Priority: " + GlobalTaskData.ToEdit.Priority);
 
         }
         else
@@ -44,8 +39,6 @@ public partial class AddTaskPage : ContentPage
             editingExistingTask = false;
             SetValues();            
         }
-
-
 
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
         DeleteTaskButton.IsVisible = editingExistingTask;
@@ -99,7 +92,6 @@ public partial class AddTaskPage : ContentPage
                 GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
                 AlertUserOfTimeSpent();
                 await Shell.Current.GoToAsync("..");
-
             }
             //send alert to user that a different task is being tracked
             else
@@ -111,11 +103,7 @@ public partial class AddTaskPage : ContentPage
             TimerButton.Text = "Stop Tracking";
             //start new timer
             GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid);
-
-
         }
-
-
     }
 
 
@@ -126,7 +114,6 @@ public partial class AddTaskPage : ContentPage
         " minutes on task " +
         GlobalTaskData.TaskManager.GetTask(GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed).Name;
         await DisplayAlert("Great Job!", alertstr, "OK");
-
     }
 
     private async void AlertUserTaskTracking(DateTime gettime, Guid currenttaskid)
@@ -171,8 +158,8 @@ public partial class AddTaskPage : ContentPage
     void HandleSliderValueChanged(object sender, ValueChangedEventArgs args)
     {
         //Stroring the new value and setting the sliders label correctly
-        double value = args.NewValue;
-        displayLabel.Text = String.Format("Priority");
+        int value = (int)args.NewValue;
+        displayLabel.Text = String.Format("Priority: " + value);
     }
 
     //This function will be used by the add task button to either create a new task or save the changes to an existing one
@@ -238,7 +225,7 @@ public partial class AddTaskPage : ContentPage
                     timeLogged,
                     totalTime);
         }
-        
+
         //Returning to the previous page
         await Shell.Current.GoToAsync("..");
         runAutoScheduler(task.TaskId);
@@ -265,11 +252,11 @@ public partial class AddTaskPage : ContentPage
 
     void runAutoScheduler(Guid taskId)
     {
-        autoScheduler.run(taskId);
-        if (autoScheduler.taskPastDue)
+        GlobalAutoScheduler.AutoScheduler.run(taskId);
+        if (GlobalAutoScheduler.AutoScheduler.taskPastDue)
         {
             string tasksString = "";
-            foreach (TaskItem task in autoScheduler.pastDueTasks)
+            foreach (TaskItem task in GlobalAutoScheduler.AutoScheduler.pastDueTasks)
             {
                 tasksString += task.Name + ", ";
             } 
