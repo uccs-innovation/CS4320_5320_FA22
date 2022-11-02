@@ -183,7 +183,6 @@ namespace StudyN.Views
         }
 
        
-
         public void OnNewStudynEvent(StudynEvent sEvent)
         {
             Console.WriteLine("in CalendarPage.OnNewStudynEvent");
@@ -192,7 +191,7 @@ namespace StudyN.Views
                 || sEvent.EventType == StudynEventType.AppointmentEdit
                 || sEvent.EventType == StudynEventType.AppointmentDelete)
             {
-                SchedulerStorage.RefreshData();
+                //SchedulerStorage.RefreshData(); //Not sure if this is crashing the app causing an "index out of range" or "handler being used elsewhere" error. The calendarpage does SchedulerStorage.RefreshData() every time it appears anyway, so im going to comment this out for now
             }
         }
 
