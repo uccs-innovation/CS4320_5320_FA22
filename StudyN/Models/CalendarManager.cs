@@ -47,6 +47,7 @@ namespace StudyN.Models
 
         static Random rnd = new Random();
 
+        /*
         void CreateAppointments()
         {
             int appointmentId = 1;
@@ -74,6 +75,7 @@ namespace StudyN.Models
                 }
             }
         }
+        */
 
         void CreateAppointmentCategories()
         {
@@ -86,6 +88,22 @@ namespace StudyN.Models
                 cat.Color = AppointmentCategoryColors[i];
                 AppointmentCategories.Add(cat);
             }
+        }
+
+        public AppointmentCategory GetAppointmentCategory(Guid id)
+        {
+            int index = 0;
+            AppointmentCategory category;
+            while (true)
+            {
+                if (AppointmentCategories[index].Id == id)
+                {
+                    category = AppointmentCategories[index];
+                    break;
+                }
+                index++;
+            }
+            return category;
         }
 
         void CreateAppointmentStatuses()
