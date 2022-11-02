@@ -288,7 +288,7 @@ namespace StudyN.Models
             AppointmentStatuses = new ObservableCollection<AppointmentStatus>();
 
             // Handle changes to collection
-            Appointments.CollectionChanged  += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(AppointmentCollectionChanged);
+            Appointments.CollectionChanged  += new NotifyCollectionChangedEventHandler(AppointmentCollectionChanged);
 
             CreateAppointmentCategories();
             CreateAppointmentStatuses();
