@@ -45,8 +45,8 @@
     <ContentPage.Content>
         <StackLayout>
             <dxsch:DayView x:Name="dayView"                           
-                           Tap="Handle_onCalendarTap_FromDayView"
-                           LongPress="Handle_onCalendarHold_FromDayView">
+                           Tap="OnCalendarTap"
+                           LongPress="OnCalendarHold">
                 <dxsch:DayView.DataStorage>
                     <dxsch:SchedulerDataStorage x:Name="SchedulerStorage">
                         <dxsch:SchedulerDataStorage.DataSource>
@@ -85,12 +85,12 @@
             </dxsch:DayView>
             
             <dxsch:WeekView x:Name="weekView"
-                            Tap="Handle_onCalendarTap_FromWeekView"
-                            LongPress="Handle_onCalendarHold_FromWeekView">
+                            Tap="OnCalendarTap"
+                            LongPress="OnCalendarHold">
             </dxsch:WeekView>
             <dxsch:MonthView x:Name="monthView"
-                             Tap="Handle_onCalendarTap_FromMonthView"
-                             LongPress="Handle_onCalendarHold_FromMonthView">
+                             Tap="OnCalendarTap"
+                             LongPress="OnCalendarHold">
             </dxsch:MonthView>
         </StackLayout>
         </ContentPage.Content>
