@@ -1,6 +1,5 @@
 ﻿using DevExpress.Maui;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
-using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace StudyN
 {
@@ -10,7 +9,6 @@ namespace StudyN
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseSkiaSharp(true)
                 .UseMauiApp<App>()
                 .UseDevExpress()
                 .ConfigureFonts(fonts =>

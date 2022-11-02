@@ -5,8 +5,6 @@ namespace StudyN.Views
 {
 	public partial class AddCategoryPage : ContentPage
 	{
-		Color color;
-		
 		public AddCategoryPage()
 		{
 			InitializeComponent();
@@ -28,35 +26,33 @@ namespace StudyN.Views
 		}
 
 		/// <summary>
-		/// Changes when user changes color and gets label
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="colorPicked"></param>
-		private void PickedColorChanged(object sender, Color colorPicked)
-		{
-			this.color = colorPicked;
-			displayLabel.Text = String.Format("Pick Color");
-		}
-
-		/// <summary>
 		/// Either creates a new category or make changes to existing category
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private async void SaveButtonClicked(object sender, EventArgs e)
 		{
-			// Gets input values, if there are none, give default values
 			this.name.Text = this.name.Text == null ? "No Name" : this.name.Text;
-			this.color = this.color == null ? Color.FromArgb("#000000") : this.color;
+			// if input is invalid than make color black
+			if (this.color.Text == null || !this.color.Text.StartsWith('#'))
+			{
+				this.color.Text = "#000000";
+			}
+			else
+			{
+				this.color.Text = this.color.Text;
+			}
+			// turns color string input into color
+			Color useColor = Color.FromArgb(this.color.Text);
 			AppointmentCategory cat;
 			if (GlobalAppointmentData.EditCategory == null) {
 				// creates the category
-				cat = GlobalAppointmentData.CalendarManager.CreateCategory(this.name.Text, this.color);
+				cat = GlobalAppointmentData.CalendarManager.CreateCategory(this.name.Text, useColor);
 			}
 			else
 			{
 				// edit the category
-				GlobalAppointmentData.CalendarManager.EditCategory(this.name.Text, this.color, 
+				GlobalAppointmentData.CalendarManager.EditCategory(this.name.Text, useColor, 
 																	GlobalAppointmentData.EditCategory.Id);
 				cat = GlobalAppointmentData.EditCategory;
 				GlobalAppointmentData.EditCategory = null;
@@ -71,7 +67,8 @@ namespace StudyN.Views
 		void LoadValues()
 		{
 			this.name.Text = GlobalAppointmentData.EditCategory.Caption;
-			this.color = GlobalAppointmentData.EditCategory.Color;
+			string colorHex = GlobalAppointmentData.EditCategory.Color.ToHex();
+			this.color.Text = colorHex;
 		}
 
 		/// <summary>
