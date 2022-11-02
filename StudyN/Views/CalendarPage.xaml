@@ -2,7 +2,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dxsch="clr-namespace:DevExpress.Maui.Scheduler;assembly=DevExpress.Maui.Scheduler"
-             xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
              Title="Calendar Page"
              IconImageSource="scheduler"
              BackgroundColor="{StaticResource NormalBackgroundColor}"
@@ -10,9 +9,38 @@
              ios:Page.UseSafeArea="true"
              x:Class="StudyN.Views.CalendarPage">
     <Shell.TitleView>
-        <dxe:ComboBoxEdit x:Name="viewSelectComboBox"
-                          ItemsSource="{Binding ViewList}" 
-                          SelectionChanged="OnViewSelectionChanged" />
+        <StackLayout
+            Orientation="Horizontal"
+            HorizontalOptions="Center"
+            Spacing="5">
+            <Button Text="Daily"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            BorderColor="Black"
+            BorderWidth="1"
+            TextColor="Black"
+            BackgroundColor="White"
+            Clicked="OnDailyClicked"
+            ></Button>
+            <Button Text="Weekly"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            BorderColor="Black"
+            BorderWidth="1"
+            TextColor="Black"
+            BackgroundColor="White"
+            Clicked="OnWeeklyClicked"
+            ></Button>
+            <Button Text="Monthly"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            BorderColor="Black"
+            TextColor="Black"
+            BorderWidth="1"
+            BackgroundColor="White"
+            Clicked="OnMonthlyClicked"
+            ></Button>
+        </StackLayout>
     </Shell.TitleView>
     <ContentPage.Content>
         <StackLayout>
