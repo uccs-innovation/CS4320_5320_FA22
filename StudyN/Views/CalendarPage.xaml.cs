@@ -65,79 +65,6 @@ namespace StudyN.Views
             base.OnAppearing();
         }
 
-        private void Handle_onCalendarTap_FromDayView(object sender, SchedulerGestureEventArgs e)
-        {
-            if (e.AppointmentInfo == null)
-            {
-                ShowNewAppointmentEditPage(e.IntervalInfo);
-                return;
-            }
-            AppointmentItem appointment = e.AppointmentInfo.Appointment;
-            ShowAppointmentEditPage(appointment);
-        }
-        private void Handle_onCalendarTap_FromWeekView(object sender, SchedulerGestureEventArgs e)
-        {
-            if (e.AppointmentInfo == null)
-            {
-                ShowNewAppointmentEditPage(e.IntervalInfo);
-                return;
-            }
-            AppointmentItem appointment = e.AppointmentInfo.Appointment;
-            ShowAppointmentEditPage(appointment);
-        }
-        private void Handle_onCalendarTap_FromMonthView(object sender, SchedulerGestureEventArgs e)
-        {
-            if (e.AppointmentInfo == null)
-            {
-                ShowNewAppointmentEditPage(e.IntervalInfo);
-                return;
-            }
-            AppointmentItem appointment = e.AppointmentInfo.Appointment;
-            ShowAppointmentEditPage(appointment);
-        }
-
-        private async void Handle_onCalendarHold_FromDayView(object sender, SchedulerGestureEventArgs e)
-        {
-            if (e.AppointmentInfo != null)
-            {
-                AppointmentItem appointment = e.AppointmentInfo.Appointment;
-                bool answer = await DisplayAlert("Are you sure?",
-                    appointment.Subject + " will be deleted.", "Yes", "No");
-
-                if (answer == true)
-                {
-                    SchedulerStorage.RemoveAppointment(appointment);
-                }
-            }
-        }
-        private async void Handle_onCalendarHold_FromMonthView(object sender, SchedulerGestureEventArgs e)
-        {
-            if (e.AppointmentInfo != null)
-            {
-                AppointmentItem appointment = e.AppointmentInfo.Appointment;
-                bool answer = await DisplayAlert("Are you sure?",
-                    appointment.Subject + " will be deleted.", "Yes", "No");
-
-                if (answer == true)
-                {
-                    SchedulerStorage.RemoveAppointment(appointment);
-                }
-            }
-        }
-        private async void Handle_onCalendarHold_FromView(object sender, SchedulerGestureEventArgs e)
-        {
-            if (e.AppointmentInfo != null)
-            {
-                AppointmentItem appointment = e.AppointmentInfo.Appointment;
-                bool answer = await DisplayAlert("Are you sure?",
-                    appointment.Subject + " will be deleted.", "Yes", "No");
-
-                if (answer == true)
-                {
-                    SchedulerStorage.RemoveAppointment(appointment);
-                }
-            }
-        }
         private void ShowAppointmentEditPage(AppointmentItem appointment)
         {
             if (!isChildPageOpening)
@@ -158,12 +85,18 @@ namespace StudyN.Views
             }
         }
 
-        // estep: I know there must be a better way to do this, but I just want to try it
-        //        since it won't let me use the same storage name for both SchedulerDataStorage objects
-       //        (so I have to have this kind of repeated code)
-        
+        private void OnCalendarTap(object sender, SchedulerGestureEventArgs e)
+        {
+            if (e.AppointmentInfo == null)
+            {
+                ShowNewAppointmentEditPage(e.IntervalInfo);
+                return;
+            }
+            AppointmentItem appointment = e.AppointmentInfo.Appointment;
+            ShowAppointmentEditPage(appointment);
+        }
 
-        private async void Handle_onCalendarHold_FromWeekView(object sender, SchedulerGestureEventArgs e)
+        private async void OnCalendarHold(object sender, SchedulerGestureEventArgs e)
         {
             if (e.AppointmentInfo != null)
             {
@@ -177,21 +110,6 @@ namespace StudyN.Views
                 }
             }
         }
-
-        private void ShowAppointmentEditPage_WeekView(AppointmentItem appointment)
-        {
-            AppointmentEditPage appEditPage = new(appointment, SchedulerStorage);
-            Navigation.PushAsync(appEditPage);
-        }
-
-        private void ShowNewAppointmentEditPage_WeekView(IntervalInfo info)
-        {
-            AppointmentEditPage appEditPage = new(info.Start, info.End,
-                                                                     info.AllDay, SchedulerStorage);
-            Navigation.PushAsync(appEditPage);
-        }
-
-       
 
         public void OnNewStudynEvent(StudynEvent sEvent)
         {
