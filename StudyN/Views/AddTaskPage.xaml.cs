@@ -131,17 +131,17 @@ public partial class AddTaskPage : ContentPage
                     totalTime);
         }
 
-        
+
         // Handles recurrence after everything is added into the task
-        if (r1.IsChecked == true)
+        if (dailyRadioButton.IsChecked == true)
         {
             HandleRecurrenceDay(sender, e);
         }
-        else if (r2.IsChecked == true)
+        else if (weeklyRadioButton.IsChecked == true)
         {
             HandleRecurrenceWeek(sender, e);
         }
-        else if (r3.IsChecked == true)
+        else if (monthlyRadioButton.IsChecked == true)
         {
             HandleRecurrenceMonth(sender, e);
         }
