@@ -51,12 +51,14 @@ namespace StudyN.Views
 			AppointmentCategory cat;
 			if (GlobalAppointmentData.EditCategory == null) {
 				// creates the category
-				cat = GlobalAppointmentData.CalendarManager.CreateCategory(this.name.Text, this.color);
+				cat = GlobalAppointmentData.CalendarManager.CreateCategory(this.name.Text, this.color, 
+																			this.colorPicker.X, this.colorPicker.Y);
 			}
 			else
 			{
 				// edit the category
 				GlobalAppointmentData.CalendarManager.EditCategory(this.name.Text, this.color, 
+																	this.colorPicker.X, this.colorPicker.Y,
 																	GlobalAppointmentData.EditCategory.Id);
 				cat = GlobalAppointmentData.EditCategory;
 				GlobalAppointmentData.EditCategory = null;
@@ -72,6 +74,8 @@ namespace StudyN.Views
 		{
 			this.name.Text = GlobalAppointmentData.EditCategory.Caption;
 			this.color = GlobalAppointmentData.EditCategory.Color;
+			this.colorPicker.PointerRingPositionXUnits = GlobalAppointmentData.EditCategory.PickerXPosition;
+			this.colorPicker.PointerRingPositionYUnits = GlobalAppointmentData.EditCategory.PickerYPosition;
 		}
 
 		/// <summary>

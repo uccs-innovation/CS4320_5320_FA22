@@ -139,6 +139,7 @@ namespace StudyN.Models
         /// <returns></returns>
         public AppointmentCategory CreateCategory(string categoryName, 
                                                    Color categoryColor,
+                                                   double x, double y,
                                                    Guid id = new Guid())
         {
             // Makes a new category
@@ -147,6 +148,8 @@ namespace StudyN.Models
                 Id = id,
                 Caption = categoryName,
                 Color = categoryColor,
+                PickerXPosition = x,
+                PickerYPosition = y
             };
             // Adds category to category list
             AppointmentCategories.Add(cat);
@@ -162,6 +165,7 @@ namespace StudyN.Models
         /// <returns></returns>
         public bool EditCategory(string categoryName, 
                                  Color categoryColor,
+                                 double x, double y,
                                  Guid id)
         {
             // Get the category
@@ -180,6 +184,8 @@ namespace StudyN.Models
             // add new elements to category
             cat.Caption = categoryName;
             cat.Color = categoryColor;
+            cat.PickerXPosition = x;
+            cat.PickerYPosition = y;
             return true;
         }
 
