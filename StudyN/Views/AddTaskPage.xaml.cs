@@ -34,7 +34,7 @@ public partial class AddTaskPage : ContentPage
             editingExistingTask = true;
             //CreateDummyTaskTimeLogData();
             TimeListLog.ItemsSource = GlobalTaskData.ToEdit.TimeList;
-
+            this.displayLabel.Text = String.Format("Priority: " + GlobalTaskData.ToEdit.Priority);
 
         }
         else
@@ -45,7 +45,7 @@ public partial class AddTaskPage : ContentPage
             SetValues();            
         }
 
-
+        
 
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
         DeleteTaskButton.IsVisible = editingExistingTask;
@@ -171,8 +171,8 @@ public partial class AddTaskPage : ContentPage
     void HandleSliderValueChanged(object sender, ValueChangedEventArgs args)
     {
         //Stroring the new value and setting the sliders label correctly
-        double value = args.NewValue;
-        displayLabel.Text = String.Format("Priority");
+        int value = (int)args.NewValue;
+        displayLabel.Text = String.Format("Priority: " + value);
     }
 
     //This function will be used by the add task button to either create a new task or save the changes to an existing one
