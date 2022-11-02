@@ -145,7 +145,7 @@
                HorizontalOptions="Start"
                VerticalOptions="Center" 
                Grid.Row="6"
-               Grid.ColumnSpan="2"
+               Grid.ColumnSpan="1"
                FontSize="16" />
             <RadioButton
                 x:Name="dailyRadioButton"
