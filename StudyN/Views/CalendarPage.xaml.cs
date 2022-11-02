@@ -55,6 +55,10 @@ namespace StudyN.Views
 
         protected override void OnAppearing()
         {
+            Console.WriteLine("CalendarPage OnAppearing");
+            SchedulerStorage.RefreshData();
+            InvalidateMeasure();
+
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
             CalendarDataView.LoadDataForNotification(notes.ToList());
             base.OnAppearing();
@@ -179,15 +183,15 @@ namespace StudyN.Views
         }
 
        
-
         public void OnNewStudynEvent(StudynEvent sEvent)
         {
+            Console.WriteLine("in CalendarPage.OnNewStudynEvent");
             // On any appointment event, refresh the data
             if (sEvent.EventType == StudynEventType.AppointmentAdd
                 || sEvent.EventType == StudynEventType.AppointmentEdit
                 || sEvent.EventType == StudynEventType.AppointmentDelete)
             {
-                SchedulerStorage.RefreshData();
+                //SchedulerStorage.RefreshData(); //Not sure if this is crashing the app causing an "index out of range" or "handler being used elsewhere" error. The calendarpage does SchedulerStorage.RefreshData() every time it appears anyway, so im going to comment this out for now
             }
         }
 
