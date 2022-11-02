@@ -148,7 +148,7 @@
                Grid.ColumnSpan="2"
                FontSize="16" />
             <RadioButton
-                x:Name="r1"
+                x:Name="dailyRadioButton"
                 Content="Day"
                 Grid.Row="6"
                 Grid.Column="1"
@@ -157,7 +157,7 @@
                 HorizontalOptions="Start"
                 IsChecked="False"/>
             <RadioButton
-                x:Name="r2"
+                x:Name="weeklyRadioButton"
                 Content="Week"
                 Grid.Row="6"
                 Grid.Column="2"
@@ -166,7 +166,7 @@
                 HorizontalOptions="CenterAndExpand"
                 IsChecked="False"/>
             <RadioButton
-                x:Name="r3"
+                x:Name="monthlyRadioButton"
                 Content="Month"
                 Grid.Row="6"
                 Grid.Column="3"
