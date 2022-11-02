@@ -94,11 +94,6 @@ namespace StudyN.Views
                 if (answer == true)
                 {
                     SchedulerStorage.RemoveAppointment(appointment);
-
-                    // Publish task delete appointment
-                    EventBus.PublishEvent(
-                                new StudynEvent(new Guid(), 
-                                StudynEvent.StudynEventType.AppointmentDelete));
                 }
             }
         }
