@@ -1,5 +1,6 @@
 ﻿using StudyN.ViewModels;
 using StudyN.Resources;
+using StudyN.Models;
 
 namespace StudyN.Views
 {
@@ -31,5 +32,13 @@ namespace StudyN.Views
                 mergedDictionaries.Add(new Dictionary1());
             }
         }
+
+        //This button sends the user to the About page
+        private async void Button_ClickedAbout(object sender, EventArgs e)
+        {
+            GlobalTaskData.ToEdit = null;
+            await Shell.Current.GoToAsync(nameof(AboutPage));
+        }
+        
     }
 }
