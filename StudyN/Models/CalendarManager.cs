@@ -276,6 +276,7 @@ namespace StudyN.Models
             }
         }
 
+
         public ObservableCollection<Appointment> Appointments { get; private set; }
         public ObservableCollection<AppointmentCategory> AppointmentCategories { get; private set; }
         public ObservableCollection<AppointmentStatus> AppointmentStatuses { get; private set; }

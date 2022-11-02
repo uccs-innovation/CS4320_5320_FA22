@@ -59,6 +59,9 @@ namespace StudyN.Views
         protected override void OnAppearing()
         {
             isChildPageOpening = false;
+            Console.WriteLine("CalendarPage OnAppearing");
+            SchedulerStorage.RefreshData();
+            InvalidateMeasure();
 
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
             CalendarDataView.LoadDataForNotification(notes.ToList());
@@ -110,15 +113,75 @@ namespace StudyN.Views
                 }
             }
         }
+        private async void Handle_onCalendarHold_FromView(object sender, SchedulerGestureEventArgs e)
+        {
+            if (e.AppointmentInfo != null)
+            {
+                AppointmentItem appointment = e.AppointmentInfo.Appointment;
+                bool answer = await DisplayAlert("Are you sure?",
+                    appointment.Subject + " will be deleted.", "Yes", "No");
 
+                if (answer == true)
+                {
+                    SchedulerStorage.RemoveAppointment(appointment);
+                }
+            }
+        }
+        private void ShowAppointmentEditPage(AppointmentItem appointment)
+        {
+            AppointmentEditPage appEditPage = new(appointment, SchedulerStorage);
+            Navigation.PushAsync(appEditPage);
+        }
+
+        private void ShowNewAppointmentEditPage(IntervalInfo info)
+        {
+            AppointmentEditPage appEditPage = new(info.Start, info.End, info.AllDay, SchedulerStorage);
+            Navigation.PushAsync(appEditPage);
+        }
+
+        // estep: I know there must be a better way to do this, but I just want to try it
+        //        since it won't let me use the same storage name for both SchedulerDataStorage objects
+       //        (so I have to have this kind of repeated code)
+        
+
+        private async void Handle_onCalendarHold_FromWeekView(object sender, SchedulerGestureEventArgs e)
+        {
+            if (e.AppointmentInfo != null)
+            {
+                AppointmentItem appointment = e.AppointmentInfo.Appointment;
+                bool answer = await DisplayAlert("Are you sure?",
+                    appointment.Subject + " will be deleted.", "Yes", "No");
+
+                if (answer == true)
+                {
+                    SchedulerStorage.RemoveAppointment(appointment);
+                }
+            }
+        }
+
+        private void ShowAppointmentEditPage_WeekView(AppointmentItem appointment)
+        {
+            AppointmentEditPage appEditPage = new(appointment, SchedulerStorage);
+            Navigation.PushAsync(appEditPage);
+        }
+
+        private void ShowNewAppointmentEditPage_WeekView(IntervalInfo info)
+        {
+            AppointmentEditPage appEditPage = new(info.Start, info.End,
+                                                                     info.AllDay, SchedulerStorage);
+            Navigation.PushAsync(appEditPage);
+        }
+
+       
         public void OnNewStudynEvent(StudynEvent sEvent)
         {
+            Console.WriteLine("in CalendarPage.OnNewStudynEvent");
             // On any appointment event, refresh the data
             if (sEvent.EventType == StudynEventType.AppointmentAdd
                 || sEvent.EventType == StudynEventType.AppointmentEdit
                 || sEvent.EventType == StudynEventType.AppointmentDelete)
             {
-                SchedulerStorage.RefreshData();
+                //SchedulerStorage.RefreshData(); //Not sure if this is crashing the app causing an "index out of range" or "handler being used elsewhere" error. The calendarpage does SchedulerStorage.RefreshData() every time it appears anyway, so im going to comment this out for now
             }
         }
 
