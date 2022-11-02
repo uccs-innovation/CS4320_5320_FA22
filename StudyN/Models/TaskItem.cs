@@ -1,4 +1,6 @@
-﻿namespace StudyN.Models
+﻿using System.Collections.ObjectModel;
+
+namespace StudyN.Models
 {
     public class TaskItem
     {
@@ -25,6 +27,9 @@
         public int CompletionProgress { get; set; } = 0;
         public int TotalTimeNeeded { get; set; } = 0;
         public int Priority { get; set; } = 3;
+        public bool BeingTimed { get; set; } = false;
+        public List<TaskItemTime> TimeList { get; set; } = new List<TaskItemTime>();
+
 
         //Method for each task %
         public double? Percent

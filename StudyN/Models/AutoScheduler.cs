@@ -24,12 +24,13 @@ public class AutoScheduler : StudynSubscriber
     private List<int> AllCurBlocks;
     public List<DateTime> currentDates;
     private List<int> numPerDate;
-    public AutoScheduler( ObservableCollection<TaskItem> TL )
-	  {
+    public AutoScheduler()
+    {
         taskPastDue = false;
         pastDueTasks = new List<TaskItem>();
-        Tasklist = TL;
+        Tasklist = GlobalTaskData.TaskManager.TaskList;
         //CalendarList = GlobalData.cs.calendarManager
+        EventBus.Subscribe(this);
     }
    
     private void associateCalendarPositions()
@@ -128,7 +129,7 @@ public class AutoScheduler : StudynSubscriber
     //If two things get scheduled at the same time or overlapping, put the one with more weight first.
     //If two things have the same weight (realllyyyyyy unlikely), just randomly put one before the other.
     private void addToCalendar()
-    {
+    { 
         Console.WriteLine("TODO: implement autoScheduler.addToCalendar");
     }
 
@@ -405,23 +406,26 @@ public class AutoScheduler : StudynSubscriber
 
     public void OnNewStudynEvent(StudynEvent taskEvent)
     {
-        if (taskEvent.EventType == StudynEventType.AddTask)
+        switch (taskEvent.EventType)
         {
-            // Implement Later
-        }
-        else if (taskEvent.EventType == StudynEventType.EditTask)
-        {
-            // Implement later
-        }
-        else if (taskEvent.EventType == StudynEventType.DeleteTask)
-        {
-            // Implement later
-        }
-        else if (taskEvent.EventType == StudynEventType.CompleteTask)
-        {
-            // Console Logging just so we can see in the output something is happening
-            Console.WriteLine("Scheduler Has CompleteTask Events!");
-            GlobalAppointmentData.CalendarManager.TaskCompleted(taskEvent.Id);
+            // On any add, edit, or modify task/appointment, rerun the scheduler
+            case StudynEventType.AddTask:
+            case StudynEventType.EditTask:
+            case StudynEventType.DeleteTask:
+            case StudynEventType.AppointmentAdd:
+            case StudynEventType.AppointmentEdit:
+            case StudynEventType.AppointmentDelete:
+            {
+                run(taskEvent.Id);
+                break;
+            }
+            case StudynEventType.CompleteTask:
+            {
+                // Console Logging just so we can see in the output something is happening
+                Console.WriteLine("Scheduler Has CompleteTask Events!");
+                GlobalAppointmentData.CalendarManager.TaskCompleted(taskEvent.Id);
+                break;
+            }
         }
     }
 }
