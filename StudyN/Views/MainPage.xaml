@@ -27,7 +27,7 @@
             <ShellContent ContentTemplate="{DataTemplate local:CategoriesPage}"/>
         </Tab>
         
-        <Tab Title="Settings" Icon="info">
+        <Tab Title="Settings" Icon="gear_dark">
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
     </TabBar>

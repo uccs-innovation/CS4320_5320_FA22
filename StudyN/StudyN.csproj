@@ -39,6 +39,8 @@
 	  <None Remove="Platforms\Android\google-services.json" />
 	  <None Remove="Platforms\Android\private_key.json" />
 	  <None Remove="private_key.json" />
+	  <None Remove="Resources\Images\gear_dark.svg" />
+	  <None Remove="Resources\Images\gear_light.svg" />
 	  <None Remove="Resources\Images\image2vector.svg" />
 	  <None Remove="Resources\Images\plus_button.png" />
 	</ItemGroup>
