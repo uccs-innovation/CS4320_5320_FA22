@@ -16,19 +16,22 @@ namespace StudyN.Models
 
         public static string[] AppointmentCategoryTitles = { "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work"};
         public static Color[] AppointmentCategoryColors = { Color.FromArgb("#3333FF"),   // dark blue
-                                                        Color.FromArgb("#008A00"),   // green                                                        
+                                                        Color.FromArgb("#00FF00"),   // green                                                        
                                                         Color.FromArgb("#D80073"),   // dark pink
                                                         Color.FromArgb("#FFCB21"),   // mustard
                                                         Color.FromArgb("#1BA1E2"),   // medium blue                                                        
                                                         Color.FromArgb("FF8000"),    // orange
                                                         Color.FromArgb("#A20025"),   // burgundy                                                         
                                                         Color.FromArgb("#6A00FF") };   // purple
+        public static double[] AppointmentCategoryX = { 0.65f, 0.35f, 0.83f, 0.15f, 0.52f, 0.1f, 0.98f, 0.8f};
         // Uncategorized category
         public static AppointmentCategory Uncategorized = new()
         {
             Id = Guid.NewGuid(),
             Caption = "Uncategorized",
-            Color = Color.FromArgb("#D9D9D9")
+            Color = Color.FromArgb("#D9D9D9"),
+            PickerXPosition = 0.5f,
+            PickerYPosition = 1.0f
         };
                                                                                       
         public static string[] AppointmentStatusTitles = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
@@ -84,6 +87,8 @@ namespace StudyN.Models
                 cat.Id = Guid.NewGuid();
                 cat.Caption = AppointmentCategoryTitles[i];
                 cat.Color = AppointmentCategoryColors[i];
+                cat.PickerXPosition = AppointmentCategoryX[i];
+                cat.PickerYPosition = 0.5f;
                 AppointmentCategories.Add(cat);
             }
         }
