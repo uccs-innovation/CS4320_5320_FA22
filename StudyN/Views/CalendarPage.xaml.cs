@@ -32,30 +32,6 @@ namespace StudyN.Views
 
         CalendarViewModel ViewModel { get; }
 
-
-        void OnDailyClicked(object sender, EventArgs args)
-        {
-            dayView.IsVisible = true;
-            weekView.IsVisible = false;
-            monthView.IsVisible = false;
-
-        }
-
-        void OnWeeklyClicked(object sender, EventArgs args)
-        {
-            dayView.IsVisible = false;
-            weekView.IsVisible = true;
-            monthView.IsVisible = false;
-
-        }
-
-        void OnMonthlyClicked(object sender, EventArgs args)
-        {
-            dayView.IsVisible = false;
-            weekView.IsVisible = false;
-            monthView.IsVisible = true;
-        }
-
         protected override void OnAppearing()
         {
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
@@ -63,9 +39,32 @@ namespace StudyN.Views
             base.OnAppearing();
         }
 
-        private void OnViewSelectionChanged()
+        protected void OnViewSelectionChanged(object sender, EventArgs args)
         {
-            // Function for changed combo box
+            // Changed to Day View
+            if(CalendarDataView.DayText
+                        == _calendarDataView.ViewList[viewSelectComboBox.SelectedIndex])
+            {
+                dayView.IsVisible = true;
+                weekView.IsVisible = false;
+                monthView.IsVisible = false;
+            }
+            // Changed to Week View
+            else if (CalendarDataView.WeekText
+                        == _calendarDataView.ViewList[viewSelectComboBox.SelectedIndex])
+            {
+                dayView.IsVisible = false;
+                weekView.IsVisible = true;
+                monthView.IsVisible = false;
+            }
+            // Chanaged to Month View
+            else if (CalendarDataView.MonthText 
+                        == _calendarDataView.ViewList[viewSelectComboBox.SelectedIndex])
+            {
+                dayView.IsVisible = false;
+                weekView.IsVisible = false;
+                monthView.IsVisible = true;
+            }
         }
 
         private void Handle_onCalendarTap_FromDayView(object sender, SchedulerGestureEventArgs e)
@@ -212,10 +211,14 @@ namespace StudyN.Views
             public IReadOnlyList<AppointmentStatus> AppointmentStatuses { get => data.AppointmentStatuses; }
 
             public List<string> ViewList { get; }
+
+            static public string DayText = "Day";
+            static public string WeekText = "Week";
+            static public string MonthText = "Month";
             public CalendarDataView()
             {
                 data = GlobalAppointmentData.CalendarManager;
-                ViewList = new List<string>() { "Day", "Week", "Month" };
+                ViewList = new List<string>() { DayText, WeekText, MonthText };
             }
 
             /// <summary>
