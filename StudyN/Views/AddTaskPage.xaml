@@ -138,7 +138,7 @@
 
             <!--Priority Slider and Label-->
             <Label x:Name="displayLabel"
-               Text="Priority"
+               Text="Priority: 3"
                HorizontalOptions="Center"
                VerticalOptions="Center" 
                Grid.Row="4"
