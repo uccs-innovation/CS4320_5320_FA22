@@ -31,7 +31,8 @@ namespace StudyN.Models
         public List<TaskItemTime> TimeList { get; set; } = new List<TaskItemTime>();
 
 
-        public double Percent
+        //Method for each task %
+        public double? Percent
         {
             get
             {
@@ -44,7 +45,8 @@ namespace StudyN.Models
                         return percentage;
                 }
                 else
-                    return 0;
+                    //If the total time is empty then it does not display %
+                    return null;
             }
         }
     }
