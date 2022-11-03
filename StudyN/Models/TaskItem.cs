@@ -38,9 +38,7 @@ namespace StudyN.Models
             {
                 if (TotalTimeNeeded != 0)
                 {
-                    double cPMinutePer = GetCompletionProgressMinutes() / 60;
-                    double tTNMinutePer = GetTotalMinutesNeeded() / 60;
-                    double percentage = (int)CompletionProgress + cPMinutePer / (int)TotalTimeNeeded + tTNMinutePer;
+                    double percentage = CompletionProgress / TotalTimeNeeded;
                     if (percentage == Double.NaN)
                         return 0;
                     else

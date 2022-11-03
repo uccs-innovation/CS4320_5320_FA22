@@ -211,11 +211,14 @@ namespace StudyN.Models
         public double SumTimes(int hours, int minutes)
         {
             // make sure minutes are below 60
-            while(minutes >= 60)
+            if(minutes >= 60)
             {
                 // take 60 out of minutes and add to hours
-                minutes -= 60;
-                hours++;
+                while(minutes >= 60)
+                {
+                    minutes -= 60;
+                    hours++;
+                }
             }
             // turn minutes into decimals
             double decimalMins = (double)minutes / 100;
