@@ -73,11 +73,12 @@ public partial class AddTaskPage : ContentPage
     private async void HandleAddTaskButton(object sender, EventArgs e)
     {
         // Make sure we aren't storing nulls
-        this.name.Text = this.name.Text == null ? "No Name" : this.name.Text;
+        this.name.Text = this.name.Text == null ? "Unnamed Task" : this.name.Text;
         this.description.Text = this.description.Text == null ? "" : this.description.Text;
         int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
         int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
-
+        this.date.Date = this.date.Date == null ? DateTime.MaxValue : this.date.Date;
+        this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
 
@@ -169,8 +170,8 @@ public partial class AddTaskPage : ContentPage
     //This function will set the date and time forms to the current time
     void SetValues()
     {
-        this.date.Date = DateTime.Now;
-        this.time.Time = DateTime.Now;
+        this.date.Date = null;
+        this.time.Time = null;
     }
 
     void runAutoScheduler(Guid taskId)
@@ -187,29 +188,13 @@ public partial class AddTaskPage : ContentPage
         }
     }
 
-    void OnCheckBoxDueDateChanged(object sender, CheckedChangedEventArgs e)
-    {
-        if(e.Value == true)
-        {
-            this.date.Date = DateTime.MaxValue;
-            this.time.Time = DateTime.MaxValue;
-            date.IsVisible = false;
-            time.IsVisible = false;
-        }
-        else if(e.Value == false)
-        {
-            this.date.Date = DateTime.Now;
-            this.time.Time = DateTime.Now;
-            date.IsVisible = true;
-            time.IsVisible = true;
-        }
-    }
-
     //These functions will be used to add recurrence of a selected task for day/week/month
     private void HandleRecurrenceDay(object sender, EventArgs e)
     {
         int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
         int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        this.date.Date = this.date.Date == null ? DateTime.MaxValue : this.date.Date;
+        this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
         for (int i = 1; i <= 365; i++)
@@ -229,6 +214,8 @@ public partial class AddTaskPage : ContentPage
     {
         int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
         int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        this.date.Date = this.date.Date == null ? DateTime.MaxValue : this.date.Date;
+        this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
 
@@ -250,6 +237,8 @@ public partial class AddTaskPage : ContentPage
     {
         int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
         int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        this.date.Date = this.date.Date == null ? DateTime.MaxValue : this.date.Date;
+        this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
         for (int i = 1; i <= 12; i++)
