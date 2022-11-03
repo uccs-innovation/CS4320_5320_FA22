@@ -20,6 +20,8 @@ public partial class AddTaskPage : ContentPage
         //autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList, GlobalAppointmentData.CalendarManager.Appointments);
         autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList, GlobalAppointmentData.CalendarManager);
 
+        completeButton.IsEnabled = false;
+        trashButton.IsEnabled = false;
 
         //This will check if we are editing an existing task or making a new one. We will know this based on if ToEdit is null or not
         if (GlobalTaskData.ToEdit != null)
@@ -28,19 +30,23 @@ public partial class AddTaskPage : ContentPage
             Title = "Edit Task";
             LoadValues();
             BindingContext = new EditTaskViewModel();
+            completeButton.IsEnabled = true;
+            trashButton.IsEnabled = true;
             editingExistingTask = true;
         }
         else
         {
             //If we are just creating a new task, we need to set the title and set the time and date so they are not null
             Title = "Add Task";
+            completeButton.IsEnabled = false;
+            trashButton.IsEnabled = false;
             editingExistingTask = false;
             SetValues();
         }
 
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
-        DeleteTaskButton.IsVisible = editingExistingTask;
-        CompleteTaskButton.IsVisible = editingExistingTask;
+        //DeleteTaskButton.IsVisible = editingExistingTask;
+        //CompleteTaskButton.IsVisible = editingExistingTask;
     }
 
     //This function will be used by the delete task button to delete the given task
@@ -87,7 +93,6 @@ public partial class AddTaskPage : ContentPage
         //Check to see if we are currently editing or adding a task
         if (editingExistingTask)
         {
-           
             //Gets task list
             ObservableCollection<TaskItem> taskList = new ObservableCollection<TaskItem>();
             for (int i = 0; i < taskList.Count; i++)

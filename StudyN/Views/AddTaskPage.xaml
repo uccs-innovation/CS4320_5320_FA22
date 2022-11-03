@@ -9,7 +9,19 @@
 
     <ContentPage.ToolbarItems>
 
-        <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" IconImageSource="whitesave"/>
+        <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" IconImageSource="whitesave"
+                     Priority="3"/>
+        <ToolbarItem Text="Trash"
+                     x:Name="trashButton"
+                     Clicked="HandleDeleteTaskClicked"
+                     Priority="2"
+                     IconImageSource="whitetrashcan" />
+        <ToolbarItem Text="Complete"
+                     x:Name="completeButton"
+                     Clicked="HandleCompleteTaskClicked"
+                     Command="{Binding ButtonVisibility}"
+                     IconImageSource="whitecheckbox" 
+                     Priority="1"/>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
@@ -166,25 +178,6 @@
                 Margin="1"
                 HorizontalOptions="EndAndExpand"
                 IsChecked="False"/>
-            
-            <!--Buttons for completing/deleting tasks-->
-            <Button 
-                x:Name="DeleteTaskButton"
-                Text="Delete Task"
-                Grid.Row="6"
-                CornerRadius="7"
-                Margin="1"
-                Clicked="HandleDeleteTaskClicked" />
-
-            <Button
-                x:Name="CompleteTaskButton"
-                Text="Mark Complete"
-                Grid.Row="6"
-                Grid.Column="1"
-                CornerRadius="7"
-                Margin="1"
-                Clicked="HandleCompleteTaskClicked"
-                Command="{Binding ButtonVisibility}"/>
         </Grid>
     </ContentPage.Content>
 
