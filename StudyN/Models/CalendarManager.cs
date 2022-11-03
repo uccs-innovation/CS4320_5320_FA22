@@ -261,6 +261,37 @@ namespace StudyN.Models
                 }
             }
         }
+        
+        private void AppointmentCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            //different kind of changes that may have occurred in collection
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                try
+                {
+                    var apptList = sender as ObservableCollection<Appointment>;
+
+                    foreach(Appointment appt in apptList)
+                    {
+                        // Publish add appointment
+                        EventBus.PublishEvent(
+                                    new StudynEvent(appt.UniqueId,
+                                    StudynEvent.StudynEventType.AppointmentAdd));
+                    }
+                }
+                catch (NullReferenceException execption)
+                {
+                    Console.WriteLine(execption.Message);
+                }
+            }
+            if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                // Publish delete appointment
+                EventBus.PublishEvent(
+                            new StudynEvent(new Guid(),
+                            StudynEvent.StudynEventType.AppointmentDelete));
+            }
+        }
 
         public ObservableCollection<Appointment> Appointments { get; private set; }
         public ObservableCollection<AppointmentCategory> AppointmentCategories { get; private set; }
