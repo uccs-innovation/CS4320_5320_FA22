@@ -12,6 +12,7 @@ using static StudyN.Utilities.StudynEvent;
 public class AutoScheduler : StudynSubscriber
 { 
     public bool taskPastDue;
+    public DateTime lastRun;
     public List<TaskItem> pastDueTasks;
     private List<TaskItem> TaskBlockList;
 
@@ -28,13 +29,15 @@ public class AutoScheduler : StudynSubscriber
     public List<DateTime> currentDates;
     private List<int> numPerDate;
     //public AutoScheduler( ObservableCollection<TaskItem> TL, ObservableCollection<Appointment> APPNTMNT )
-    public AutoScheduler(ObservableCollection<TaskItem> TL, CalendarManager CALMNGR)
+    public AutoScheduler()
     {
+        lastRun = DateTime.Now.AddYears(-999);
         taskPastDue = false;
         pastDueTasks = new List<TaskItem>();
-        Tasklist = TL;
-        //Appointments = APPNTMNT;
-        calendarManager = CALMNGR;
+        calendarManager = GlobalAppointmentData.CalendarManager;
+        Tasklist = GlobalTaskData.TaskManager.TaskList;
+        //CalendarList = GlobalData.cs.calendarManager
+        EventBus.Subscribe(this);
     }
    
     private void associateCalendarPositions()
@@ -346,6 +349,7 @@ public class AutoScheduler : StudynSubscriber
 
     public void run(Guid taskId)
     {
+        if( (DateTime.Now - lastRun).TotalSeconds < 10) { return; }
         Console.WriteLine("started running auto scheduler");
         refreshArrays();
         breakTasksIntoBlocks();
@@ -362,27 +366,32 @@ public class AutoScheduler : StudynSubscriber
         }
 
         Console.WriteLine("done running auto scheduler");
+        lastRun = DateTime.Now;
     }
 
     public void OnNewStudynEvent(StudynEvent taskEvent)
     {
-        if (taskEvent.EventType == StudynEventType.AddTask)
+        switch (taskEvent.EventType)
         {
-            // Implement Later
-        }
-        else if (taskEvent.EventType == StudynEventType.EditTask)
-        {
-            // Implement later
-        }
-        else if (taskEvent.EventType == StudynEventType.DeleteTask)
-        {
-            // Implement later
-        }
-        else if (taskEvent.EventType == StudynEventType.CompleteTask)
-        {
-            // Console Logging just so we can see in the output something is happening
-            Console.WriteLine("Scheduler Has CompleteTask Events!");
-            GlobalAppointmentData.CalendarManager.TaskCompleted(taskEvent.Id);
+            // On any add, edit, or modify task/appointment, rerun the scheduler
+            case StudynEventType.AddTask:
+            case StudynEventType.EditTask:
+            case StudynEventType.DeleteTask:
+            case StudynEventType.AppointmentAdd:
+            case StudynEventType.AppointmentEdit:
+            case StudynEventType.AppointmentDelete:
+            {
+                run(taskEvent.Id);
+                lastRun = DateTime.Now;
+                break;
+            }
+            case StudynEventType.CompleteTask:
+            {
+                // Console Logging just so we can see in the output something is happening
+                Console.WriteLine("Scheduler Has CompleteTask Events!");
+                GlobalAppointmentData.CalendarManager.TaskCompleted(taskEvent.Id);
+                break;
+            }
         }
     }
 }

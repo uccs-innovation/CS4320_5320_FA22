@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyN.Views.AddIcsPage"
+             Title="Import Calendar">
+    <Grid>
+        <Grid RowDefinitions="0,*,Auto">
+            <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto" Padding="20,15,20,15" RowSpacing="10" TranslationY ="200">
+                <Entry
+                        Grid.ColumnSpan="1"
+                        Placeholder="Enter link to iCal file (.ics)"
+                        ClearButtonVisibility="WhileEditing"
+                        ReturnType="Go"
+                        Keyboard="Url"
+                        IsSpellCheckEnabled="false"
+                        IsTextPredictionEnabled="false"
+                        MaxLength="200"
+                        TextChanged="Entry_TextChanged"/>
+            </Grid>
+            <Button 
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="1"
+                    Text="Submit"
+                    Clicked="Submit_Button"
+                    VerticalOptions="Start"
+                    HorizontalOptions="End"
+                    TranslationX="-20"
+                    TranslationY="270"/>
+        </Grid>
+    </Grid>
+</ContentPage>
