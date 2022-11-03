@@ -37,6 +37,11 @@ namespace StudyN.Models
             TimeSpan difference = this.taskitemtime.stop - this.taskitemtime.start;
             this.taskitemtime.span = difference;
             taskitem.CompletionProgress += GlobalTaskData.TaskManager.SumTimes(difference.Hours, difference.Minutes);
+            // make sure minutes don't go above 60
+            if(taskitem.GetCompletionProgressMinutes() >= 60)
+            {
+                taskitem.CompletionProgress = GlobalTaskData.TaskManager.SumTimes((int)taskitem.CompletionProgress, taskitem.GetCompletionProgressMinutes());
+            }
 
             GlobalTaskData.TaskManager.EditTask(taskitem.TaskId,
                                                 taskitem.Name,
