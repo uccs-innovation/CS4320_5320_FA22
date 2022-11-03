@@ -1,7 +1,6 @@
 ﻿using DevExpress.Maui.Scheduler;
 using StudyN.ViewModels;
 using StudyN.Common;
-using StudyN.Models;
 using System.ComponentModel;
 using System;
 using System.Threading.Tasks;
@@ -12,6 +11,8 @@ namespace StudyN.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HomePage : ContentPage
     {
+
+        SchedulerDataStorage storage = new SchedulerDataStorage();
 
         public HomePage()
         {
@@ -38,10 +39,8 @@ namespace StudyN.Views
             //Check to ensure an actual appointment is tapped.
             if (e.Item != null)
             {
-                AppointmentItem appointment = (Appointment)e.Item;
-                SchedulerDataStorage storage = new SchedulerDataStorage();
-                AppointmentEditPage appEditPage = new(appointment, storage);
-                Navigation.PushAsync(appEditPage);
+                AppointmentEditPage appointmentEditPage = new((AppointmentItem)e.Item, storage);
+                Navigation.PushAsync(appointmentEditPage);
             }
         }
 
