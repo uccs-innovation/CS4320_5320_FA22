@@ -72,7 +72,7 @@ public partial class AddTaskPage : ContentPage
     {
         //Stroring the new value and setting the sliders label correctly
         double value = args.NewValue;
-        displayLabel.Text = String.Format("Priority");
+        //displayLabel.Text = String.Format("Priority");
     }
 
     //This function will be used by the add task button to either create a new task or save the changes to an existing one
