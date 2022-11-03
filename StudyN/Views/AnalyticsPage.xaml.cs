@@ -21,6 +21,7 @@ namespace StudyN.Views
         protected override void OnAppearing()
         {
             BindingContext = ViewModel = new AnalyticsViewModel();
+            EventBreakdown.Series[0].LegendTextPattern = "{L}: {V}";
         }
     }
 }
