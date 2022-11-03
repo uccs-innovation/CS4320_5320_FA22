@@ -8,6 +8,9 @@
          ios:Page.UseSafeArea="true"
         x:Class="StudyN.Views.MainPage">
     <TabBar>
+        <Tab Title="About page" Icon="info">
+            <ShellContent ContentTemplate="{DataTemplate local:NewPage1}" />
+        </Tab>
         <Tab Title="Home" Icon="icons8home">
             <ShellContent ContentTemplate="{DataTemplate local:HomePage}" />
         </Tab>
@@ -26,10 +29,12 @@
         <Tab Title="Categories" Icon="popup">
             <ShellContent ContentTemplate="{DataTemplate local:CategoriesPage}"/>
         </Tab>
-        
         <Tab Title="Settings" Icon="info">
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
+        
+        
+        
     </TabBar>
 
 </Shell>
