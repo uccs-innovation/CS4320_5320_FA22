@@ -11,7 +11,7 @@ namespace StudyN.Models
     {
         //lets us know if a task is being timed
         public bool BeingTimed;
-        public Guid TheTaskidBeingTimed;
+        public Guid TaskidBeingTimed;
         public TaskItemTime taskitemtime;
 
         //initializes the object
@@ -24,7 +24,7 @@ namespace StudyN.Models
         {
             this.taskitemtime = new TaskItemTime(datetimetaken, taskid);
             this.BeingTimed = true;
-            this.TheTaskidBeingTimed = taskid;
+            this.TaskidBeingTimed = taskid;
         }
 
         public void StopCurrent(DateTime datetimetaken)
@@ -32,7 +32,7 @@ namespace StudyN.Models
             this.taskitemtime.StopTime(datetimetaken);
             this.BeingTimed = false;
             AddNewTimeTaskItemListOfTimes();
-            TaskItem taskitem = GlobalTaskData.TaskManager.GetTask(TheTaskidBeingTimed);
+            TaskItem taskitem = GlobalTaskData.TaskManager.GetTask(TaskidBeingTimed);
 
             TimeSpan difference = this.taskitemtime.stop - this.taskitemtime.start;
             this.taskitemtime.span = difference;
@@ -50,7 +50,7 @@ namespace StudyN.Models
 
         public void AddNewTimeTaskItemListOfTimes()
         {
-            TaskItem thetaskitem = GlobalTaskData.TaskManager.GetTask(TheTaskidBeingTimed);
+            TaskItem thetaskitem = GlobalTaskData.TaskManager.GetTask(TaskidBeingTimed);
 
             thetaskitem.TimeList.Add(this.taskitemtime); 
 

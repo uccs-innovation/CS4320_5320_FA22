@@ -65,7 +65,7 @@ public partial class AddTaskPage : ContentPage
         if (editingExistingTask)
         {
             Guid currenttaskid = GlobalTaskData.ToEdit.TaskId;
-            Guid taskbeingtimed = GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed;
+            Guid taskbeingtimed = GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed;
             //Console.WriteLine("ALERT ALERT ALERT ");
             //if task isn't being tracked or task is not task being tracked
             if (currenttaskid != taskbeingtimed || !GlobalTaskTimeData.TaskTimeManager.BeingTimed)
@@ -95,7 +95,7 @@ public partial class AddTaskPage : ContentPage
         if (GlobalTaskTimeData.TaskTimeManager.BeingTimed)
         {
             //if the task is being time and the current task id matches the task being timed
-            if(currenttaskid == GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed)
+            if(currenttaskid == GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed)
             {
                 TimerButton.Text = "Track Task";
                 GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
@@ -121,7 +121,7 @@ public partial class AddTaskPage : ContentPage
         String alertstr = "You spent " +
         GlobalTaskTimeData.TaskTimeManager.taskitemtime.span.Minutes +
         " minutes on task " +
-        GlobalTaskData.TaskManager.GetTask(GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed).Name;
+        GlobalTaskData.TaskManager.GetTask(GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed).Name;
         await DisplayAlert("Great Job!", alertstr, "OK");
     }
 
@@ -129,7 +129,7 @@ public partial class AddTaskPage : ContentPage
     {
         //alert currently tracking
         string alertstr = "Would you like to stop tracking task " +
-        GlobalTaskData.TaskManager.GetTask(GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed).Name
+        GlobalTaskData.TaskManager.GetTask(GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed).Name
         + " and begin tracking " + GlobalTaskData.ToEdit.Name;
         bool tracknew = await DisplayAlert("Task Already Being Tracked", alertstr, "Yes", "No");
 
