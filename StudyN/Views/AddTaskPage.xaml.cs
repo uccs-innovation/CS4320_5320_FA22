@@ -68,7 +68,7 @@ public partial class AddTaskPage : ContentPage
             Guid taskbeingtimed = GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed;
             //Console.WriteLine("ALERT ALERT ALERT ");
             //if task isn't being tracked or task is not task being tracked
-            if (currenttaskid != taskbeingtimed || !GlobalTaskTimeData.TaskTimeManager.TaskIsBeingTimed)
+            if (currenttaskid != taskbeingtimed || !GlobalTaskTimeData.TaskTimeManager.BeingTimed)
             {
                 TimerButton.Text = "Track Task";
                 //Console.WriteLine("ALERT Setting text to track task");
@@ -92,7 +92,7 @@ public partial class AddTaskPage : ContentPage
 
         //Checks if other task is being timed. If it is we want to send an alert to turn off
         //timing of the other task May make popup window have buttons that does this for user
-        if (GlobalTaskTimeData.TaskTimeManager.TaskIsBeingTimed)
+        if (GlobalTaskTimeData.TaskTimeManager.BeingTimed)
         {
             //if the task is being time and the current task id matches the task being timed
             if(currenttaskid == GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed)
