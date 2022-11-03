@@ -13,18 +13,19 @@ namespace StudyN.Models
         public bool BeingTimed;
         public Guid TaskidBeingTimed;
         public TaskItemTime taskitemtime;
-
+        public String TaskName;
         //initializes the object
         public TaskTimeDataManager()
         {
             this.BeingTimed = false;
         }
 
-        public void StartNew(DateTime datetimetaken, Guid taskid)
+        public void StartNew(DateTime datetimetaken, Guid taskid, String taskname)
         {
             this.taskitemtime = new TaskItemTime(datetimetaken, taskid);
             this.BeingTimed = true;
             this.TaskidBeingTimed = taskid;
+            this.TaskName = taskname;
         }
 
         public void StopCurrent(DateTime datetimetaken)

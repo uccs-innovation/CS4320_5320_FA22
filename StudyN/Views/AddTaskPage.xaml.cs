@@ -87,6 +87,7 @@ public partial class AddTaskPage : ContentPage
     {
         //gets guid of the current task.
         Guid currenttaskid = GlobalTaskData.ToEdit.TaskId;
+        String taskname = GlobalTaskData.ToEdit.Name;
         //gets the current time
         DateTime gettime = DateTime.Now;
 
@@ -111,7 +112,7 @@ public partial class AddTaskPage : ContentPage
             //update button
             TimerButton.Text = "Stop Tracking";
             //start new timer
-            GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid);
+            GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid,taskname);
         }
     }
 
@@ -127,19 +128,19 @@ public partial class AddTaskPage : ContentPage
 
     private async void AlertUserTaskTracking(DateTime gettime, Guid currenttaskid)
     {
+        String taskname = GlobalTaskData.ToEdit.Name;
         //alert currently tracking
-        string alertstr = "Would you like to stop tracking task " +
-        GlobalTaskData.TaskManager.GetTask(GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed).Name
-        + " and begin tracking " + GlobalTaskData.ToEdit.Name;
+        string alertstr = "Would you like to stop tracking task " + 
+        GlobalTaskTimeData.TaskTimeManager.TaskName
+        + " and begin tracking " + taskname;
         bool tracknew = await DisplayAlert("Task Already Being Tracked", alertstr, "Yes", "No");
-
         //if user wants to stop tracking old and start tracking new
         if (tracknew)
         {
             TimerButton.Text = "Stop Tracking";
             GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
             AlertUserOfTimeSpent();
-            GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid);
+            GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid, taskname);
 
         }
     }
