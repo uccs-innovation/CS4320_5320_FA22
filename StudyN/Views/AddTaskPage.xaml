@@ -172,23 +172,6 @@
             </StackLayout>
             
             <!--Buttons for completing/deleting tasks-->
-            <Button 
-                x:Name="DeleteTaskButton"
-                Text="Delete Task"
-                Grid.Row="6"
-                CornerRadius="7"
-                Margin="1"
-                Clicked="HandleDeleteTaskClicked" />
-
-            <Button
-                x:Name="CompleteTaskButton"
-                Text="Mark Complete"
-                Grid.Row="6"
-                Grid.Column="1"
-                CornerRadius="7"
-                Margin="1"
-                Clicked="HandleCompleteTaskClicked"
-                Command="{Binding ButtonVisibility}"/>
         </Grid>
     </ContentPage.Content>
 
