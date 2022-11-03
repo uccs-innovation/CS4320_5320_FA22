@@ -9,7 +9,19 @@
 
     <ContentPage.ToolbarItems>
 
-        <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" IconImageSource="whitesave"/>
+        <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" IconImageSource="whitesave"
+                     Priority="3"/>
+        <ToolbarItem Text="Trash"
+                     x:Name="trashButton"
+                     Clicked="HandleDeleteTaskClicked"
+                     Priority="2"
+                     IconImageSource="whitetrashcan" />
+        <ToolbarItem Text="Complete"
+                     x:Name="completeButton"
+                     Clicked="HandleCompleteTaskClicked"
+                     Command="{Binding ButtonVisibility}"
+                     IconImageSource="whitecheckbox" 
+                     Priority="1"/>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
@@ -30,6 +42,7 @@
                 <RowDefinition Height="30" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             
             <!--Grid column definitions-->
@@ -42,7 +55,8 @@
             <dxe:TextEdit
                 Grid.ColumnSpan="2"
                 LabelText="Name"
-                IsLabelFloating="True"
+                IsLabelFloating="False"
+                PlaceholderText="Unnamed Task"
                 Margin="1"
                 x:Name="name" />
 
@@ -51,7 +65,7 @@
             <dxe:MultilineEdit
                 Grid.ColumnSpan="2"
                 LabelText="Description"
-                IsLabelFloating="True"
+                IsLabelFloating="False"
                 Grid.Row="1"
                 x:Name="description" />
             
@@ -62,32 +76,10 @@
                 Grid.Column="1"
                 Grid.ColumnSpan="1"
                 LabelText="Time Due"
-                IsLabelFloating="True"
+                PlaceholderText="--:--"
+                IsLabelFloating="False"
                 Margin="1"
                 x:Name="time" />
-            <CheckBox x:Name="checkBoxDueDate" 
-                CheckedChanged="OnCheckBoxDueDateChanged"
-                Grid.Row="4"
-                Grid.Column="0"
-                Grid.ColumnSpan="1"
-                Margin="1"/>
-            <Label Text="No Due Date"
-                   Grid.Row="4"
-                Grid.Column="0"
-                Grid.ColumnSpan="1"
-                   Margin="0">
-                
-                <Label.Triggers>
-                    <DataTrigger TargetType="Label"
-         
-                     Binding="{Binding Source={x:Reference checkBoxDueDate}, Path=IsChecked}"
-                     Value="true">
-                        <Setter Property="FontAttributes"
-                    Value="Italic, Bold" />
-
-                    </DataTrigger>
-                </Label.Triggers>
-            </Label>
 
             <!--Date Entry box GridRow 3 Spans 1 Column-->
             <dxe:DateEdit 
@@ -95,7 +87,8 @@
                 Grid.Row="2"
                 Grid.ColumnSpan="1"
                 LabelText="Date Due"
-                IsLabelFloating="True"
+                PlaceholderText="--/--/----"
+                IsLabelFloating="False"
                 Margin="1"
                 x:Name="date" />
             
@@ -106,7 +99,8 @@
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
                 LabelText="Estimated Time"
-                IsLabelFloating="True"
+                IsLabelFloating="False"
+                PlaceholderText="0h"
                 Margin="1"
                 x:Name="tComplete"/>
 
@@ -118,26 +112,36 @@
                 Grid.ColumnSpan="1"
                 Grid.Column="1"
                 LabelText="Actual Time"
-                IsLabelFloating="True"
+                PlaceholderText="0h"
+                IsLabelFloating="False"
                 Margin="1"
                 x:Name="tSpent"/>
 
             <!--Priority Slider and Label-->
-            <Label x:Name="displayLabel"
+
+            
+            <StackLayout
+                Grid.Row="5"
+                Grid.ColumnSpan="5"
+                Padding="0, -30">
+                <Label x:Name="rotatingLabel"
                Text="Priority"
+               FontSize="18"
                HorizontalOptions="Center"
-               VerticalOptions="Center" 
-               Grid.Row="4"
-               Grid.ColumnSpan="2"
-               FontSize="16" />
-            <Slider 
+               VerticalOptions="Center" />
+                <Slider 
                 Maximum="5"
                 Minimum="1"
                 Value="3"
                 ValueChanged="HandleSliderValueChanged" 
-                Grid.Row="5"
-                Grid.ColumnSpan="2"
                 x:Name="priority" />
+                <Label x:Name="displayLabel"
+               Text="{Binding Source={x:Reference priority},
+                              Path=Value,
+                              StringFormat='{0:F0}'}"
+               HorizontalOptions="Center"
+               VerticalOptions="Center" />
+            </StackLayout>
 
             <!--Buttons for Recurrance tasks-->
             <StackLayout Orientation="Horizontal"
@@ -168,23 +172,6 @@
             </StackLayout>
             
             <!--Buttons for completing/deleting tasks-->
-            <Button 
-                x:Name="DeleteTaskButton"
-                Text="Delete Task"
-                Grid.Row="6"
-                CornerRadius="7"
-                Margin="1"
-                Clicked="HandleDeleteTaskClicked" />
-
-            <Button
-                x:Name="CompleteTaskButton"
-                Text="Mark Complete"
-                Grid.Row="6"
-                Grid.Column="1"
-                CornerRadius="7"
-                Margin="1"
-                Clicked="HandleCompleteTaskClicked"
-                Command="{Binding ButtonVisibility}"/>
         </Grid>
     </ContentPage.Content>
 
