@@ -16,8 +16,8 @@ namespace StudyN.Models
                                 string description,
                                 DateTime dueTime,
                                 int priority,
-                                int CompletionProgress,
-                                int TotalTimeNeeded)
+                                double CompletionProgress,
+                                double TotalTimeNeeded)
         {
             //Creating new task with sent parameters
             TaskItem newTask  = new TaskItem(name,
@@ -73,8 +73,8 @@ namespace StudyN.Models
                                 string description,
                                 DateTime dueTime,
                                 int priority,
-                                int CompletionProgress,
-                                int TotalTimeNeeded,
+                                double CompletionProgress,
+                                double TotalTimeNeeded,
                                 List<TaskItemTime> TimeList = null,
                                 bool updateFile = true)
         {

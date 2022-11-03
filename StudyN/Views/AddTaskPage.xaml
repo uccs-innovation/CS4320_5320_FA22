@@ -154,7 +154,7 @@
                 LabelText="Actual Minutes"
                 IsLabelFloating="True"
                 Margin="1"
-                x:Name="mSpents"/>
+                x:Name="mSpent"/>
 
             <!--Priority Slider and Label-->
             <Label x:Name="displayLabel"

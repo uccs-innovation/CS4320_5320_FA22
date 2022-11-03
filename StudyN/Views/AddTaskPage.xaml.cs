@@ -256,8 +256,10 @@ public partial class AddTaskPage : ContentPage
         this.date.Date = (GlobalTaskData.ToEdit.DueTime.Date);
         this.time.Time = GlobalTaskData.ToEdit.DueTime;
         this.priority.Value = (GlobalTaskData.ToEdit.Priority);
-        this.hComplete.Value = GlobalTaskData.ToEdit.TotalTimeNeeded;
-        this.hSpent.Value = GlobalTaskData.ToEdit.CompletionProgress;
+        this.hComplete.Value = (int)GlobalTaskData.ToEdit.TotalTimeNeeded;
+        this.mComplete.Value = GlobalTaskData.ToEdit.GetTotalMinutesNeeded();
+        this.hSpent.Value = (int)GlobalTaskData.ToEdit.CompletionProgress;
+        this.mSpent.Value = GlobalTaskData.ToEdit.GetCompletionProgressMinutes();
     }
 
     //This function will set the date and time forms to the current time
