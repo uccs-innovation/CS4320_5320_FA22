@@ -168,8 +168,8 @@ public partial class AddTaskPage : ContentPage
         // Make sure we aren't storing nulls
         this.name.Text = this.name.Text == null ? "No Name" : this.name.Text;
         this.description.Text = this.description.Text == null ? "" : this.description.Text;
-        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
-        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        int timeLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
+        int totalTime = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
 
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
@@ -256,8 +256,8 @@ public partial class AddTaskPage : ContentPage
         this.date.Date = (GlobalTaskData.ToEdit.DueTime.Date);
         this.time.Time = GlobalTaskData.ToEdit.DueTime;
         this.priority.Value = (GlobalTaskData.ToEdit.Priority);
-        this.tComplete.Value = GlobalTaskData.ToEdit.TotalTimeNeeded;
-        this.tSpent.Value = GlobalTaskData.ToEdit.CompletionProgress;
+        this.hComplete.Value = GlobalTaskData.ToEdit.TotalTimeNeeded;
+        this.hSpent.Value = GlobalTaskData.ToEdit.CompletionProgress;
     }
 
     //This function will set the date and time forms to the current time
@@ -302,8 +302,8 @@ public partial class AddTaskPage : ContentPage
     //These functions will be used to add recurrence of a selected task for day/week/month
     private void HandleRecurrenceDay(object sender, EventArgs e)
     {
-        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
-        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        int timeLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
+        int totalTime = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
         for (int i = 1; i <= 365; i++)
@@ -321,8 +321,8 @@ public partial class AddTaskPage : ContentPage
     }
     private void HandleRecurrenceWeek(object sender, EventArgs e)
     {
-        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
-        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        int timeLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
+        int totalTime = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
 
@@ -342,8 +342,8 @@ public partial class AddTaskPage : ContentPage
     }
     private void HandleRecurrenceMonth(object sender, EventArgs e)
     {
-        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
-        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        int timeLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
+        int totalTime = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
         for (int i = 1; i <= 12; i++)
