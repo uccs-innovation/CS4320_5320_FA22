@@ -14,6 +14,14 @@
     {
         //This is for the object that manages all of our appointments
         public static CalendarManager CalendarManager { get; set; }
+        //This will be used to keep track of a category we are editing
+        public static AppointmentCategory EditCategory { get; set; }
+    }
+
+    public static class GlobalAutoScheduler
+    {
+        //This is for the object that auto schedules stuff
+        public static AutoScheduler AutoScheduler { get; set; }
 
     }
 }
