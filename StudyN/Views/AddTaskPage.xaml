@@ -213,7 +213,8 @@
                 Command="{Binding ButtonVisibility}"/>
 
             <!--Label Header Title for Task Time Log, row 9-->
-            <Label 
+            <Label
+                x:Name="LogTitle"
                 Text="Task Time Log"
                 HorizontalOptions="Start"
                 VerticalOptions="Center" 
@@ -223,7 +224,8 @@
                 FontSize="16" />
 
             <!--Labels for column headers for Task Time Log, row 10-->
-            <Label 
+            <Label
+                x:Name="LogStart"
                 Text="  Start Time" 
                 Grid.Row="10"
                 Grid.ColumnSpan="2" 
@@ -231,7 +233,8 @@
                 VerticalTextAlignment="Center"
                 FontAttributes="Bold"    
                 FontSize="10" />
-            <Label 
+            <Label
+                x:Name="LogStop"
                 Text="Stop Time"                
                 Grid.Row="10"
                 Grid.ColumnSpan="2"
@@ -239,7 +242,8 @@
                 VerticalTextAlignment="Center"
                 FontAttributes="Bold"    
                 FontSize="10" />
-            <Label 
+            <Label
+                x:Name="LogDuration"
                 Text="Duration     "                 
                 Grid.Row="10"
                 Grid.ColumnSpan="2"                
