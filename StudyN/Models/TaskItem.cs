@@ -7,23 +7,8 @@
                         DateTime dueTime,
                         int priority,
                         int completionProgress,
-                        int totalTimeNeeded)
-        {
-            this.Name = name;
-            this.Description = description;
-            this.DueTime = dueTime;
-            this.Priority = priority;
-            this.CompletionProgress = completionProgress;
-            this.TotalTimeNeeded = totalTimeNeeded;
-        }
-
-        public TaskItem(string name,
-                        string description,
-                        DateTime dueTime,
-                        int priority,
-                        int completionProgress,
                         int totalTimeNeeded,
-                        Guid recur)
+                        string recur)
         {
             this.Name = name;
             this.Description = description;
@@ -31,8 +16,8 @@
             this.Priority = priority;
             this.CompletionProgress = completionProgress;
             this.TotalTimeNeeded = totalTimeNeeded;
-            this.recur = recur;
-            this.isRecur = true;
+            this.Recur = recur;
+            this.IsRecur = true;
         }
 
         public bool Completed { get; set; } = false;
@@ -44,9 +29,9 @@
         public int TotalTimeNeeded { get; set; } = 0;
         public int Priority { get; set; } = 3;
 
-        public Guid recur = Guid.NewGuid();
+        public string Recur { get; set; } = "";
 
-        public bool isRecur = false;
+        public bool IsRecur { get; set; } = false;
 
 
         //Method for each task %

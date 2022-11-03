@@ -24,7 +24,8 @@ namespace StudyN.Models
                                             dueTime,
                                             priority,
                                             CompletionProgress,
-                                            TotalTimeNeeded);
+                                            TotalTimeNeeded,
+                                            "");
 
             //This will add the tasks to the list
             TaskList.Add(newTask);
@@ -42,7 +43,7 @@ namespace StudyN.Models
                                int priority,
                                int CompletionProgress,
                                int TotalTimeNeeded,
-                               Guid recur)
+                               string recur)
         {
             //Creating new task with sent parameters
             TaskItem newTask = new TaskItem(name,

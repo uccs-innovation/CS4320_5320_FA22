@@ -224,7 +224,7 @@ public partial class AddTaskPage : ContentPage
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime,
-                task.TaskId);
+                task.TaskId.ToString());
         }
     }
     private void HandleRecurrenceWeek(object sender, EventArgs e, TaskItem task)
@@ -245,7 +245,7 @@ public partial class AddTaskPage : ContentPage
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime,
-                task.TaskId);
+                task.TaskId.ToString());
         }
 
     }
@@ -266,16 +266,25 @@ public partial class AddTaskPage : ContentPage
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime,
-                task.TaskId);
+                task.TaskId.ToString());
         }
         
     }
 
     private void editRecurringTasks(TaskItem toEdit)
     {
+        string toComp;
+        if(toEdit.IsRecur == true)
+        {
+            toComp = toEdit.Recur.ToString();
+        }
+        else
+        {
+            toComp = toEdit.TaskId.ToString();
+        }
         foreach (var task in GlobalTaskData.TaskManager.TaskList)
         {
-            if(task.recur == toEdit.TaskId && task.isRecur == true)
+            if(task.Recur == toComp || task.TaskId.ToString().Equals (toComp))
             {
                 GlobalTaskData.TaskManager.EditTask(
                 task.TaskId,
