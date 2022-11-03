@@ -87,13 +87,16 @@ namespace StudyN.Views
 
         private void OnCalendarTap(object sender, SchedulerGestureEventArgs e)
         {
-            if (e.AppointmentInfo == null)
+            if (e.IntervalInfo != null)
             {
-                ShowNewAppointmentEditPage(e.IntervalInfo);
-                return;
+                if (e.AppointmentInfo == null)
+                {
+                    ShowNewAppointmentEditPage(e.IntervalInfo);
+                    return;
+                }
+                AppointmentItem appointment = e.AppointmentInfo.Appointment;
+                ShowAppointmentEditPage(appointment);
             }
-            AppointmentItem appointment = e.AppointmentInfo.Appointment;
-            ShowAppointmentEditPage(appointment);
         }
 
         private async void OnCalendarHold(object sender, SchedulerGestureEventArgs e)
