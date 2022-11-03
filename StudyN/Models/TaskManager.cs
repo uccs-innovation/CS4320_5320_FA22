@@ -36,6 +36,33 @@ namespace StudyN.Models
             return newTask;
         }
 
+        public TaskItem AddTask(string name,
+                               string description,
+                               DateTime dueTime,
+                               int priority,
+                               int CompletionProgress,
+                               int TotalTimeNeeded,
+                               Guid recur)
+        {
+            //Creating new task with sent parameters
+            TaskItem newTask = new TaskItem(name,
+                                            description,
+                                            dueTime,
+                                            priority,
+                                            CompletionProgress,
+                                            TotalTimeNeeded,
+                                            recur);
+
+            //This will add the tasks to the list
+            TaskList.Add(newTask);
+
+            // Publish task add event
+            EventBus.PublishEvent(
+                        new StudynEvent(newTask.TaskId, StudynEvent.StudynEventType.AddTask));
+
+            return newTask;
+        }
+
         //This will return a requested task using its id
         public TaskItem GetTask(Guid taskId)
         {
