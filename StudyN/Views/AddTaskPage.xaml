@@ -81,12 +81,12 @@
                 x:Name="time" />
             <CheckBox x:Name="checkBoxDueDate" 
                 CheckedChanged="OnCheckBoxDueDateChanged"
-                Grid.Row="4"
+                Grid.Row="5"
                 Grid.Column="0"
                 Grid.ColumnSpan="1"
                 Margin="1"/>
             <Label Text="No Due Date"
-                   Grid.Row="4"
+                   Grid.Row="5"
                 Grid.Column="0"
                 Grid.ColumnSpan="1"
                    Margin="0">
