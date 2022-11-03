@@ -67,8 +67,8 @@ public partial class AddTaskPage : ContentPage
             Guid currenttaskid = GlobalTaskData.ToEdit.TaskId;
             Guid taskbeingtimed = GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed;
             //Console.WriteLine("ALERT ALERT ALERT ");
-            //if task isn't being tracked or task is not task being tracked
-            if (currenttaskid != taskbeingtimed || !GlobalTaskTimeData.TaskTimeManager.BeingTimed)
+            //if no task is being tracked or if the task in edit isn't being tracked
+            if (!GlobalTaskTimeData.TaskTimeManager.BeingTimed || currenttaskid != taskbeingtimed)
             {
                 TimerButton.Text = "Track Task";
                 //Console.WriteLine("ALERT Setting text to track task");
@@ -85,18 +85,20 @@ public partial class AddTaskPage : ContentPage
 
     async void HandleTimerOnOff(object sender, EventArgs args)
     {
-        //gets guid of the current task.
+        //gets guid and name of the current task.
         Guid currenttaskid = GlobalTaskData.ToEdit.TaskId;
         String taskname = GlobalTaskData.ToEdit.Name;
+        Guid taskidtimed = GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed;
+        bool currentlytiming = GlobalTaskTimeData.TaskTimeManager.BeingTimed;
         //gets the current time
         DateTime gettime = DateTime.Now;
 
         //Checks if other task is being timed. If it is we want to send an alert to turn off
         //timing of the other task May make popup window have buttons that does this for user
-        if (GlobalTaskTimeData.TaskTimeManager.BeingTimed)
+        if (currentlytiming)
         {
             //if the task is being time and the current task id matches the task being timed
-            if(currenttaskid == GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed)
+            if(currenttaskid == taskidtimed)
             {
                 TimerButton.Text = "Track Task";
                 GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
@@ -119,20 +121,22 @@ public partial class AddTaskPage : ContentPage
 
     async void AlertUserOfTimeSpent()
     {
-        String alertstr = "You spent " +
-        GlobalTaskTimeData.TaskTimeManager.taskitemtime.span.Minutes +
-        " minutes on task " +
-        GlobalTaskData.TaskManager.GetTask(GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed).Name;
+        //gets name of task being timed and time spent on task
+        String taskname = GlobalTaskTimeData.TaskTimeManager.TaskName;
+        int timespent = GlobalTaskTimeData.TaskTimeManager.taskitemtime.span.Minutes;
+        //Informational alert and alert string.
+        String alertstr = "You spent " + timespent + " minutes on task " + taskname;
         await DisplayAlert("Great Job!", alertstr, "OK");
     }
 
     private async void AlertUserTaskTracking(DateTime gettime, Guid currenttaskid)
     {
-        String taskname = GlobalTaskData.ToEdit.Name;
+        //strings for alert
+        String tasknameInEdit = GlobalTaskData.ToEdit.Name;
+        String tasknameTimed = GlobalTaskTimeData.TaskTimeManager.TaskName;
         //alert currently tracking
-        string alertstr = "Would you like to stop tracking task " + 
-        GlobalTaskTimeData.TaskTimeManager.TaskName
-        + " and begin tracking " + taskname;
+        string alertstr = "Would you like to stop tracking task " +  tasknameTimed
+        + " and begin tracking " + tasknameInEdit;
         bool tracknew = await DisplayAlert("Task Already Being Tracked", alertstr, "Yes", "No");
         //if user wants to stop tracking old and start tracking new
         if (tracknew)
@@ -140,7 +144,7 @@ public partial class AddTaskPage : ContentPage
             TimerButton.Text = "Stop Tracking";
             GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
             AlertUserOfTimeSpent();
-            GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid, taskname);
+            GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid, tasknameInEdit);
 
         }
     }
@@ -149,19 +153,73 @@ public partial class AddTaskPage : ContentPage
     //This function will be used by the delete task button to delete the given task
     private async void HandleDeleteTaskClicked(object sender, EventArgs args)
     {
+        //gets variables for check
+        bool beingtimed = GlobalTaskTimeData.TaskTimeManager.BeingTimed;
+        Guid taskidTimed= GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed;
+        Guid taskidInEdit = GlobalTaskData.ToEdit.TaskId;
+        //if task is being timed and task in edit is the one being timed
+        if (beingtimed && taskidTimed == taskidInEdit)
+        {
+            //makes string for alert
+            String tasknameTimed = GlobalTaskTimeData.TaskTimeManager.TaskName;
+            string alertstr = "Would you like to stop tracking task " + tasknameTimed + " and delete the task?";
+            bool deletetracked = await DisplayAlert("Task Is Being Timed!", alertstr, "Yes", "No");
+            //If user confirms delete
+            if(deletetracked) {
+                GlobalTaskTimeData.TaskTimeManager.StopCurrent(DateTime.Now);
+                DeleteTask();
+                await Shell.Current.GoToAsync("..");
+            } 
+        } else {
+            DeleteTask();
+            await Shell.Current.GoToAsync("..");
+        }
+
+    }
+
+    //Deletes the task at hand
+    private void DeleteTask()
+    {
         //The task manager will be told to delete this task, after which we will set ToEdit to null and return to the previous page
         GlobalTaskData.TaskManager.DeleteTask(GlobalTaskData.ToEdit.TaskId);
         GlobalTaskData.ToEdit = null;
-        await Shell.Current.GoToAsync("..");
     }
 
     //This function will be used by the complete task button to "complete" a given task
     private async void HandleCompleteTaskClicked(object sender, EventArgs args)
     {
+        //gets variables for check
+        bool beingtimed = GlobalTaskTimeData.TaskTimeManager.BeingTimed;
+        Guid taskidTimed = GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed;
+        Guid taskidInEdit = GlobalTaskData.ToEdit.TaskId;
+        //if task is being timed and task in edit is the one being timed
+        if (beingtimed && taskidTimed == taskidInEdit)
+        {
+            //makes string for alert
+            String tasknameTimed = GlobalTaskTimeData.TaskTimeManager.TaskName;
+            string alertstr = "Would you like to stop tracking task " + tasknameTimed + " and Complete the task?";
+            bool deletetracked = await DisplayAlert("Task Is Being Timed!", alertstr, "Yes", "No");
+            //If user confirms delete
+            if (deletetracked)
+            {
+                GlobalTaskTimeData.TaskTimeManager.StopCurrent(DateTime.Now);
+                CompleteTask();
+                await Shell.Current.GoToAsync("..");
+            }
+        }
+        else
+        {
+            CompleteTask();
+            await Shell.Current.GoToAsync("..");
+        }
+
+    }
+
+    private void CompleteTask()
+    {
         //The task manager will be told to "complete" this task, after which we will set ToEdit to null and return to the previous page
         GlobalTaskData.TaskManager.CompleteTask(GlobalTaskData.ToEdit.TaskId);
         GlobalTaskData.ToEdit = null;
-        await Shell.Current.GoToAsync("..");
     }
 
     //This function will be used by the priority slider when its value has changed to set and keep track of the new value
