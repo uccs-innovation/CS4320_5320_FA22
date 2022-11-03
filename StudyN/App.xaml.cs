@@ -27,6 +27,7 @@ namespace StudyN
             Routing.RegisterRoute(nameof(CalendarPage), typeof(CalendarPage));
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             Routing.RegisterRoute(nameof(TaskPage), typeof(TaskPage));
+            Routing.RegisterRoute(nameof(AddIcsPage), typeof(AddIcsPage));
             CrossFirebasePushNotification.Current.OnTokenRefresh += Current_OnTokenRefresh;
         }
 

@@ -5,9 +5,11 @@
     <Color x:Key="Primary">#512BD4</Color>
     <Color x:Key="PrimaryLight">#deedff</Color>
     <Color x:Key="NormalText">#55575c</Color>
+    <Color x:Key="NormalText2">White</Color>
     <Color x:Key="NormalHeaderText">#404144</Color>
     <Color x:Key="NormalLightText">#959aa0</Color>
     <Color x:Key="DrawerTitleTextColor">White</Color>
     <Color x:Key="TitleTextColor">White</Color>
     <Color x:Key="NormalBackgroundColor">White</Color>
+    <Color x:Key="NormalBackgroundColor2">#512BA1</Color>
 </ResourceDictionary>
