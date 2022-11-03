@@ -8,8 +8,7 @@ namespace StudyN.ViewModels
     public class HomeViewModel : BaseViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public ObservableCollection<TaskItem> TaskList { get => GlobalTaskData.TaskManager.TaskList; }
-
+        public ObservableCollection<Appointment> CalendarEvents { get => GlobalAppointmentData.CalendarManager.Appointments; }
         public HomeViewModel()
         {
             Title = "Dashboard";

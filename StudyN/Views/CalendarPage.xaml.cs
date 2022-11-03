@@ -90,15 +90,21 @@ namespace StudyN.Views
             }
         }
 
-        private void OnCalendarTap(object sender, SchedulerGestureEventArgs e)
+        private async void OnCalendarTap(object sender, SchedulerGestureEventArgs e)
         {
             if (e.AppointmentInfo == null)
             {
+
                 ShowNewAppointmentEditPage(e.IntervalInfo);
                 return;
             }
             AppointmentItem appointment = e.AppointmentInfo.Appointment;
-            ShowAppointmentEditPage(appointment);
+            bool answer = await DisplayAlert("Are you sure?",
+                    appointment.Subject + " should be edited.", "Yes", "No");
+            if (answer == true)
+            {
+                ShowAppointmentEditPage(appointment);
+            }
         }
 
         private async void OnCalendarHold(object sender, SchedulerGestureEventArgs e)
