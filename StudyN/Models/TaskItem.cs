@@ -17,7 +17,6 @@
             this.CompletionProgress = completionProgress;
             this.TotalTimeNeeded = totalTimeNeeded;
             this.Recur = recur;
-            this.IsRecur = true;
         }
 
         public bool Completed { get; set; } = false;

@@ -274,9 +274,9 @@ public partial class AddTaskPage : ContentPage
     private void editRecurringTasks(TaskItem toEdit)
     {
         string toComp;
-        if(toEdit.IsRecur == true)
+        if(!toEdit.Recur.Equals(""))
         {
-            toComp = toEdit.Recur.ToString();
+            toComp = toEdit.Recur;
         }
         else
         {
@@ -284,14 +284,14 @@ public partial class AddTaskPage : ContentPage
         }
         foreach (var task in GlobalTaskData.TaskManager.TaskList)
         {
-            if(task.Recur == toComp || task.TaskId.ToString().Equals (toComp))
+            if(toComp.Equals(task.Recur) || task.TaskId.ToString().Equals(toComp))
             {
                 GlobalTaskData.TaskManager.EditTask(
                 task.TaskId,
                 toEdit.Name,
                 toEdit.Description,
-                toEdit.DueTime,
-                toEdit.Priority,
+                task.DueTime,
+                task.Priority,
                 toEdit.CompletionProgress,
                 toEdit.TotalTimeNeeded);
             }
