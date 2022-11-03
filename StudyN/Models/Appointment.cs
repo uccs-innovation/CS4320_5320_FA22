@@ -75,6 +75,8 @@ namespace StudyN.Models
         public Guid Id { get; set; }
         public string Caption { get; set; }
         public Color Color { get; set; }
+        public double PickerXPosition { get; set; }
+        public double PickerYPosition { get; set; }
     }
 
     public class AppointmentStatus

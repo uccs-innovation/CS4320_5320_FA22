@@ -17,19 +17,22 @@ namespace StudyN.Models
 
         public static string[] AppointmentCategoryTitles = { "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work"};
         public static Color[] AppointmentCategoryColors = { Color.FromArgb("#3333FF"),   // dark blue
-                                                        Color.FromArgb("#008A00"),   // green                                                        
+                                                        Color.FromArgb("#00FF00"),   // green                                                        
                                                         Color.FromArgb("#D80073"),   // dark pink
                                                         Color.FromArgb("#FFCB21"),   // mustard
                                                         Color.FromArgb("#1BA1E2"),   // medium blue                                                        
                                                         Color.FromArgb("FF8000"),    // orange
-                                                        Color.FromArgb("#A20025"),   // burgundy                                                         
+                                                        Color.FromArgb("#FF0000"),   // burgundy                                                         
                                                         Color.FromArgb("#6A00FF") };   // purple
-        // Uncategorized category
-        public static AppointmentCategory Uncategorized = new()
-        {
-            Id = Guid.NewGuid(),
-            Caption = "Uncategorized",
-            Color = Color.FromArgb("#D9D9D9")
+        public static double[] AppointmentCategoryX = { 0.65f, 0.35f, 0.9f, 0.15f, 0.52f, 0.1f, 0.98f, 0.8f};
+        // Uncategorized category
+        public static AppointmentCategory Uncategorized = new()
+        {
+            Id = Guid.NewGuid(),
+            Caption = "Uncategorized",
+            Color = Color.FromArgb("#D9D9D9"),
+            PickerXPosition = 0.5f,
+            PickerYPosition = 1.0f
         };
                                                                                       
         public static string[] AppointmentStatusTitles = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
@@ -85,6 +88,8 @@ namespace StudyN.Models
                 cat.Id = Guid.NewGuid();
                 cat.Caption = AppointmentCategoryTitles[i];
                 cat.Color = AppointmentCategoryColors[i];
+                cat.PickerXPosition = AppointmentCategoryX[i];
+                cat.PickerYPosition = 0.5f;
                 AppointmentCategories.Add(cat);
             }
         }
@@ -138,20 +143,23 @@ namespace StudyN.Models
         /// <param name="categoryColor"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public AppointmentCategory CreateCategory(string categoryName, 
-                                                   Color categoryColor,
-                                                   Guid id = new Guid())
-        {
-            // Makes a new category
-            AppointmentCategory cat = new()
-            {
-                Id = id,
-                Caption = categoryName,
-                Color = categoryColor,
-            };
-            // Adds category to category list
-            AppointmentCategories.Add(cat);
-            return cat;
+        public AppointmentCategory CreateCategory(string categoryName, 
+                                                   Color categoryColor,
+                                                   double x, double y,
+                                                   Guid id = new Guid())
+        {
+            // Makes a new category
+            AppointmentCategory cat = new()
+            {
+                Id = id,
+                Caption = categoryName,
+                Color = categoryColor,
+                PickerXPosition = x,
+                PickerYPosition = y
+            };
+            // Adds category to category list
+            AppointmentCategories.Add(cat);
+            return cat;
         }
 
         /// <summary>
@@ -163,25 +171,28 @@ namespace StudyN.Models
         /// <returns></returns>
         public bool EditCategory(string categoryName, 
                                  Color categoryColor,
-                                 Guid id)
-        {
-            // Get the category
-            AppointmentCategory cat = null;
-            foreach (AppointmentCategory category in AppointmentCategories)
-            {
-                if(category.Id == id)
-                {
-                    cat = category;
-                }
-            }
-            if(cat == null)
-            {
-                return false;
-            }
-            // add new elements to category
-            cat.Caption = categoryName;
-            cat.Color = categoryColor;
-            return true;
+                                 double x, double y,
+                                 Guid id)
+        {
+            // Get the category
+            AppointmentCategory cat = null;
+            foreach (AppointmentCategory category in AppointmentCategories)
+            {
+                if(category.Id == id)
+                {
+                    cat = category;
+                }
+            }
+            if(cat == null)
+            {
+                return false;
+            }
+            // add new elements to category
+            cat.Caption = categoryName;
+            cat.Color = categoryColor;
+            cat.PickerXPosition = x;
+            cat.PickerYPosition = y;
+            return true;
         }
 
         /// <summary>
