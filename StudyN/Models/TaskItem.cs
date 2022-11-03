@@ -7,7 +7,8 @@
                         DateTime dueTime,
                         int priority,
                         int completionProgress,
-                        int totalTimeNeeded)
+                        int totalTimeNeeded,
+                        string recur)
         {
             this.Name = name;
             this.Description = description;
@@ -15,6 +16,7 @@
             this.Priority = priority;
             this.CompletionProgress = completionProgress;
             this.TotalTimeNeeded = totalTimeNeeded;
+            this.Recur = recur;
         }
 
         public bool Completed { get; set; } = false;
@@ -25,6 +27,11 @@
         public int CompletionProgress { get; set; } = 0;
         public int TotalTimeNeeded { get; set; } = 0;
         public int Priority { get; set; } = 3;
+
+        public string Recur { get; set; } = "";
+
+        public bool IsRecur { get; set; } = false;
+
 
         //Method for each task %
         public double? Percent
