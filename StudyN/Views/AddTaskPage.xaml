@@ -234,6 +234,7 @@
 
             <!--Label Header Title for Task Time Log, row 10-->
             <Label 
+                x:Name="LogTitle"
                 Text="Task Time Log"
                 HorizontalOptions="Start"
                 VerticalOptions="Center" 
@@ -244,6 +245,7 @@
 
             <!--Labels for column headers for Task Time Log, row 11-->
             <Label 
+                x:Name="LogStart"
                 Text="  Start Time" 
                 Grid.Row="11"
                 Grid.ColumnSpan="2" 
@@ -251,7 +253,8 @@
                 VerticalTextAlignment="Center"
                 FontAttributes="Bold"    
                 FontSize="10" />
-            <Label 
+            <Label
+                x:Name="LogStop"
                 Text="Stop Time"                
                 Grid.Row="11"
                 Grid.ColumnSpan="2"
@@ -259,7 +262,8 @@
                 VerticalTextAlignment="Center"
                 FontAttributes="Bold"    
                 FontSize="10" />
-            <Label 
+            <Label
+                x:Name="LogDuration"
                 Text="Duration     "                 
                 Grid.Row="11"
                 Grid.ColumnSpan="2"                

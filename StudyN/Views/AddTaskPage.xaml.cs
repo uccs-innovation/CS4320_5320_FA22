@@ -49,6 +49,13 @@ public partial class AddTaskPage : ContentPage
 
         //Makes timer button visible
         TimerButton.IsVisible = editingExistingTask;
+
+        //Make task time log visible
+        LogTitle.IsVisible = editingExistingTask;
+        LogStart.IsVisible = editingExistingTask;
+        LogStop.IsVisible = editingExistingTask;
+        LogDuration.IsVisible = editingExistingTask;
+        TimeListLog.IsVisible = editingExistingTask;
         //checks text of timer button. If it's not being tracked we want to see 
         //track task. Otherwise we want to see stop tracking
         SetTimerButton();
