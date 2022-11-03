@@ -22,7 +22,7 @@ namespace StudyN.Views
             InitializeComponent();
             ViewModel = new CalendarViewModel();
             BindingContext = _calendarDataView = new CalendarDataView(); //Use to pull data of CalendarData under Models
-
+            dailyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 255);
             EventBus.Subscribe(this);
 
             // Reuse data storage between all the views
@@ -38,7 +38,9 @@ namespace StudyN.Views
             dayView.IsVisible = true;
             weekView.IsVisible = false;
             monthView.IsVisible = false;
-
+            dailyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 255);
+            weeklyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 0);
+            monthlyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 0);
         }
 
         void OnWeeklyClicked(object sender, EventArgs args)
@@ -46,6 +48,9 @@ namespace StudyN.Views
             dayView.IsVisible = false;
             weekView.IsVisible = true;
             monthView.IsVisible = false;
+            dailyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 0);
+            weeklyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 255);
+            monthlyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 0);
 
         }
 
@@ -54,6 +59,9 @@ namespace StudyN.Views
             dayView.IsVisible = false;
             weekView.IsVisible = false;
             monthView.IsVisible = true;
+            dailyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 0);
+            weeklyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 0);
+            monthlyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 255);
         }
 
         protected override void OnAppearing()
