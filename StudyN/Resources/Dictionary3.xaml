@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyN.Resources.Dictionary3">
+    <Color x:Key="Primary">#000000</Color>
+    <Color x:Key="PrimaryLight">#444444</Color>
+    <Color x:Key="NormalText">#ff0000</Color>
+    <Color x:Key="NormalHeaderText">#00f0f0</Color>
+    <Color x:Key="NormalLightText">#00ff00</Color>
+    <Color x:Key="DrawerTitleTextColor">#0000ff</Color>
+    <Color x:Key="TitleTextColor">#f0f000</Color>
+    <Color x:Key="NormalBackgroundColor">#f000f0</Color>
+</ResourceDictionary>

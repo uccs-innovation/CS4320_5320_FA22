@@ -13,6 +13,16 @@ namespace StudyN.Views
             BindingContext = new SettingsViewModel();
         }
 
+        private void Button_ClickedDebug(object sender, EventArgs e)
+        {
+            ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
+            if (mergedDictionaries != null)
+            {
+                mergedDictionaries.Clear();
+                mergedDictionaries.Add(new Dictionary3());
+            }
+        }
+
         private void Button_ClickedDark(object sender, EventArgs e)
         {
             ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;

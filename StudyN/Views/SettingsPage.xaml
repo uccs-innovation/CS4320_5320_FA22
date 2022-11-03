@@ -14,9 +14,7 @@
              ios:Page.UseSafeArea="true"
              x:Class="StudyN.Views.SettingsPage">
     <ContentPage.Content>
-        
-        
-        <Grid RowDefinitions="Auto,*,Auto">
+        <Grid RowDefinitions="Auto,*,Auto" BackgroundColor="{DynamicResource PrimaryLight}">
             <Image Source="background" HorizontalOptions="FillAndExpand" Aspect="Fill"/>
             <StackLayout VerticalOptions="Center" Margin="0,10,0,10" Spacing="5">
                 <Button
@@ -27,6 +25,10 @@
                     Text="Dark Mode"
                     Style="{StaticResource PrimaryButton}"
                     Clicked="Button_ClickedDark"/>
+                <Button
+                    Text="Color Debug Mode"
+                    Style="{StaticResource PrimaryButton}"
+                    Clicked="Button_ClickedDebug"/>
                 <Button
                     Text="About"
                     Style="{StaticResource PrimaryButton}"

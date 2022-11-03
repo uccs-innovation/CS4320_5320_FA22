@@ -102,6 +102,9 @@
 
 
 	<ItemGroup>
+	  <MauiXaml Update="Resources\Dictionary3.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\AboutPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
