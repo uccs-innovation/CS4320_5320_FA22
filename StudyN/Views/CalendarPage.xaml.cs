@@ -1,4 +1,7 @@
 ﻿using DevExpress.Maui.Scheduler;
+using DevExpress.Web.ASPxScheduler.Forms;
+using DevExpress.XamarinAndroid.Scheduler;
+using DevExpress.XtraScheduler.Native;
 using StudyN.Common;
 using StudyN.Models; //Calls Calendar Data
 using StudyN.Utilities;
@@ -57,8 +60,10 @@ namespace StudyN.Views
         {
             Console.WriteLine("CalendarPage OnAppearing");
             SchedulerStorage.RefreshData();
+            //SchedulerStorage.AppointmentItems.Refresh(); //https://supportcenter.devexpress.com/ticket/details/q320528/slow-scheduler-refresh //https://supportcenter.devexpress.com/ticket/details/t615692/how-to-programmatically-refresh-scheduler
+            //SchedulerElement.
             InvalidateMeasure();
-
+            
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
             CalendarDataView.LoadDataForNotification(notes.ToList());
             base.OnAppearing();
