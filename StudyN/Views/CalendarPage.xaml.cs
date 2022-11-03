@@ -57,6 +57,7 @@ namespace StudyN.Views
         {
             Console.WriteLine("CalendarPage OnAppearing");
             SchedulerStorage.RefreshData();
+            //SchedulerStorage.AppointmentItems.Refresh(); //https://supportcenter.devexpress.com/ticket/details/q320528/slow-scheduler-refresh //https://supportcenter.devexpress.com/ticket/details/t615692/how-to-programmatically-refresh-scheduler
             InvalidateMeasure();
 
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
