@@ -120,6 +120,7 @@ public partial class AddTaskPage : ContentPage
                 totalTime);
             task = GlobalTaskData.ToEdit;
             GlobalTaskData.ToEdit = null;
+            editRecurringTasks(task);
         }
         else
         {
@@ -268,5 +269,23 @@ public partial class AddTaskPage : ContentPage
                 task.TaskId);
         }
         
+    }
+
+    private void editRecurringTasks(TaskItem toEdit)
+    {
+        foreach (var task in GlobalTaskData.TaskManager.TaskList)
+        {
+            if(task.recur == toEdit.TaskId && task.isRecur == true)
+            {
+                GlobalTaskData.TaskManager.EditTask(
+                task.TaskId,
+                toEdit.Name,
+                toEdit.Description,
+                toEdit.DueTime,
+                toEdit.Priority,
+                toEdit.CompletionProgress,
+                toEdit.TotalTimeNeeded);
+            }
+        }
     }
 }
