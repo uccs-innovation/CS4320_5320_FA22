@@ -22,7 +22,7 @@ namespace StudyN.Models
                                                         Color.FromArgb("#FFCB21"),   // mustard
                                                         Color.FromArgb("#1BA1E2"),   // medium blue                                                        
                                                         Color.FromArgb("FF8000"),    // orange
-                                                        Color.FromArgb("#A20025"),   // burgundy                                                         
+                                                        Color.FromArgb("#FF0000"),   // burgundy                                                         
                                                         Color.FromArgb("#6A00FF") };   // purple
         public static double[] AppointmentCategoryX = { 0.65f, 0.35f, 0.9f, 0.15f, 0.52f, 0.1f, 0.98f, 0.8f};
         // Uncategorized category
