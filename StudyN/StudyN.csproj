@@ -23,11 +23,11 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiImage Include="Resources\appicon.svg" IsAppIcon="true" ForegroundFile="Resources\splashscreen.svg" Color="#FFFFFF" />
-
+		<MauiIcon Include="Resources\appicon.jpg" Color="#FFFFFF"/>
+		
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\splashscreen.svg" Color="#5B27D9" />
-
+		<MauiSplashScreen Include="Resources\Splash\splashscreen.jpg" Color="#FFFFFF"/>
+		
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 
