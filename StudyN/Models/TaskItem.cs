@@ -9,7 +9,7 @@ namespace StudyN.Models
                         DateTime dueTime,
                         int priority,
                         double completionProgress,
-                        double totalTimeNeeded)
+                        double totalTimeNeeded,
                         string recur)
         {
             this.Name = name;
