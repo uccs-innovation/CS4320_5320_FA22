@@ -11,17 +11,27 @@
                      IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
     </ContentPage.ToolbarItems>
     <!-- DataGrid of Categories -->
-    <dxg:DataGridView ItemsSource="{Binding AppointmentCategories}"
+    <dxg:DataGridView x:Name="DataGrid"
+                      ItemsSource="{Binding AppointmentCategories}"
                       Tap="CellClicked"
                       ColumnHeaderHeight="0"
                       BorderThickness="10">
         <dxg:DataGridView.Columns>
             <!-- Doesn't work unfortunatly -->
             <!-- <dxg:TemplateColumn FieldName="Color" Caption="Color" BackgroundColor="{Binding FieldName}" Width ="75" /> -->
-            <dxg:TextColumn FieldName="Caption" Caption="Name" />
+            <dxg:TemplateColumn x:Name="PreviewColumn" FieldName="Color" Caption="Color" Width ="50">
+                <dxg:TemplateColumn.DisplayTemplate>
+                    <DataTemplate>
+                        <Grid VerticalOptions="Center" Padding="0, 0, 0, 0" Scale="20">
+                            <Label Text="" BackgroundColor="{Binding Path=Item.Color}"/>
+                        </Grid>
+                    </DataTemplate>
+                </dxg:TemplateColumn.DisplayTemplate>
+            </dxg:TemplateColumn>
+            <dxg:TextColumn FieldName="Caption" Caption="Name" Grid.ColumnSpan="5"/>
         </dxg:DataGridView.Columns>
         <dxg:DataGridView.CellStyle>
-            <dxg:CellStyle Padding="30" FontSize="18" />
+            <dxg:CellStyle Padding="10" FontSize="18" SelectionColor="White"/>
         </dxg:DataGridView.CellStyle>
         <dxg:DataGridView.ColumnHeaderStyle>
             <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />

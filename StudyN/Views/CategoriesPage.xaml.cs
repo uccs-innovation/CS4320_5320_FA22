@@ -2,6 +2,8 @@ using StudyN.ViewModels;
 using StudyN.Models;
 using DevExpress.Maui.DataGrid;
 using AndroidX.Lifecycle;
+using System.Collections.ObjectModel;
+using DevExpress.Data.Browsing;
 
 namespace StudyN.Views
 {
@@ -13,12 +15,15 @@ namespace StudyN.Views
 		public CategoriesPage()
 		{
 			InitializeComponent();
-			BindingContext = new CategoriesViewModel();
+			BindingContext = ViewModel = new CategoriesViewModel();
 		}
+
+        CategoriesViewModel ViewModel { get; set; }
 
         protected override void OnAppearing()
         {
             isChildPageOpening = false;
+            BindingContext = ViewModel = new CategoriesViewModel();
         }
 
         /// <summary>
