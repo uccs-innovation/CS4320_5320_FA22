@@ -13,17 +13,15 @@
     <!-- DataGrid of Categories -->
     <dxg:DataGridView ItemsSource="{Binding AppointmentCategories}"
                       Tap="CellClicked"
-                      ColumnHeaderHeight="0">
+                      ColumnHeaderHeight="0"
+                      BorderThickness="10">
         <dxg:DataGridView.Columns>
             <!-- Doesn't work unfortunatly -->
             <!-- <dxg:TemplateColumn FieldName="Color" Caption="Color" BackgroundColor="{Binding FieldName}" Width ="75" /> -->
             <dxg:TextColumn FieldName="Caption" Caption="Name" />
         </dxg:DataGridView.Columns>
-        <dxg:DataGridView.GroupRowStyle>
-            <dxg:GroupRowStyle FontSize="16" />
-        </dxg:DataGridView.GroupRowStyle>
         <dxg:DataGridView.CellStyle>
-            <dxg:CellStyle Padding="10" FontSize="24"/>
+            <dxg:CellStyle Padding="30" FontSize="18" />
         </dxg:DataGridView.CellStyle>
         <dxg:DataGridView.ColumnHeaderStyle>
             <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />

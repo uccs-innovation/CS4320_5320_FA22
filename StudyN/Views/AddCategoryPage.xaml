@@ -45,7 +45,7 @@
             <controls:ColorPicker
                 Grid.ColumnSpan="2"
                 ColorFlowDirection="Horizontal"
-                ColorSpectrumStyle="HueOnlyStyle"
+                ColorSpectrumStyle="TintToHueToShadeStyle"
                 PickedColorChanged="PickedColorChanged"
                 PointerRingBorderUnits="0.3"
                 PointerRingDiameterUnits="0.7"
