@@ -1,102 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using Microsoft.Maui.Graphics;
+﻿using System.Collections.ObjectModel;
 using StudyN.Models;
 
 namespace StudyN.ViewModels
 {
-    class TaskChartsViewModel
+    public class TaskChartsViewModel
     {
-        public IReadOnlyList<HoursRemainingItem> HoursRemainingList { get; }
-        //public ObservableCollection<HoursRemainingItem> HoursRemainingList { get; private set; }
+        public ObservableCollection<TaskData> TasksTimeWorked { get; }
+        public ObservableCollection<TaskData> TasksTimeNeeded { get; }
 
         public TaskChartsViewModel()
         {
- 
-            DateTime currDay = DateTime.Today;
-            //HoursRemainingList = new ObservableCollection<HoursRemainingItem>()
-            HoursRemainingList = new List<HoursRemainingItem>()
+            TasksTimeWorked = new ObservableCollection<TaskData>();
+            TasksTimeNeeded = new ObservableCollection<TaskData>();
+
+            ObservableCollection<TaskItem> TaskList = GlobalTaskData.TaskManager.TaskList;
+
+            foreach (TaskItem task in TaskList)
             {
-                new HoursRemainingItem(currDay, 0, 3),
-                new HoursRemainingItem(currDay.AddDays(1), 4, 6),
-                new HoursRemainingItem(currDay.AddDays(3), 3, 5) 
+                String taskName = task.Name;
+                int timeWorked = task.CompletionProgress;
+                int timeNeeded = task.TotalTimeNeeded;
                 
-            };
-
-            //// estepanek: I know that this should be in it's own method :-(
-            //int totalHoursForDay = 0;
-            //int totalHoursRemaining = 0;
-
-            //// estepanek: I'm assuming the list is already sorted by day
-            //foreach (TaskItem task in TaskList) // estepanek: can't figure out how to access this list
-            //{
-            //    if (task.DueTime.Day < currDay.Day)
-            //    {
-            //        continue; // cycle
-            //    }
-                
-            //    if (task.DueTime.Day == currDay.Day)
-            //    {
-            //        totalHoursRemaining += (task.TotalTimeNeeded - task.CompletionProgress);
-            //        totalHoursForDay += task.TotalTimeNeeded;
-            //        continue; // cycle
-            //    }
-
-            //    if (totalHoursForDay == 0) // don't bother adding if total is zero
-            //    {
-            //        continue; // cycle
-            //    }
-
-            //    HoursRemainingItem item = new HoursRemainingItem(currDay, totalHoursForDay, totalHoursRemaining);
-            //    HoursRemainingList.Add(item);
-
-            //    currDay = currDay.AddDays(1);
-            //    totalHoursRemaining = 0;
-            //    totalHoursForDay = 0;
-            //} // end foreach
-            //if (totalHoursForDay > 0) // still stuff left to add
-            //{
-            //    HoursRemainingItem item = new HoursRemainingItem(currDay, totalHoursForDay, totalHoursRemaining);
-            //    HoursRemainingList.Add(item);
-            //}
-
-            palette = PaletteLoader.LoadPalette("#975ba5", "#03bfc1", "#f8c855", "#f45a4e",
-                                                    "#496cbe", "#f58f35", "#d293fd", "#25a966");
-        }
-        readonly Color[] palette;
-        public Color[] Palette => palette;
-
-    }
-
-    // estepanek: might need this later?
-    static class PaletteLoader
-    {
-        public static Color[] LoadPalette(params string[] values)
-        {
-            Color[] colors = new Color[values.Length];
-            for (int i = 0; i < values.Length; i++)
-                colors[i] = Color.FromArgb(values[i]);
-            return colors;
+                TasksTimeWorked.Add(new TaskData(taskName, timeWorked));
+                if (timeNeeded - timeWorked > 0)
+                {
+                    TasksTimeNeeded.Add(new TaskData(taskName, timeNeeded - timeWorked));
+                }
+            }
         }
     }
 
-    class HoursRemainingItem
+    public class TaskData
     {
-        // Properties
-        public DateTime StudyDay { get; set; }
-        public int TotalHoursForDay { get; set; }
-        public int HoursLeftForDay { get; set; }
+        public String TaskName { get; }
+        public int Time { get; }
 
-
-        // Constructor
-        public HoursRemainingItem(DateTime studyDay, int totalHoursForDay, int hoursLeftForDay)
+        public TaskData(String taskName, int time)
         {
-            Console.WriteLine("In the HoursRemainingItem constructor");
-            this.StudyDay = studyDay;
-            this.TotalHoursForDay = totalHoursForDay;
-            this.HoursLeftForDay = hoursLeftForDay;
+            this.TaskName = taskName;
+            this.Time = time;
         }
     }
 }
