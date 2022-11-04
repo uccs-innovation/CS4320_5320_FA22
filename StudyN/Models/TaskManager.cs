@@ -11,7 +11,7 @@ namespace StudyN.Models
     //This class manages all of our tasks and preforms actions related to them
     public class TaskDataManager
     {
-        //This function will add a new task to our list of tasks
+
         public TaskItem AddTask(string name,
                                 string description,
                                 DateTime dueTime,
@@ -37,13 +37,13 @@ namespace StudyN.Models
 
             return newTask;
         }
-
+        //This function will add a new task to our list of tasks
         public TaskItem AddTask(string name,
                                string description,
                                DateTime dueTime,
                                int priority,
-                               int CompletionProgress,
-                               int TotalTimeNeeded,
+                               double CompletionProgress,
+                               double TotalTimeNeeded,
                                string recur)
         {
             //Creating new task with sent parameters
