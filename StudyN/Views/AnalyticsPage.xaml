@@ -23,7 +23,7 @@
                     </dxc:PieHint>
                 </dxc:PieChartView.Hint>
                 <dxc:PieChartView.Series>
-                    <dxc:PieSeries >
+                    <dxc:PieSeries>
                         <dxc:PieSeries.Label>
                             <dxc:PieSeriesLabel TextPattern="{}{VP}%">
                                 <dxc:PieSeriesLabel.Style>
@@ -50,7 +50,8 @@
                             <dxc:LegendStyle BorderColor="LightGray" 
                                              BorderThickness="1"
                                              BackgroundColor="#424651"
-                                             MarkerSize="18" TextIndent="5"
+                                             MarkerSize="18" 
+                                             TextIndent="5"
                                              ItemsVerticalIndent="10"
                                              Padding="10,10,10,10">
                                 <dxc:LegendStyle.TextStyle>
@@ -61,7 +62,6 @@
                     </dxc:Legend>
                 </dxc:PieChartView.Legend>
             </dxc:PieChartView>
-            
         </Grid>
     </ContentPage.Content>
 </ContentPage>
