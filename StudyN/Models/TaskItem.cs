@@ -9,7 +9,8 @@ namespace StudyN.Models
                         DateTime dueTime,
                         int priority,
                         int completionProgress,
-                        int totalTimeNeeded)
+                        int totalTimeNeeded,
+                        string recur)
         {
             this.Name = name;
             this.Description = description;
@@ -17,6 +18,7 @@ namespace StudyN.Models
             this.Priority = priority;
             this.CompletionProgress = completionProgress;
             this.TotalTimeNeeded = totalTimeNeeded;
+            this.Recur = recur;
         }
 
         public bool Completed { get; set; } = false;
@@ -29,6 +31,11 @@ namespace StudyN.Models
         public int Priority { get; set; } = 3;
         public bool BeingTimed { get; set; } = false;
         public List<TaskItemTime> TimeList { get; set; } = new List<TaskItemTime>();
+
+
+        public string Recur { get; set; } = "";
+
+        public bool IsRecur { get; set; } = false;
 
 
         //Method for each task %
