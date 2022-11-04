@@ -1,37 +1,34 @@
 using StudyN.ViewModels;
 using StudyN.Models;
 using DevExpress.Maui.DataGrid;
-using AndroidX.Lifecycle;
-using System.Collections.ObjectModel;
-using DevExpress.Data.Browsing;
 
 namespace StudyN.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class CategoriesPage : ContentPage
 	{
-        // Flag to prevent multiple child pages opening
-        bool isChildPageOpening = false;
+        	// Flag to prevent multiple child pages opening
+        	bool isChildPageOpening = false;
 		public CategoriesPage()
 		{
 			InitializeComponent();
 			BindingContext = ViewModel = new CategoriesViewModel();
 		}
 
-        CategoriesViewModel ViewModel { get; set; }
+        	CategoriesViewModel ViewModel { get; set; }
 
-        protected override void OnAppearing()
-        {
-            isChildPageOpening = false;
-            BindingContext = ViewModel = new CategoriesViewModel();
-        }
+		protected override void OnAppearing()
+		{
+		    isChildPageOpening = false;
+		    BindingContext = ViewModel = new CategoriesViewModel();
+		}
 
-        /// <summary>
-        /// Pressing this button will allow the user to go to add category page
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void AddButtonClicked(object sender, EventArgs e)
+		/// <summary>
+		/// Pressing this button will allow the user to go to add category page
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+        	private async void AddButtonClicked(object sender, EventArgs e)
 		{
 			if (!isChildPageOpening)
 			{
@@ -51,12 +48,12 @@ namespace StudyN.Views
 		{
 			if(e.Item != null && !isChildPageOpening)
 			{
-                // Get selected category for editing
-                isChildPageOpening = true;
-                AppointmentCategory cat = (AppointmentCategory)e.Item;
+                		// Get selected category for editing
+                		isChildPageOpening = true;
+                		AppointmentCategory cat = (AppointmentCategory)e.Item;
 				GlobalAppointmentData.EditCategory = cat;
-                Routing.RegisterRoute(nameof(Views.AddCategoryPage), typeof(Views.AddCategoryPage));
-                await Shell.Current.GoToAsync(nameof(AddCategoryPage));
+               			Routing.RegisterRoute(nameof(Views.AddCategoryPage), typeof(Views.AddCategoryPage));
+                		await Shell.Current.GoToAsync(nameof(AddCategoryPage));
 			}
 		}
 	}
