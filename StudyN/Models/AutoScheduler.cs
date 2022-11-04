@@ -3,6 +3,7 @@ namespace StudyN.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using DevExpress.CodeParser;
 using DevExpress.Utils;
 using StudyN.Models;
 using StudyN.Utilities;
@@ -11,11 +12,14 @@ using static StudyN.Utilities.StudynEvent;
 public class AutoScheduler : StudynSubscriber
 { 
     public bool taskPastDue;
+    public DateTime lastRun;
     public List<TaskItem> pastDueTasks;
     private List<TaskItem> TaskBlockList;
 
     //public ObservableCollection<CalendarAppointment> CalendarList { get; set; }
     private ObservableCollection<TaskItem> Tasklist { get; set; }
+    //private ObservableCollection<Appointment> Appointments { get; set; }
+    private CalendarManager calendarManager;
     private List<double> weightAssoc;   //weightAssoc[0] corresponds to TaskBlockList[0], weightAssoc[1] corresponds to TaskBlockList[1]...
     public List<DateTime> calPosAssoc;  //calPosAssoc[0] corresponds to TaskBlockList[0], calPosAssoc[1] corresponds to TaskBlockList[1]...
 
@@ -24,10 +28,13 @@ public class AutoScheduler : StudynSubscriber
     private List<int> AllCurBlocks;
     public List<DateTime> currentDates;
     private List<int> numPerDate;
+    //public AutoScheduler( ObservableCollection<TaskItem> TL, ObservableCollection<Appointment> APPNTMNT )
     public AutoScheduler()
     {
+        lastRun = DateTime.Now.AddYears(-999);
         taskPastDue = false;
         pastDueTasks = new List<TaskItem>();
+        calendarManager = GlobalAppointmentData.CalendarManager;
         Tasklist = GlobalTaskData.TaskManager.TaskList;
         //CalendarList = GlobalData.cs.calendarManager
         EventBus.Subscribe(this);
@@ -123,14 +130,15 @@ public class AutoScheduler : StudynSubscriber
         return weight;
     }
 
-
-    //This is where conflict resolution will happen. If an event gets scheduled during blackout time, put it in the first
-    //available slot after blackout time.
-    //If two things get scheduled at the same time or overlapping, put the one with more weight first.
-    //If two things have the same weight (realllyyyyyy unlikely), just randomly put one before the other.
     private void addToCalendar()
-    { 
-        Console.WriteLine("TODO: implement autoScheduler.addToCalendar");
+    {
+        Console.WriteLine("Adding taskBlocks to calendar");
+        for(int i = 0; i < TaskBlockList.Count; i++) { 
+            calendarManager.CreateAppointment(-1, TaskBlockList[i].Name, calPosAssoc[i], calPosAssoc[i].AddHours(1) - calPosAssoc[i], -1, TaskBlockList[i].TaskId); //Assuming task block is 1 hour. IDK what "room" is. The GUID is set to be the overall task's GUID
+        }
+
+        
+
     }
 
     private void breakTasksIntoBlocks()
@@ -141,7 +149,7 @@ public class AutoScheduler : StudynSubscriber
 
         foreach(var task in Tasklist)
         {
-            int length = task.TotalTimeNeeded; //TODO: update to be based on TIME REMAINING, once we figure out whether "completion progress" is how many hours have been logged, or a percent
+            int length = (int)task.TotalTimeNeeded; //TODO: update to be based on TIME REMAINING, once we figure out whether "completion progress" is how many hours have been logged, or a percent
 
             //Assuming TotalTimeNeeded is in hours
             int numBlocksForTask = length;
@@ -149,7 +157,7 @@ public class AutoScheduler : StudynSubscriber
 
             for(int i = 0; i < numBlocksForTask; i++)
             {
-                TaskItem taskBlock = new TaskItem(task.Name, task.Description, task.DueTime, task.Priority, task.CompletionProgress, 1); //1 = totalTimeNeeded (1 hour per block)
+                TaskItem taskBlock = new TaskItem(task.Name, task.Description, task.DueTime, task.Priority, task.CompletionProgress, 1, ""); //1 = totalTimeNeeded (1 hour per block)
                 taskBlock.TaskId = task.TaskId;
                 
                 TaskBlockList.Add(taskBlock);
@@ -162,6 +170,7 @@ public class AutoScheduler : StudynSubscriber
         calPosAssoc = new List<DateTime>( new DateTime[TaskBlockList.Count] );
 
     }
+
     //Before? or After? or during?? a rightPush blocks should be compressed! The leftPush inherently compresses the blocks, as it only incrementally pushes them left
     private void compressBlocks()
     {
@@ -325,53 +334,7 @@ public class AutoScheduler : StudynSubscriber
                     Console.WriteLine("WARNING: THERE ARE TOO MANY BLOCKS IN THIS DAY!!!");
                 }
             }
-
-                /*bool foundNew = false;
-                bool foundCur = false;
-                bool canMove = true;
-                int howMany = 0;
-                int curTask = -1;
-
-               for (int i = 0; i < numPerDate.Count; i++)
-                {
-                    if (numPerDate[i] > 4)
-                    {
-                        howMany = numPerDate[i] - 4;
-                        while ((howMany > 0) && canMove == true)
-                        {
-                            for (int j = 0; j < TaskBlockList.Count && (foundNew != true); j++)
-                            {
-                                if (TaskBlockList[j].TaskId == curId && calPosAssoc[AllCurBlocks[j]].Date == currentDates[i].Date && foundCur != true)
-                                {
-                                    curTask = j;
-                                    foundCur = true;
-                                }
-                            }
-
-
-
-                            for (int j = 0; j < currentDates.Count && curTask > -1 && foundNew != true; j++)
-                            {
-                                if (numPerDate[j] < 4)
-                                {
-                                    calPosAssoc[curTask] = currentDates[j].Date;
-                                    foundNew = true;
-                                }
-                            }
-
-                            if(foundNew == false)
-                            {
-                                canMove = false;
-                            }
-                            else
-                            {
-                                howMany--;
-                            }
-                            Console.WriteLine("A");
-                        }
-                    }
-                }*/
-            }
+        }
     }
 
     private void refreshArrays()
@@ -386,6 +349,7 @@ public class AutoScheduler : StudynSubscriber
 
     public void run(Guid taskId)
     {
+        if( (DateTime.Now - lastRun).TotalSeconds < 10) { return; }
         Console.WriteLine("started running auto scheduler");
         refreshArrays();
         breakTasksIntoBlocks();
@@ -402,6 +366,7 @@ public class AutoScheduler : StudynSubscriber
         }
 
         Console.WriteLine("done running auto scheduler");
+        lastRun = DateTime.Now;
     }
 
     public void OnNewStudynEvent(StudynEvent taskEvent)
@@ -417,6 +382,7 @@ public class AutoScheduler : StudynSubscriber
             case StudynEventType.AppointmentDelete:
             {
                 run(taskEvent.Id);
+                lastRun = DateTime.Now;
                 break;
             }
             case StudynEventType.CompleteTask:

@@ -11,6 +11,7 @@ using StudyN.Utilities;
 using StudyN.ViewModels;
 using static Android.Util.EventLogTags;
 using static Android.Provider.Settings;
+using Android.Renderscripts;
 
 public partial class AddTaskPage : ContentPage
 {
@@ -18,6 +19,8 @@ public partial class AddTaskPage : ContentPage
     public AddTaskPage()
     {
         InitializeComponent();
+        //autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList, GlobalAppointmentData.CalendarManager.Appointments);
+        AutoScheduler autoScheduler = new AutoScheduler();
 
         //This will check if we are editing an existing task or making a new one. We will know this based on if ToEdit is null or not
         if (GlobalTaskData.ToEdit != null)
@@ -46,6 +49,13 @@ public partial class AddTaskPage : ContentPage
 
         //Makes timer button visible
         TimerButton.IsVisible = editingExistingTask;
+
+        //Make task time log visible
+        LogTitle.IsVisible = editingExistingTask;
+        LogStart.IsVisible = editingExistingTask;
+        LogStop.IsVisible = editingExistingTask;
+        LogDuration.IsVisible = editingExistingTask;
+        TimeListLog.IsVisible = editingExistingTask;
         //checks text of timer button. If it's not being tracked we want to see 
         //track task. Otherwise we want to see stop tracking
         SetTimerButton();
@@ -168,8 +178,14 @@ public partial class AddTaskPage : ContentPage
         // Make sure we aren't storing nulls
         this.name.Text = this.name.Text == null ? "No Name" : this.name.Text;
         this.description.Text = this.description.Text == null ? "" : this.description.Text;
-        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
-        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
+        int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
+        int totalHours = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
+        int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
+
+        // Turn logged time and total time into time doubles
+        double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
+        double totalTime = GlobalTaskData.TaskManager.SumTimes(totalHours, totalMinutes);
 
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
@@ -213,6 +229,7 @@ public partial class AddTaskPage : ContentPage
                 totalTime);
             task = GlobalTaskData.ToEdit;
             GlobalTaskData.ToEdit = null;
+            editRecurringTasks(task);
         }
         else
         {
@@ -230,15 +247,15 @@ public partial class AddTaskPage : ContentPage
         // Handles recurrence after everything is added into the task
         if (dailyRadioButton.IsChecked == true)
         {
-            HandleRecurrenceDay(sender, e);
+            HandleRecurrenceDay(sender, e, task);
         }
         else if (weeklyRadioButton.IsChecked == true)
         {
-            HandleRecurrenceWeek(sender, e);
+            HandleRecurrenceWeek(sender, e, task);
         }
         else if (monthlyRadioButton.IsChecked == true)
         {
-            HandleRecurrenceMonth(sender, e);
+            HandleRecurrenceMonth(sender, e, task);
         }
 
 
@@ -256,8 +273,10 @@ public partial class AddTaskPage : ContentPage
         this.date.Date = (GlobalTaskData.ToEdit.DueTime.Date);
         this.time.Time = GlobalTaskData.ToEdit.DueTime;
         this.priority.Value = (GlobalTaskData.ToEdit.Priority);
-        this.tComplete.Value = GlobalTaskData.ToEdit.TotalTimeNeeded;
-        this.tSpent.Value = GlobalTaskData.ToEdit.CompletionProgress;
+        this.hComplete.Value = (int)GlobalTaskData.ToEdit.TotalTimeNeeded;
+        this.mComplete.Value = GlobalTaskData.ToEdit.GetTotalMinutesNeeded();
+        this.hSpent.Value = (int)GlobalTaskData.ToEdit.CompletionProgress;
+        this.mSpent.Value = GlobalTaskData.ToEdit.GetCompletionProgressMinutes();
     }
 
     //This function will set the date and time forms to the current time
@@ -300,10 +319,14 @@ public partial class AddTaskPage : ContentPage
     }
 
     //These functions will be used to add recurrence of a selected task for day/week/month
-    private void HandleRecurrenceDay(object sender, EventArgs e)
+    private void HandleRecurrenceDay(object sender, EventArgs e, TaskItem task)
     {
-        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
-        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
+        int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
+        int totalHours = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
+        int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
+        double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
+        double totalTime = GlobalTaskData.TaskManager.SumTimes(totalHours, totalMinutes);
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
         for (int i = 1; i <= 365; i++)
@@ -316,13 +339,18 @@ public partial class AddTaskPage : ContentPage
                 dateTime,
                 (int)this.priority.Value,
                 timeLogged,
-                totalTime);
+                totalTime,
+                task.TaskId.ToString());
         }
     }
-    private void HandleRecurrenceWeek(object sender, EventArgs e)
+    private void HandleRecurrenceWeek(object sender, EventArgs e, TaskItem task)
     {
-        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
-        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
+        int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
+        int totalhours = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
+        int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
+        double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
+        double totalTime = GlobalTaskData.TaskManager.SumTimes(totalhours, totalMinutes);
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
 
@@ -336,14 +364,19 @@ public partial class AddTaskPage : ContentPage
                 dateTime,
                 (int)this.priority.Value,
                 timeLogged,
-                totalTime);
+                totalTime,
+                task.TaskId.ToString());
         }
 
     }
-    private void HandleRecurrenceMonth(object sender, EventArgs e)
+    private void HandleRecurrenceMonth(object sender, EventArgs e, TaskItem task)
     {
-        int timeLogged = this.tSpent.Value == null ? 0 : (int)this.tSpent.Value;
-        int totalTime = this.tComplete.Value == null ? 0 : (int)this.tComplete.Value;
+        int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
+        int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
+        int totalHours = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
+        int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
+        double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
+        double totalTime = GlobalTaskData.TaskManager.SumTimes(totalHours, totalMinutes);
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
         for (int i = 1; i <= 12; i++)
@@ -356,8 +389,36 @@ public partial class AddTaskPage : ContentPage
                 dateTime,
                 (int)this.priority.Value,
                 timeLogged,
-                totalTime);
+                totalTime,
+                task.TaskId.ToString());
         }
         
+    }
+
+    private void editRecurringTasks(TaskItem toEdit)
+    {
+        string toComp;
+        if(!toEdit.Recur.Equals(""))
+        {
+            toComp = toEdit.Recur;
+        }
+        else
+        {
+            toComp = toEdit.TaskId.ToString();
+        }
+        foreach (var task in GlobalTaskData.TaskManager.TaskList)
+        {
+            if(toComp.Equals(task.Recur) || task.TaskId.ToString().Equals(toComp))
+            {
+                GlobalTaskData.TaskManager.EditTask(
+                task.TaskId,
+                toEdit.Name,
+                toEdit.Description,
+                task.DueTime,
+                task.Priority,
+                toEdit.CompletionProgress,
+                toEdit.TotalTimeNeeded);
+            }
+        }
     }
 }
