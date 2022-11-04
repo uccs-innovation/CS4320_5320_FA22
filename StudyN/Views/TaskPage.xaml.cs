@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Android.Gms.Tasks;
 using DevExpress.Maui.DataGrid;
 using StudyN.Models;
 using StudyN.ViewModels;
@@ -91,7 +92,7 @@ namespace StudyN.Views
         }
 
         //This function will be used by the trash button to delete selected tasks
-        private void TrashButtonClicked(object sender, EventArgs e)
+        private async void TrashButtonClicked(object sender, EventArgs e)
         {
             try
             {
@@ -106,7 +107,31 @@ namespace StudyN.Views
                 List<Guid> taskIds = new List<Guid>();
                 foreach (TaskItem task in selectedTasks)
                 {
-                    taskIds.Add(task.TaskId);
+                    //If a task is being timed
+                    if(GlobalTaskTimeData.TaskTimeManager.BeingTimed)
+                    {
+                        //If task being timed has the same id as the task in this list
+                        if(task.TaskId == GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed)
+                        {
+                            //Alert Check
+                            String alertstr = "Would you like to stop timing "
+                            + GlobalTaskTimeData.TaskTimeManager.TaskName +
+                            " and remove task?";
+                            bool endtrack = await DisplayAlert("A Task You Selected Is Currently Being Timed", alertstr, "Yes", "No");
+                            //if user wants to stop tracking old and start tracking new
+                            if (endtrack)
+                            {
+                                GlobalTaskTimeData.TaskTimeManager.StopCurrent(DateTime.Now);
+                                AlertUserOfTimeSpent();
+                                taskIds.Add(task.TaskId);
+                            }
+
+                        } else {
+                            taskIds.Add(task.TaskId);
+                        }
+                    } else {
+                        taskIds.Add(task.TaskId);
+                    }
                 }
 
                 //Sending the created list to TaskManager's DeleteListOfTasks function
@@ -167,6 +192,19 @@ namespace StudyN.Views
                 isChildPageOpening = true;
                 await Shell.Current.GoToAsync(nameof(TaskChartsPage));
             }
+        }
+
+
+
+
+        async void AlertUserOfTimeSpent()
+        {
+            //gets name of task being timed and time spent on task
+            String taskname = GlobalTaskTimeData.TaskTimeManager.TaskName;
+            int timespent = GlobalTaskTimeData.TaskTimeManager.taskitemtime.span.Minutes;
+            //Informational alert and alert string.
+            String alertstr = "You spent " + timespent + " minutes on task " + taskname;
+            await DisplayAlert("Great Job!", alertstr, "OK");
         }
 
         //This function will be used to preform certain actions when a row is pressed
