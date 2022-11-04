@@ -5,7 +5,14 @@
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
              xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
              xmlns:dxee="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:ViewModels="clr-namespace:StudyN.ViewModels"
+             xmlns:local="clr-namespace:StudyN.Views"
              Title="{Binding Title}">
+
+    <!-- Binding Context -->
+    <ContentPage.BindingContext>
+        <ViewModels:TaskDataViewModel />
+    </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
 
@@ -19,25 +26,31 @@
               Padding="5"
               RowSpacing="10"
               ColumnSpacing="10">
-            
+
             <!--Grid rows definitions-->
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" />
-                <RowDefinition Height="250" />
-                <RowDefinition Height="50" />
-                <RowDefinition Height="50" />
-                <RowDefinition Height="20" />
-                <RowDefinition Height="30" />
-                <RowDefinition Height="50" />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="50" /><!--Task Name Row                    0-->
+                <RowDefinition Height="100" /><!--Description                     1-->
+                <RowDefinition Height="50" /><!--Time and Date Entry              2-->
+                <RowDefinition Height="50" /><!--Time Spent and Completed         3-->
+                <RowDefinition Height="20" /><!--Priority label                   4-->
+                <RowDefinition Height="30" /><!--Priority slider                  5-->
+                <RowDefinition Height="50" /><!--recurrence                       6-->
+                <RowDefinition Height="50" /><!--Delete And Complete              7-->
+                <RowDefinition Height="50" /><!--Timer                            8-->
+                <RowDefinition Height="20" /><!--Time List Log Label              9-->                
+                <RowDefinition Height="14" /><!--Time List Log Header             10-->
+                <RowDefinition Height="70"/><!--Time List Log                     11-->
             </Grid.RowDefinitions>
-            
+
             <!--Grid column definitions-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-    
+
+
+
             <!--task name box GridRow 1 Spans 2 columns-->
             <dxe:TextEdit
                 Grid.ColumnSpan="2"
@@ -98,7 +111,8 @@
                 IsLabelFloating="True"
                 Margin="1"
                 x:Name="date" />
-            
+
+
             <!--Estimated Time to Complete Task-->
             <dxe:NumericEdit 
                 AllowNullValue="True"
@@ -124,7 +138,7 @@
 
             <!--Priority Slider and Label-->
             <Label x:Name="displayLabel"
-               Text="Priority"
+               Text="Priority: 3"
                HorizontalOptions="Center"
                VerticalOptions="Center" 
                Grid.Row="4"
@@ -139,47 +153,41 @@
                 Grid.ColumnSpan="2"
                 x:Name="priority" />
 
+
             <!--Buttons for Recurrance tasks-->
-            <Label x:Name="RecurrenceLabel"
-               Text="Recurrence:"
-               HorizontalOptions="Start"
-               VerticalOptions="Center" 
-               Grid.Row="6"
-               Grid.ColumnSpan="2"
-               FontSize="16" />
-            <RadioButton
-                x:Name="dailyRadioButton"
-                Content="Day"
-                Grid.Row="6"
-                Grid.Column="1"
-                CornerRadius="3"
-                Margin="1"
-                HorizontalOptions="Start"
-                IsChecked="False"/>
-            <RadioButton
-                x:Name="weeklyRadioButton"
-                Content="Week"
-                Grid.Row="6"
-                Grid.Column="2"
-                CornerRadius="3"
-                Margin="1"
-                HorizontalOptions="CenterAndExpand"
-                IsChecked="False"/>
-            <RadioButton
-                x:Name="monthlyRadioButton"
-                Content="Month"
-                Grid.Row="6"
-                Grid.Column="3"
-                CornerRadius="3"
-                Margin="1"
-                HorizontalOptions="EndAndExpand"
-                IsChecked="False"/>
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Start"
+                         Spacing="1"
+                         Grid.Row="6"
+                         Grid.ColumnSpan="2">
+                <Label x:Name="RecurrenceLabel"
+                   Text="Recurrence:"
+                   HorizontalOptions="StartAndExpand"
+                   VerticalOptions="Center"
+                   FontSize="16" />
+                <RadioButton
+                    x:Name="dailyRadioButton"
+                    Content="Day"
+                    HorizontalOptions="EndAndExpand"
+                    IsChecked="False"/>
+                <RadioButton
+                    x:Name="weeklyRadioButton"
+                    Content="Week"
+                    HorizontalOptions="CenterAndExpand"
+                    IsChecked="False"/>
+                <RadioButton
+                    x:Name="monthlyRadioButton"
+                    Content="Month"
+                    HorizontalOptions="End"
+                    IsChecked="False"/>
+            </StackLayout>
             
+
             <!--Buttons for completing/deleting tasks-->
             <Button 
                 x:Name="DeleteTaskButton"
                 Text="Delete Task"
-                Grid.Row="6"
+                Grid.Row="7"
                 CornerRadius="7"
                 Margin="1"
                 Clicked="HandleDeleteTaskClicked" />
@@ -187,12 +195,111 @@
             <Button
                 x:Name="CompleteTaskButton"
                 Text="Mark Complete"
-                Grid.Row="6"
+                Grid.Row="7"
                 Grid.Column="1"
                 CornerRadius="7"
                 Margin="1"
                 Clicked="HandleCompleteTaskClicked"
                 Command="{Binding ButtonVisibility}"/>
+
+            <Button
+                x:Name="TimerButton"
+                Text="{Binding IsStartOrStop}"
+                Grid.Row="8"
+                Grid.ColumnSpan="2"
+                CornerRadius="7"
+                Margin="1"
+                Clicked="HandleTimerOnOff"
+                Command="{Binding ButtonVisibility}"/>
+
+            <!--Label Header Title for Task Time Log, row 9-->
+            <Label
+                x:Name="LogTitle"
+                Text="Task Time Log"
+                HorizontalOptions="Start"
+                VerticalOptions="Center" 
+                Grid.Row="9"
+                Grid.ColumnSpan="1"
+                FontAttributes="Bold"    
+                FontSize="16" />
+
+            <!--Labels for column headers for Task Time Log, row 10-->
+            <Label
+                x:Name="LogStart"
+                Text="  Start Time" 
+                Grid.Row="10"
+                Grid.ColumnSpan="2" 
+                HorizontalTextAlignment="Start"
+                VerticalTextAlignment="Center"
+                FontAttributes="Bold"    
+                FontSize="10" />
+            <Label
+                x:Name="LogStop"
+                Text="Stop Time"                
+                Grid.Row="10"
+                Grid.ColumnSpan="2"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"
+                FontAttributes="Bold"    
+                FontSize="10" />
+            <Label
+                x:Name="LogDuration"
+                Text="Duration     "                 
+                Grid.Row="10"
+                Grid.ColumnSpan="2"                
+                HorizontalTextAlignment="End"
+                VerticalTextAlignment="Center"
+                FontAttributes="Bold"    
+                FontSize="10" />
+
+            <!--Task Time Log Collection View, row 11-->
+            <CollectionView ItemsSource="{Binding TimeList}"
+                            x:Name="TimeListLog"
+                            ItemsLayout="VerticalList"                            
+                            Grid.Row="11"
+                            Grid.ColumnSpan="2"
+                            BackgroundColor="WhiteSmoke"
+                            VerticalScrollBarVisibility="Always"
+                            EmptyView="No items to display">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="14" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label         
+                                Text="{Binding start}"                                 
+                                Grid.Column="0"
+                                VerticalTextAlignment="Center" 
+                                HorizontalTextAlignment="Start"
+                                FontSize="10"
+                                FontAttributes="Italic" />
+                            <Label                                 
+                                Text="{Binding stop}"                                
+                                Grid.Column="1"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                FontSize="10"
+                                FontAttributes="Italic" />
+                            <Label 
+                                Text="{Binding span}"
+                                Grid.Column="2"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="End"
+                                FontSize="10"
+                                FontAttributes="Italic" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
         </Grid>
     </ContentPage.Content>
 

@@ -1,3 +1,4 @@
+﻿using Newtonsoft.Json;
 ﻿using Android.Gms.Tasks;
 using Android.Service.Autofill;
 using StudyN.Utilities;
@@ -54,6 +55,9 @@ namespace StudyN.Models
                                             TotalTimeNeeded,
                                             recur);
 
+
+
+
             //This will add the tasks to the list
             TaskList.Add(newTask);
 
@@ -99,8 +103,11 @@ namespace StudyN.Models
                                 int priority,
                                 int CompletionProgress,
                                 int TotalTimeNeeded,
+                                List<TaskItemTime> TimeList = null,
                                 bool updateFile = true)
         {
+
+
             //Retrieving the task
             TaskItem task = GetTask(taskId);
 
@@ -116,6 +123,7 @@ namespace StudyN.Models
             task.Priority = priority;
             task.CompletionProgress = CompletionProgress;
             task.TotalTimeNeeded = TotalTimeNeeded;
+            task.TimeList = TimeList;
 
             // Publish task edit event
             EventBus.PublishEvent(
@@ -189,16 +197,35 @@ namespace StudyN.Models
             foreach (string file in taskfilelist)
             {
                 jsonfiletext = File.ReadAllText(file);
-                TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                //Console.WriteLine(jsonfiletext);
+                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext); 
+                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
                 TaskList.Add(task);
+
+                if (task.TimeList != null)
+                {
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine("Writing out task times");
+                    foreach (TaskItemTime tasktime in task.TimeList)
+                    {
+                        Console.WriteLine("Time Start" + tasktime.start);
+                        Console.WriteLine("TimeStop" + tasktime.stop);
+                        Console.WriteLine("Timespanned" + tasktime.span);
+                    }
+                }
             }
+
+
 
             // gets completed tasks
             string[] completedfiles = FileManager.LoadCompletedFileNames();
             foreach (string file in completedfiles)
             {
                 jsonfiletext = File.ReadAllText(file);
-                TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+
+                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
                 CompletedTasks.Add(task);
             }
         }

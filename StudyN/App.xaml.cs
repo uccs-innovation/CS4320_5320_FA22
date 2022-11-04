@@ -26,7 +26,6 @@ namespace StudyN
             Routing.RegisterRoute(nameof(AddTaskPage), typeof(AddTaskPage));
             Routing.RegisterRoute(nameof(CalendarPage), typeof(CalendarPage));
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
-            Routing.RegisterRoute(nameof(AddEventPage), typeof(AddEventPage));
             Routing.RegisterRoute(nameof(TaskPage), typeof(TaskPage));
             Routing.RegisterRoute(nameof(AddIcsPage), typeof(AddIcsPage));
             Routing.RegisterRoute(nameof(TaskChartsPage), typeof(TaskChartsPage));
