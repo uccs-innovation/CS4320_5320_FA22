@@ -11,13 +11,13 @@ namespace StudyN.Models
     //This class manages all of our tasks and preforms actions related to them
     public class TaskDataManager
     {
-        //This function will add a new task to our list of tasks
+
         public TaskItem AddTask(string name,
                                 string description,
                                 DateTime dueTime,
                                 int priority,
-                                int CompletionProgress,
-                                int TotalTimeNeeded)
+                                double CompletionProgress,
+                                double TotalTimeNeeded)
         {
             //Creating new task with sent parameters
             TaskItem newTask  = new TaskItem(name,
@@ -37,13 +37,13 @@ namespace StudyN.Models
 
             return newTask;
         }
-
+        //This function will add a new task to our list of tasks
         public TaskItem AddTask(string name,
                                string description,
                                DateTime dueTime,
                                int priority,
-                               int CompletionProgress,
-                               int TotalTimeNeeded,
+                               double CompletionProgress,
+                               double TotalTimeNeeded,
                                string recur)
         {
             //Creating new task with sent parameters
@@ -101,8 +101,8 @@ namespace StudyN.Models
                                 string description,
                                 DateTime dueTime,
                                 int priority,
-                                int CompletionProgress,
-                                int TotalTimeNeeded,
+                                double CompletionProgress,
+                                double TotalTimeNeeded,
                                 List<TaskItemTime> TimeList = null,
                                 bool updateFile = true)
         {
@@ -228,6 +228,30 @@ namespace StudyN.Models
                 //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
                 CompletedTasks.Add(task);
             }
+        }
+
+        /// <summary>
+        /// Turns record of hours and minutes and makes them doubles
+        /// </summary>
+        /// <param name="hours"></param>
+        /// <param name="minutes"></param>
+        /// <returns></returns>
+        public double SumTimes(int hours, int minutes)
+        {
+            // make sure minutes are below 60
+            if(minutes >= 60)
+            {
+                // take 60 out of minutes and add to hours
+                while(minutes >= 60)
+                {
+                    minutes -= 60;
+                    hours++;
+                }
+            }
+            // turn minutes into decimals
+            double decimalMins = (double)minutes / 60;
+            // return hours.minutes
+            return (double)hours + decimalMins;
         }
 
         public ObservableCollection<TaskItem> TaskList { get; private set; }

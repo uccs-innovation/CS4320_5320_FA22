@@ -149,7 +149,7 @@ public class AutoScheduler : StudynSubscriber
 
         foreach(var task in Tasklist)
         {
-            int length = task.TotalTimeNeeded; //TODO: update to be based on TIME REMAINING, once we figure out whether "completion progress" is how many hours have been logged, or a percent
+            int length = (int)task.TotalTimeNeeded; //TODO: update to be based on TIME REMAINING, once we figure out whether "completion progress" is how many hours have been logged, or a percent
 
             //Assuming TotalTimeNeeded is in hours
             int numBlocksForTask = length;
