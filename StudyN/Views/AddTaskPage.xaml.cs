@@ -229,6 +229,7 @@ public partial class AddTaskPage : ContentPage
                 totalTime);
             task = GlobalTaskData.ToEdit;
             GlobalTaskData.ToEdit = null;
+            editRecurringTasks(task);
         }
         else
         {
@@ -246,15 +247,15 @@ public partial class AddTaskPage : ContentPage
         // Handles recurrence after everything is added into the task
         if (dailyRadioButton.IsChecked == true)
         {
-            HandleRecurrenceDay(sender, e);
+            HandleRecurrenceDay(sender, e, task);
         }
         else if (weeklyRadioButton.IsChecked == true)
         {
-            HandleRecurrenceWeek(sender, e);
+            HandleRecurrenceWeek(sender, e, task);
         }
         else if (monthlyRadioButton.IsChecked == true)
         {
-            HandleRecurrenceMonth(sender, e);
+            HandleRecurrenceMonth(sender, e, task);
         }
 
 
@@ -318,7 +319,7 @@ public partial class AddTaskPage : ContentPage
     }
 
     //These functions will be used to add recurrence of a selected task for day/week/month
-    private void HandleRecurrenceDay(object sender, EventArgs e)
+    private void HandleRecurrenceDay(object sender, EventArgs e, TaskItem task)
     {
         int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
         int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
@@ -338,10 +339,11 @@ public partial class AddTaskPage : ContentPage
                 dateTime,
                 (int)this.priority.Value,
                 timeLogged,
-                totalTime);
+                totalTime,
+                task.TaskId.ToString());
         }
     }
-    private void HandleRecurrenceWeek(object sender, EventArgs e)
+    private void HandleRecurrenceWeek(object sender, EventArgs e, TaskItem task)
     {
         int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
         int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
@@ -362,11 +364,12 @@ public partial class AddTaskPage : ContentPage
                 dateTime,
                 (int)this.priority.Value,
                 timeLogged,
-                totalTime);
+                totalTime,
+                task.TaskId.ToString());
         }
 
     }
-    private void HandleRecurrenceMonth(object sender, EventArgs e)
+    private void HandleRecurrenceMonth(object sender, EventArgs e, TaskItem task)
     {
         int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
         int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
@@ -386,8 +389,36 @@ public partial class AddTaskPage : ContentPage
                 dateTime,
                 (int)this.priority.Value,
                 timeLogged,
-                totalTime);
+                totalTime,
+                task.TaskId.ToString());
         }
         
+    }
+
+    private void editRecurringTasks(TaskItem toEdit)
+    {
+        string toComp;
+        if(!toEdit.Recur.Equals(""))
+        {
+            toComp = toEdit.Recur;
+        }
+        else
+        {
+            toComp = toEdit.TaskId.ToString();
+        }
+        foreach (var task in GlobalTaskData.TaskManager.TaskList)
+        {
+            if(toComp.Equals(task.Recur) || task.TaskId.ToString().Equals(toComp))
+            {
+                GlobalTaskData.TaskManager.EditTask(
+                task.TaskId,
+                toEdit.Name,
+                toEdit.Description,
+                task.DueTime,
+                task.Priority,
+                toEdit.CompletionProgress,
+                toEdit.TotalTimeNeeded);
+            }
+        }
     }
 }

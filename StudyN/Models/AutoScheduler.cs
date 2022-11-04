@@ -157,7 +157,7 @@ public class AutoScheduler : StudynSubscriber
 
             for(int i = 0; i < numBlocksForTask; i++)
             {
-                TaskItem taskBlock = new TaskItem(task.Name, task.Description, task.DueTime, task.Priority, task.CompletionProgress, 1); //1 = totalTimeNeeded (1 hour per block)
+                TaskItem taskBlock = new TaskItem(task.Name, task.Description, task.DueTime, task.Priority, task.CompletionProgress, 1, ""); //1 = totalTimeNeeded (1 hour per block)
                 taskBlock.TaskId = task.TaskId;
                 
                 TaskBlockList.Add(taskBlock);
