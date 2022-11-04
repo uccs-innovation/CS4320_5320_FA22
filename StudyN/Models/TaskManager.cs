@@ -249,7 +249,7 @@ namespace StudyN.Models
                 }
             }
             // turn minutes into decimals
-            double decimalMins = (double)minutes / 100;
+            double decimalMins = (double)minutes / 60;
             // return hours.minutes
             return (double)hours + decimalMins;
         }

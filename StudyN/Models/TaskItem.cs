@@ -63,9 +63,9 @@ namespace StudyN.Models
         /// <returns></returns>
         public int GetCompletionProgressMinutes()
         {
-            int hoursRemoved = (int)CompletionProgress;
+            double hoursRemoved = CompletionProgress % 1;
             double minutesRemain = CompletionProgress - hoursRemoved;
-            minutesRemain *= 100;
+            minutesRemain *= 60;
             return (int)minutesRemain;
         }
 
@@ -75,9 +75,9 @@ namespace StudyN.Models
         /// <returns></returns>
         public int GetTotalMinutesNeeded()
         {
-            int hoursRemoved = (int)TotalTimeNeeded;
+            double hoursRemoved = TotalTimeNeeded % 1;
             double minutesRemain = TotalTimeNeeded - hoursRemoved;
-            minutesRemain *= 100;
+            minutesRemain *= 60;
             return (int)minutesRemain;
         }
     }
