@@ -1,3 +1,4 @@
+﻿using Newtonsoft.Json;
 ﻿using Android.Gms.Tasks;
 using Android.Service.Autofill;
 using StudyN.Utilities;
@@ -10,13 +11,13 @@ namespace StudyN.Models
     //This class manages all of our tasks and preforms actions related to them
     public class TaskDataManager
     {
-        //This function will add a new task to our list of tasks
+
         public TaskItem AddTask(string name,
                                 string description,
                                 DateTime dueTime,
                                 int priority,
-                                int CompletionProgress,
-                                int TotalTimeNeeded)
+                                double CompletionProgress,
+                                double TotalTimeNeeded)
         {
             //Creating new task with sent parameters
             TaskItem newTask  = new TaskItem(name,
@@ -24,7 +25,38 @@ namespace StudyN.Models
                                             dueTime,
                                             priority,
                                             CompletionProgress,
-                                            TotalTimeNeeded);
+                                            TotalTimeNeeded,
+                                            "");
+
+            //This will add the tasks to the list
+            TaskList.Add(newTask);
+
+            // Publish task add event
+            EventBus.PublishEvent(
+                        new StudynEvent(newTask.TaskId, StudynEvent.StudynEventType.AddTask));
+
+            return newTask;
+        }
+        //This function will add a new task to our list of tasks
+        public TaskItem AddTask(string name,
+                               string description,
+                               DateTime dueTime,
+                               int priority,
+                               double CompletionProgress,
+                               double TotalTimeNeeded,
+                               string recur)
+        {
+            //Creating new task with sent parameters
+            TaskItem newTask = new TaskItem(name,
+                                            description,
+                                            dueTime,
+                                            priority,
+                                            CompletionProgress,
+                                            TotalTimeNeeded,
+                                            recur);
+
+
+
 
             //This will add the tasks to the list
             TaskList.Add(newTask);
@@ -69,10 +101,13 @@ namespace StudyN.Models
                                 string description,
                                 DateTime dueTime,
                                 int priority,
-                                int CompletionProgress,
-                                int TotalTimeNeeded,
+                                double CompletionProgress,
+                                double TotalTimeNeeded,
+                                List<TaskItemTime> TimeList = null,
                                 bool updateFile = true)
         {
+
+
             //Retrieving the task
             TaskItem task = GetTask(taskId);
 
@@ -88,6 +123,7 @@ namespace StudyN.Models
             task.Priority = priority;
             task.CompletionProgress = CompletionProgress;
             task.TotalTimeNeeded = TotalTimeNeeded;
+            task.TimeList = TimeList;
 
             // Publish task edit event
             EventBus.PublishEvent(
@@ -161,18 +197,61 @@ namespace StudyN.Models
             foreach (string file in taskfilelist)
             {
                 jsonfiletext = File.ReadAllText(file);
-                TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                //Console.WriteLine(jsonfiletext);
+                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext); 
+                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
                 TaskList.Add(task);
+
+                if (task.TimeList != null)
+                {
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine("Writing out task times");
+                    foreach (TaskItemTime tasktime in task.TimeList)
+                    {
+                        Console.WriteLine("Time Start" + tasktime.start);
+                        Console.WriteLine("TimeStop" + tasktime.stop);
+                        Console.WriteLine("Timespanned" + tasktime.span);
+                    }
+                }
             }
+
+
 
             // gets completed tasks
             string[] completedfiles = FileManager.LoadCompletedFileNames();
             foreach (string file in completedfiles)
             {
                 jsonfiletext = File.ReadAllText(file);
-                TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+
+                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
                 CompletedTasks.Add(task);
             }
+        }
+
+        /// <summary>
+        /// Turns record of hours and minutes and makes them doubles
+        /// </summary>
+        /// <param name="hours"></param>
+        /// <param name="minutes"></param>
+        /// <returns></returns>
+        public double SumTimes(int hours, int minutes)
+        {
+            // make sure minutes are below 60
+            if(minutes >= 60)
+            {
+                // take 60 out of minutes and add to hours
+                while(minutes >= 60)
+                {
+                    minutes -= 60;
+                    hours++;
+                }
+            }
+            // turn minutes into decimals
+            double decimalMins = (double)minutes / 60;
+            // return hours.minutes
+            return (double)hours + decimalMins;
         }
 
         public ObservableCollection<TaskItem> TaskList { get; private set; }

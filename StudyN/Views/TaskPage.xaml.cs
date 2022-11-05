@@ -8,6 +8,9 @@ namespace StudyN.Views
 {
     public partial class TaskPage : ContentPage
     {
+        // Flag to prevent multiple child pages opening
+        bool isChildPageOpening = false;
+
         bool isLongPressMenuVisible = true;
         ToolbarItem addToolbarItem;
         ToolbarItem cancelToolbarItem;
@@ -54,6 +57,11 @@ namespace StudyN.Views
             //Ensuring that the long press menu is not yet viable
             ShowLongPressMenu(false);
 
+        }
+
+        protected override void OnAppearing()
+        {
+            isChildPageOpening = false;
         }
 
         //This function will by the cancel button to reset the selection menu to its
@@ -154,7 +162,11 @@ namespace StudyN.Views
         // Bringing up the Task Metrics Visualization Page
         private async void TaskChartsButtonClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync(nameof(TaskChartsPage));
+            if (!isChildPageOpening)
+            {
+                isChildPageOpening = true;
+                await Shell.Current.GoToAsync(nameof(TaskChartsPage));
+            }
         }
 
         //This function will be used to preform certain actions when a row is pressed
@@ -203,8 +215,9 @@ namespace StudyN.Views
             
             if (e.Item != null && e.FieldName != "DueTime")
             {
-                if (!isLongPressMenuVisible)
+                if (!isLongPressMenuVisible && !isChildPageOpening)
                 {
+                    isChildPageOpening = true;
                     // TaskItem we need to edit...
                     TaskItem task = (TaskItem)e.Item;
                     GlobalTaskData.ToEdit = task;
@@ -221,8 +234,12 @@ namespace StudyN.Views
         //Function for the add task button to bring to new task page
         private async void AddButtonClicked(object sender, EventArgs e)
         {
-            GlobalTaskData.ToEdit = null;
-            await Shell.Current.GoToAsync(nameof(AddTaskPage));
+            if (!isChildPageOpening)
+            {
+                isChildPageOpening = true;
+                GlobalTaskData.ToEdit = null;
+                await Shell.Current.GoToAsync(nameof(AddTaskPage));
+            }
         }
 
         //This function will be used to bring up more options on a long press
@@ -282,8 +299,8 @@ namespace StudyN.Views
             int rowCount = dataGrid.RowCount;
 
             // Variables to store data in
-            float totalHoursWorked = 0;
-            float totalHoursNeeded = 0;
+            double totalHoursWorked = 0;
+            double totalHoursNeeded = 0;
 
             // Runs for each row in dataGrid
             for (int i = 0; i < rowCount; i++)
@@ -298,7 +315,7 @@ namespace StudyN.Views
             if (totalHoursNeeded > 0)
             {
                 // Calculates total percent completion
-                float totalPercentComplete = (totalHoursWorked / totalHoursNeeded) * 100;
+                double totalPercentComplete = (totalHoursWorked / totalHoursNeeded) * 100;
                 e.TotalValue = Math.Round(totalPercentComplete);
 
             }

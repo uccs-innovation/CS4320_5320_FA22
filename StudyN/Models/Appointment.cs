@@ -1,7 +1,11 @@
 ﻿using DevExpress.Maui.Scheduler;
+using StudyN.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,6 +43,30 @@ namespace StudyN.Models
         // properties for data import
         public bool IsCanvasImport { get; set; }
         public bool IsExternalCalendarImport { get; set; }
+
+        public DateTime LastEdited { get; set; }
+
+        protected void ApptChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // Publish Appointment Edit
+            // Checking if the last edit was within the last second
+            // prevents us from sending an event for each property
+            if ((DateTime.Now - LastEdited).TotalSeconds > 1)
+            {
+                LastEdited = DateTime.Now;
+                // Publish task delete appointment
+                EventBus.PublishEvent(
+                            new StudynEvent(UniqueId,
+                            StudynEvent.StudynEventType.AppointmentEdit));
+            }
+        }
+
+        public Appointment() : base()
+        {
+            UniqueId = new Guid();
+            LastEdited = DateTime.Now;
+            PropertyChanged += new PropertyChangedEventHandler(ApptChanged);
+        }
     }
 
 
@@ -47,6 +75,8 @@ namespace StudyN.Models
         public Guid Id { get; set; }
         public string Caption { get; set; }
         public Color Color { get; set; }
+        public double PickerXPosition { get; set; }
+        public double PickerYPosition { get; set; }
     }
 
     public class AppointmentStatus
