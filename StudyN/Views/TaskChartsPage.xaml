@@ -1,79 +1,31 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
-             x:Class="StudyN.Views.TaskChartsPage" 
+             x:Class="StudyN.Views.TaskChartsPage"
              xmlns:local="clr-namespace:StudyN.ViewModels"
-             Title="Task Visualization">
+             Title="Task Completion">
     <ContentPage.BindingContext>
         <local:TaskChartsViewModel/>
     </ContentPage.BindingContext>
-    <Shell.TitleView>
-        <StackLayout
-            Orientation="Horizontal"
-            HorizontalOptions="Center"
-            Spacing="5">
-            <Label Text="How much work do I have left?"
-            VerticalOptions="Center"
-            HorizontalOptions="Center"
-            TextColor="Black"
-            BackgroundColor="White"
-            ></Label>
-        </StackLayout>
-    </Shell.TitleView>
-    <dxc:ChartView>
+    <dxc:ChartView x:Name="TaskChart">
         <dxc:ChartView.Series>
-            <dxc:LineSeries DisplayName="Total Study Hours For Due Date" MarkersVisible="True">
-                <dxc:LineSeries.Data>
-                    <dxc:SeriesDataAdapter DataSource="{Binding HoursRemainingList}"
-                                           ArgumentDataMember="StudyDay">
-                        <dxc:ValueDataMember Type="Value" Member="TotalHoursForDay"/>
+            <dxc:StackedBarSeries>
+                <dxc:StackedBarSeries.Data>
+                    <dxc:SeriesDataAdapter DataSource="{Binding TasksTimeWorked}"
+                                            ArgumentDataMember="TaskName">
+                        <dxc:ValueDataMember Type="Value" Member="Time"/>
                     </dxc:SeriesDataAdapter>
-                </dxc:LineSeries.Data>
-            </dxc:LineSeries>
-            <dxc:LineSeries DisplayName="Hours Left for Due Date">
-                <dxc:LineSeries.Data>
-                    <dxc:SeriesDataAdapter DataSource="{Binding HoursRemainingList}"
-                                           ArgumentDataMember="StudyDay">
-                        <dxc:ValueDataMember Type="Value" Member="HoursLeftForDay"/>
+                </dxc:StackedBarSeries.Data>
+            </dxc:StackedBarSeries>
+            <dxc:StackedBarSeries>
+                <dxc:StackedBarSeries.Data>
+                    <dxc:SeriesDataAdapter DataSource="{Binding TasksTimeNeeded}"
+                                            ArgumentDataMember="TaskName">
+                        <dxc:ValueDataMember Type="Value" Member="Time"/>
                     </dxc:SeriesDataAdapter>
-                </dxc:LineSeries.Data>
-                <dxc:LineSeries.Style>
-                    <dxc:LineSeriesStyle Stroke="#7145a7" StrokeThickness="2" MarkerSize="8">
-                        <dxc:LineSeriesStyle.MarkerStyle>
-                            <dxc:MarkerStyle Fill="#7145a7"/>
-                        </dxc:LineSeriesStyle.MarkerStyle>
-                    </dxc:LineSeriesStyle>
-                </dxc:LineSeries.Style>
-            </dxc:LineSeries>
+                </dxc:StackedBarSeries.Data>
+            </dxc:StackedBarSeries>
         </dxc:ChartView.Series>
-        <dxc:ChartView.AxisX>
-            <dxc:DateTimeAxisX MeasureUnit="Day" 
-                           GridAlignment="Day" 
-                           GridSpacing="1"/>
-        </dxc:ChartView.AxisX>
-        <dxc:ChartView.AxisY>
-            <dxc:NumericAxisY>
-                <dxc:NumericAxisY.Title>
-                    <dxc:AxisTitle Text="HOURS">
-                        <dxc:AxisTitle.Style>
-                            <dxc:TitleStyle>
-                                <dxc:TitleStyle.TextStyle>
-                                    <dxc:TextStyle Size="16"/>
-                                </dxc:TitleStyle.TextStyle>
-                            </dxc:TitleStyle>
-                        </dxc:AxisTitle.Style>
-                    </dxc:AxisTitle>
-                </dxc:NumericAxisY.Title>
-                <dxc:NumericAxisY.Label>
-                    <dxc:AxisLabel TextFormat="##.#" Position="Inside"/>
-                </dxc:NumericAxisY.Label>
-            </dxc:NumericAxisY>
-        </dxc:ChartView.AxisY>
-        <dxc:ChartView.Legend>
-            <dxc:Legend VerticalPosition="Top" 
-                    HorizontalPosition="Center" 
-                    Orientation="LeftToRight"/>
-        </dxc:ChartView.Legend>
     </dxc:ChartView>
 </ContentPage>
