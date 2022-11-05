@@ -16,30 +16,89 @@
             <Button Text="Daily"
             VerticalOptions="Center"
             HorizontalOptions="Center"
-            BorderColor="Black"
+            BorderColor="Transparent"
+            x:Name="dailyButton"
             BorderWidth="1"
             TextColor="Black"
-            BackgroundColor="White"
+            FontSize="15"
+            BackgroundColor="Transparent"
             Clicked="OnDailyClicked"
-            ></Button>
+            >
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="Scale"
+                            Value="1" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="Scale"
+                            Value="0.8" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Button>
+          
+
             <Button Text="Weekly"
             VerticalOptions="Center"
+            x:Name="weeklyButton"
             HorizontalOptions="Center"
-            BorderColor="Black"
+            BorderColor="Transparent"
             BorderWidth="1"
             TextColor="Black"
-            BackgroundColor="White"
+            FontSize="15"
+            BackgroundColor="Transparent"
             Clicked="OnWeeklyClicked"
-            ></Button>
+            >
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="Scale"
+                            Value="1" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="Scale"
+                            Value="0.8" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Button>
             <Button Text="Monthly"
             VerticalOptions="Center"
             HorizontalOptions="Center"
-            BorderColor="Black"
+            BorderColor="Transparent"
             TextColor="Black"
             BorderWidth="1"
-            BackgroundColor="White"
+            FontSize="15"
+            x:Name="monthlyButton"
+            BackgroundColor="Transparent"
             Clicked="OnMonthlyClicked"
-            ></Button>
+            >
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="Scale"
+                            Value="1" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="Scale"
+                            Value="0.8" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Button>
         </StackLayout>
     </Shell.TitleView>
     <ContentPage.Content>

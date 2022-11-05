@@ -18,6 +18,7 @@
         <ToolbarItem Text="Add" 
                      Clicked="AddButtonClicked"
                      IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+      
 
         <!-- Press and hold options -->
         <ToolbarItem Text="Cancel"

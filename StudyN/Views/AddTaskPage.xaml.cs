@@ -22,6 +22,9 @@ public partial class AddTaskPage : ContentPage
         //autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList, GlobalAppointmentData.CalendarManager.Appointments);
         AutoScheduler autoScheduler = new AutoScheduler();
 
+        completeButton.IsEnabled = false;
+        trashButton.IsEnabled = false;
+
         //This will check if we are editing an existing task or making a new one. We will know this based on if ToEdit is null or not
         if (GlobalTaskData.ToEdit != null)
         {
@@ -29,6 +32,8 @@ public partial class AddTaskPage : ContentPage
             Title = "Edit Task";
             LoadValues();
             BindingContext = new EditTaskViewModel();
+            completeButton.IsEnabled = true;
+            trashButton.IsEnabled = true;
             editingExistingTask = true;
             //CreateDummyTaskTimeLogData();
             TimeListLog.ItemsSource = GlobalTaskData.ToEdit.TimeList;
@@ -39,13 +44,13 @@ public partial class AddTaskPage : ContentPage
         {
             //If we are just creating a new task, we need to set the title and set the time and date so they are not null
             Title = "Add Task";
+            completeButton.IsEnabled = false;
+            trashButton.IsEnabled = false;
             editingExistingTask = false;
             SetValues();            
         }
 
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
-        DeleteTaskButton.IsVisible = editingExistingTask;
-        CompleteTaskButton.IsVisible = editingExistingTask;
 
         //Makes timer button visible
         TimerButton.IsVisible = editingExistingTask;
@@ -176,13 +181,14 @@ public partial class AddTaskPage : ContentPage
     private async void HandleAddTaskButton(object sender, EventArgs e)
     {
         // Make sure we aren't storing nulls
-        this.name.Text = this.name.Text == null ? "No Name" : this.name.Text;
+        this.name.Text = this.name.Text == null ? "Unnamed Task" : this.name.Text;
         this.description.Text = this.description.Text == null ? "" : this.description.Text;
         int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
         int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
         int totalHours = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
         int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
-
+        this.date.Date = this.date.Date == null ? DateTime.MaxValue : this.date.Date;
+        this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
         // Turn logged time and total time into time doubles
         double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
         double totalTime = GlobalTaskData.TaskManager.SumTimes(totalHours, totalMinutes);
@@ -195,7 +201,6 @@ public partial class AddTaskPage : ContentPage
         //Check to see if we are currently editing or adding a task
         if (editingExistingTask)
         {
-           
             //Gets task list
             ObservableCollection<TaskItem> taskList = new ObservableCollection<TaskItem>();
             for (int i = 0; i < taskList.Count; i++)
@@ -282,8 +287,8 @@ public partial class AddTaskPage : ContentPage
     //This function will set the date and time forms to the current time
     void SetValues()
     {
-        this.date.Date = DateTime.Now;
-        this.time.Time = DateTime.Now;
+        this.date.Date = null;
+        this.time.Time = null;
     }
 
     void runAutoScheduler(Guid taskId)
@@ -300,24 +305,6 @@ public partial class AddTaskPage : ContentPage
         }
     }
 
-    void OnCheckBoxDueDateChanged(object sender, CheckedChangedEventArgs e)
-    {
-        if(e.Value == true)
-        {
-            this.date.Date = DateTime.MaxValue;
-            this.time.Time = DateTime.MaxValue;
-            date.IsVisible = false;
-            time.IsVisible = false;
-        }
-        else if(e.Value == false)
-        {
-            this.date.Date = DateTime.Now;
-            this.time.Time = DateTime.Now;
-            date.IsVisible = true;
-            time.IsVisible = true;
-        }
-    }
-
     //These functions will be used to add recurrence of a selected task for day/week/month
     private void HandleRecurrenceDay(object sender, EventArgs e, TaskItem task)
     {
@@ -327,6 +314,8 @@ public partial class AddTaskPage : ContentPage
         int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
         double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
         double totalTime = GlobalTaskData.TaskManager.SumTimes(totalHours, totalMinutes);
+        this.date.Date = this.date.Date == null ? DateTime.MaxValue : this.date.Date;
+        this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
         for (int i = 1; i <= 365; i++)
@@ -351,6 +340,8 @@ public partial class AddTaskPage : ContentPage
         int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
         double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
         double totalTime = GlobalTaskData.TaskManager.SumTimes(totalhours, totalMinutes);
+        this.date.Date = this.date.Date == null ? DateTime.MaxValue : this.date.Date;
+        this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
 
@@ -377,6 +368,8 @@ public partial class AddTaskPage : ContentPage
         int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
         double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
         double totalTime = GlobalTaskData.TaskManager.SumTimes(totalHours, totalMinutes);
+        this.date.Date = this.date.Date == null ? DateTime.MaxValue : this.date.Date;
+        this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
         for (int i = 1; i <= 12; i++)
