@@ -18,13 +18,13 @@ namespace StudyN.ViewModels
             foreach (TaskItem task in TaskList)
             {
                 String taskName = task.Name;
-                int timeWorked = task.CompletionProgress;
-                int timeNeeded = task.TotalTimeNeeded;
+                double timeWorked = task.CompletionProgress;
+                double timeNeeded = task.TotalTimeNeeded;
                 
-                TasksTimeWorked.Add(new TaskData(taskName, timeWorked));
+                TasksTimeWorked.Add(new TaskData(taskName, (int)timeWorked));
                 if (timeNeeded - timeWorked > 0)
                 {
-                    TasksTimeNeeded.Add(new TaskData(taskName, timeNeeded - timeWorked));
+                    TasksTimeNeeded.Add(new TaskData(taskName, (int)timeNeeded - (int)timeWorked));
                 }
             }
         }
