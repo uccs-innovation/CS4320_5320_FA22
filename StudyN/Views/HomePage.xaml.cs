@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System;
 using System.Threading.Tasks;
 using DevExpress.Maui.DataGrid;
+using DevExpress.Maui.Charts;
 using StudyN.Models;
 
 namespace StudyN.Views
@@ -19,7 +20,27 @@ namespace StudyN.Views
         {
             //Initializes the Home Page the first time it is opened. Sets AutoFilterValue to Today so that only items that are due at some point today appear.
             InitializeComponent();
-            DateFilter.AutoFilterValue = DateTime.Today; 
+            DateFilter.AutoFilterValue = DateTime.Today;
+
+            TaskDonutChart.ChartStyle = new PieChartStyle()
+            {
+                Palette = new Color[]
+                {
+                    Color.FromArgb("#1db2f5"),
+                    Color.FromArgb("#dcdcdc")
+                }
+            };
+            var screenWidthUnits = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
+            var widgetWidth = screenWidthUnits / 4;
+
+            TaskDonutChart.WidthRequest = widgetWidth;
+            TaskDonutChart.HeightRequest = widgetWidth;
+
+            TaskCompletedStack.WidthRequest = widgetWidth;
+            TaskCompletedStack.HeightRequest = widgetWidth;
+
+            TaskRemainingStack.WidthRequest = widgetWidth;
+            TaskCompletedStack.HeightRequest = widgetWidth;
         }
 
         HomeViewModel ViewModel { get; }
@@ -30,6 +51,11 @@ namespace StudyN.Views
             base.OnAppearing();
             //This refreshes the data from the DataSource for this page.
             myList.RefreshData();
+
+            TaskSeries.CenterLabel = new PieCenterTextLabel
+            {
+                TextPattern = "50%"
+            };
         }
 
 
