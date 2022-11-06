@@ -30,8 +30,18 @@ namespace StudyN.Views
                     Color.FromArgb("#dcdcdc")
                 }
             };
+
+            // Get total screen width in "maui units"
             var screenWidthUnits = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
-            var widgetWidth = screenWidthUnits / 4;
+            // Adjust for column spacing
+            screenWidthUnits -= (StatGrid.Children.Count - 1) * StatGrid.ColumnSpacing;
+            // Adjust for padding of all parent components
+            screenWidthUnits -= (ParentStack.Padding.Left +
+                                 ParentStack.Padding.Right +
+                                 StatGrid.Padding.Left +
+                                 StatGrid.Padding.Right);
+            // Divide by number of columns to get each columns disired width in "maui units"
+            var widgetWidth = screenWidthUnits / StatGrid.Children.Count;
 
             TaskDonutChart.WidthRequest = widgetWidth;
             TaskDonutChart.HeightRequest = widgetWidth;
@@ -40,7 +50,7 @@ namespace StudyN.Views
             TaskCompletedStack.HeightRequest = widgetWidth;
 
             TaskRemainingStack.WidthRequest = widgetWidth;
-            TaskCompletedStack.HeightRequest = widgetWidth;
+            TaskRemainingStack.HeightRequest = widgetWidth;
         }
 
         HomeViewModel ViewModel { get; }

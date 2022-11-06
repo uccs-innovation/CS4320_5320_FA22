@@ -13,50 +13,48 @@
         <ViewModels:HomeViewModel />
     </ContentPage.BindingContext>
     <!--Vertical Layout of Page.-->
-    <StackLayout Orientation="Vertical" Spacing="10" Padding="5,5">
+    <StackLayout x:Name="ParentStack" Orientation="Vertical" Spacing="10" Padding="5,5">
         <!--Vertical Layout of Page.-->
         <Label Text="Overview" FontSize="Title"/>
         <!--Horizontal layout of first row of stats.-->
-        <Grid Padding="10,10" RowSpacing="10" ColumnSpacing="10">
+        <Grid x:Name="StatGrid" Padding="20,20" RowSpacing="10" ColumnSpacing="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <StackLayout  x:Name="TaskCompletedStack"
-                          Orientation="Vertical"
-                          Spacing="0"
-                          Grid.Row="0"
-                          Grid.Column="0">
-                <Border Stroke="Black"
-                        StrokeThickness="2"
-                        Padding="10,10"
-                        StrokeShape="Rectangle">
-                    <StackLayout Orientation="Vertical"
-                                Spacing="0">
-                        <Label Text="0" HorizontalTextAlignment="Center"/>
-                        <Label Text="Tasks" HorizontalTextAlignment="Center"/>
-                        <Label Text="Completed" HorizontalTextAlignment="Center"/>
-                    </StackLayout>
-                </Border>
-            </StackLayout>
-            <StackLayout  x:Name="TaskRemainingStack"
-                          Orientation="Vertical"
-                          Spacing="0"
-                          Grid.Row="0"
-                          Grid.Column="1">
-                <Border Stroke="Black"
-                        StrokeThickness="2"
-                        Padding="10,10"
-                        StrokeShape="Rectangle">
-                    <StackLayout Orientation="Vertical"
-                                Spacing="0">
+            <Border Stroke="Black"
+                    StrokeThickness="2"
+                    Padding="0,0"
+                    StrokeShape="Rectangle"
+                    VerticalOptions="CenterAndExpand"
+                    Grid.Row="0"
+                    Grid.Column="0">
+                <StackLayout x:Name="TaskCompletedStack"
+                             Orientation="Vertical"
+                             Spacing="0"
+                             Padding="10,10">
                         <Label Text="0" HorizontalTextAlignment="Center"/>
                         <Label Text="Tasks" HorizontalTextAlignment="Center"/>
                         <Label Text="Remaining" HorizontalTextAlignment="Center"/>
-                    </StackLayout>
-                </Border>
-            </StackLayout>
+                </StackLayout>
+            </Border>
+            <Border Stroke="Black"
+                    StrokeThickness="2"
+                    Padding="0,0"
+                    StrokeShape="Rectangle"
+                    VerticalOptions="CenterAndExpand"
+                    Grid.Row="0"
+                    Grid.Column="1">
+                <StackLayout x:Name="TaskRemainingStack"
+                             Orientation="Vertical"
+                             Spacing="0"
+                             Padding="10,10">
+                        <Label Text="0" HorizontalTextAlignment="Center"/>
+                        <Label Text="Tasks" HorizontalTextAlignment="Center"/>
+                        <Label Text="Remaining" HorizontalTextAlignment="Center"/>
+                </StackLayout>
+            </Border>
             <dxc:PieChartView x:Name="TaskDonutChart"
                               HeightRequest="100"
                               WidthRequest="100"
