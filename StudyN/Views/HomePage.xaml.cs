@@ -31,26 +31,38 @@ namespace StudyN.Views
                 }
             };
 
+            HoursDonutChart.ChartStyle = TaskDonutChart.ChartStyle;
+
             // Get total screen width in "maui units"
             var screenWidthUnits = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
             // Adjust for column spacing
-            screenWidthUnits -= (StatGrid.Children.Count - 1) * StatGrid.ColumnSpacing;
+            screenWidthUnits -= (StatGrid.ColumnDefinitions.Count - 1) * StatGrid.ColumnSpacing;
             // Adjust for padding of all parent components
             screenWidthUnits -= (ParentStack.Padding.Left +
                                  ParentStack.Padding.Right +
                                  StatGrid.Padding.Left +
                                  StatGrid.Padding.Right);
             // Divide by number of columns to get each columns disired width in "maui units"
-            var widgetWidth = screenWidthUnits / StatGrid.Children.Count;
+            var widgetWidth = screenWidthUnits / StatGrid.ColumnDefinitions.Count;
 
-            TaskDonutChart.WidthRequest = widgetWidth;
-            TaskDonutChart.HeightRequest = widgetWidth;
-
+            // Set the width and height of all the stat boxes
             TaskCompletedStack.WidthRequest = widgetWidth;
             TaskCompletedStack.HeightRequest = widgetWidth;
 
             TaskRemainingStack.WidthRequest = widgetWidth;
             TaskRemainingStack.HeightRequest = widgetWidth;
+
+            TaskDonutChart.WidthRequest = widgetWidth;
+            TaskDonutChart.HeightRequest = widgetWidth;
+
+            HoursCompletedStack.WidthRequest = widgetWidth;
+            HoursCompletedStack.HeightRequest = widgetWidth;
+
+            HoursRemainingStack.WidthRequest = widgetWidth;
+            HoursRemainingStack.HeightRequest = widgetWidth;
+
+            HoursDonutChart.WidthRequest = widgetWidth;
+            HoursDonutChart.HeightRequest = widgetWidth;
         }
 
         HomeViewModel ViewModel { get; }
@@ -64,7 +76,12 @@ namespace StudyN.Views
 
             TaskSeries.CenterLabel = new PieCenterTextLabel
             {
-                TextPattern = "50%"
+                TextPattern = "70%"
+            };
+
+            HourSeries.CenterLabel = new PieCenterTextLabel
+            {
+                TextPattern = "30%"
             };
         }
 

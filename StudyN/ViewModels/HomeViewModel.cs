@@ -10,12 +10,18 @@ namespace StudyN.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ObservableCollection<DonutChartItem> TaskPieChartData { get; }
+        public ObservableCollection<DonutChartItem> HoursPieChartData { get; }
         public ObservableCollection<Appointment> CalendarEvents { get => GlobalAppointmentData.CalendarManager.Appointments; }
         public HomeViewModel()
         {
             TaskPieChartData = new ObservableCollection<DonutChartItem>() {
-                new DonutChartItem("Complete", 50),
-                new DonutChartItem("Incomplete", 50)
+                new DonutChartItem("Complete", 70),
+                new DonutChartItem("Incomplete", 30)
+            };
+
+            HoursPieChartData = new ObservableCollection<DonutChartItem>() {
+                new DonutChartItem("Complete", 30),
+                new DonutChartItem("Incomplete", 70)
             };
         }
 
