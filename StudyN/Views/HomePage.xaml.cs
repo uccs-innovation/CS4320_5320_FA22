@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System;
 using System.Threading.Tasks;
 using DevExpress.Maui.DataGrid;
+using StudyN.Models;
 
 namespace StudyN.Views
 {
@@ -19,7 +20,6 @@ namespace StudyN.Views
             //Initializes the Home Page the first time it is opened. Sets AutoFilterValue to Today so that only items that are due at some point today appear.
             InitializeComponent();
             DateFilter.AutoFilterValue = DateTime.Today; 
-            BindingContext = ViewModel = new HomeViewModel();
         }
 
         HomeViewModel ViewModel { get; }

@@ -8,10 +8,15 @@ namespace StudyN.ViewModels
     public class HomeViewModel : BaseViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public ObservableCollection<DonutChartItem> TaskPieChartData { get; }
         public ObservableCollection<Appointment> CalendarEvents { get => GlobalAppointmentData.CalendarManager.Appointments; }
         public HomeViewModel()
         {
-            Title = "Dashboard";
+            TaskPieChartData = new ObservableCollection<DonutChartItem>() {
+                new DonutChartItem("Complete", 50),
+                new DonutChartItem("Incomplete", 50)
+            };
         }
 
         protected void RaisePropertyChanged(string name)
