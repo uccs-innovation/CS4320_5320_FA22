@@ -15,7 +15,6 @@ using static StudyN.Utilities.StudynEvent;
 //Because of the minuteMap, this iteration of the autoScheduler doesn't seem to have a need for blocks
 public class AutoScheduler : StudynSubscriber
 {
-    public DateTime lastRun;
     private DateTime baseTime; //The base time the autoscheduler will use to do all its calculations
     ObservableCollection<Appointment> appts;
     ObservableCollection<TaskItem> tasks;
@@ -32,7 +31,6 @@ public class AutoScheduler : StudynSubscriber
         minuteMap = new minuteSnapshot[40320]; //40320 minutes in 4 weeks. AutoScheduler will only scheduler out 4 weeks.
         for(int i = 0; i < minuteMap.Length; i++) { minuteMap[i] = new minuteSnapshot(); }
         baseTime = DateTime.Now;
-        lastRun = DateTime.Now.AddDays(-99);
     }
    
     //Put appointments from the global appointments list into the minute mapping, for future use in scheduling
@@ -213,6 +211,7 @@ public class AutoScheduler : StudynSubscriber
 
     public void OnNewStudynEvent(StudynEvent taskEvent)
     {
+        Console.WriteLine("autoScheduler.OnNewStudynEvent");
         switch (taskEvent.EventType)
         {
             // On any add, edit, or modify task/appointment, rerun the scheduler
@@ -223,7 +222,7 @@ public class AutoScheduler : StudynSubscriber
             case StudynEventType.AppointmentEdit:
             case StudynEventType.AppointmentDelete:
             {
-                if ((DateTime.Now - lastRun).TotalSeconds > 2) { run(taskEvent.Id); }
+                run(taskEvent.Id); 
                 break;
             }
             case StudynEventType.CompleteTask:
