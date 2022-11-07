@@ -83,14 +83,14 @@ namespace StudyN.Views
             int numHoursScheduled = GlobalAppointmentData.CalendarManager.NumHoursScheduledToday();
 
             double taskPercentage = numTasksDueToday == 0 ?
-                                    0 : ((numTasksCompleted / numTasksDueToday) * 100);
+                                    0 : (((double)numTasksCompleted / (double)numTasksDueToday) * 100);
 
             ViewModel.SetTaskPercentage(taskPercentage);
 
             double hourPercentage = numHoursScheduled == 0 ?
-                                    0 : ((numHoursCompleted / numHoursScheduled) * 100);
+                                    0 : (((double)numHoursCompleted / (double)numHoursScheduled) * 100);
 
-            ViewModel.SetTaskPercentage(hourPercentage);
+            ViewModel.SetHourPercentage(hourPercentage);
 
             string taskPercentageString = numTasksDueToday == 0 ?
                                     "--%" : taskPercentage.ToString() + "%";
