@@ -12,7 +12,7 @@
     <!--Vertical Layout of Page.-->
     <StackLayout x:Name="ParentStack" Orientation="Vertical" Spacing="5" Padding="5,5">
         <!--Vertical Layout of Page.-->
-        <Label Text="Overview" FontSize="Title"/>
+        <Label Text="Overview" FontSize="Title" TextColor="Black"/>
         <Grid x:Name="StatGrid" Padding="5,5" RowSpacing="10" ColumnSpacing="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
