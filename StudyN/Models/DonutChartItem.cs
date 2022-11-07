@@ -8,8 +8,8 @@ namespace StudyN.Models
 {
     public class DonutChartItem
     {
-        public string Name { get; }
-        public int Percentage { get; }
+        public string Name { get; set; }
+        public int Percentage { get; set; }
 
         public DonutChartItem(string name, int percentage)
         {
