@@ -56,6 +56,8 @@ public class AutoScheduler //: StudynSubscriber
         }
     }
 
+    //Map each task minute by minute back from its duedate. If something is already scheduled for that minute, look back to the minute before it.
+    //It will map higher important tasks first. Therefore lower importance tasks will be scheduled around the higher importance ones.
     private void MapTasks()
     {
         Console.WriteLine("autoScheduler.MapTasks()");
@@ -91,6 +93,35 @@ public class AutoScheduler //: StudynSubscriber
                 }
             }
         }
+    }
+
+    //All contiguous minute mappings should be transformed into a continous appointment. IE indexes in the minute mapping that are next to each other and have the same Guid should be combined together.
+    private List<Appointment> CoalesceMinuteMapping()
+    {
+        Console.WriteLine("autoScheduler.CoalesceMinuteMapping()");
+        List<Appointment> coalescedAppointments = new List<Appointment>();
+        Guid? curGuid = null;
+        int guidStart = 0;
+        for(int i = 0; i < minuteMap.Length; i++)
+        {
+            if(curGuid != minuteMap[i].id)
+            {
+                if(minuteMap[i - 1].id != null)
+                {
+                    Appointment appt = new Appointment();
+                    appt.Start = baseTime.AddMinutes(guidStart);
+                    appt.End = baseTime.AddMinutes(i - 1); //The previous index was the last index with the previous guid
+                    appt.Subject = minuteMap[i - 1].name;
+                    appt.UniqueId = (Guid)minuteMap[i - 1].id;
+                    appt.From = minuteMap[i - 1].from;
+                    coalescedAppointments.Add(appt);
+                }
+                curGuid = minuteMap[i].id;
+                guidStart = i;
+            }
+        }
+
+        return coalescedAppointments;
     }
 
     private IOrderedEnumerable<TaskItem> sortByWeight()
@@ -148,6 +179,7 @@ public class AutoScheduler //: StudynSubscriber
         refreshData();
         MapAppointments();
         MapTasks();
+        CoalesceMinuteMapping();
         Console.WriteLine("Done running autoScheduler");
 
         for (int i = 0; i < minuteMap.Length; i++)
