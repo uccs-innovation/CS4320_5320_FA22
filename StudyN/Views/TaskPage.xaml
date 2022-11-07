@@ -7,12 +7,51 @@
              Title="Tasks"
              IconImageSource="grid"
              x:Class="StudyN.Views.TaskPage">
+
+    <!-- Binding Context -->
     <ContentPage.BindingContext>
         <ViewModels:TaskDataViewModel />
     </ContentPage.BindingContext>
+    <!-- Toolbar -->
+    <ContentPage.ToolbarItems>
+        <!-- Standard Options -->
+        <ToolbarItem Text="Add" 
+                     Clicked="AddButtonClicked"
+                     IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+      
+
+        <!-- Press and hold options -->
+        <ToolbarItem Text="Cancel"
+                     Clicked="CancelButtonClicked"
+                     Priority="0"
+                     IconImageSource="whitecancel" />
+        <ToolbarItem Text="Trash"
+                     Clicked="TrashButtonClicked"
+                     Priority="1"
+                     IconImageSource="whitetrashcan" />
+        <ToolbarItem Text="Complete"
+                     Clicked="CompleteButtonClicked"
+                     Priority="2"
+                     IconImageSource="whitecheckbox" />
+        <ToolbarItem Text="Chart"
+                     Clicked="TaskChartsButtonClicked"
+                     Priority="3"
+                     IconImageSource="charts" />
+
+    </ContentPage.ToolbarItems>
+    <!-- DataGrid -->
+    <dxg:DataGridView ItemsSource="{Binding TaskList}"
+                      Tap="CellClicked"
+                      LongPress="RowLongPressed"
+                      CustomCellStyle="HighlightSelectedRows"
+                      ColumnHeaderHeight="0"
+                      CalculateCustomSummary="CalculateTotalPercent">
     <dxg:DataGridView x:Name="grid" ItemsSource="{Binding CalendarTasks}" Tap="CellClicked">
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
+            <dxg:TextColumn FieldName="Name" Caption="Task" />
+            <dxg:DateColumn FieldName="DueTime" Caption="Due" DisplayFormat="h:mm tt" IsGrouped="True"/>
+            <dxg:TextColumn FieldName="Percent" Caption="Percent" DisplayFormat="P0" />
             <dxg:CheckBoxColumn FieldName="Completed" Caption=" " Width="15" />
             <dxg:TextColumn FieldName="Name" Caption="Task Name" />
             <dxg:TextColumn FieldName="Description" Caption="Task Description" />
@@ -23,15 +62,24 @@
 
 
         </dxg:DataGridView.Columns>
-     
+        <!--Customize the appearance of group row.-->
+        <dxg:DataGridView.GroupRowStyle>
+            <dxg:GroupRowStyle FontSize="16" />
+        </dxg:DataGridView.GroupRowStyle>
         <!--Customize the appearance of grid cells.-->
         <dxg:DataGridView.CellStyle>
-            <dxg:CellStyle Padding="3" CheckBoxPadding="3"/>
+            <dxg:CellStyle Padding="10" FontSize="24"/>
         </dxg:DataGridView.CellStyle>
         <!--Customize the appearance of column headers.-->
         <dxg:DataGridView.ColumnHeaderStyle>
             <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
         </dxg:DataGridView.ColumnHeaderStyle>
-        
+        <dxg:DataGridView.TotalSummaries>
+            <dxg:GridColumnSummary FieldName="Percent" Type="Custom" 
+                                   DisplayFormat="Total Completion: {0}%"/>
+        </dxg:DataGridView.TotalSummaries>
+        <dxg:DataGridView.TotalSummaryStyle>
+            <dxg:TotalSummaryStyle FontSize="16"/>
+        </dxg:DataGridView.TotalSummaryStyle>
     </dxg:DataGridView>
 </ContentPage>

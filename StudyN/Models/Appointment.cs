@@ -1,0 +1,88 @@
+﻿using DevExpress.Maui.Scheduler;
+using StudyN.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace StudyN.Models
+{
+    public class Appointment : AppointmentItem
+    {
+        public Guid UniqueId { get; set; }
+        public string ReminderInfo { get; set; }
+        public string Notes { get; set; }
+
+        // properties for StudyN_Time category
+        public bool IsGeneratedStudyNTime { get; set; }
+        public Guid ParentTaskId { get; set; }
+        public int StudyNBlock_Minutes { get; set; }
+        public bool WasEdited { get; set; }
+        public bool IsOrphan { get; set; }
+
+        // properties for Assignment category
+        public int EstimatedCompletionTime_Hours { get; set; }
+
+        // properties for Exam category
+        public bool IsExamTakehome { get; set; }
+        public int ExamTime_Minutes { get; set; }
+
+        // StudyN Time Algorithm properties
+        public int BeforePadding_Minutes { get; set; }
+        public int AfterPadding_Minutes { get; set; }
+        public int MaxBlockTime_Minutes { get; set; }
+        public int MinBlockTime_Minutes { get; set; }
+        public int BreakTime_Minutes { get; set; }
+        public bool AllowBackToBackStudyNSessions { get; set; }
+        public bool UseFreeTimeBlocks { get; set; }
+
+        // properties for data import
+        public bool IsCanvasImport { get; set; }
+        public bool IsExternalCalendarImport { get; set; }
+
+        public DateTime LastEdited { get; set; }
+
+        protected void ApptChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // Publish Appointment Edit
+            // Checking if the last edit was within the last second
+            // prevents us from sending an event for each property
+            if ((DateTime.Now - LastEdited).TotalSeconds > 1)
+            {
+                LastEdited = DateTime.Now;
+                // Publish task delete appointment
+                EventBus.PublishEvent(
+                            new StudynEvent(UniqueId,
+                            StudynEvent.StudynEventType.AppointmentEdit));
+            }
+        }
+
+        public Appointment() : base()
+        {
+            UniqueId = new Guid();
+            LastEdited = DateTime.Now;
+            PropertyChanged += new PropertyChangedEventHandler(ApptChanged);
+        }
+    }
+
+
+    public class AppointmentCategory
+    {
+        public Guid Id { get; set; }
+        public string Caption { get; set; }
+        public Color Color { get; set; }
+        public double PickerXPosition { get; set; }
+        public double PickerYPosition { get; set; }
+    }
+
+    public class AppointmentStatus
+    {
+        public int Id { get; set; }
+        public string Caption { get; set; }
+        public Color Color { get; set; }
+    }
+}

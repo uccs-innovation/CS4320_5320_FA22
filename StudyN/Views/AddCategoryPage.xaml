@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyN.Views.AddCategoryPage"
+             xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
+             xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
+             xmlns:dxu="clr-namespace:DevExpress.Utils;assembly=DevExpress.Maui.Core"
+             xmlns:dxee="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:controls="clr-namespace:Maui.ColorPicker;assembly=Maui.ColorPicker"
+             Title="{Binding Title}">
+    <!-- Saves the category -->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save" Clicked="SaveButtonClicked" IconImageSource="whitesave" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <!-- Get user input through grid-->
+        <Grid Margin="10"
+              Padding="5"
+              RowSpacing="10"
+              ColumnSpacing="10">
+            <!-- Grid Row Definition -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="400" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <!-- Get name of category from user -->
+            <dxe:TextEdit
+                Grid.ColumnSpan="2"
+                LabelText="Name"
+                IsLabelFloating="True"
+                Margin="1"
+                x:Name="name" />
+            <!-- Get color of category from user, package created by nor0x -->
+            <Label 
+                x:Name="displayLabel"
+                Text="Pick Color"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                FontSize="16" />
+            <controls:ColorPicker
+                Grid.ColumnSpan="2"
+                ColorFlowDirection="Horizontal"
+                ColorSpectrumStyle="TintToHueToShadeStyle"
+                PickedColorChanged="PickedColorChanged"
+                PointerRingBorderUnits="0.3"
+                PointerRingDiameterUnits="0.7"
+                Grid.Row="2"
+                x:Name="colorPicker" />
+            <!-- Button for deleting category -->
+            <Button
+                x:Name="RemoveButton"
+                Text="Remove Category"
+                Grid.Row="3"
+                CornerRadius="7"
+                Margin="1"
+                Clicked="RemoveButtonClicked"
+                Command="{Binding ButtonVisibility}"/>
+        </Grid>
+        
+    </ContentPage.Content>
+</ContentPage>

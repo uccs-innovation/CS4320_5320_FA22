@@ -9,28 +9,30 @@
         x:Class="StudyN.Views.MainPage">
     <TabBar>
         <Tab Title="Import" Icon="charts">
+        <Tab Title="Home" Icon="icons8home">
             <ShellContent ContentTemplate="{DataTemplate local:HomePage}" />
         </Tab>
         <Tab Title="Calendar" Icon="scheduler">
             <ShellContent ContentTemplate="{DataTemplate local:CalendarPage}" />
         </Tab>
 
-        <Tab Title="Add Event" Icon="image2vector">
-            <ShellContent ContentTemplate="{DataTemplate local:AddEventPage}" />
-        </Tab>
-        
         <Tab Title="Tasks" Icon="grid">
             <ShellContent ContentTemplate="{DataTemplate local:TaskPage}"/>
         </Tab>
-
+        
+        <Tab Title="Analytics" Icon="charts">
+            <ShellContent ContentTemplate="{DataTemplate local:AnalyticsPage}" />
+        </Tab>
+        
+        <Tab Title="Categories" Icon="popup">
+            <ShellContent ContentTemplate="{DataTemplate local:CategoriesPage}"/>
+        </Tab>
         <Tab Title="Settings" Icon="info">
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
-
-        <Tab Title="Integrate" Icon="info">
-            <ShellContent ContentTemplate="{DataTemplate local:HomePage}" />
-        </Tab>
-
+        
+        
+        
     </TabBar>
 
 </Shell>

@@ -1,8 +1,165 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dxsch="clr-namespace:DevExpress.Maui.Scheduler;assembly=DevExpress.Maui.Scheduler"
+             xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
              xmlns:dxdf="clr-namespace:DevExpress.Maui.DataForm;assembly=DevExpress.Maui.Editors"
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
+             xmlns:ViewModels="clr-namespace:StudyN.ViewModels"
+             xmlns:local="clr-namespace:StudyN.Views"
+             Title="My Day"
+             IconImageSource="grid"
+             x:Class="StudyN.Views.HomePage">
+    <!--Vertical Layout of Page.-->
+    <StackLayout x:Name="ParentStack" Orientation="Vertical" Spacing="5" Padding="5,5">
+        <!--Vertical Layout of Page.-->
+        <Label Text="Overview" FontSize="Title" TextColor="Black"/>
+        <Grid x:Name="StatGrid" Padding="5,5" RowSpacing="10" ColumnSpacing="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--first row of stats.-->
+            <Border Stroke="Black"
+                    StrokeThickness="2"
+                    Padding="0,0"
+                    StrokeShape="Rectangle"
+                    VerticalOptions="CenterAndExpand"
+                    Grid.Row="0"
+                    Grid.Column="0">
+                <StackLayout x:Name="TaskCompletedStack"
+                             Orientation="Vertical"
+                             Spacing="0"
+                             Padding="10,10">
+                    <Label x:Name="NumTasksCompleted"
+                           Text="0" 
+                           HorizontalTextAlignment="Center"
+                           TextColor="Black"
+                           VerticalOptions="Center"
+                           FontSize="36"/>
+                    <Label Text="Tasks" 
+                           HorizontalTextAlignment="Center" 
+                           TextColor="Black"
+                           VerticalOptions="Center"/>
+                    <Label Text="Completed" 
+                           HorizontalTextAlignment="Center" 
+                           TextColor="Black"
+                           VerticalOptions="Center"/>
+                </StackLayout>
+            </Border>
+            <Border Stroke="Black"
+                    StrokeThickness="2"
+                    Padding="0,0"
+                    StrokeShape="Rectangle"
+                    VerticalOptions="CenterAndExpand"
+                    Grid.Row="0"
+                    Grid.Column="1">
+                <StackLayout x:Name="TaskRemainingStack"
+                             Orientation="Vertical"
+                             Spacing="0"
+                             Padding="10,10">
+                    <Label x:Name="NumTasksRemaining"
+                           Text="0" 
+                           HorizontalTextAlignment="Center" 
+                           TextColor="Black"
+                           VerticalOptions="Center"
+                           FontSize="36"/>
+                    <Label Text="Tasks" 
+                           HorizontalTextAlignment="Center" 
+                           TextColor="Black" 
+                           VerticalOptions="Center"/>
+                    <Label Text="Remaining" 
+                           HorizontalTextAlignment="Center"
+                           TextColor="Black"
+                           VerticalOptions="Center"/>
+                </StackLayout>
+            </Border>
+            <dxc:PieChartView x:Name="TaskDonutChart"
+                              Grid.Row="0"
+                              Grid.Column="2">
+                <dxc:PieChartView.Series>
+                    <dxc:DonutSeries x:Name="TaskSeries">
+                        <dxc:DonutSeries.Data>
+                            <dxc:PieSeriesDataAdapter DataSource="{Binding TaskPieChartData}"
+                                                  LabelDataMember="Name"
+                                                  ValueDataMember="Percentage" />
+                        </dxc:DonutSeries.Data>
+                    </dxc:DonutSeries>
+                </dxc:PieChartView.Series>
+            </dxc:PieChartView>
+            <!--second row of stats.-->
+            <Border Stroke="Black"
+                    StrokeThickness="2"
+                    Padding="0,0"
+                    StrokeShape="Rectangle"
+                    VerticalOptions="CenterAndExpand"
+                    Grid.Row="1"
+                    Grid.Column="0">
+                <StackLayout x:Name="HoursCompletedStack"
+                             Orientation="Vertical"
+                             Spacing="0"
+                             Padding="10,10">
+                    <Label x:Name="NumHoursCompleted"
+                           Text="0" 
+                           HorizontalTextAlignment="Center"
+                           TextColor="Black"
+                           VerticalOptions="Center"
+                           FontSize="36"/>
+                    <Label Text="Hours" 
+                           HorizontalTextAlignment="Center" 
+                           TextColor="Black"
+                           VerticalOptions="Center"/>
+                    <Label Text="Completed" 
+                           HorizontalTextAlignment="Center" 
+                           TextColor="Black"
+                           VerticalOptions="Center"/>
+                </StackLayout>
+            </Border>
+            <Border Stroke="Black"
+                    StrokeThickness="2"
+                    Padding="0,0"
+                    StrokeShape="Rectangle"
+                    VerticalOptions="CenterAndExpand"
+                    Grid.Row="1"
+                    Grid.Column="1">
+                <StackLayout x:Name="HoursRemainingStack"
+                             Orientation="Vertical"
+                             Spacing="0"
+                             Padding="10,10">
+                    <Label x:Name="NumHoursRemaining"
+                           Text="0" 
+                           HorizontalTextAlignment="Center" 
+                           TextColor="Black"
+                           VerticalOptions="Center"
+                           FontSize="36"/>
+                    <Label Text="Hours" 
+                           HorizontalTextAlignment="Center" 
+                           TextColor="Black" 
+                           VerticalOptions="Center"/>
+                    <Label Text="Remaining" 
+                           HorizontalTextAlignment="Center"
+                           TextColor="Black"
+                           VerticalOptions="Center"/>
+                </StackLayout>
+            </Border>
+            <dxc:PieChartView x:Name="HoursDonutChart"
+                              Grid.Row="1"
+                              Grid.Column="2">
+                <dxc:PieChartView.Series>
+                    <dxc:DonutSeries x:Name="HourSeries">
+                        <dxc:DonutSeries.Data>
+                            <dxc:PieSeriesDataAdapter DataSource="{Binding HoursPieChartData}"
+                                                  LabelDataMember="Name"
+                                                  ValueDataMember="Percentage" />
+                        </dxc:DonutSeries.Data>
+                    </dxc:DonutSeries>
+                </dxc:PieChartView.Series>
+            </dxc:PieChartView>
              x:Class="StudyN.Views.HomePage"
              Title="{Binding Title}"
              IconImageSource="charts">
@@ -33,5 +190,58 @@
                     TranslationY="270"/>
             </Grid>
         </Grid>
+
+        <dxg:DataGridView x:Name ="myList" ItemsSource="{Binding CalendarEvents}"
+                          IsEnabled="True"
+                          IsVisible="True"
+                          ShowAutoFilterRow="False"
+                          Tap="OnTapEditAppointment"
+                          ColumnHeaderHeight="60">
+            <!--Set the Columns to use.-->
+            <dxg:DataGridView.Columns>
+                <!-- AutoFilter is not shown to user to prevent them from manually filtering the Todays View. AutoFilterCondition is set to Equal so that any task that has the same day as today will be shown.-->
+                <dxg:TextColumn FieldName="Subject" Caption="Task">
+                    <dxg:TextColumn.HeaderContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Label Text="Task" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </dxg:TextColumn.HeaderContentTemplate>
+                </dxg:TextColumn>
+                <dxg:DateColumn AllowAutoFilter="False" FieldName="Start" Caption="Start" DisplayFormat="hh:mmtt">
+                    <dxg:DateColumn.HeaderContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Label Text="Start Time" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </dxg:DateColumn.HeaderContentTemplate>
+                </dxg:DateColumn>
+                <dxg:DateColumn x:Name="DateFilter" FieldName="End" Caption="Due" DisplayFormat="hh:mm tt" AutoFilterCondition="Equals" AutoFilterValue="">
+                    <dxg:DateColumn.HeaderContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Label Text="Due Time" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </dxg:DateColumn.HeaderContentTemplate>
+                </dxg:DateColumn>
+            </dxg:DataGridView.Columns>
+            <!--Customize the appearance of group row.-->
+            <dxg:DataGridView.GroupRowStyle>
+                <dxg:GroupRowStyle FontSize="16" />
+            </dxg:DataGridView.GroupRowStyle>
+            <!--Customize the appearance of grid cells.-->
+            <dxg:DataGridView.CellStyle>
+                <dxg:CellStyle Padding="10" FontSize="24"/>
+            </dxg:DataGridView.CellStyle>
+            <!--Customize the appearance of column headers.-->
+            <dxg:DataGridView.ColumnHeaderStyle>
+                <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
+            </dxg:DataGridView.ColumnHeaderStyle>
+        </dxg:DataGridView>
+    </StackLayout>
+</ContentPage>
     </ContentPage.Content>
 </ContentPage>
