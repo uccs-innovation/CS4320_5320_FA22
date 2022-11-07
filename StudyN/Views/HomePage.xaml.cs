@@ -18,6 +18,7 @@ namespace StudyN.Views
 
         public HomePage()
         {
+            BindingContext = ViewModel = new HomeViewModel();
             //Initializes the Home Page the first time it is opened. Sets AutoFilterValue to Today so that only items that are due at some point today appear.
             InitializeComponent();
             DateFilter.AutoFilterValue = DateTime.Today;
@@ -74,15 +75,44 @@ namespace StudyN.Views
             //This refreshes the data from the DataSource for this page.
             myList.RefreshData();
 
+            // Populate the statistics fields
+            int numTasksCompleted = GlobalTaskData.TaskManager.NumTasksCompletedToday();
+            int numTasksDueToday = GlobalTaskData.TaskManager.NumTasksDueToday();
+
+            int numHoursCompleted = GlobalAppointmentData.CalendarManager.NumHoursCompletedToday();
+            int numHoursScheduled = GlobalAppointmentData.CalendarManager.NumHoursScheduledToday();
+
+            double taskPercentage = numTasksDueToday == 0 ?
+                                    0 : ((numTasksCompleted / numTasksDueToday) * 100);
+
+            ViewModel.SetTaskPercentage(taskPercentage);
+
+            double hourPercentage = numHoursScheduled == 0 ?
+                                    0 : ((numHoursCompleted / numHoursScheduled) * 100);
+
+            ViewModel.SetTaskPercentage(hourPercentage);
+
+            string taskPercentageString = numTasksDueToday == 0 ?
+                                    "--%" : taskPercentage.ToString() + "%";
+
+            string hoursPercentageString = numHoursScheduled == 0 ?
+                                    "--%" : hourPercentage.ToString() + "%";
+
             TaskSeries.CenterLabel = new PieCenterTextLabel
             {
-                TextPattern = "70%"
+                TextPattern = taskPercentageString
             };
 
             HourSeries.CenterLabel = new PieCenterTextLabel
             {
-                TextPattern = "30%"
+                TextPattern = hoursPercentageString
             };
+
+            NumTasksCompleted.Text = numTasksCompleted.ToString();
+            NumTasksRemaining.Text = numTasksDueToday.ToString();
+
+            NumHoursCompleted.Text = numHoursCompleted.ToString();
+            NumHoursRemaining.Text = numHoursScheduled.ToString();
         }
 
 

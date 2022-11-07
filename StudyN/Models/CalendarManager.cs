@@ -8,6 +8,7 @@ using DevExpress.Maui.Scheduler;
 using DevExpress.Maui.Scheduler.Internal;
 using Microsoft.Maui.Controls;
 using StudyN.Utilities;
+using DevExpress.Data.Mask;
 
 namespace StudyN.Models
 {
@@ -35,9 +36,12 @@ namespace StudyN.Models
 
             Caption = "Uncategorized",
 
-            Color = Color.FromArgb("#D9D9D9"),
-            PickerXPosition = 0.5f,
-            PickerYPosition = 1.0f
+            Color = Color.FromArgb("#D9D9D9"),
+
+            PickerXPosition = 0.5f,
+
+            PickerYPosition = 1.0f
+
         };
                                                                                       
         public static string[] AppointmentStatusTitles = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
@@ -170,7 +174,8 @@ namespace StudyN.Models
 
                                                    Color categoryColor,
 
-                                                   double x, double y,
+                                                   double x, double y,
+
                                                    Guid id = new Guid())
 
         {
@@ -187,8 +192,10 @@ namespace StudyN.Models
 
                 Color = categoryColor,
 
-                PickerXPosition = x,
-                PickerYPosition = y
+                PickerXPosition = x,
+
+                PickerYPosition = y
+
             };
 
             // Adds category to category list
@@ -245,8 +252,10 @@ namespace StudyN.Models
 
             cat.Color = categoryColor;
 
-            cat.PickerXPosition = x;
-            cat.PickerYPosition = y;
+            cat.PickerXPosition = x;
+
+            cat.PickerYPosition = y;
+
             return true;
 
         }
@@ -341,6 +350,48 @@ namespace StudyN.Models
                             new StudynEvent(new Guid(),
                             StudynEvent.StudynEventType.AppointmentDelete));
             }
+        }
+
+        // Calculate the number of total hours scheduled to work on tasks today
+        public int NumHoursScheduledToday()
+        {
+            double numMinScheduled = 0;
+            foreach(Appointment appt in Appointments)
+            {
+                // Check if associated task exits
+                if (GlobalTaskData.TaskManager.GetTask(appt.UniqueId) != null)
+                {
+                    numMinScheduled += (appt.End - appt.Start).TotalMinutes;
+                }
+            }
+            // Return as int for simple UI
+            return (int)(numMinScheduled/60);
+        }
+
+        // Calculate the number of hours scheduled today that have already been completed
+        public int NumHoursCompletedToday()
+        {
+            double numMinCompleted = 0;
+            foreach (Appointment appt in Appointments)
+            {
+                TaskItem task = GlobalTaskData.TaskManager.GetTask(appt.UniqueId);
+                // Check if associated task exits
+                if (task != null)
+                {
+                    // Look at logged times
+                    foreach (TaskItemTime taskTime in task.TimeList)
+                    {
+                        // Add up times that finished before "now"
+                        // that started sometime today
+                        if(taskTime.stop < DateTime.Now
+                            && taskTime.start == DateTime.Today)
+                        {
+                            numMinCompleted += taskTime.span.TotalMinutes;
+                        }
+                    }
+                }
+            }
+            return (int)(numMinCompleted/60);
         }
 
         public ObservableCollection<Appointment> Appointments { get; private set; }
