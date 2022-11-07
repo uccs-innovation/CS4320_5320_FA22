@@ -5,6 +5,7 @@ using StudyN.Utilities;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Threading.Tasks;
+using DevExpress.CodeParser;
 
 namespace StudyN.Models
 {
@@ -252,6 +253,34 @@ namespace StudyN.Models
             double decimalMins = (double)minutes / 60;
             // return hours.minutes
             return (double)hours + decimalMins;
+        }
+
+        // Count the number of total tasks due today
+        public int NumTasksDueToday()
+        {
+            int numTasksDue = NumTasksCompletedToday();
+            foreach(TaskItem task in TaskList)
+            {
+                if (task.DueTime.Date == DateTime.Today)
+                {
+                    numTasksDue++;
+                }
+            }
+            return numTasksDue;
+        }
+
+        // Count the number of task completed that were due today
+        public int NumTasksCompletedToday()
+        {
+            int numCompleted = 0;
+            foreach(TaskItem task in CompletedTasks)
+            {
+                if(task.DueTime.Date == DateTime.Today)
+                {
+                    numCompleted++;
+                }
+            }
+            return numCompleted;
         }
 
         public ObservableCollection<TaskItem> TaskList { get; private set; }
