@@ -124,6 +124,15 @@ public class AutoScheduler //: StudynSubscriber
         return coalescedAppointments;
     }
 
+    private void AddToCalendar(List<Appointment> appts)
+    {
+        Console.WriteLine("autoScheduler adding to calendar");
+        foreach(Appointment appt in appts)
+        {
+            GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+        }
+    }
+
     private IOrderedEnumerable<TaskItem> sortByWeight()
     {
         List<TaskItem> tempTasks = new List<TaskItem>();
@@ -179,7 +188,7 @@ public class AutoScheduler //: StudynSubscriber
         refreshData();
         MapAppointments();
         MapTasks();
-        CoalesceMinuteMapping();
+        AddToCalendar( CoalesceMinuteMapping() );
         Console.WriteLine("Done running autoScheduler");
 
         for (int i = 0; i < minuteMap.Length; i++)
