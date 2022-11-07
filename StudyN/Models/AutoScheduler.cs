@@ -7,14 +7,16 @@ using System.Linq;
 using Android.Accessibilityservice.AccessibilityService;
 using DevExpress.CodeParser;
 using DevExpress.Utils;
+using DevExpress.XtraRichEdit.Model.History;
 using StudyN.Models;
 using StudyN.Utilities;
 using static StudyN.Utilities.StudynEvent;
 
 //Because of the minuteMap, this iteration of the autoScheduler doesn't seem to have a need for blocks
-public class AutoScheduler //: StudynSubscriber
+public class AutoScheduler : StudynSubscriber
 {
-    DateTime baseTime; //The base time the autoscheduler will use to do all its calculations
+    public DateTime lastRun;
+    private DateTime baseTime; //The base time the autoscheduler will use to do all its calculations
     ObservableCollection<Appointment> appts;
     ObservableCollection<TaskItem> tasks;
     private minuteSnapshot[] minuteMap;
@@ -30,6 +32,7 @@ public class AutoScheduler //: StudynSubscriber
         minuteMap = new minuteSnapshot[40320]; //40320 minutes in 4 weeks. AutoScheduler will only scheduler out 4 weeks.
         for(int i = 0; i < minuteMap.Length; i++) { minuteMap[i] = new minuteSnapshot(); }
         baseTime = DateTime.Now;
+        lastRun = DateTime.Now.AddDays(-99);
     }
    
     //Put appointments from the global appointments list into the minute mapping, for future use in scheduling
@@ -106,7 +109,7 @@ public class AutoScheduler //: StudynSubscriber
         {
             if(curGuid != minuteMap[i].id)
             {
-                if(minuteMap[i - 1].id != null)
+                if(i > 0 && minuteMap[i - 1].id != null) 
                 {
                     Appointment appt = new Appointment();
                     appt.Start = baseTime.AddMinutes(guidStart);
@@ -208,30 +211,31 @@ public class AutoScheduler //: StudynSubscriber
         for (int i = 0; i < minuteMap.Length; i++) { minuteMap[i] = new minuteSnapshot(); }
     }
 
-    /*    public void OnNewStudynEvent(StudynEvent taskEvent)
+    public void OnNewStudynEvent(StudynEvent taskEvent)
+    {
+        switch (taskEvent.EventType)
         {
-            switch (taskEvent.EventType)
+            // On any add, edit, or modify task/appointment, rerun the scheduler
+            case StudynEventType.AddTask:
+            case StudynEventType.EditTask:
+            case StudynEventType.DeleteTask:
+            case StudynEventType.AppointmentAdd:
+            case StudynEventType.AppointmentEdit:
+            case StudynEventType.AppointmentDelete:
             {
-                // On any add, edit, or modify task/appointment, rerun the scheduler
-                case StudynEventType.AddTask:
-                case StudynEventType.EditTask:
-                case StudynEventType.DeleteTask:
-                case StudynEventType.AppointmentAdd:
-                case StudynEventType.AppointmentEdit:
-                case StudynEventType.AppointmentDelete:
-                {
-                    if ((DateTime.Now - lastRun).TotalSeconds > 2) { run(taskEvent.Id); }
-                    break;
-                }
-                case StudynEventType.CompleteTask:
-                {
-                    // Console Logging just so we can see in the output something is happening
-                    Console.WriteLine("Scheduler Has CompleteTask Events!");
-                    GlobalAppointmentData.CalendarManager.TaskCompleted(taskEvent.Id);
-                    break;
-                }
+                if ((DateTime.Now - lastRun).TotalSeconds > 2) { run(taskEvent.Id); }
+                break;
             }
-        }*/
+            case StudynEventType.CompleteTask:
+            {
+                // Console Logging just so we can see in the output something is happening
+                Console.WriteLine("Scheduler Has CompleteTask Events!");
+                GlobalAppointmentData.CalendarManager.TaskCompleted(taskEvent.Id);
+                break;
+            }
+        }
+    }
+
 }
 
 internal class minuteSnapshot
