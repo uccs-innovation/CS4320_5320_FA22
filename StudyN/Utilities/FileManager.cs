@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using StudyN.Models;
 using static StudyN.Utilities.StudynEvent;
+using StudyN.Assets;
 
 namespace StudyN.Utilities
 {
@@ -144,6 +145,25 @@ namespace StudyN.Utilities
                 Console.WriteLine(file);
             }
             return files;
+        }
+
+        // Method that saves tasks data to specific location for testing
+        public async Task SaveTaskTestOnApp()
+        {
+            //Reads the source file
+            using Stream fileStream = await FileSystem.Current.OpenAppPackageFileAsync(TASK_DIR);
+            using StreamReader reader = new StreamReader(fileStream);
+
+            string content = await reader.ReadToEndAsync();
+
+            // Write the file content to the app data directory
+            string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "/StudyN/Assets/TaskTest.txt");
+
+            using FileStream outputStream = System.IO.File.OpenWrite(targetFile);
+            using StreamWriter streamWriter = new StreamWriter(outputStream);
+
+            await streamWriter.WriteAsync(content);
+            //This gets saved from the task file to an app data folder
         }
     }
 }
