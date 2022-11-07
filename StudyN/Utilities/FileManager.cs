@@ -13,6 +13,7 @@ namespace StudyN.Utilities
         static string DIR = FileSystem.AppDataDirectory;
         static string TASK_DIR = DIR + "/tasks/";
         static string COMPLETE_TASK_DIR = DIR + "/completedTask/";
+        static string CATEGORY_DIR = DIR + "/categories/"; 
 
         public FileManager()
         {
@@ -21,7 +22,7 @@ namespace StudyN.Utilities
             // create directories
             System.IO.Directory.CreateDirectory(TASK_DIR);
             System.IO.Directory.CreateDirectory(COMPLETE_TASK_DIR);
-
+            System.IO.Directory.CreateDirectory(CATEGORY_DIR);
         }
 
         public void OnNewStudynEvent(StudynEvent taskEvent)
