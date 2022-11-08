@@ -200,6 +200,21 @@ namespace StudyN.Utilities
             return files; 
         }
 
+        /// <summary>
+        /// Loads the categories from the category directory
+        /// </summary>
+        /// <returns></returns>
+        public static string[] LoadCategoryFileNames()
+        {
+            string[] files = { };
+            // if directory exists get files from it
+            if (Directory.Exists(CATEGORY_DIR))
+            {
+                files = Directory.GetFiles(CATEGORY_DIR);
+            }
+            return files;
+        }
+
         public static string[] LoadFileNames()
         {
             Console.WriteLine("WRITING OUT FILES");
