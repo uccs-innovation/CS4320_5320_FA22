@@ -103,6 +103,8 @@ namespace StudyN.Models
                 cat.PickerXPosition = AppointmentCategoryX[i];
                 cat.PickerYPosition = 0.5f;
                 AppointmentCategories.Add(cat);
+                EventBus.PublishEvent(
+                            new StudynEvent(cat.Id, StudynEvent.StudynEventType.CategoryAdd));
             }
         }
 
