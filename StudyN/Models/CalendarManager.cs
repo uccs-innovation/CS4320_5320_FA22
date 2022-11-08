@@ -431,7 +431,29 @@ namespace StudyN.Models
             // Handle changes to collection
             Appointments.CollectionChanged  += new NotifyCollectionChangedEventHandler(AppointmentCollectionChanged);
 
-            CreateAppointmentCategories();
+            // check if default categories have files before allowing them to be created
+            bool duplicate = false;
+            foreach(string name in AppointmentCategoryTitles)
+            {
+                foreach(AppointmentCategory category in AppointmentCategories)
+                {
+                    if (category.Caption == name)
+                    {
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if (duplicate)
+                {
+                    break;
+                }
+            }
+            // create default categories if duplicate isn't found
+            if (!duplicate)
+            {
+                CreateAppointmentCategories();
+            }
+            
             CreateAppointmentStatuses();
             //CreateAppointments();
         }
