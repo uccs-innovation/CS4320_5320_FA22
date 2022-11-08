@@ -43,6 +43,18 @@ namespace StudyN.Utilities
             {
                 TasksCompleted(taskEvent.Id);
             }
+            else if (taskEvent.EventType == StudynEventType.CategoryAdd)
+            {
+                CategoryAdded(taskEvent.Id);
+            }
+            else if (taskEvent.EventType == StudynEventType.CategoryEdit)
+            {
+                CategoryEdited(taskEvent.Id);
+            }
+            else if (taskEvent.EventType == StudynEventType.CategoryDelete)
+            {
+                CategoryDeleted(taskEvent.Id);
+            }
         }
 
         //This function will take a given task and save it to a new file
