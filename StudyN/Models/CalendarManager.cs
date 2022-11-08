@@ -9,6 +9,7 @@ using DevExpress.Maui.Scheduler.Internal;
 using Microsoft.Maui.Controls;
 using StudyN.Utilities;
 using DevExpress.Data.Mask;
+using Newtonsoft.Json;
 
 namespace StudyN.Models
 {
@@ -399,6 +400,19 @@ namespace StudyN.Models
                 }
             }
             return (int)(numMinCompleted/60);
+        }
+
+        public void LoadFilesIntoAppointCategories()
+        {
+            string jsonFileText;
+            // gets categories
+            string[] categoryFileList = FileManager.LoadCategoryFileNames();
+            foreach (string file in categoryFileList)
+            {
+                jsonFileText = File.ReadAllText(file);
+                AppointmentCategory category = JsonConvert.DeserializeObject<AppointmentCategory>(jsonFileText);
+                AppointmentCategories.Add(category);
+            }
         }
 
         public ObservableCollection<Appointment> Appointments { get; private set; }
