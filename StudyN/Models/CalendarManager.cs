@@ -107,7 +107,7 @@ namespace StudyN.Models
 
         public AppointmentCategory GetAppointmentCategory(Guid id)
         {
-            // turned into foreach loop instead of while(true) loop, didn't want to deal with infinite loops
+            // go through categories
             foreach(AppointmentCategory category in AppointmentCategories)
             {
                 // if the category is found return it
@@ -201,6 +201,9 @@ namespace StudyN.Models
 
             AppointmentCategories.Add(cat);
 
+            EventBus.PublishEvent(
+                        new StudynEvent(cat.Id, StudynEvent.StudynEventType.CategoryAdd));
+
             return cat;
 
         }
@@ -255,6 +258,9 @@ namespace StudyN.Models
 
             cat.PickerYPosition = y;
 
+            EventBus.PublishEvent(
+                        new StudynEvent(id, StudynEvent.StudynEventType.CategoryEdit));
+
             return true;
 
         }
@@ -281,6 +287,8 @@ namespace StudyN.Models
                     }
                     // Remove category
                     AppointmentCategories.Remove(category);
+                    EventBus.PublishEvent(
+                                new StudynEvent(id, StudynEvent.StudynEventType.CategoryDelete));
                     return;
                 }
             }
