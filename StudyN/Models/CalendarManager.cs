@@ -107,18 +107,17 @@ namespace StudyN.Models
 
         public AppointmentCategory GetAppointmentCategory(Guid id)
         {
-            int index = 0;
-            AppointmentCategory category;
-            while (true)
+            // turned into foreach loop instead of while(true) loop, didn't want to deal with infinite loops
+            foreach(AppointmentCategory category in AppointmentCategories)
             {
-                if (AppointmentCategories[index].Id == id)
+                // if the category is found return it
+                if(category.Id == id)
                 {
-                    category = AppointmentCategories[index];
-                    break;
+                    return category;
                 }
-                index++;
             }
-            return category;
+            // else return null
+            return null;
         }
 
         void CreateAppointmentStatuses()

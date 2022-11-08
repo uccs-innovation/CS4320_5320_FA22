@@ -103,7 +103,13 @@ namespace StudyN.Utilities
             }
         }
 
-
+        public static void TaskEdited(Guid taskId)
+        {
+            TasksDeleted(taskId);
+            TasksAdded(taskId);
+            //Unneeded. Mainly just writes out files in directory for testing purposes. 
+            //LoadFileNames();
+        }
 
         public static string[] LoadTaskFileNames()
         {
@@ -123,16 +129,6 @@ namespace StudyN.Utilities
                 files = Directory.GetFiles(COMPLETE_TASK_DIR);
             }
             return files; 
-        }
-
-
-
-        public static void TaskEdited(Guid taskId)
-        {
-            TasksDeleted(taskId);
-            TasksAdded(taskId);
-            //Unneeded. Mainly just writes out files in directory for testing purposes. 
-            //LoadFileNames();
         }
 
         public static string[] LoadFileNames()
