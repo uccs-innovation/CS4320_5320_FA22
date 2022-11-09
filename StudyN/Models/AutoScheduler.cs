@@ -7,9 +7,11 @@ using System.Linq;
 using Android.Accessibilityservice.AccessibilityService;
 using DevExpress.CodeParser;
 using DevExpress.Utils;
+using DevExpress.Xamarin.Android.Dropdown.Utils;
 using DevExpress.XtraRichEdit.Model.History;
 using StudyN.Models;
 using StudyN.Utilities;
+using Xamarin.Google.Crypto.Tink.Prf;
 using static StudyN.Utilities.StudynEvent;
 
 //Because of the minuteMap, this iteration of the autoScheduler doesn't seem to have a need for blocks
@@ -21,6 +23,7 @@ public class AutoScheduler : StudynSubscriber
     private minuteSnapshot[] minuteMap;
     public bool taskPastDue;
     public List<TaskItem> pastDueTasks;
+    private int blockSize; //How long each work block is (in minutes)
 
     public AutoScheduler()
     {
@@ -30,6 +33,7 @@ public class AutoScheduler : StudynSubscriber
         pastDueTasks = new List<TaskItem>();
         minuteMap = new minuteSnapshot[40320]; //40320 minutes in 4 weeks. AutoScheduler will only scheduler out 4 weeks.
         for(int i = 0; i < minuteMap.Length; i++) { minuteMap[i] = new minuteSnapshot(); }
+        blockSize = 60; //1 hour task blocks
         baseTime = DateTime.Now;
     }
    
@@ -57,19 +61,61 @@ public class AutoScheduler : StudynSubscriber
         }
     }
 
+
+    private void MapTaskBlocks(IOrderedEnumerable<TaskItem> sortedTasks)
+    {
+        Console.WriteLine("autoScheduler.MapTaskBlocks()");
+        foreach (TaskItem task in sortedTasks)
+        {
+            if (task.DueTime < baseTime.AddMinutes(40320) && task.DueTime > baseTime) //Task is due within the 4 weeks the scheduler will schedule
+            {
+                int offset = (int)(task.DueTime - baseTime).TotalMinutes;
+                int minutesMapped = 0;
+                task.TotalTimeNeeded = task.TotalTimeNeeded * 60; //Convert into minutes
+                while(minutesMapped < task.TotalTimeNeeded)
+                {
+                    bool availableBlockSpace = true; //Check if there is a block worth of time available.
+                    if (offset - blockSize < 0) { availableBlockSpace = false;
+                        task.TotalTimeNeeded = task.TotalTimeNeeded - minutesMapped; break; //There is this much time left over after mapping all possible blocks. IE if blocks are 1 hour, and the task is 2.5 hours, there will be .5 hours left over
+                    }
+
+                    else
+                    {
+                       for (int i = offset; i > offset - blockSize; i--) //If this loop completes execution then it means there is a block space available at this location
+                       {
+                           if (minuteMap[i].id != null) { availableBlockSpace = false; break; }
+                       }
+
+                        if(availableBlockSpace) //If available space, map the task into the space
+                        {
+                            for(int i = offset; i > offset - blockSize; i--)
+                            {
+                                minuteMap[i].id = task.TaskId;
+                                minuteMap[i].from = "autoScheduler";
+                                minuteMap[i].name = task.Name;
+                            }
+                            minutesMapped += blockSize;
+                        }
+                    }
+                    offset = offset - blockSize;
+                }
+            }
+        }
+    }
+
+
     //Map each task minute by minute back from its duedate. If something is already scheduled for that minute, look back to the minute before it.
     //It will map higher important tasks first. Therefore lower importance tasks will be scheduled around the higher importance ones.
-    private void MapTasks()
+    private void MapRemainingTaskMinutes(IOrderedEnumerable<TaskItem> sortedTasks)
     {
-        Console.WriteLine("autoScheduler.MapTasks()");
-        IOrderedEnumerable<TaskItem> sortedTasks = sortByWeight();
+        Console.WriteLine("autoScheduler.MapRemainingTaskMinutes()");
         foreach (TaskItem task in sortedTasks) //Schedule the higher weight (IE high importance) tasks first, so if something is unscheduleable it will be a lower weight task
         {
             if(task.DueTime < baseTime.AddMinutes(40320) && task.DueTime > baseTime) //Task is due within the 4 weeks the scheduler will schedule
             {
                 int offset = (int)(task.DueTime - baseTime).TotalMinutes;
                 int minutesMapped = 0;
-                while(minutesMapped < task.TotalTimeNeeded * 60)
+                while(minutesMapped < task.TotalTimeNeeded)
                 {
                     if(offset < 0) //meaning task cannot be completed unless its scheduled before baseTime (aka in the past)
                     {
@@ -78,6 +124,7 @@ public class AutoScheduler : StudynSubscriber
                         taskPastDue = true;
                         break;
                     }
+
                     if(minuteMap[offset].id == null) //If nothing has been mapped to this spot yet, put it here
                     {
                         minuteMap[offset].id = task.TaskId;
@@ -94,6 +141,14 @@ public class AutoScheduler : StudynSubscriber
                 }
             }
         }
+    }
+
+    private void MapTasks()
+    {
+        Console.WriteLine("autoScheduler.MapTasks()");
+        IOrderedEnumerable<TaskItem> sortedTasks = sortByWeight();
+        MapTaskBlocks(sortedTasks);
+        MapRemainingTaskMinutes(sortedTasks);
     }
 
     //All contiguous minute mappings should be transformed into a continous appointment. IE indexes in the minute mapping that are next to each other and have the same Guid should be combined together.
