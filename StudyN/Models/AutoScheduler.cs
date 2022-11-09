@@ -39,6 +39,15 @@ public class AutoScheduler : StudynSubscriber
         Console.WriteLine("autoScheduler.MapAppointments()");
         foreach(Appointment appt in appts)
         {
+            if (appt.From == "autoScheduler") //If the appointment is from the autoScheduler, delete it from the calendar so we can reschedule it without duplicating it
+            {
+                Console.WriteLine("rescheduling appointment from autoScheduler");
+                //GlobalAppointmentData.CalendarManager.DeleteAppointment(minuteMap[i].id); //To be able to delete an appointment, the calnedarManager needs a function to do so
+            } 
+        }
+
+        foreach (Appointment appt in appts)
+        {
             DateTime start, end;
             start = appt.Start; end = appt.End;
             if(end < baseTime.AddMinutes(40320)) //If the appointment falls wholly within the 4 week autoscheduling time frame
@@ -49,9 +58,9 @@ public class AutoScheduler : StudynSubscriber
                 int span = (int)(appt.End - appt.Start).TotalMinutes; 
                 for(int i = offset; i < offset + span; i++)
                 {
-                    minuteMap[i].id = appt.UniqueId;
+                    minuteMap[i].id = appt.UniqueId; 
                     minuteMap[i].from = "appts";
-                    minuteMap[i].name = appt.Subject;
+                    minuteMap[i].name = appt.Subject; 
                 }
             }
         }
@@ -207,6 +216,7 @@ public class AutoScheduler : StudynSubscriber
         pastDueTasks = new List<TaskItem>();
         minuteMap = new minuteSnapshot[40320];
         for (int i = 0; i < minuteMap.Length; i++) { minuteMap[i] = new minuteSnapshot(); }
+        baseTime = DateTime.Now;
     }
 
     public void OnNewStudynEvent(StudynEvent taskEvent)
