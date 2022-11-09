@@ -17,6 +17,7 @@ namespace StudyN.Views
 
             GlobalAppointmentData.CalendarManager = new CalendarManager();
             GlobalAutoScheduler.AutoScheduler = new AutoScheduler();
+            GlobalAppointmentData.CalendarManager.LoadFilesIntoLists();
         }
     }
 }

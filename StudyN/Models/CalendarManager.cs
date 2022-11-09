@@ -8,6 +8,9 @@ using DevExpress.Maui.Scheduler;
 using DevExpress.Maui.Scheduler.Internal;
 using Microsoft.Maui.Controls;
 using StudyN.Utilities;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace StudyN.Models
 {
@@ -360,6 +363,43 @@ namespace StudyN.Models
             CreateAppointmentCategories();
             CreateAppointmentStatuses();
             //CreateAppointments();
+        }
+
+        public void LoadFilesIntoLists()
+        {
+            string jsonfiletext;
+
+            // gets completed tasks
+            string[] apptfilelist = FileManager.LoadApptFileNames();
+            foreach (string file in apptfilelist)
+            {
+                jsonfiletext = File.ReadAllText(file);
+                //Console.WriteLine(jsonfiletext);
+                Appointment appt = JsonConvert.DeserializeObject<Appointment>(jsonfiletext);
+                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                Appointments.Add(appt);
+
+
+            }
+
+
+        }
+
+        public Appointment GetAppointment(Guid taskId)
+        {
+
+            //Checking each item in the current task list
+            foreach (Appointment appt in Appointments)
+            {
+                //If the task is found, return the task
+                if (appt.UniqueId == taskId)
+                {
+                    return appt;
+                }
+            }
+
+            //If not found in either list, return null
+            return null;
         }
     }
 }

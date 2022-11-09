@@ -13,6 +13,7 @@ namespace StudyN.Utilities
         static string DIR = FileSystem.AppDataDirectory;
         static string TASK_DIR = DIR + "/tasks/";
         static string COMPLETE_TASK_DIR = DIR + "/completedTask/";
+        static string APPT_DIR = DIR + "/appointments/";
 
         public FileManager()
         {
@@ -42,6 +43,11 @@ namespace StudyN.Utilities
             {
                 TasksCompleted(taskEvent.Id);
             }
+            else if (taskEvent.EventType == StudynEventType.AppointmentAdd)
+            {
+                ApptAdded(taskEvent.Id);
+                return;
+            }
         }
 
         //This function will take a given task and save it to a new file
@@ -60,6 +66,24 @@ namespace StudyN.Utilities
             //Console.WriteLine("Tasks Added:");
             //Console.WriteLine("    " + taskId.ToString());
 
+        }
+
+        public static void ApptAdded(Guid apptId)
+        {
+
+            // serialaize tasks into task file
+            string fileName = APPT_DIR + apptId + ".json";
+            var indent = new JsonSerializerOptions { WriteIndented = true };
+            Appointment appt = GlobalAppointmentData.CalendarManager.GetAppointment(apptId);
+
+            string jsonString = JsonSerializer.Serialize(appt, indent);
+
+
+            File.WriteAllText(fileName, jsonString);
+            // output, might be taken out later
+            //Console.WriteLine("Tasks Added:");
+            //Console.WriteLine("    " + taskId.ToString());
+            
         }
 
         //This function will take a task and delete the associated file
@@ -124,7 +148,15 @@ namespace StudyN.Utilities
             return files; 
         }
 
-
+        public static string[] LoadApptFileNames()
+        {
+            string[] files = { };
+            if (Directory.Exists(APPT_DIR))
+            {
+                files = Directory.GetFiles(APPT_DIR);
+            }
+            return files;
+        }
 
         public static void TaskEdited(Guid taskId)
         {
