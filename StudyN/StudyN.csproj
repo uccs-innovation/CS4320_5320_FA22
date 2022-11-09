@@ -66,6 +66,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="nor0x.Maui.ColorPicker" Version="1.0.1" />
 		<PackageReference Include="Plugin.FirebasePushNotification" Version="3.4.35" />
+		<PackageReference Include="Plugin.LocalNotification" Version="10.0.2" />
 		<PackageReference Include="SkiaSharp" Version="2.88.3" />
 		<PackageReference Include="SkiaSharp.Views" Version="2.88.3" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.3" />

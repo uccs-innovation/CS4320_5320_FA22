@@ -19,4 +19,5 @@ namespace StudyN.Views
             GlobalAutoScheduler.AutoScheduler = new AutoScheduler();
         }
     }
+
 }

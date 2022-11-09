@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using DevExpress.Maui.DataGrid;
 using StudyN.Models;
 using StudyN.ViewModels;
+using Plugin.LocalNotification;
+using Plugin.LocalNotification.AndroidOption;
 
 namespace StudyN.Views
 {
@@ -32,7 +34,7 @@ namespace StudyN.Views
 
             foreach (ToolbarItem item in ToolbarItems)
             {
-                switch(item.Text)
+                switch (item.Text)
                 {
                     case "Add":
                         addToolbarItem = item;
@@ -62,6 +64,20 @@ namespace StudyN.Views
         protected override void OnAppearing()
         {
             isChildPageOpening = false;
+            var request = new NotificationRequest
+            {
+                NotificationId = 1337,
+                Title = "Task ",
+                Description = "A new task is created",
+                BadgeNumber = 42,
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = DateTime.Now.AddSeconds(5),
+                    NotifyRepeatInterval = TimeSpan.FromDays(1),
+                }
+            };
+            LocalNotificationCenter.Current.Show(request);
+
         }
 
         //This function will by the cancel button to reset the selection menu to its
@@ -75,7 +91,7 @@ namespace StudyN.Views
                 DataGridView gridView = contentPage.Content as DataGridView;
 
                 gridView.BeginUpdate();
-                
+
                 //Clearing the selected tasks and resetting the menu to its default
                 //setting
                 selectedTasks.Clear();
@@ -84,7 +100,7 @@ namespace StudyN.Views
 
                 gridView.EndUpdate();
             }
-            catch(NullReferenceException execption)
+            catch (NullReferenceException execption)
             {
                 Console.WriteLine(execption.Message);
             }
@@ -212,7 +228,7 @@ namespace StudyN.Views
         //task
         private async void CellClicked(object sender, DataGridGestureEventArgs e)
         {
-            
+
             if (e.Item != null && e.FieldName != "DueTime")
             {
                 if (!isLongPressMenuVisible && !isChildPageOpening)
@@ -278,7 +294,7 @@ namespace StudyN.Views
         //This function will be used to change the color of a selected task
         private void HighlightSelectedRows(object sender, CustomCellStyleEventArgs e)
         {
-            if(rowHandleList.Contains(e.RowHandle))
+            if (rowHandleList.Contains(e.RowHandle))
             {
                 e.BackgroundColor = Color.FromArgb("#d9f0fe");
             }
@@ -286,7 +302,7 @@ namespace StudyN.Views
             {
                 e.BackgroundColor = Color.FromArgb("#FFFFFF");
             }
-            
+
         }
 
         // Method to calculate percent completion for all tasks in the Data Grid

@@ -49,6 +49,7 @@
                            HorizontalTextAlignment="Center" 
                            TextColor="Black"
                            VerticalOptions="Center"/>
+                    
                 </StackLayout>
             </Border>
             <Border Stroke="Black"
@@ -161,6 +162,18 @@
             </dxc:PieChartView>
         </Grid>
 
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+            <Button
+                x:Name="CounterBtn"
+                Text="Click me"
+                SemanticProperties.Hint="Counts the number of times you called"
+                Clicked="OnCounterClicked"
+                HorizontalOptions="Center" />
+        </VerticalStackLayout>
+
         <dxg:DataGridView x:Name ="myList" ItemsSource="{Binding CalendarEvents}"
                           IsEnabled="True"
                           IsVisible="True"
@@ -211,5 +224,6 @@
                 <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
             </dxg:DataGridView.ColumnHeaderStyle>
         </dxg:DataGridView>
+       
     </StackLayout>
 </ContentPage>
