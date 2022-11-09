@@ -415,9 +415,10 @@ namespace StudyN.Models
             string[] categoryFileList = FileManager.LoadCategoryFileNames();
             foreach (string file in categoryFileList)
             {
-                jsonFileText = File.ReadAllText(file);
-                AppointmentCategory category = JsonConvert.DeserializeObject<AppointmentCategory>(jsonFileText);
-                AppointmentCategories.Add(category);
+                File.Delete(file);
+                //jsonFileText = File.ReadAllText(file);
+                //AppointmentCategory category = JsonConvert.DeserializeObject<AppointmentCategory>(jsonFileText);
+                //AppointmentCategories.Add(category);
             }
         }
 
