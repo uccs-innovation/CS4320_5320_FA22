@@ -362,8 +362,8 @@ namespace StudyN.Views
             int rowCount = dataGrid.RowCount;
 
             // Variables to store data in
-            float totalHoursWorked = 0;
-            float totalHoursNeeded = 0;
+            double totalHoursWorked = 0;
+            double totalHoursNeeded = 0;
 
             // Runs for each row in dataGrid
             for (int i = 0; i < rowCount; i++)
@@ -378,7 +378,7 @@ namespace StudyN.Views
             if (totalHoursNeeded > 0)
             {
                 // Calculates total percent completion
-                float totalPercentComplete = (totalHoursWorked / totalHoursNeeded) * 100;
+                double totalPercentComplete = (totalHoursWorked / totalHoursNeeded) * 100;
                 e.TotalValue = Math.Round(totalPercentComplete);
 
             }

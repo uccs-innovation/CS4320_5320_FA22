@@ -13,7 +13,7 @@
                         <dxc:PieHint.Style>
                             <dxc:PieHintStyle BackgroundColor="#424651"
                                               MarkerSize="18"
-                                              Padding="15,15,15,10"
+                                              Padding="10,10,10,0"
                                               TextIndent="10">
                                 <dxc:PieHintStyle.TextStyle>
                                     <dxc:TextStyle Color="White" Size="18"/>
@@ -25,11 +25,11 @@
                 <dxc:PieChartView.Series>
                     <dxc:PieSeries>
                         <dxc:PieSeries.Label>
-                            <dxc:PieSeriesLabel TextPattern="{}{VP}%" Position="Inside">
+                            <dxc:PieSeriesLabel TextPattern="{}{VP}%">
                                 <dxc:PieSeriesLabel.Style>
                                     <dxc:PieSeriesLabelStyle>
                                         <dxc:PieSeriesLabelStyle.TextStyle>
-                                            <dxc:TextStyle Color="White" Size="36"/>
+                                            <dxc:TextStyle Color="#424651" Size="18"/>
                                         </dxc:PieSeriesLabelStyle.TextStyle>
                                     </dxc:PieSeriesLabelStyle>
                                  </dxc:PieSeriesLabel.Style>
@@ -47,12 +47,15 @@
                                 HorizontalPosition="Center"
                                 VerticalPosition="Bottom">
                         <dxc:Legend.Style>
-                            <dxc:LegendStyle BorderColor="LightGray" BorderThickness="1"
+                            <dxc:LegendStyle BorderColor="LightGray" 
+                                             BorderThickness="1"
                                              BackgroundColor="#424651"
-                                             MarkerSize="18" TextIndent="6"
-                                             ItemsVerticalIndent="12">
+                                             MarkerSize="18" 
+                                             TextIndent="5"
+                                             ItemsVerticalIndent="10"
+                                             Padding="10,10,10,10">
                                 <dxc:LegendStyle.TextStyle>
-                                    <dxc:TextStyle Color="White" Size="18"/>
+                                    <dxc:TextStyle Color="White" Size="12"/>
                                 </dxc:LegendStyle.TextStyle>
                             </dxc:LegendStyle>
                         </dxc:Legend.Style>

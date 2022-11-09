@@ -16,7 +16,19 @@
 
     <ContentPage.ToolbarItems>
 
-        <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" IconImageSource="whitesave"/>
+        <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" IconImageSource="whitesave"
+                     Priority="3"/>
+        <ToolbarItem Text="Trash"
+                     x:Name="trashButton"
+                     Clicked="HandleDeleteTaskClicked"
+                     Priority="2"
+                     IconImageSource="whitetrashcan" />
+        <ToolbarItem Text="Complete"
+                     x:Name="completeButton"
+                     Clicked="HandleCompleteTaskClicked"
+                     Command="{Binding ButtonVisibility}"
+                     IconImageSource="whitecheckbox" 
+                     Priority="1"/>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
@@ -32,15 +44,16 @@
                 <RowDefinition Height="50" /><!--Task Name Row                    0-->
                 <RowDefinition Height="100" /><!--Description                     1-->
                 <RowDefinition Height="50" /><!--Time and Date Entry              2-->
-                <RowDefinition Height="50" /><!--Time Spent and Completed         3-->
-                <RowDefinition Height="20" /><!--Priority label                   4-->
-                <RowDefinition Height="30" /><!--Priority slider                  5-->
-                <RowDefinition Height="50" /><!--recurrence                       6-->
-                <RowDefinition Height="50" /><!--Delete And Complete              7-->
-                <RowDefinition Height="50" /><!--Timer                            8-->
-                <RowDefinition Height="20" /><!--Time List Log Label              9-->                
-                <RowDefinition Height="14" /><!--Time List Log Header             10-->
-                <RowDefinition Height="70"/><!--Time List Log                     11-->
+                <RowDefinition Height="50" /><!--Hours and Minutes to Spend       3-->
+                <RowDefinition Height="50" /><!--Hours and Minutes Completed      4-->
+                <RowDefinition Height="20" /><!--Priority label                   5-->
+                <RowDefinition Height="30" /><!--Priority slider                  6-->
+                <RowDefinition Height="50" /><!--recurrence                       7-->
+                <RowDefinition Height="50" /><!--Delete And Complete              8-->
+                <RowDefinition Height="50" /><!--Timer                            9-->
+                <RowDefinition Height="20" /><!--Time List Log Label              10-->                
+                <RowDefinition Height="20" /><!--Time List Log Header             11-->
+                <RowDefinition Height="70"/><!--Time List Log                     12-->
             </Grid.RowDefinitions>
 
             <!--Grid column definitions-->
@@ -55,7 +68,8 @@
             <dxe:TextEdit
                 Grid.ColumnSpan="2"
                 LabelText="Name"
-                IsLabelFloating="True"
+                IsLabelFloating="False"
+                PlaceholderText="Unnamed Task"
                 Margin="1"
                 x:Name="name" />
 
@@ -64,7 +78,7 @@
             <dxe:MultilineEdit
                 Grid.ColumnSpan="2"
                 LabelText="Description"
-                IsLabelFloating="True"
+                IsLabelFloating="False"
                 Grid.Row="1"
                 x:Name="description" />
             
@@ -75,32 +89,10 @@
                 Grid.Column="1"
                 Grid.ColumnSpan="1"
                 LabelText="Time Due"
-                IsLabelFloating="True"
+                PlaceholderText="--:--"
+                IsLabelFloating="False"
                 Margin="1"
                 x:Name="time" />
-            <CheckBox x:Name="checkBoxDueDate" 
-                CheckedChanged="OnCheckBoxDueDateChanged"
-                Grid.Row="4"
-                Grid.Column="0"
-                Grid.ColumnSpan="1"
-                Margin="1"/>
-            <Label Text="No Due Date"
-                   Grid.Row="4"
-                Grid.Column="0"
-                Grid.ColumnSpan="1"
-                   Margin="0">
-                
-                <Label.Triggers>
-                    <DataTrigger TargetType="Label"
-         
-                     Binding="{Binding Source={x:Reference checkBoxDueDate}, Path=IsChecked}"
-                     Value="true">
-                        <Setter Property="FontAttributes"
-                    Value="Italic, Bold" />
-
-                    </DataTrigger>
-                </Label.Triggers>
-            </Label>
 
             <!--Date Entry box GridRow 3 Spans 1 Column-->
             <dxe:DateEdit 
@@ -108,57 +100,90 @@
                 Grid.Row="2"
                 Grid.ColumnSpan="1"
                 LabelText="Date Due"
-                IsLabelFloating="True"
+                PlaceholderText="--/--/----"
+                IsLabelFloating="False"
                 Margin="1"
                 x:Name="date" />
 
 
-            <!--Estimated Time to Complete Task-->
+            <!--Estimated Time to Complete Task, row 3-->
             <dxe:NumericEdit 
                 AllowNullValue="True"
                 DisplayFormat="n0"
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
-                LabelText="Estimated Time"
-                IsLabelFloating="True"
+                LabelText="Estimated Hours"
+                IsLabelFloating="False"
+                PlaceholderText="0h"
                 Margin="1"
-                x:Name="tComplete"/>
-
-            <!--Actual Time to Complete Task-->
-            <dxe:NumericEdit 
+                x:Name="hComplete"/>
+            <dxe:NumericEdit
                 AllowNullValue="True"
                 DisplayFormat="n0"
                 Grid.Row="3"
                 Grid.ColumnSpan="1"
                 Grid.Column="1"
-                LabelText="Actual Time"
-                IsLabelFloating="True"
+                LabelText="Estimated Minutes"
+                IsLabelFloating="False"
+                PlaceholderText="0m"
                 Margin="1"
-                x:Name="tSpent"/>
+                x:Name="mComplete"/>
+
+            <!--Actual Time to Complete Task, row 4-->
+            <dxe:NumericEdit 
+                AllowNullValue="True"
+                DisplayFormat="n0"
+                Grid.Row="4"
+                Grid.ColumnSpan="1"
+                LabelText="Actual Hours"
+                IsLabelFloating="False"
+                PlaceholderText="0h"
+                Margin="1"
+                x:Name="hSpent"/>
+            <dxe:NumericEdit
+                AllowNullValue="True"
+                DisplayFormat="n0"
+                Grid.Row="4"
+                Grid.ColumnSpan="1"
+                Grid.Column="1"
+                LabelText="Actual Minutes"
+                PlaceholderText="0m"
+                IsLabelFloating="False"
+                Margin="1"
+                x:Name="mSpent"/>
 
             <!--Priority Slider and Label-->
-            <Label x:Name="displayLabel"
-               Text="Priority: 3"
+
+            
+            <StackLayout
+                Grid.Row="5"
+                Grid.ColumnSpan="5"
+                Padding="0, -10">
+                <Label x:Name="rotatingLabel"
+               Text="Priority"
+               FontSize="18"
                HorizontalOptions="Center"
-               VerticalOptions="Center" 
-               Grid.Row="4"
-               Grid.ColumnSpan="2"
-               FontSize="16" />
-            <Slider 
+               VerticalOptions="Center" />
+                <Slider 
                 Maximum="5"
                 Minimum="1"
                 Value="3"
                 ValueChanged="HandleSliderValueChanged" 
-                Grid.Row="5"
-                Grid.ColumnSpan="2"
                 x:Name="priority" />
+                <Label x:Name="displayLabel"
+               Text="{Binding Source={x:Reference priority},
+                              Path=Value,
+                              StringFormat='{0:F0}'}"
+               HorizontalOptions="Center"
+               VerticalOptions="Center" />
+            </StackLayout>
 
 
-            <!--Buttons for Recurrance tasks-->
+            <!--Buttons for Recurrance tasks, row 7-->
             <StackLayout Orientation="Horizontal"
                          HorizontalOptions="Start"
                          Spacing="1"
-                         Grid.Row="6"
+                         Grid.Row="7"
                          Grid.ColumnSpan="2">
                 <Label x:Name="RecurrenceLabel"
                    Text="Recurrence:"
@@ -181,26 +206,6 @@
                     HorizontalOptions="End"
                     IsChecked="False"/>
             </StackLayout>
-            
-
-            <!--Buttons for completing/deleting tasks-->
-            <Button 
-                x:Name="DeleteTaskButton"
-                Text="Delete Task"
-                Grid.Row="7"
-                CornerRadius="7"
-                Margin="1"
-                Clicked="HandleDeleteTaskClicked" />
-
-            <Button
-                x:Name="CompleteTaskButton"
-                Text="Mark Complete"
-                Grid.Row="7"
-                Grid.Column="1"
-                CornerRadius="7"
-                Margin="1"
-                Clicked="HandleCompleteTaskClicked"
-                Command="{Binding ButtonVisibility}"/>
 
             <Button
                 x:Name="TimerButton"
@@ -212,8 +217,8 @@
                 Clicked="HandleTimerOnOff"
                 Command="{Binding ButtonVisibility}"/>
 
-            <!--Label Header Title for Task Time Log, row 9-->
-            <Label
+            <!--Label Header Title for Task Time Log, row 10-->
+            <Label 
                 x:Name="LogTitle"
                 Text="Task Time Log"
                 HorizontalOptions="Start"
@@ -223,8 +228,8 @@
                 FontAttributes="Bold"    
                 FontSize="16" />
 
-            <!--Labels for column headers for Task Time Log, row 10-->
-            <Label
+            <!--Labels for column headers for Task Time Log, row 11-->
+            <Label 
                 x:Name="LogStart"
                 Text="  Start Time" 
                 Grid.Row="10"
@@ -252,7 +257,7 @@
                 FontAttributes="Bold"    
                 FontSize="10" />
 
-            <!--Task Time Log Collection View, row 11-->
+            <!--Task Time Log Collection View, row 12-->
             <CollectionView ItemsSource="{Binding TimeList}"
                             x:Name="TimeListLog"
                             ItemsLayout="VerticalList"                            
