@@ -133,7 +133,13 @@ namespace StudyN.Utilities
             string fileName = CATEGORY_DIR + catId + ".json";
             var indent = new JsonSerializerOptions { WriteIndented = true };
             AppointmentCategory category = GlobalAppointmentData.CalendarManager.GetAppointmentCategory(catId);
-            string jsonString = JsonSerializer.Serialize(category, indent);
+            SerializedAppointmentCategory serializer = new SerializedAppointmentCategory();
+            serializer.Id = catId;
+            serializer.Caption = category.Caption;
+            serializer.Color = category.Color.ToHex();
+            serializer.PickerXPosition = category.PickerXPosition;
+            serializer.PickerYPosition = category.PickerYPosition;
+            string jsonString = JsonSerializer.Serialize(serializer, indent);
             File.WriteAllText(fileName, jsonString);
         }
 
