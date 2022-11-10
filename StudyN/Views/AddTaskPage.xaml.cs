@@ -47,7 +47,7 @@ public partial class AddTaskPage : ContentPage
             completeButton.IsEnabled = false;
             trashButton.IsEnabled = false;
             editingExistingTask = false;
-            SetValues();            
+            SetValues();
         }
 
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
@@ -64,7 +64,7 @@ public partial class AddTaskPage : ContentPage
         //checks text of timer button. If it's not being tracked we want to see 
         //track task. Otherwise we want to see stop tracking
         SetTimerButton();
-    }   
+    }
 
     void SetTimerButton()
     {
@@ -101,7 +101,7 @@ public partial class AddTaskPage : ContentPage
         if (GlobalTaskTimeData.TaskTimeManager.TaskIsBeingTimed)
         {
             //if the task is being time and the current task id matches the task being timed
-            if(currenttaskid == GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed)
+            if (currenttaskid == GlobalTaskTimeData.TaskTimeManager.TheTaskidBeingTimed)
             {
                 TimerButton.Text = "Track Task";
                 GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
@@ -262,8 +262,7 @@ public partial class AddTaskPage : ContentPage
         {
             HandleRecurrenceMonth(sender, e, task);
         }
-
-
+        //FileManager.SaveTaskTestOnApp(task.TaskId);
         //Returning to the previous page
         await Shell.Current.GoToAsync("..");
 
