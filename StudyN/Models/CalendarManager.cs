@@ -61,35 +61,6 @@ namespace StudyN.Models
 
         static Random rnd = new Random();
 
-        /*
-        void CreateAppointments()
-        {
-            int appointmentId = 1;
-            int appointmentListIndex = 0;
-            DateTime start;
-            TimeSpan duration;
-            for (int i = -20; i < 20; i++)
-            {
-                for (int j = 0; j < 15; j++)
-                {
-                    int room = rnd.Next(1, 100);
-                    start = BaseDate.AddDays(i).AddHours(rnd.Next(8, 17)).AddMinutes(rnd.Next(0, 40));
-                    duration = TimeSpan.FromMinutes(rnd.Next(20, 30));
-                    CreateAppointment(appointmentId,
-                                        AppointmentTitles[appointmentListIndex],
-                                        start,
-                                        duration,
-                                        room);
-                    appointmentId++;
-                    appointmentListIndex++;
-                    if (appointmentListIndex >= AppointmentTitles.Length - 1)
-                    {
-                        appointmentListIndex = 1;
-                    }
-                }
-            }
-        }
-        */
 
         public void CreateAppointmentCategories()
         {
@@ -141,7 +112,8 @@ namespace StudyN.Models
                                             DateTime start,
                                             TimeSpan duration,
                                             int room,
-                                            Guid guid = new Guid())
+                                            Guid guid = new Guid(),
+                                            String from = "")
         {
             Appointment appt = new()
             {
@@ -153,14 +125,19 @@ namespace StudyN.Models
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
                 Description = string.Empty,
-                UniqueId = guid
+                UniqueId = guid,
+                From = from
             };
 
             Appointments.Add(appt);
 
             // Publish appointment add event
-            EventBus.PublishEvent(
-                        new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
+
+            if (appt.From != "autoScheduler")
+            {
+                EventBus.PublishEvent(
+                            new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
+            }
 
             return appt;
         }
@@ -342,10 +319,14 @@ namespace StudyN.Models
 
                     foreach(Appointment appt in apptList)
                     {
+                        Console.WriteLine("Attempting to publishing appt from " + appt.From);
                         // Publish add appointment
-                        EventBus.PublishEvent(
-                                    new StudynEvent(appt.UniqueId,
-                                    StudynEvent.StudynEventType.AppointmentAdd));
+                        if (appt.From != "autoScheduler")
+                        {
+                            EventBus.PublishEvent(
+                                new StudynEvent(appt.UniqueId,
+                                StudynEvent.StudynEventType.AppointmentAdd));
+                        }
                     }
                 }
                 catch (NullReferenceException execption)

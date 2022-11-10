@@ -37,6 +37,8 @@ namespace StudyN.Models
 
         public bool IsRecur { get; set; } = false;
 
+        public double? weight { get; set; } = null;
+
 
         //Method for each task %
         public double? Percent
