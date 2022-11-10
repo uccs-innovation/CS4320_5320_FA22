@@ -23,10 +23,10 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\appicon.jpg" Color="#FFFFFF"/>
+		<MauiIcon Include="Resources\appicon.jpg" Color="#FFFFFF" />
 		
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splashscreen.jpg"  Color="#FFFFFF"/>
+		<MauiSplashScreen Include="Resources\Splash\splashscreen.jpg" Color="#FFFFFF" />
 		
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -110,9 +110,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\CategoriesPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\NewPage1.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\TaskChartsPage.xaml">
