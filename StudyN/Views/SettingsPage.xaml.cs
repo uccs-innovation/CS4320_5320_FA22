@@ -12,24 +12,9 @@ namespace StudyN.Views
             BindingContext = new SettingsViewModel();
         }
 
-        private void Button_ClickedDark(object sender, EventArgs e)
+        private async void Button_ClickedThemes(object sender, EventArgs e)
         {
-            ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
-            if (mergedDictionaries != null)
-            {
-                mergedDictionaries.Clear();
-                mergedDictionaries.Add(new Dictionary2());
-            }
-        }
-
-        private void Button_ClickedLight(object sender, EventArgs e)
-        {
-            ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
-            if (mergedDictionaries != null)
-            {
-                mergedDictionaries.Clear();
-                mergedDictionaries.Add(new Dictionary1());
-            }
+            await Shell.Current.GoToAsync(nameof(ThemePage));
         }
 
         private async void Button_ClickedIcs(object sender, EventArgs e)

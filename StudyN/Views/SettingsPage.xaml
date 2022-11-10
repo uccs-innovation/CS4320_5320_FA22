@@ -33,15 +33,11 @@
                         HeightRequest="2"
                         HorizontalOptions="Fill" />
 
-                    <!-- Buttons in settings page to change the colors, of just the buttons for now-->
+                    <!-- Goes to Theme Page-->
                     <Button
-                        Text="Light mode"
+                        Text="Themes"
                         Style="{StaticResource PrimaryButton}"
-                        Clicked="Button_ClickedLight"/>
-                    <Button
-                        Text="Dark Mode"
-                        Style="{StaticResource PrimaryButton}"
-                        Clicked="Button_ClickedDark"/>
+                        Clicked="Button_ClickedThemes"/>
                 </StackLayout>
             </Frame>
 
