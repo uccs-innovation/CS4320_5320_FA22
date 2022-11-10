@@ -42,7 +42,7 @@
             <!--Grid rows definitions-->
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" /><!--Task Name Row                    0-->
-                <RowDefinition Height="100" /><!--Description                     1-->
+                <RowDefinition Height="50" /><!--Description                     1-->
                 <RowDefinition Height="50" /><!--Time and Date Entry              2-->
                 <RowDefinition Height="50" /><!--Hours and Minutes to Spend       3-->
                 <RowDefinition Height="50" /><!--Hours and Minutes Completed      4-->
@@ -153,8 +153,6 @@
                 x:Name="mSpent"/>
 
             <!--Priority Slider and Label-->
-
-            
             <StackLayout
                 Grid.Row="5"
                 Grid.ColumnSpan="5"

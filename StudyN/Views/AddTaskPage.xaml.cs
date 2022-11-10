@@ -246,8 +246,8 @@ public partial class AddTaskPage : ContentPage
         int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
         int totalHours = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
         int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
-        this.date.Date = this.date.Date == null ? DateTime.MaxValue : this.date.Date;
-        this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
+        this.date.Date = this.date.Date == null ? DateTime.Now.AddYears(1) : this.date.Date;
+        this.time.Time = this.time.Time == null ? DateTime.Now.AddYears(1) : this.time.Time;
         // Turn logged time and total time into time doubles
         double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
         double totalTime = GlobalTaskData.TaskManager.SumTimes(totalHours, totalMinutes);
@@ -379,7 +379,8 @@ public partial class AddTaskPage : ContentPage
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
         for (int i = 1; i <= 365; i++)
         {
-            dateTime = dateTime.AddDays(i); //every day
+            Console.WriteLine(i);
+            dateTime = dateTime.AddDays(1); //every day
             //If we are not editing, use TaskManager's AddTask function to create and save the task
             GlobalTaskData.TaskManager.AddTask(
                 this.name.Text,
@@ -406,7 +407,7 @@ public partial class AddTaskPage : ContentPage
 
         for (int i = 1; i <= 52; i++)
         {
-            dateTime = dateTime.AddDays(i*7); //every week
+            dateTime = dateTime.AddDays(7); //every week
             //If we are not editing, use TaskManager's AddTask function to create and save the task
             GlobalTaskData.TaskManager.AddTask(
                 this.name.Text,
@@ -433,7 +434,7 @@ public partial class AddTaskPage : ContentPage
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
         for (int i = 1; i <= 12; i++)
         {
-            dateTime = dateTime.AddMonths(i); //months
+            dateTime = dateTime.AddMonths(1); //months
             //If we are not editing, use TaskManager's AddTask function to create and save the task
             GlobalTaskData.TaskManager.AddTask(
                 this.name.Text,
