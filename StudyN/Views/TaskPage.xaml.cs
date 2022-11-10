@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using DevExpress.Maui.DataGrid;
 using StudyN.Models;
 using StudyN.ViewModels;
-using Plugin.LocalNotification;
-using Plugin.LocalNotification.AndroidOption;
+
 
 namespace StudyN.Views
 {
@@ -30,7 +29,9 @@ namespace StudyN.Views
             Console.WriteLine("TaskPage initialized");
 
             selectedTasks = new HashSet<TaskItem>();
+
             rowHandleList = new HashSet<int>();
+
 
             foreach (ToolbarItem item in ToolbarItems)
             {
@@ -64,19 +65,7 @@ namespace StudyN.Views
         protected override void OnAppearing()
         {
             isChildPageOpening = false;
-            var request = new NotificationRequest
-            {
-                NotificationId = 1337,
-                Title = "Task ",
-                Description = "A new task is created",
-                BadgeNumber = 42,
-                Schedule = new NotificationRequestSchedule
-                {
-                    NotifyTime = DateTime.Now.AddSeconds(5),
-                    NotifyRepeatInterval = TimeSpan.FromDays(1),
-                }
-            };
-            LocalNotificationCenter.Current.Show(request);
+           
 
         }
 

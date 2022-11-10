@@ -216,6 +216,8 @@
                 Margin="1"
                 Clicked="HandleTimerOnOff"
                 Command="{Binding ButtonVisibility}"/>
+    
+
 
             <!--Label Header Title for Task Time Log, row 10-->
             <Label 
