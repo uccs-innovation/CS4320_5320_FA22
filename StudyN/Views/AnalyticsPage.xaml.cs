@@ -1,6 +1,7 @@
 using DevExpress.Maui.Charts;
 using StudyN.ViewModels;
 using System.ComponentModel;
+using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
 
 namespace StudyN.Views
@@ -12,8 +13,6 @@ namespace StudyN.Views
         public AnalyticsPage()
         {
             InitializeComponent();
-            BindingContext = ViewModel = new AnalyticsViewModel();
-
         }
 
         AnalyticsViewModel ViewModel { get; set; }
