@@ -7,6 +7,7 @@ using DevExpress.CodeParser;
 using DevExpress.Utils;
 using StudyN.Models;
 using StudyN.Utilities;
+using StudyN.Views;
 using static StudyN.Utilities.StudynEvent;
 
 public class AutoScheduler : StudynSubscriber
@@ -203,7 +204,7 @@ public class AutoScheduler : StudynSubscriber
         calPosAssoc[higherWeighted] = calPosAssoc[lowerWeighted].AddHours(-1 - randomness); //Add in randomness incase a task block keeps getting scheduled back and forth between two blocks infinitely
     }
 
-    private void pushRight()
+    async private void pushRight()
     {
         DateTime now = DateTime.Now;
         DateTime farthestLeft = now;
@@ -227,6 +228,24 @@ public class AutoScheduler : StudynSubscriber
             if(calPosAssoc[i].AddHours(1) > TaskBlockList[i].DueTime)
             {
                 Console.WriteLine("ISSUE SCHEDULING TASK BLOCK");
+
+                //pop up to warn user that "the following task cannot be completed on time" for the given task
+                await App.Current.MainPage.DisplayAlert("Warning", "The following task cannot be completed on time: "
+                    + TaskBlockList[i].Name, "OK");
+
+                //pop up to ask if user would like to edit task that cannot be implemented 
+                bool answer = await App.Current.MainPage.DisplayAlert("Warning", "The following task cannot be completed on time: "
+                    + TaskBlockList[i].Name + "\n\nWould you like to edit task?", "Yes", "No");
+                if (answer)
+                {
+                    // TaskItem we need to edit...
+                    TaskItem task = TaskBlockList[i];
+                    GlobalTaskData.ToEdit = task;
+                    // Get it in here
+                    await Shell.Current.GoToAsync(nameof(AddTaskPage));
+                    await Shell.Current.GoToAsync(nameof(MainPage));
+                }
+
                 calPosAssoc[i] = DateTime.Now.AddDays(-2); //idk where to schedule tasks that cant be completed ontime, so im just putting them in the past for now
                 taskPastDue = true;
                 pastDueTasks.Add(TaskBlockList[i]);
@@ -257,13 +276,31 @@ public class AutoScheduler : StudynSubscriber
         pushRight();
     }
 
-    private void checkForUnscheduables()
+    async private void checkForUnscheduables()
     {
         for(int i = 0; i < TaskBlockList.Count; i++)
         {
             if (calPosAssoc[i].AddHours(1) > TaskBlockList[i].DueTime)
             {
                 Console.WriteLine("ISSUE SCHEDULING TASK BLOCK");
+
+                //pop up to warn user that "the following task cannot be completed on time" for the given task
+                await App.Current.MainPage.DisplayAlert("Warning", "The following task cannot be completed on time: "
+                    + TaskBlockList[i].Name, "OK");
+
+                //pop up to ask if user would like to edit task that cannot be implemented 
+                bool answer = await App.Current.MainPage.DisplayAlert("Warning", "The following task cannot be completed on time: "
+                    + TaskBlockList[i].Name + "\n\nWould you like to edit task?", "Yes", "No");
+                if (answer)
+                {
+                    // TaskItem we need to edit...
+                    TaskItem task = TaskBlockList[i];
+                    GlobalTaskData.ToEdit = task;
+                    // Get it in here
+                    await Shell.Current.GoToAsync(nameof(AddTaskPage));
+                    await Shell.Current.GoToAsync(nameof(MainPage));
+                }
+
                 calPosAssoc[i] = DateTime.Now.AddDays(-2); //idk where to schedule tasks that cant be completed ontime, so im just putting them in the past for now
                 taskPastDue = true;
                 pastDueTasks.Add(TaskBlockList[i]);
@@ -271,7 +308,7 @@ public class AutoScheduler : StudynSubscriber
         }
     }
 
-    private void handleMaxTasksInADay()
+    async private void handleMaxTasksInADay()
     {
         //Loop through TaskBlockList
         //Check if more than 4 TaskItems have the same GUID in one day
@@ -332,6 +369,9 @@ public class AutoScheduler : StudynSubscriber
                 if(numPerDate[i] > 4)
                 {
                     Console.WriteLine("WARNING: THERE ARE TOO MANY BLOCKS IN THIS DAY!!!");
+
+                    //pop up to warn user that "the following task cannot be completed on time" for the given task
+                    await App.Current.MainPage.DisplayAlert("Warning", "Too many blocks have been assigned on one day.", "OK");
                 }
             }
         }
@@ -350,22 +390,44 @@ public class AutoScheduler : StudynSubscriber
     public void run(Guid taskId)
     {
         if( (DateTime.Now - lastRun).TotalSeconds < 10) { return; }
+
+        //loading bar start
+        ProgressBar progressBar = new ProgressBar
+        {
+            Progress = 0,
+            ProgressColor = Colors.Gray
+        };
+
         Console.WriteLine("started running auto scheduler");
         refreshArrays();
+
+        //update progress bar
+        progressBar.ProgressTo(0.125, 100, Easing.Linear);
+
         breakTasksIntoBlocks();
+        progressBar.ProgressTo(0.25, 100, Easing.Linear);
         associateWeights();
+        progressBar.ProgressTo(0.375, 100, Easing.Linear);
         associateCalendarPositions();
+        progressBar.ProgressTo(0.50, 100, Easing.Linear);
         driveOverlapCorrection();
+        progressBar.ProgressTo(0.625, 100, Easing.Linear);
         checkForUnscheduables();
+        progressBar.ProgressTo(0.75, 100, Easing.Linear);
         handleMaxTasksInADay();
+        progressBar.ProgressTo(0.875, 100, Easing.Linear);
         addToCalendar();
 
-        for(int i = 0; i < TaskBlockList.Count; i++)
+        for (int i = 0; i < TaskBlockList.Count; i++)
         {
             Console.WriteLine(TaskBlockList[i].Name + ", Weight: " + weightAssoc[i] + ", startTime: " + calPosAssoc[i]);
         }
 
         Console.WriteLine("done running auto scheduler");
+
+        //loading bar end
+        progressBar.ProgressTo(1, 100, Easing.Linear);
+
         lastRun = DateTime.Now;
     }
 
