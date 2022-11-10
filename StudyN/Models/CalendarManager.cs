@@ -415,10 +415,15 @@ namespace StudyN.Models
             string[] categoryFileList = FileManager.LoadCategoryFileNames();
             foreach (string file in categoryFileList)
             {
-                File.Delete(file);
-                //jsonFileText = File.ReadAllText(file);
-                //AppointmentCategory category = JsonConvert.DeserializeObject<AppointmentCategory>(jsonFileText);
-                //AppointmentCategories.Add(category);
+                jsonFileText = File.ReadAllText(file);
+                SerializedAppointmentCategory deserializer = JsonConvert.DeserializeObject<SerializedAppointmentCategory>(jsonFileText);
+                AppointmentCategory category = new AppointmentCategory();
+                category.Id = deserializer.Id;
+                category.Caption = deserializer.Caption;
+                category.Color = Color.FromArgb(deserializer.Color);
+                category.PickerXPosition = deserializer.PickerXPosition;
+                category.PickerYPosition = deserializer.PickerYPosition;
+                AppointmentCategories.Add(category);
             }
         }
 
