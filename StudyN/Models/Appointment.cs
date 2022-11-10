@@ -13,7 +13,7 @@ namespace StudyN.Models
 {
     public class Appointment : AppointmentItem
     {
-        public Guid UniqueId { get; set; }
+        public Guid UniqueId { get; set; } = Guid.NewGuid();
         public string ReminderInfo { get; set; }
         public string Notes { get; set; }
 

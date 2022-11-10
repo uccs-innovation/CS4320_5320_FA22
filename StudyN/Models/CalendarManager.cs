@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
+
 namespace StudyN.Models
 {
     public class CalendarManager
@@ -59,8 +60,8 @@ namespace StudyN.Models
 
         static Random rnd = new Random();
 
-        /*
-        void CreateAppointments()
+        
+       /* void CreateAppointments()
         {
             int appointmentId = 1;
             int appointmentListIndex = 0;
@@ -86,8 +87,8 @@ namespace StudyN.Models
                     }
                 }
             }
-        }
-        */
+        }*/
+        
 
         void CreateAppointmentCategories()
         {
@@ -149,15 +150,46 @@ namespace StudyN.Models
                 LabelId = AppointmentCategories[rnd.Next(0, 5)].Id,
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
+                Description = string.Empty
+            };
+
+
+            Console.WriteLine("THIS IS THE SUBJECT: ");
+            Console.WriteLine(appointmentTitle);
+            Appointments.Add(appt);
+           
+            // Publish appointment add event
+            EventBus.PublishEvent(
+                        new StudynEvent(appt.UniqueId, StudynEvent.StudynEventType.AppointmentAdd));
+
+            return appt;
+        }
+
+        public Appointment CreateAppointment(object appointmentId,
+                                            string appointmentTitle,
+                                            DateTime start,
+                                            DateTime end,
+                                            string loc,
+                                            Guid guid = new Guid()
+                                            )
+        {
+            Appointment appt = new()
+            {
+                Id = appointmentId,
+                Start = start,
+                End = end,
+                Subject = appointmentTitle,
+                LabelId = AppointmentCategories[rnd.Next(0, 5)].Id,
+                StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
+                Location = loc,
                 Description = string.Empty,
-                UniqueId = guid
             };
 
             Appointments.Add(appt);
 
             // Publish appointment add event
             EventBus.PublishEvent(
-                        new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
+                        new StudynEvent(appt.UniqueId, StudynEvent.StudynEventType.AppointmentAdd));
 
             return appt;
         }
@@ -374,12 +406,10 @@ namespace StudyN.Models
             foreach (string file in apptfilelist)
             {
                 jsonfiletext = File.ReadAllText(file);
-                //Console.WriteLine(jsonfiletext);
+                Console.WriteLine(jsonfiletext);
                 Appointment appt = JsonConvert.DeserializeObject<Appointment>(jsonfiletext);
                 //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
-                Appointments.Add(appt);
-
-
+                CreateAppointment(appt.Id, appt.Subject, appt.Start, appt.End, appt.Location);
             }
 
 

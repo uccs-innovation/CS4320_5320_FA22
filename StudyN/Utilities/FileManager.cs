@@ -22,7 +22,7 @@ namespace StudyN.Utilities
             // create directories
             System.IO.Directory.CreateDirectory(TASK_DIR);
             System.IO.Directory.CreateDirectory(COMPLETE_TASK_DIR);
-
+            System.IO.Directory.CreateDirectory(APPT_DIR);
         }
 
         public void OnNewStudynEvent(StudynEvent taskEvent)
@@ -72,13 +72,13 @@ namespace StudyN.Utilities
         {
 
             // serialaize tasks into task file
-            string fileName = APPT_DIR + apptId + ".json";
+            string fileName = APPT_DIR + GlobalAppointmentData.CalendarManager.GetAppointment(apptId).Subject + ".json";
             var indent = new JsonSerializerOptions { WriteIndented = true };
             Appointment appt = GlobalAppointmentData.CalendarManager.GetAppointment(apptId);
 
             string jsonString = JsonSerializer.Serialize(appt, indent);
 
-
+            Console.WriteLine(fileName);
             File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
             //Console.WriteLine("Tasks Added:");
@@ -153,7 +153,18 @@ namespace StudyN.Utilities
             string[] files = { };
             if (Directory.Exists(APPT_DIR))
             {
+                Console.WriteLine("file:");
+                Console.WriteLine("file:");
+                Console.WriteLine("file:");
+                Console.WriteLine("file:");
+                Console.WriteLine("file:");
                 files = Directory.GetFiles(APPT_DIR);
+            }
+
+            foreach(string file in files)
+            {
+                Console.WriteLine("file:");
+                Console.WriteLine(file);
             }
             return files;
         }

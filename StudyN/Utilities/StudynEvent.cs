@@ -18,7 +18,8 @@ namespace StudyN.Utilities
             // Appointment Event
             AppointmentAdd,
             AppointmentEdit,
-            AppointmentDelete
+            AppointmentDelete,
+            AppointmentSave
         }
 
         public StudynEvent(Guid id, StudynEventType eventType)
@@ -26,6 +27,8 @@ namespace StudyN.Utilities
             Id = id;
             EventType = eventType;
         }
+
+
         public Guid Id { get; set; }
         public StudynEventType EventType { get; set; }
     }
