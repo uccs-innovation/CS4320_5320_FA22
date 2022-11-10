@@ -10,7 +10,6 @@
                      Clicked="AddButtonClicked"
                      IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
     </ContentPage.ToolbarItems>
-    <!-- DataGrid of Categories -->
     <dxg:DataGridView x:Name="DataGrid"
                       ItemsSource="{Binding AppointmentCategories}"
                       Tap="CellClicked"

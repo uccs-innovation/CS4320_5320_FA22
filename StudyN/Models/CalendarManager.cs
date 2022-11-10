@@ -9,6 +9,7 @@ using DevExpress.Maui.Scheduler.Internal;
 using Microsoft.Maui.Controls;
 using StudyN.Utilities;
 using DevExpress.Data.Mask;
+using Newtonsoft.Json;
 
 namespace StudyN.Models
 {
@@ -36,9 +37,12 @@ namespace StudyN.Models
 
             Caption = "Uncategorized",
 
-            Color = Color.FromArgb("#D9D9D9"),
-            PickerXPosition = 0.5f,
-            PickerYPosition = 1.0f
+            Color = Color.FromArgb("#D9D9D9"),
+
+            PickerXPosition = 0.5f,
+
+            PickerYPosition = 1.0f
+
         };
                                                                                       
         public static string[] AppointmentStatusTitles = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
@@ -58,7 +62,7 @@ namespace StudyN.Models
         static Random rnd = new Random();
 
 
-        void CreateAppointmentCategories()
+        public void CreateAppointmentCategories()
         {
             int count = AppointmentCategoryTitles.Length;
             for (int i = 0; i < count; i++)
@@ -70,23 +74,24 @@ namespace StudyN.Models
                 cat.PickerXPosition = AppointmentCategoryX[i];
                 cat.PickerYPosition = 0.5f;
                 AppointmentCategories.Add(cat);
+                EventBus.PublishEvent(
+                            new StudynEvent(cat.Id, StudynEvent.StudynEventType.CategoryAdd));
             }
         }
 
         public AppointmentCategory GetAppointmentCategory(Guid id)
         {
-            int index = 0;
-            AppointmentCategory category;
-            while (true)
+            // go through categories
+            foreach(AppointmentCategory category in AppointmentCategories)
             {
-                if (AppointmentCategories[index].Id == id)
+                // if the category is found return it
+                if(category.Id == id)
                 {
-                    category = AppointmentCategories[index];
-                    break;
+                    return category;
                 }
-                index++;
             }
-            return category;
+            // else return null
+            return null;
         }
 
         void CreateAppointmentStatuses()
@@ -148,7 +153,8 @@ namespace StudyN.Models
 
                                                    Color categoryColor,
 
-                                                   double x, double y,
+                                                   double x, double y,
+
                                                    Guid id = new Guid())
 
         {
@@ -165,13 +171,18 @@ namespace StudyN.Models
 
                 Color = categoryColor,
 
-                PickerXPosition = x,
-                PickerYPosition = y
+                PickerXPosition = x,
+
+                PickerYPosition = y
+
             };
 
             // Adds category to category list
 
             AppointmentCategories.Add(cat);
+
+            EventBus.PublishEvent(
+                        new StudynEvent(cat.Id, StudynEvent.StudynEventType.CategoryAdd));
 
             return cat;
 
@@ -223,8 +234,13 @@ namespace StudyN.Models
 
             cat.Color = categoryColor;
 
-            cat.PickerXPosition = x;
-            cat.PickerYPosition = y;
+            cat.PickerXPosition = x;
+
+            cat.PickerYPosition = y;
+
+            EventBus.PublishEvent(
+                        new StudynEvent(id, StudynEvent.StudynEventType.CategoryEdit));
+
             return true;
 
         }
@@ -251,6 +267,8 @@ namespace StudyN.Models
                     }
                     // Remove category
                     AppointmentCategories.Remove(category);
+                    EventBus.PublishEvent(
+                                new StudynEvent(id, StudynEvent.StudynEventType.CategoryDelete));
                     return;
                 }
             }
@@ -367,6 +385,25 @@ namespace StudyN.Models
             return (int)(numMinCompleted/60);
         }
 
+        public void LoadFilesIntoAppointCategories()
+        {
+            string jsonFileText;
+            // gets categories
+            string[] categoryFileList = FileManager.LoadCategoryFileNames();
+            foreach (string file in categoryFileList)
+            {
+                jsonFileText = File.ReadAllText(file);
+                SerializedAppointmentCategory deserializer = JsonConvert.DeserializeObject<SerializedAppointmentCategory>(jsonFileText);
+                AppointmentCategory category = new AppointmentCategory();
+                category.Id = deserializer.Id;
+                category.Caption = deserializer.Caption;
+                category.Color = Color.FromArgb(deserializer.Color);
+                category.PickerXPosition = deserializer.PickerXPosition;
+                category.PickerYPosition = deserializer.PickerYPosition;
+                AppointmentCategories.Add(category);
+            }
+        }
+
         public ObservableCollection<Appointment> Appointments { get; private set; }
         public ObservableCollection<AppointmentCategory> AppointmentCategories { get; private set; }
         public ObservableCollection<AppointmentStatus> AppointmentStatuses { get; private set; }
@@ -381,7 +418,12 @@ namespace StudyN.Models
             // Handle changes to collection
             Appointments.CollectionChanged  += new NotifyCollectionChangedEventHandler(AppointmentCollectionChanged);
 
-            CreateAppointmentCategories();
+            // check if pointer file doesn't exist before make default files
+            if (FileManager.LoadCategoryFileNames().Length == 0)
+            {
+                CreateAppointmentCategories();
+            }
+            
             CreateAppointmentStatuses();
             //CreateAppointments();
         }
