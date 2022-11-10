@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Text.Json;
@@ -13,6 +13,7 @@ namespace StudyN.Utilities
         static string DIR = FileSystem.AppDataDirectory;
         static string TASK_DIR = DIR + "/tasks/";
         static string COMPLETE_TASK_DIR = DIR + "/completedTask/";
+        static string TASK_DIR_TEST = DIR + "/testForTasks/"; //For testing purposes
 
         public FileManager()
         {
@@ -21,6 +22,7 @@ namespace StudyN.Utilities
             // create directories
             System.IO.Directory.CreateDirectory(TASK_DIR);
             System.IO.Directory.CreateDirectory(COMPLETE_TASK_DIR);
+            System.IO.Directory.CreateDirectory(TASK_DIR_TEST); //For testing
 
         }
 
@@ -29,6 +31,7 @@ namespace StudyN.Utilities
             if(taskEvent.EventType == StudynEventType.AddTask)
             {
                 TasksAdded(taskEvent.Id);
+                SaveTaskTestOnApp(taskEvent.Id);
             }
             else if (taskEvent.EventType == StudynEventType.EditTask)
             {
@@ -57,8 +60,8 @@ namespace StudyN.Utilities
 
             File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
-            //Console.WriteLine("Tasks Added:");
-            //Console.WriteLine("    " + taskId.ToString());
+            Console.WriteLine("Tasks Added:");
+            Console.WriteLine("    " + taskId.ToString());
 
         }
 
@@ -123,6 +126,17 @@ namespace StudyN.Utilities
             }
             return files; 
         }
+        //For testing
+        public static string[] LoadTaskFileTest()
+        {
+            string[] files = { };
+            if (Directory.Exists(TASK_DIR_TEST))
+            {
+                files = Directory.GetFiles(TASK_DIR_TEST);
+            }
+            return files;
+        }
+
 
 
 
@@ -147,22 +161,15 @@ namespace StudyN.Utilities
         }
 
         // Method that saves tasks data to specific location for testing
-        public async Task SaveTaskTestOnApp()
+        public static void SaveTaskTestOnApp(Guid taskId)
         {
-            //Reads the source file
-            using Stream fileStream = await FileSystem.Current.OpenAppPackageFileAsync(TASK_DIR);
-            using StreamReader reader = new StreamReader(fileStream);
-
-            string content = await reader.ReadToEndAsync();
-
-            // Write the file content to the app data directory
-            string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "/StudyN/Assets/TaskTest.txt");
-
-            using FileStream outputStream = System.IO.File.OpenWrite(targetFile);
-            using StreamWriter streamWriter = new StreamWriter(outputStream);
-
-            await streamWriter.WriteAsync(content);
-            //This gets saved from the task file to an app data folder
+            // serialaize tasks into task file for testing
+            string fileName = TASK_DIR_TEST + taskId + ".json";
+            var indent = new JsonSerializerOptions { WriteIndented = true };
+            TaskItem task = GlobalTaskData.TaskManager.GetTask(taskId);
+            string jsonString = JsonSerializer.Serialize(task, indent);
+            File.WriteAllText(fileName, jsonString);
         }
+
     }
 }
