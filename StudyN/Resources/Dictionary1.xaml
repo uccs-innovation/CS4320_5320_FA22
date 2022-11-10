@@ -2,14 +2,13 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyN.Resources.Dictionary1">
-    <Color x:Key="Primary">#512BD4</Color>
-    <Color x:Key="PrimaryLight">#deedff</Color>
-    <Color x:Key="NormalText">#55575c</Color>
-    <Color x:Key="NormalText2">White</Color>
-    <Color x:Key="NormalHeaderText">#404144</Color>
-    <Color x:Key="NormalLightText">#959aa0</Color>
-    <Color x:Key="DrawerTitleTextColor">White</Color>
-    <Color x:Key="TitleTextColor">White</Color>
-    <Color x:Key="NormalBackgroundColor">White</Color>
-    <Color x:Key="NormalBackgroundColor2">#512BA1</Color>
+    <!--Light Mode-->
+    <Color x:Key="Primary">#512BD4</Color>                  <!--Use for foreground elements like buttons-->
+    <Color x:Key="PrimaryLight">#deedff</Color>             <!--Use for background elements like page background-->
+    <Color x:Key="NormalText">#55575c</Color>               <!--Use for normal text-->
+    <Color x:Key="NormalText2">White</Color>                <!--Use for accents like button text-->
+    <Color x:Key="NormalHeaderText">#404144</Color>         <!--Use for headers like label titles-->
+    <Color x:Key="NormalLightText">#959aa0</Color>          <!--Use for text meant to be overwritten or disabled, like in text fields-->
+    <Color x:Key="DrawerTitleTextColor">White</Color>       <!---->
+    <Color x:Key="TitleTextColor">White</Color>             <!--Use only for Page titles-->
 </ResourceDictionary>
