@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Text.Json;
@@ -13,7 +13,7 @@ namespace StudyN.Utilities
         static string DIR = FileSystem.AppDataDirectory;
         static string TASK_DIR = DIR + "/tasks/";
         static string COMPLETE_TASK_DIR = DIR + "/completedTask/";
-        static string TASK_DIR_TEST = DIR + "/testForTasks/"; //For testing purposes
+        static string CATEGORY_DIR = DIR + "/categories/"; 
 
         public FileManager()
         {
@@ -22,8 +22,7 @@ namespace StudyN.Utilities
             // create directories
             System.IO.Directory.CreateDirectory(TASK_DIR);
             System.IO.Directory.CreateDirectory(COMPLETE_TASK_DIR);
-            System.IO.Directory.CreateDirectory(TASK_DIR_TEST); //For testing
-
+            System.IO.Directory.CreateDirectory(CATEGORY_DIR);
         }
 
         public void OnNewStudynEvent(StudynEvent taskEvent)
@@ -31,7 +30,6 @@ namespace StudyN.Utilities
             if(taskEvent.EventType == StudynEventType.AddTask)
             {
                 TasksAdded(taskEvent.Id);
-                SaveTaskTestOnApp(taskEvent.Id);
             }
             else if (taskEvent.EventType == StudynEventType.EditTask)
             {
@@ -44,6 +42,18 @@ namespace StudyN.Utilities
             else if (taskEvent.EventType == StudynEventType.CompleteTask)
             {
                 TasksCompleted(taskEvent.Id);
+            }
+            else if (taskEvent.EventType == StudynEventType.CategoryAdd)
+            {
+                CategoryAdded(taskEvent.Id);
+            }
+            else if (taskEvent.EventType == StudynEventType.CategoryEdit)
+            {
+                CategoryEdited(taskEvent.Id);
+            }
+            else if (taskEvent.EventType == StudynEventType.CategoryDelete)
+            {
+                CategoryDeleted(taskEvent.Id);
             }
         }
 
@@ -60,8 +70,8 @@ namespace StudyN.Utilities
 
             File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
-            Console.WriteLine("Tasks Added:");
-            Console.WriteLine("    " + taskId.ToString());
+            //Console.WriteLine("Tasks Added:");
+            //Console.WriteLine("    " + taskId.ToString());
 
         }
 
@@ -105,7 +115,76 @@ namespace StudyN.Utilities
             }
         }
 
+        public static void TaskEdited(Guid taskId)
+        {
+            TasksDeleted(taskId);
+            TasksAdded(taskId);
+            //Unneeded. Mainly just writes out files in directory for testing purposes. 
+            //LoadFileNames();
+        }
 
+        /// <summary>
+        /// Adds json file when a category is added
+        /// </summary>
+        /// <param name="catId"></param>
+        public static void CategoryAdded(Guid catId)
+        {
+            // serialize category into category file
+            string fileName = CATEGORY_DIR + catId + ".json";
+            var indent = new JsonSerializerOptions { WriteIndented = true };
+            AppointmentCategory category = GlobalAppointmentData.CalendarManager.GetAppointmentCategory(catId);
+            SerializedAppointmentCategory serializer = new SerializedAppointmentCategory();
+            serializer.Id = catId;
+            serializer.Caption = category.Caption;
+            serializer.Color = category.Color.ToHex();
+            serializer.PickerXPosition = category.PickerXPosition;
+            serializer.PickerYPosition = category.PickerYPosition;
+            string jsonString = JsonSerializer.Serialize(serializer, indent);
+            File.WriteAllText(fileName, jsonString);
+        }
+
+        /// <summary>
+        /// Deletes json file pertaining to a category
+        /// </summary>
+        /// <param name="catId"></param>
+        public static void CategoryDeleted(Guid catId)
+        {
+            // get name of category file
+            string fileName = CATEGORY_DIR + catId + ".json";
+            // makes sure file exists
+            if (File.Exists(fileName))
+            {
+                // Delete the file
+                File.Delete(fileName);
+            }
+            else
+            {
+                // else notify the file doesn't exist
+                Console.WriteLine("Erorr: File does not exist");
+            }
+        }
+
+        /// <summary>
+        /// Edits a category's json file
+        /// </summary>
+        /// <param name="catId"></param>
+        public static void CategoryEdited(Guid catId)
+        {
+            // get name of category file
+            string fileName = CATEGORY_DIR + catId + ".json";
+            // make sure file exists
+            if (File.Exists(fileName))
+            {
+                // serialize new date into category file, might be more wastefule to delete and make new file
+                CategoryAdded(catId);
+            }
+            else
+            {
+                // else notify the file doesn't exist, and add the file
+                Console.WriteLine("Error: File doesn't exist, adding new file");
+                CategoryAdded(catId);
+            }
+        }
 
         public static string[] LoadTaskFileNames()
         {
@@ -126,6 +205,21 @@ namespace StudyN.Utilities
             }
             return files; 
         }
+
+        /// <summary>
+        /// Loads the categories from the category directory
+        /// </summary>
+        /// <returns></returns>
+        public static string[] LoadCategoryFileNames()
+        {
+            string[] files = { };
+            // if directory exists get files from it
+            if (Directory.Exists(CATEGORY_DIR))
+            {
+                files = Directory.GetFiles(CATEGORY_DIR);
+            }
+            return files;
+        }
         //For testing
         public static string[] LoadTaskFileTest(string directoryName)
         {
@@ -135,17 +229,6 @@ namespace StudyN.Utilities
                 files = Directory.GetFiles(DIR + directoryName);
             }
             return files;
-        }
-
-
-
-
-        public static void TaskEdited(Guid taskId)
-        {
-            TasksDeleted(taskId);
-            TasksAdded(taskId);
-            //Unneeded. Mainly just writes out files in directory for testing purposes. 
-            //LoadFileNames();
         }
 
         public static string[] LoadFileNames()

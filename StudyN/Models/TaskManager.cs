@@ -5,6 +5,7 @@ using StudyN.Utilities;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Threading.Tasks;
+using DevExpress.CodeParser;
 
 namespace StudyN.Models
 {
@@ -342,9 +343,36 @@ namespace StudyN.Models
             return (double)hours + decimalMins;
         }
 
+        // Count the number of total tasks due today
+        public int NumTasksDueToday()
+        {
+            int numTasksDue = NumTasksCompletedToday();
+            foreach(TaskItem task in TaskList)
+            {
+                if (task.DueTime.Date == DateTime.Today)
+                {
+                    numTasksDue++;
+                }
+            }
+            return numTasksDue;
+        }
+
+        // Count the number of task completed that were due today
+        public int NumTasksCompletedToday()
+        {
+            int numCompleted = 0;
+            foreach(TaskItem task in CompletedTasks)
+            {
+                if(task.DueTime.Date == DateTime.Today)
+                {
+                    numCompleted++;
+                }
+            }
+            return numCompleted;
+        }
+
         public ObservableCollection<TaskItem> TaskList { get; private set; }
         private ObservableCollection<TaskItem> CompletedTasks { get; set; }
-        public ObservableCollection<TaskItem> TaskListTest { get; private set; }
 
         //This constructor will create the normal TaskList and the list for
         //completed tasks, CompletedTasks
@@ -352,7 +380,6 @@ namespace StudyN.Models
         {
             TaskList = new ObservableCollection<TaskItem>();
             CompletedTasks = new ObservableCollection<TaskItem>();
-            TaskListTest = new ObservableCollection<TaskItem>();
         }
 
     }
