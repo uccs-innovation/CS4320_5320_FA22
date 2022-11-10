@@ -23,12 +23,9 @@ namespace StudyN.Models
                                                         Color.FromArgb("#D80073"),   // dark pink
                                                         Color.FromArgb("#FFCB21"),   // mustard
                                                         Color.FromArgb("#1BA1E2"),   // medium blue                                                        
-
                                                         Color.FromArgb("FF8000"),    // orange
                                                         Color.FromArgb("#FF0000"),   // burgundy                                                         
                                                         Color.FromArgb("#6A00FF") };   // purple
-                                                        
-                                                        
         public static double[] AppointmentCategoryX = { 0.65f, 0.35f, 0.9f, 0.15f, 0.52f, 0.1f, 0.98f, 0.8f};
         // Uncategorized category
 
@@ -49,9 +46,9 @@ namespace StudyN.Models
         };
                                                                                       
         public static string[] AppointmentStatusTitles = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
-        public static Color[] AppointmentStatusColors = { Color.FromArgb("#00FF80"),   // light green
+        public static Color[] AppointmentStatusColors = { Color.FromArgb("00FF80"),   // light green
                                                           Color.FromArgb("#FF3333"),  // red                                                        
-                                                          Color.FromArgb("#FF33FF"),   // magenta
+                                                          Color.FromArgb("FF33FF"),   // magenta
                                                           Color.FromArgb("#FFFF00"),  // yellow
                                                           Color.FromArgb("#00FFFF") };// cyan
                                                                                                                  
@@ -62,7 +59,7 @@ namespace StudyN.Models
                                                 "Homework", "Project", "GYM",
                                                 "Going to get Food"};
 
-        //static Random rnd = new Random();
+        static Random rnd = new Random();
 
 
         public void CreateAppointmentCategories()
@@ -72,15 +69,10 @@ namespace StudyN.Models
             {
                 AppointmentCategory cat = new AppointmentCategory();
                 cat.Id = Guid.NewGuid();
-                cat.builtInId = i;
                 cat.Caption = AppointmentCategoryTitles[i];
-                Console.WriteLine("Created appointment category Num_" + i.ToString() + " = " + cat.Caption);
                 cat.Color = AppointmentCategoryColors[i];
-
                 cat.PickerXPosition = AppointmentCategoryX[i];
                 cat.PickerYPosition = 0.5f;
-                
-                
                 AppointmentCategories.Add(cat);
                 EventBus.PublishEvent(
                             new StudynEvent(cat.Id, StudynEvent.StudynEventType.CategoryAdd));
@@ -110,7 +102,6 @@ namespace StudyN.Models
                 AppointmentStatus stat = new AppointmentStatus();
                 stat.Id = i;
                 stat.Caption = AppointmentStatusTitles[i];
-                Console.WriteLine("Created appointment status Num_" + i.ToString() + " = " + stat.Caption);
                 stat.Color = AppointmentStatusColors[i];
                 AppointmentStatuses.Add(stat);
             }
@@ -121,7 +112,6 @@ namespace StudyN.Models
                                             DateTime start,
                                             TimeSpan duration,
                                             int room,
-
                                             Guid guid = new Guid(),
                                             String from = "")
         {
@@ -131,23 +121,15 @@ namespace StudyN.Models
                 Start = start,
                 End = start.Add(duration),
                 Subject = appointmentTitle,
-                //LabelId = AppointmentCategories[rnd.Next(0, 5)].Id,
-                LabelId = labelID, // auto scheduler set this to 0 for StudyN block
-                //StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
-                StatusId = statusID, // auto scheduler set this to 2 for BLocked
+                LabelId = AppointmentCategories[rnd.Next(0, 5)].Id,
+                StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
                 Description = string.Empty,
                 UniqueId = guid,
                 From = from
             };
 
-            Console.WriteLine("In CreateAppointment");
-            Console.WriteLine("appt.Subject = " + appt.Subject.ToString());
-            Console.WriteLine("appt.Start = " + appt.Start.ToString());
-            Console.WriteLine("appt.LabelId = " + appt.LabelId.ToString());
-            Console.WriteLine("appt.StatusId = " + appt.StatusId.ToString());
             Appointments.Add(appt);
-            Console.WriteLine("Just added appointment.");
 
             // Publish appointment add event
 

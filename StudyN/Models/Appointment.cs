@@ -74,8 +74,7 @@ namespace StudyN.Models
 
     public class AppointmentCategory
     {
-        public Guid Id { get; set; }  // custom id
-        public int builtInId { get; set; } // built in id 
+        public Guid Id { get; set; }
         public string Caption { get; set; }
         public Color Color { get; set; }
         public double PickerXPosition { get; set; }

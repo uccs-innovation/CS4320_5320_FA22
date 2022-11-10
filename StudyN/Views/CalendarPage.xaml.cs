@@ -25,9 +25,6 @@ namespace StudyN.Views
             InitializeComponent();
             ViewModel = new CalendarViewModel();
             BindingContext = _calendarDataView = new CalendarDataView(); //Use to pull data of CalendarData under Models
-            SchedulerStorage.DataSource.AppointmentsSource = _calendarDataView.Appointments; 
-            SchedulerStorage.DataSource.AppointmentLabelsSource = _calendarDataView.AppointmentCategories; 
-            SchedulerStorage.DataSource.AppointmentStatusesSource = _calendarDataView.AppointmentStatuses; 
             dailyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 255);
             EventBus.Subscribe(this);
 
