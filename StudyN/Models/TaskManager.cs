@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 ﻿using Android.Gms.Tasks;
 using Android.Service.Autofill;
 using StudyN.Utilities;

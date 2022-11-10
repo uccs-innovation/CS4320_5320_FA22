@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0-android</TargetFrameworks>
@@ -113,9 +113,6 @@
 	  <MauiXaml Update="Views\CategoriesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\NewPage1.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Views\TaskChartsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -139,6 +136,9 @@
 	    <Generator>TextTemplatingFileGenerator</Generator>
 	  </None>
 	</ItemGroup>
+    	  <MauiImage Include="Resources\Images\export.png" />
+	</ItemGroup>
+
 	<PropertyGroup>
 		<UseInterpreter Condition="$(TargetFramework.Contains('-ios'))">True</UseInterpreter>
 		<UseInterpreter Condition="$(TargetFramework.Contains('-android'))">False</UseInterpreter>
