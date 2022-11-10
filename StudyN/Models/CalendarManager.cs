@@ -1,17 +1,21 @@
 using System;
-using System.Collections.Specialized;
+using System.Collections.Specialized;
+
 using System.Collections.ObjectModel;
-using System.Linq;
+using System.Linq;
+
 using System.Xml;
 using AndroidX.Fragment.App.StrictMode;
 using DevExpress.Maui.Scheduler;
 using DevExpress.Maui.Scheduler.Internal;
 using Microsoft.Maui.Controls;
 using StudyN.Utilities;
-using DevExpress.Data.Mask;
+using DevExpress.Data.Mask;
+
 using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using Newtonsoft.Json;
+
 
 
 namespace StudyN.Models
@@ -22,27 +26,38 @@ namespace StudyN.Models
 
         public static string[] AppointmentCategoryTitles = { "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work"};
         public static Color[] AppointmentCategoryColors = { Color.FromArgb("#3333FF"),   // dark blue
-                                                        Color.FromArgb("#00FF00"),   // green                                                        
+                                                        Color.FromArgb("#00FF00"),   // green                                                        
+
                                                         Color.FromArgb("#D80073"),   // dark pink
                                                         Color.FromArgb("#FFCB21"),   // mustard
                                                         Color.FromArgb("#1BA1E2"),   // medium blue                                                        
                                                         Color.FromArgb("FF8000"),    // orange
-                                                        Color.FromArgb("#FF0000"),   // burgundy                                                         
+                                                        Color.FromArgb("#FF0000"),   // burgundy                                                         
+
                                                         Color.FromArgb("#6A00FF") };   // purple
-        public static double[] AppointmentCategoryX = { 0.65f, 0.35f, 0.9f, 0.15f, 0.52f, 0.1f, 0.98f, 0.8f};
-        // Uncategorized category
+        public static double[] AppointmentCategoryX = { 0.65f, 0.35f, 0.9f, 0.15f, 0.52f, 0.1f, 0.98f, 0.8f};
+
+        // Uncategorized category
+
 
-        public static AppointmentCategory Uncategorized = new()
+        public static AppointmentCategory Uncategorized = new()
+
 
-        {
+        {
+
 
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid(),
+
 
-            Caption = "Uncategorized",
+            Caption = "Uncategorized",
+
 
-            Color = Color.FromArgb("#D9D9D9"),
-            PickerXPosition = 0.5f,
-            PickerYPosition = 1.0f
+            Color = Color.FromArgb("#D9D9D9"),
+
+            PickerXPosition = 0.5f,
+
+            PickerYPosition = 1.0f
+
         };
                                                                                       
         public static string[] AppointmentStatusTitles = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
@@ -142,9 +157,12 @@ namespace StudyN.Models
            
             // Publish appointment add event
 
-            if (appt.From != "autoScheduler")
-            {
-                EventBus.PublishEvent(
+            if (appt.From != "autoScheduler")
+
+            {
+
+                EventBus.PublishEvent(
+
                             new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
             }
 
@@ -243,10 +261,8 @@ namespace StudyN.Models
 
             cat.Color = categoryColor;
 
-            cat.PickerXPosition = x;
-
-            cat.PickerYPosition = y;
-
+            cat.PickerXPosition = x;
+            cat.PickerYPosition = y;
             EventBus.PublishEvent(
                         new StudynEvent(id, StudynEvent.StudynEventType.CategoryEdit));
 
@@ -315,7 +331,8 @@ namespace StudyN.Models
                 {
                     apt.End = DateTime.Now;
                 }
-            }
+            }
+
         }
 
 
@@ -350,7 +367,8 @@ namespace StudyN.Models
                             StudynEvent.StudynEventType.AppointmentDelete));
             }
         }
-
+
+
 
         // Calculate the number of total hours scheduled to work on tasks today
         public int NumHoursScheduledToday()
@@ -393,7 +411,8 @@ namespace StudyN.Models
             }
             return (int)(numMinCompleted / 60);
         }
-        public void LoadFilesIntoAppointCategories()
+
+        public void LoadFilesIntoAppointCategories()
         {
             string jsonFileText;
             // gets categories
@@ -504,4 +523,5 @@ namespace StudyN.Models
             return appt;
         }
     }
-}
+}
+
