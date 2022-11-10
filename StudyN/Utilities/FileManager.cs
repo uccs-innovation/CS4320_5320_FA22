@@ -13,6 +13,7 @@ namespace StudyN.Utilities
         static string DIR = FileSystem.AppDataDirectory;
         static string TASK_DIR = DIR + "/tasks/";
         static string COMPLETE_TASK_DIR = DIR + "/completedTask/";
+        static string TASK_DIR_TEST = DIR + "/testForTasks/";
         static string CATEGORY_DIR = DIR + "/categories/"; 
 
         public FileManager()
@@ -220,6 +221,16 @@ namespace StudyN.Utilities
             }
             return files;
         }
+        //For testing
+        public static string[] LoadTaskFileTest(string directoryName)
+        {
+            string[] files = { };
+            if (Directory.Exists(DIR + directoryName))
+            {
+                files = Directory.GetFiles(DIR + directoryName);
+            }
+            return files;
+        }
 
         public static string[] LoadFileNames()
         {
@@ -232,5 +243,17 @@ namespace StudyN.Utilities
             }
             return files;
         }
+
+        // Method that saves tasks data to specific location for testing
+        public static void SaveTaskTestOnApp(Guid taskId)
+        {
+            // serialaize tasks into task file for testing
+            string fileName = TASK_DIR_TEST + taskId + ".json";
+            var indent = new JsonSerializerOptions { WriteIndented = true };
+            TaskItem task = GlobalTaskData.TaskManager.GetTask(taskId);
+            string jsonString = JsonSerializer.Serialize(task, indent);
+            File.WriteAllText(fileName, jsonString);
+        }
+
     }
 }
