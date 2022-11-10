@@ -10,24 +10,7 @@
                      Clicked="AddButtonClicked"
                      IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
     </ContentPage.ToolbarItems>
-    
-    <!--<VerticalStackLayout> -->
-        <!-- For when the DataGrid is empty-->
-        <!--<Label
-            x:Name="emptyLabel"
-            Text="There are no Categories"
-            HorizontalOptions="Center"
-            FontSize="24"/>
-        <Button
-            x:Name="AddDefaultButton"
-            Text="Add the Default Categories"
-            FontSize="24"
-            CornerRadius="7"
-            Margin="1"
-            Clicked="AddDefaultButtonClicked"
-            Command="{Binding ButtonVisibility}"/> -->
-        <!-- DataGrid of Categories -->
-        <dxg:DataGridView x:Name="DataGrid"
+    <dxg:DataGridView x:Name="DataGrid"
                       ItemsSource="{Binding AppointmentCategories}"
                       Tap="CellClicked"
                       ColumnHeaderHeight="0"
@@ -53,6 +36,4 @@
             <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
         </dxg:DataGridView.ColumnHeaderStyle>
     </dxg:DataGridView>
-    <!--</VerticalStackLayout> -->
-    
 </ContentPage>

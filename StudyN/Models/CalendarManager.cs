@@ -15,8 +15,6 @@ namespace StudyN.Models
 {
     public class CalendarManager
     {
-        // pointer file for creating default files
-        static string INITIAL_FILE = FileSystem.AppDataDirectory + "/InitializationComplete.txt";
         public static DateTime BaseDate = DateTime.Today;
 
         public static string[] AppointmentCategoryTitles = { "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work"};
@@ -108,8 +106,6 @@ namespace StudyN.Models
                 EventBus.PublishEvent(
                             new StudynEvent(cat.Id, StudynEvent.StudynEventType.CategoryAdd));
             }
-            if(!File.Exists(INITIAL_FILE))
-                File.Create(INITIAL_FILE);
         }
 
         public AppointmentCategory GetAppointmentCategory(Guid id)
@@ -442,7 +438,7 @@ namespace StudyN.Models
             Appointments.CollectionChanged  += new NotifyCollectionChangedEventHandler(AppointmentCollectionChanged);
 
             // check if pointer file doesn't exist before make default files
-            if (!File.Exists(INITIAL_FILE))
+            if (FileManager.LoadCategoryFileNames().Length == 0)
             {
                 CreateAppointmentCategories();
             }
