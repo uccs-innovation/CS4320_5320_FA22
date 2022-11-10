@@ -42,12 +42,11 @@
             <!--Grid rows definitions-->
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" /><!--Task Name Row                    0-->
-                <RowDefinition Height="50" /><!--Description                     1-->
+                <RowDefinition Height="50" /><!--Description                      1-->
                 <RowDefinition Height="50" /><!--Time and Date Entry              2-->
                 <RowDefinition Height="50" /><!--Hours and Minutes to Spend       3-->
                 <RowDefinition Height="50" /><!--Hours and Minutes Completed      4-->
-                <RowDefinition Height="20" /><!--Priority label                   5-->
-                <RowDefinition Height="30" /><!--Priority slider                  6-->
+                <RowDefinition Height="50" /><!--Priority slider                  5-->
                 <RowDefinition Height="50" /><!--recurrence                       7-->
                 <RowDefinition Height="50" /><!--Delete And Complete              8-->
                 <RowDefinition Height="50" /><!--Timer                            9-->
@@ -177,11 +176,11 @@
             </StackLayout>
 
 
-            <!--Buttons for Recurrance tasks, row 7-->
+            <!--Buttons for Recurrance tasks, row 6-->
             <StackLayout Orientation="Horizontal"
                          HorizontalOptions="Start"
                          Spacing="1"
-                         Grid.Row="7"
+                         Grid.Row="6"
                          Grid.ColumnSpan="2">
                 <Label x:Name="RecurrenceLabel"
                    Text="Recurrence:"
@@ -204,6 +203,26 @@
                     HorizontalOptions="End"
                     IsChecked="False"/>
             </StackLayout>
+
+            
+            <!--Label and DateTime Box For Reccurence end date-->
+            <Label Text="Recurrence End Date:"
+                   Grid.Row="7"
+                   Grid.ColumnSpan="1"
+                   FontSize="16"
+                   HorizontalOptions="StartAndExpand"
+                   VerticalOptions="Center"></Label>
+
+
+            <dxe:DateEdit 
+                DisplayFormat="d"
+                Grid.Row="7"
+                Grid.Column="2"
+                PlaceholderText="--/--/----"
+                IsLabelFloating="False"
+                Margin="1"
+                x:Name="recurrenceDate" />
+
 
             <Button
                 x:Name="TimerButton"

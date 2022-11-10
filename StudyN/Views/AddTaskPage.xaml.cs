@@ -12,6 +12,7 @@ using StudyN.ViewModels;
 using static Android.Util.EventLogTags;
 using static Android.Provider.Settings;
 using Android.Renderscripts;
+using DevExpress.CodeParser;
 
 public partial class AddTaskPage : ContentPage
 {
@@ -308,19 +309,40 @@ public partial class AddTaskPage : ContentPage
         }
 
 
+
         // Handles recurrence after everything is added into the task
-        if (dailyRadioButton.IsChecked == true)
+        this.recurrenceDate.Date = this.recurrenceDate.Date == null ? DateTime.Now : this.recurrenceDate.Date;
+        //if buttons are checked
+
+        if (dailyRadioButton.IsChecked || weeklyRadioButton.IsChecked || monthlyRadioButton.IsChecked)
         {
-            HandleRecurrenceDay(sender, e, task);
+            DateTime recurrencedateTime = new DateTime(this.recurrenceDate.Date.Value.Year,
+                                           this.recurrenceDate.Date.Value.Month,
+                                           this.recurrenceDate.Date.Value.Day);
+            //and date for end of recurrence is after this current moment (otherwise recurrence doesn't matter
+            if (this.recurrenceDate.Date > DateTime.Now)
+            {
+                Console.WriteLine(this.recurrenceDate);
+                if (dailyRadioButton.IsChecked == true)
+                {
+                    HandleRecurrenceDay(sender, e, task, recurrencedateTime);
+                }
+                else if (weeklyRadioButton.IsChecked == true)
+                {
+                    HandleRecurrenceWeek(sender, e, task, recurrencedateTime);
+                }
+                else if (monthlyRadioButton.IsChecked == true)
+                {
+                    HandleRecurrenceMonth(sender, e, task, recurrencedateTime);
+                }
+            } else { //if recurrence date is null send user alert failure to recurr 
+                await DisplayAlert("Recurrance End Date Not Set! ",
+               "Sorry you must set a recurrence end date in order " +
+               "to schedule recurrence. Please try again.", "OK");
+            }
+
         }
-        else if (weeklyRadioButton.IsChecked == true)
-        {
-            HandleRecurrenceWeek(sender, e, task);
-        }
-        else if (monthlyRadioButton.IsChecked == true)
-        {
-            HandleRecurrenceMonth(sender, e, task);
-        }
+
 
 
         //Returning to the previous page
@@ -348,6 +370,7 @@ public partial class AddTaskPage : ContentPage
     {
         this.date.Date = null;
         this.time.Time = null;
+        this.recurrenceDate.Date = null;
     }
 
     void runAutoScheduler(Guid taskId)
@@ -365,7 +388,7 @@ public partial class AddTaskPage : ContentPage
     }
 
     //These functions will be used to add recurrence of a selected task for day/week/month
-    private void HandleRecurrenceDay(object sender, EventArgs e, TaskItem task)
+    private void HandleRecurrenceDay(object sender, EventArgs e, TaskItem task, DateTime enddate)
     {
         int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
         int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
@@ -377,9 +400,9 @@ public partial class AddTaskPage : ContentPage
         this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-        for (int i = 1; i <= 365; i++)
+
+        while (dateTime <= enddate)
         {
-            Console.WriteLine(i);
             dateTime = dateTime.AddDays(1); //every day
             //If we are not editing, use TaskManager's AddTask function to create and save the task
             GlobalTaskData.TaskManager.AddTask(
@@ -392,7 +415,7 @@ public partial class AddTaskPage : ContentPage
                 task.TaskId.ToString());
         }
     }
-    private void HandleRecurrenceWeek(object sender, EventArgs e, TaskItem task)
+    private void HandleRecurrenceWeek(object sender, EventArgs e, TaskItem task, DateTime enddate)
     {
         int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
         int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
@@ -405,7 +428,7 @@ public partial class AddTaskPage : ContentPage
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
 
-        for (int i = 1; i <= 52; i++)
+        while (dateTime <= enddate)
         {
             dateTime = dateTime.AddDays(7); //every week
             //If we are not editing, use TaskManager's AddTask function to create and save the task
@@ -420,7 +443,7 @@ public partial class AddTaskPage : ContentPage
         }
 
     }
-    private void HandleRecurrenceMonth(object sender, EventArgs e, TaskItem task)
+    private void HandleRecurrenceMonth(object sender, EventArgs e, TaskItem task, DateTime enddate)
     {
         int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
         int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
@@ -432,7 +455,7 @@ public partial class AddTaskPage : ContentPage
         this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
         DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
             this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-        for (int i = 1; i <= 12; i++)
+        while (dateTime <= enddate)
         {
             dateTime = dateTime.AddMonths(1); //months
             //If we are not editing, use TaskManager's AddTask function to create and save the task
