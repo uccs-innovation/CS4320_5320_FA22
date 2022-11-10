@@ -1,4 +1,6 @@
-﻿using StudyN.Models;
+﻿using DevExpress.Maui.Scheduler;
+using StudyN.Common;
+using StudyN.Models;
 using System.Collections.ObjectModel;
 
 namespace StudyN.ViewModels
@@ -9,5 +11,5 @@ namespace StudyN.ViewModels
         {
             Title = "Calendar";
         }
-    }  
-}
+    }
+}  

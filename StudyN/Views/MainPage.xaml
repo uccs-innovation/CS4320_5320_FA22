@@ -6,7 +6,8 @@
          Style="{StaticResource ShellStyle}"
          xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
          ios:Page.UseSafeArea="true"
-        x:Class="StudyN.Views.MainPage">
+         x:Class="StudyN.Views.MainPage">
+    
     <TabBar>
         <Tab Title="About page" Icon="info">
             <ShellContent ContentTemplate="{DataTemplate local:NewPage1}" />

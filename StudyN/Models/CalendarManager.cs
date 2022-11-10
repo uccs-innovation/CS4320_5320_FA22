@@ -159,6 +159,25 @@ namespace StudyN.Models
             return appt;
         }
 
+        //Remove Appointment function to remove appointments from global data when tasks are deleted.
+        //public void RemoveAppointment(string appointmentTitle)
+        //{
+
+            //foreach (Appointment appt in Appointments)
+            //{
+                //If found
+                //if (appt.Description == appointmentTitle)
+                //{
+                //    Appointments.Remove(appt);
+                //    return;
+                //}
+           // }
+
+            // Publish appointment delete event
+            //EventBus.PublishEvent(
+            //          new StudynEvent(StudynEvent.StudynEventType.AppointmentDelete));
+        //}
+
         /// <summary>
         /// Function for creating a new category and adding it to category list
         /// </summary>

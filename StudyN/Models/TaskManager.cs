@@ -167,7 +167,8 @@ namespace StudyN.Models
                 {
                     //Remove the task from list
                     TaskList.Remove(task);
-
+                    //The goal here is to synchronize the datastores such that when a task is deleted, the calender reflects the same change.
+                    //GlobalAppointmentData.CalendarManager.RemoveAppointment(task.Name);
                     // Publish task delete event
                     EventBus.PublishEvent(
                         new StudynEvent(taskId, StudynEvent.StudynEventType.DeleteTask));
