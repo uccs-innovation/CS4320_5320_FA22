@@ -13,6 +13,20 @@ namespace StudyN.Views
 		{
 			InitializeComponent();
 			BindingContext = ViewModel = new CategoriesViewModel();
+			if (ViewModel.AppointmentCategories.Count == 0)
+			{
+				// make empty screen
+				emptyLabel.IsEnabled = true;
+				AddDefaultButton.IsEnabled = true;
+				DataGrid.IsEnabled = false;
+			}
+			else
+			{
+				// show categories
+				emptyLabel.IsEnabled = false;
+				AddDefaultButton.IsEnabled = false;
+				DataGrid.IsEnabled = true;
+			}
 		}
 
         	CategoriesViewModel ViewModel { get; set; }
@@ -21,6 +35,16 @@ namespace StudyN.Views
 		{
 		    isChildPageOpening = false;
 		    BindingContext = ViewModel = new CategoriesViewModel();
+		}
+
+		/// <summary>
+		/// Pressing this button will allow the user to add back default categories
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void AddDefaultButtonClicked(object sender, EventArgs e)
+		{
+			GlobalAppointmentData.CalendarManager.CreateAppointmentCategories();
 		}
 
 		/// <summary>

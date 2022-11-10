@@ -93,7 +93,7 @@ namespace StudyN.Models
         }
         */
 
-        void CreateAppointmentCategories()
+        public void CreateAppointmentCategories()
         {
             int count = AppointmentCategoryTitles.Length;
             for (int i = 0; i < count; i++)
