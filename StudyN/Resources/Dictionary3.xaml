@@ -5,6 +5,7 @@
     <!--High Contrast Mode-->
     <Color x:Key="Primary">#000</Color>                     <!--Use for foreground elements like buttons-->
     <Color x:Key="PrimaryLight">#fff</Color>                <!--Use for background elements like page background-->
+    <Color x:Key="PrimaryLight2">#aaa</Color>               <!--Use for accents to background elements-->
     <Color x:Key="NormalText">#0f0</Color>                  <!--Use for normal text-->
     <Color x:Key="NormalText2">#f00</Color>                 <!--Use for accents like button text-->
     <Color x:Key="NormalHeaderText">#00f</Color>            <!--Use for headers like label titles-->

@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:StudyN.Views"
              Title="Tasks"
              IconImageSource="grid"
-             x:Class="StudyN.Views.TaskPage">
+             x:Class="StudyN.Views.TaskPage"
+             Style="{StaticResource ContentPage}">
 
     <!-- Binding Context -->
     <ContentPage.BindingContext>
@@ -48,28 +49,28 @@
                       CalculateCustomSummary="CalculateTotalPercent">
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
-            <dxg:TextColumn FieldName="Name" Caption="Task" />
-            <dxg:DateColumn FieldName="DueTime" Caption="Due" DisplayFormat="h:mm tt" IsGrouped="True"/>
-            <dxg:TextColumn FieldName="Percent" Caption="Percent" DisplayFormat="P0" />
+            <dxg:TextColumn FieldName="Name" Caption="Task" FontColor="{DynamicResource NormalText}"/>
+            <dxg:DateColumn FieldName="DueTime" Caption="Due" DisplayFormat="h:mm tt" IsGrouped="True" FontColor="{DynamicResource NormalText}"/>
+            <dxg:TextColumn FieldName="Percent" Caption="Percent" DisplayFormat="P0" FontColor="{DynamicResource NormalText}"/>
         </dxg:DataGridView.Columns>
         <!--Customize the appearance of group row.-->
         <dxg:DataGridView.GroupRowStyle>
-            <dxg:GroupRowStyle FontSize="16" />
+            <dxg:GroupRowStyle FontSize="16" FontColor="{DynamicResource NormalHeaderText}" BackgroundColor="{DynamicResource PrimaryLight2}" BorderColor="{DynamicResource Primary}"/>
         </dxg:DataGridView.GroupRowStyle>
         <!--Customize the appearance of grid cells.-->
         <dxg:DataGridView.CellStyle>
-            <dxg:CellStyle Padding="10" FontSize="24"/>
+            <dxg:CellStyle Padding="10" FontSize="24" />
         </dxg:DataGridView.CellStyle>
         <!--Customize the appearance of column headers.-->
         <dxg:DataGridView.ColumnHeaderStyle>
-            <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
+            <dxg:ColumnHeaderStyle FontAttributes="Bold"/>
         </dxg:DataGridView.ColumnHeaderStyle>
         <dxg:DataGridView.TotalSummaries>
             <dxg:GridColumnSummary FieldName="Percent" Type="Custom" 
                                    DisplayFormat="Total Completion: {0}%"/>
         </dxg:DataGridView.TotalSummaries>
         <dxg:DataGridView.TotalSummaryStyle>
-            <dxg:TotalSummaryStyle FontSize="16"/>
+            <dxg:TotalSummaryStyle FontSize="16" FontColor="{DynamicResource NormalHeaderText}" BackgroundColor="{DynamicResource Primary}"/>
         </dxg:DataGridView.TotalSummaryStyle>
     </dxg:DataGridView>
 </ContentPage>

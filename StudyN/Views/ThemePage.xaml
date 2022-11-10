@@ -2,31 +2,23 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyN.Views.ThemePage"
-             Title="ThemePage">
+             Title="ThemePage"
+             Style="{StaticResource ContentPage}">
     <VerticalStackLayout>
-        <Frame 
-                BorderColor="{DynamicResource Primary}"
-                CornerRadius="5"
-                Padding="8"
-                BackgroundColor="{DynamicResource NormalBackgroundColor}">
+        <Frame Style="{StaticResource Frame}">
             <StackLayout Spacing="3">
-                <BoxView 
-                        Color="{DynamicResource Primary}"
-                        HeightRequest="2"
-                        HorizontalOptions="Fill" />
-
-                <!-- Buttons in settings page to change the colors, of just the buttons for now-->
+                <!-- Buttons to change the app colors-->
                 <Button
                         Text="Light mode"
-                        Style="{DynamicResource PrimaryButton}"
+                        Style="{StaticResource PrimaryButton}"
                         Clicked="Button_ClickedLight"/>
                 <Button
                         Text="Dark Mode"
-                        Style="{DynamicResource PrimaryButton}"
+                        Style="{StaticResource PrimaryButton}"
                         Clicked="Button_ClickedDark"/>
                 <Button
                         Text="High Contrast Mode"
-                        Style="{DynamicResource PrimaryButton}"
+                        Style="{StaticResource PrimaryButton}"
                         Clicked="Button_ClickedContrast"/>
             </StackLayout>
         </Frame>

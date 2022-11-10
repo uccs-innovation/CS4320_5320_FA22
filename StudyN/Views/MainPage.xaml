@@ -29,9 +29,6 @@
         <Tab Title="Settings" Icon="info">
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
-        
-        
-        
     </TabBar>
 
 </Shell>

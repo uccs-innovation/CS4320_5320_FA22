@@ -4,7 +4,8 @@
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
              x:Class="StudyN.Views.TaskChartsPage"
              xmlns:local="clr-namespace:StudyN.ViewModels"
-             Title="Task Completion">
+             Title="Task Completion"
+             Style="{StaticResource ContentPage}">
     <ContentPage.BindingContext>
         <local:TaskChartsViewModel/>
     </ContentPage.BindingContext>
@@ -27,5 +28,8 @@
                 </dxc:StackedBarSeries.Data>
             </dxc:StackedBarSeries>
         </dxc:ChartView.Series>
+        <dxc:ChartView.ChartStyle>
+            <dxc:ChartStyle BackgroundColor="{DynamicResource PrimaryLight2}"/>
+        </dxc:ChartView.ChartStyle>
     </dxc:ChartView>
 </ContentPage>

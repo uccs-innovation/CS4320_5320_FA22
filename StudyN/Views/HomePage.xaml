@@ -8,12 +8,13 @@
              xmlns:local="clr-namespace:StudyN.Views"
              Title="My Day"
              IconImageSource="grid"
-             x:Class="StudyN.Views.HomePage">
+             x:Class="StudyN.Views.HomePage"
+             Style="{StaticResource ContentPage}">
     <!--Vertical Layout of Page.-->
-    <StackLayout x:Name="ParentStack" Orientation="Vertical" Spacing="5" Padding="5,5">
+    <StackLayout x:Name="ParentStack" Orientation="Vertical" Spacing="5" Padding="5,5,5,5" HorizontalOptions="Center">
         <!--Vertical Layout of Page.-->
-        <Label Text="Overview" FontSize="Title" TextColor="Black"/>
-        <Grid x:Name="StatGrid" Padding="5,5" RowSpacing="10" ColumnSpacing="10">
+        <Label Text="Overview" FontSize="Title" TextColor="{DynamicResource NormalHeaderText}" HorizontalOptions="Center" FontAttributes="Bold"/>
+        <Grid x:Name="StatGrid" Padding="5,5,5,5" RowSpacing="5" ColumnSpacing="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto" />
@@ -24,12 +25,8 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <!--first row of stats.-->
-            <Border Stroke="Black"
-                    StrokeThickness="2"
-                    Padding="0,0"
-                    StrokeShape="Rectangle"
-                    VerticalOptions="CenterAndExpand"
-                    Grid.Row="0"
+            <Border Style="{StaticResource Border}" 
+                    Grid.Row="0" 
                     Grid.Column="0">
                 <StackLayout x:Name="TaskCompletedStack"
                              Orientation="Vertical"
@@ -38,24 +35,18 @@
                     <Label x:Name="NumTasksCompleted"
                            Text="0" 
                            HorizontalTextAlignment="Center"
-                           TextColor="Black"
+                           TextColor="{DynamicResource NormalText2}"
                            VerticalOptions="Center"
                            FontSize="36"/>
                     <Label Text="Tasks" 
                            HorizontalTextAlignment="Center" 
-                           TextColor="Black"
-                           VerticalOptions="Center"/>
+                           TextColor="{DynamicResource NormalText}"/>
                     <Label Text="Completed" 
                            HorizontalTextAlignment="Center" 
-                           TextColor="Black"
-                           VerticalOptions="Center"/>
+                           TextColor="{DynamicResource NormalText}"/>
                 </StackLayout>
             </Border>
-            <Border Stroke="Black"
-                    StrokeThickness="2"
-                    Padding="0,0"
-                    StrokeShape="Rectangle"
-                    VerticalOptions="CenterAndExpand"
+            <Border Style="{StaticResource Border}"
                     Grid.Row="0"
                     Grid.Column="1">
                 <StackLayout x:Name="TaskRemainingStack"
@@ -65,16 +56,16 @@
                     <Label x:Name="NumTasksRemaining"
                            Text="0" 
                            HorizontalTextAlignment="Center" 
-                           TextColor="Black"
+                           TextColor="{DynamicResource NormalText2}"
                            VerticalOptions="Center"
                            FontSize="36"/>
                     <Label Text="Tasks" 
                            HorizontalTextAlignment="Center" 
-                           TextColor="Black" 
+                           TextColor="{DynamicResource NormalText}" 
                            VerticalOptions="Center"/>
                     <Label Text="Remaining" 
                            HorizontalTextAlignment="Center"
-                           TextColor="Black"
+                           TextColor="{DynamicResource NormalText}"
                            VerticalOptions="Center"/>
                 </StackLayout>
             </Border>
@@ -90,13 +81,12 @@
                         </dxc:DonutSeries.Data>
                     </dxc:DonutSeries>
                 </dxc:PieChartView.Series>
+                <dxc:PieChartView.ChartStyle>
+                    <dxc:PieChartStyle BackgroundColor="{DynamicResource PrimaryLight}"/>
+                </dxc:PieChartView.ChartStyle>
             </dxc:PieChartView>
             <!--second row of stats.-->
-            <Border Stroke="Black"
-                    StrokeThickness="2"
-                    Padding="0,0"
-                    StrokeShape="Rectangle"
-                    VerticalOptions="CenterAndExpand"
+            <Border Style="{StaticResource Border}"
                     Grid.Row="1"
                     Grid.Column="0">
                 <StackLayout x:Name="HoursCompletedStack"
@@ -106,24 +96,20 @@
                     <Label x:Name="NumHoursCompleted"
                            Text="0" 
                            HorizontalTextAlignment="Center"
-                           TextColor="Black"
+                           TextColor="{DynamicResource NormalText2}"
                            VerticalOptions="Center"
                            FontSize="36"/>
                     <Label Text="Hours" 
                            HorizontalTextAlignment="Center" 
-                           TextColor="Black"
+                           TextColor="{DynamicResource NormalText}"
                            VerticalOptions="Center"/>
                     <Label Text="Completed" 
                            HorizontalTextAlignment="Center" 
-                           TextColor="Black"
+                           TextColor="{DynamicResource NormalText}"
                            VerticalOptions="Center"/>
                 </StackLayout>
             </Border>
-            <Border Stroke="Black"
-                    StrokeThickness="2"
-                    Padding="0,0"
-                    StrokeShape="Rectangle"
-                    VerticalOptions="CenterAndExpand"
+            <Border Style="{StaticResource Border}"
                     Grid.Row="1"
                     Grid.Column="1">
                 <StackLayout x:Name="HoursRemainingStack"
@@ -133,16 +119,16 @@
                     <Label x:Name="NumHoursRemaining"
                            Text="0" 
                            HorizontalTextAlignment="Center" 
-                           TextColor="Black"
+                           TextColor="{DynamicResource NormalText2}"
                            VerticalOptions="Center"
                            FontSize="36"/>
                     <Label Text="Hours" 
                            HorizontalTextAlignment="Center" 
-                           TextColor="Black" 
+                           TextColor="{DynamicResource NormalText}" 
                            VerticalOptions="Center"/>
                     <Label Text="Remaining" 
                            HorizontalTextAlignment="Center"
-                           TextColor="Black"
+                           TextColor="{DynamicResource NormalText}"
                            VerticalOptions="Center"/>
                 </StackLayout>
             </Border>
@@ -158,6 +144,9 @@
                         </dxc:DonutSeries.Data>
                     </dxc:DonutSeries>
                 </dxc:PieChartView.Series>
+                <dxc:PieChartView.ChartStyle>
+                    <dxc:PieChartStyle BackgroundColor="{DynamicResource PrimaryLight}"/>
+                </dxc:PieChartView.ChartStyle>
             </dxc:PieChartView>
         </Grid>
 
@@ -174,7 +163,7 @@
                     <dxg:TextColumn.HeaderContentTemplate>
                         <DataTemplate>
                             <StackLayout>
-                                <Label Text="Task" />
+                                <Label Text="Task" TextColor="{DynamicResource NormalText2}"/>
                             </StackLayout>
                         </DataTemplate>
                     </dxg:TextColumn.HeaderContentTemplate>
@@ -183,7 +172,7 @@
                     <dxg:DateColumn.HeaderContentTemplate>
                         <DataTemplate>
                             <StackLayout>
-                                <Label Text="Start Time" />
+                                <Label Text="Start Time" TextColor="{DynamicResource NormalText2}"/>
                             </StackLayout>
                         </DataTemplate>
                     </dxg:DateColumn.HeaderContentTemplate>
@@ -192,7 +181,7 @@
                     <dxg:DateColumn.HeaderContentTemplate>
                         <DataTemplate>
                             <StackLayout>
-                                <Label Text="Due Time" />
+                                <Label Text="Due Time" TextColor="{DynamicResource NormalText2}"/>
                             </StackLayout>
                         </DataTemplate>
                     </dxg:DateColumn.HeaderContentTemplate>
@@ -208,7 +197,7 @@
             </dxg:DataGridView.CellStyle>
             <!--Customize the appearance of column headers.-->
             <dxg:DataGridView.ColumnHeaderStyle>
-                <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
+                <dxg:ColumnHeaderStyle BackgroundColor="{DynamicResource PrimaryLight2}" BorderColor="{DynamicResource Primary}" FontAttributes="Bold" />
             </dxg:DataGridView.ColumnHeaderStyle>
         </dxg:DataGridView>
     </StackLayout>

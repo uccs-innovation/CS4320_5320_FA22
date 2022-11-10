@@ -5,6 +5,7 @@
     <!--Light Mode-->
     <Color x:Key="Primary">#512BD4</Color>                  <!--Use for foreground elements like buttons-->
     <Color x:Key="PrimaryLight">#deedff</Color>             <!--Use for background elements like page background-->
+    <Color x:Key="PrimaryLight2">#ccc</Color>               <!--Use for accents to background elements-->
     <Color x:Key="NormalText">#55575c</Color>               <!--Use for normal text-->
     <Color x:Key="NormalText2">White</Color>                <!--Use for accents like button text-->
     <Color x:Key="NormalHeaderText">#404144</Color>         <!--Use for headers like label titles-->

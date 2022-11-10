@@ -5,10 +5,11 @@
     <!--Dark Mode-->
     <Color x:Key="Primary">#000000</Color>                  <!--Use for foreground elements like buttons-->
     <Color x:Key="PrimaryLight">#404144</Color>             <!--Use for background elements like page background-->
+    <Color x:Key="PrimaryLight2">#606266</Color>            <!--Use for accents to background elements-->
     <Color x:Key="NormalText">#959aa0</Color>               <!--Use for normal text-->
     <Color x:Key="NormalText2">White</Color>                <!--Use for accents like button text-->
     <Color x:Key="NormalHeaderText">White</Color>           <!--Use for headers like label titles-->
     <Color x:Key="NormalLightText">#959</Color>             <!--Use for text meant to be overwritten or disabled, like in text fields-->
     <Color x:Key="DrawerTitleTextColor">Black</Color>       <!---->
-    <Color x:Key="TitleTextColor">#959aa0</Color>           <!--Use only for Page titles-->
+    <Color x:Key="TitleTextColor">#babfff</Color>           <!--Use only for Page titles-->
 </ResourceDictionary>
