@@ -127,12 +127,12 @@ namespace StudyN.Utilities
             return files; 
         }
         //For testing
-        public static string[] LoadTaskFileTest()
+        public static string[] LoadTaskFileTest(string directoryName)
         {
             string[] files = { };
-            if (Directory.Exists(TASK_DIR_TEST))
+            if (Directory.Exists(DIR + directoryName))
             {
-                files = Directory.GetFiles(TASK_DIR_TEST);
+                files = Directory.GetFiles(DIR + directoryName);
             }
             return files;
         }
