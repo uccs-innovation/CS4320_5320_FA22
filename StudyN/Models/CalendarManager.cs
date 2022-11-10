@@ -141,6 +141,7 @@ namespace StudyN.Models
                                             int room,
                                             Guid guid = new Guid())
         {
+            guid = Guid.NewGuid();
             Appointment appt = new()
             {
                 Id = appointmentId,
@@ -150,7 +151,8 @@ namespace StudyN.Models
                 LabelId = AppointmentCategories[rnd.Next(0, 5)].Id,
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
-                Description = string.Empty
+                Description = string.Empty,
+                UniqueId = guid
             };
 
 
@@ -173,6 +175,7 @@ namespace StudyN.Models
                                             Guid guid = new Guid()
                                             )
         {
+            guid = Guid.NewGuid();
             Appointment appt = new()
             {
                 Id = appointmentId,
@@ -183,6 +186,7 @@ namespace StudyN.Models
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = loc,
                 Description = string.Empty,
+                UniqueId = guid
             };
 
             Appointments.Add(appt);
