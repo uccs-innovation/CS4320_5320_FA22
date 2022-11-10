@@ -50,12 +50,11 @@ public class AutoScheduler : StudynSubscriber
         {
             DateTime start, end;
             start = appt.Start; end = appt.End;
-            if(end < baseTime.AddMinutes(40320)) //If the appointment falls wholly within the 4 week autoscheduling time frame
+            if(end < baseTime.AddMinutes(40320) && end > baseTime) //If the appointment falls wholly within the 4 week autoscheduling time frame
             {
-                if(start < baseTime && end > baseTime) { start = baseTime; } //If appointment is going on right now, treat it as if it starts right now
-
-                int offset = (int)(appt.Start - baseTime).TotalMinutes;
-                int span = (int)(appt.End - appt.Start).TotalMinutes; 
+                if(start < baseTime) { start = baseTime; } //If appointment is going on right now, treat it as if it starts right now
+                int offset = (int)(start - baseTime).TotalMinutes;
+                int span = (int)(end - start).TotalMinutes; 
                 for(int i = offset; i < offset + span; i++)
                 {
                     minuteMap[i].id = appt.UniqueId; 
