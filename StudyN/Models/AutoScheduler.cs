@@ -133,8 +133,14 @@ public class AutoScheduler : StudynSubscriber
     private void addToCalendar()
     {
         Console.WriteLine("Adding taskBlocks to calendar");
-        for(int i = 0; i < TaskBlockList.Count; i++) { 
-            calendarManager.CreateAppointment(-1, TaskBlockList[i].Name, calPosAssoc[i], calPosAssoc[i].AddHours(1) - calPosAssoc[i], -1, TaskBlockList[i].TaskId); //Assuming task block is 1 hour. IDK what "room" is. The GUID is set to be the overall task's GUID
+
+        int count = TaskBlockList.Count;
+        Console.WriteLine("Number of taskblocks count = " + count.ToString()); // estepanek added for debugging
+        int categoryForStudyNBlocks = 0;
+        int statusForStudyNBlocks_Blocked = 2;
+
+        for (int i = 0; i < TaskBlockList.Count; i++) { 
+            calendarManager.CreateAppointment(-1, TaskBlockList[i].Name, calPosAssoc[i], calPosAssoc[i].AddHours(1) - calPosAssoc[i], -1, categoryForStudyNBlocks, statusForStudyNBlocks_Blocked, TaskBlockList[i].TaskId); //Assuming task block is 1 hour. IDK what "room" is. The GUID is set to be the overall task's GUID
         }
 
         
@@ -150,16 +156,19 @@ public class AutoScheduler : StudynSubscriber
         foreach(var task in Tasklist)
         {
             int length = (int)task.TotalTimeNeeded; //TODO: update to be based on TIME REMAINING, once we figure out whether "completion progress" is how many hours have been logged, or a percent
+            Console.WriteLine("length = " + length.ToString());
 
             //Assuming TotalTimeNeeded is in hours
             int numBlocksForTask = length;
             totalNumBlocks += numBlocksForTask;
+            Console.WriteLine("totalNumBlocks = " + totalNumBlocks.ToString());
 
-            for(int i = 0; i < numBlocksForTask; i++)
+            for (int i = 0; i < numBlocksForTask; i++)
             {
                 TaskItem taskBlock = new TaskItem(task.Name, task.Description, task.DueTime, task.Priority, task.CompletionProgress, 1, ""); //1 = totalTimeNeeded (1 hour per block)
                 taskBlock.TaskId = task.TaskId;
-                
+                Console.WriteLine("taskBlock = " + taskBlock.ToString());
+
                 TaskBlockList.Add(taskBlock);
 
             }
