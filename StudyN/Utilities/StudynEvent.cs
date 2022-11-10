@@ -30,6 +30,8 @@ namespace StudyN.Utilities
             Id = id;
             EventType = eventType;
         }
+
+
         public Guid Id { get; set; }
         public StudynEventType EventType { get; set; }
     }

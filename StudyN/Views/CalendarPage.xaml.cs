@@ -28,6 +28,8 @@ namespace StudyN.Views
             dailyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 255);
             EventBus.Subscribe(this);
 
+            
+
             // Reuse data storage between all the views
             weekView.DataStorage = dayView.DataStorage;
             monthView.DataStorage = dayView.DataStorage;
