@@ -13,6 +13,7 @@ namespace StudyN.Views
 		{
 			InitializeComponent();
 			BindingContext = ViewModel = new CategoriesViewModel();
+			DataGrid.EndUpdate();
 		}
 
         	CategoriesViewModel ViewModel { get; set; }
@@ -21,6 +22,7 @@ namespace StudyN.Views
 		{
 		    isChildPageOpening = false;
 		    BindingContext = ViewModel = new CategoriesViewModel();
+			DataGrid.EndUpdate();
 		}
 
 		/// <summary>
@@ -34,6 +36,7 @@ namespace StudyN.Views
 			{
 				isChildPageOpening = true;
 				GlobalAppointmentData.EditCategory = null;
+				DataGrid.BeginUpdate();
 				Routing.RegisterRoute(nameof(Views.AddCategoryPage), typeof(Views.AddCategoryPage));
 				await Shell.Current.GoToAsync(nameof(AddCategoryPage));
 			}
@@ -48,12 +51,13 @@ namespace StudyN.Views
 		{
 			if(e.Item != null && !isChildPageOpening)
 			{
-                		// Get selected category for editing
-                		isChildPageOpening = true;
-                		AppointmentCategory cat = (AppointmentCategory)e.Item;
+                // Get selected category for editing
+                isChildPageOpening = true;
+                AppointmentCategory cat = (AppointmentCategory)e.Item;
 				GlobalAppointmentData.EditCategory = cat;
-               			Routing.RegisterRoute(nameof(Views.AddCategoryPage), typeof(Views.AddCategoryPage));
-                		await Shell.Current.GoToAsync(nameof(AddCategoryPage));
+				DataGrid.BeginUpdate();
+               	Routing.RegisterRoute(nameof(Views.AddCategoryPage), typeof(Views.AddCategoryPage));
+                await Shell.Current.GoToAsync(nameof(AddCategoryPage));
 			}
 		}
 	}

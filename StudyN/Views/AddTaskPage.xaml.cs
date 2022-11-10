@@ -293,6 +293,7 @@ public partial class AddTaskPage : ContentPage
 
     void runAutoScheduler(Guid taskId)
     {
+        Console.WriteLine("In AddTaskPage.runAutoScheduler");
         GlobalAutoScheduler.AutoScheduler.run(taskId);
         if (GlobalAutoScheduler.AutoScheduler.taskPastDue)
         {

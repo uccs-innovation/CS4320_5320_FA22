@@ -46,6 +46,8 @@ namespace StudyN.Models
 
         public DateTime LastEdited { get; set; }
 
+        public string From { get; set; } //IE From "autoScheduler", from "userInput", from "ICS", etc...
+
         protected void ApptChanged(object sender, PropertyChangedEventArgs e)
         {
             // Publish Appointment Edit
@@ -76,6 +78,19 @@ namespace StudyN.Models
         public int builtInId { get; set; } // built in id 
         public string Caption { get; set; }
         public Color Color { get; set; }
+        public double PickerXPosition { get; set; }
+        public double PickerYPosition { get; set; }
+    }
+
+    /// <summary>
+    /// Used to serialize categories into json files
+    /// Colors can't be serialized
+    /// </summary>
+    public class SerializedAppointmentCategory
+    {
+        public Guid Id { get; set; }
+        public string Caption { get; set; }
+        public string Color { get; set; }
         public double PickerXPosition { get; set; }
         public double PickerYPosition { get; set; }
     }
