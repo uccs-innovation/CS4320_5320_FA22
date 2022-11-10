@@ -11,7 +11,7 @@
                      IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
     </ContentPage.ToolbarItems>
     
-    <VerticalStackLayout>
+    <!--<VerticalStackLayout> -->
         <!-- For when the DataGrid is empty-->
         <!--<Label
             x:Name="emptyLabel"
@@ -53,6 +53,6 @@
             <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
         </dxg:DataGridView.ColumnHeaderStyle>
     </dxg:DataGridView>
-    </VerticalStackLayout>
+    <!--</VerticalStackLayout> -->
     
 </ContentPage>
