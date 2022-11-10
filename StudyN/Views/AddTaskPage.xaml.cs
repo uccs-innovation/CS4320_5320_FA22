@@ -8,10 +8,13 @@ using System.Diagnostics;
 using Microsoft.Maui.Animations;
 using StudyN.Models;
 using StudyN.Utilities;
-using StudyN.ViewModels;
-using static Android.Util.EventLogTags;
+using StudyN.ViewModels;using static Android.Util.EventLogTags;
 using static Android.Provider.Settings;
 using Android.Renderscripts;
+using Plugin.LocalNotification;
+using Plugin.LocalNotification;
+using Plugin.LocalNotification.AndroidOption;
+using DevExpress.XtraSpreadsheet.Commands;
 
 public partial class AddTaskPage : ContentPage
 {
@@ -76,7 +79,26 @@ public partial class AddTaskPage : ContentPage
             //if task isn't being tracked or task is not task being tracked
             if (currenttaskid != taskbeingtimed || !GlobalTaskTimeData.TaskTimeManager.TaskIsBeingTimed)
             {
+                DateTime gettime = DateTime.Now;
                 TimerButton.Text = "Track Task";
+                
+
+                {
+                    var request = new NotificationRequest
+                    {
+                        
+                        NotificationId = 1337,
+                        Title = "Task",
+                        Description = "Hurry up you have time till".ToString(),
+                        BadgeNumber = 42,
+                        Schedule = new NotificationRequestSchedule
+                        {
+                            NotifyTime = DateTime.Now.AddSeconds(5),
+                            NotifyRepeatInterval = TimeSpan.FromDays(1),
+                        }
+                    };
+                    LocalNotificationCenter.Current.Show(request);
+                }
                 //Console.WriteLine("ALERT Setting text to track task");
             }
             //if a task is being tracked and this is the task being tracked

@@ -21,4 +21,5 @@ namespace StudyN.Views
             GlobalAppointmentData.CalendarManager.LoadFilesIntoLists();
         }
     }
+
 }

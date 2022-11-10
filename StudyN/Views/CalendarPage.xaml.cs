@@ -2,6 +2,7 @@
 using DevExpress.Web.ASPxScheduler.Forms;
 using DevExpress.XamarinAndroid.Scheduler;
 using DevExpress.XtraScheduler.Native;
+using Plugin.LocalNotification;
 using StudyN.Common;
 using StudyN.Models; //Calls Calendar Data
 using StudyN.Utilities;
@@ -76,13 +77,9 @@ namespace StudyN.Views
             //SchedulerStorage.AppointmentItems.Refresh(); //https://supportcenter.devexpress.com/ticket/details/q320528/slow-scheduler-refresh //https://supportcenter.devexpress.com/ticket/details/t615692/how-to-programmatically-refresh-scheduler
             InvalidateMeasure();
 
-            isChildPageOpening = false;
-
-            var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
-            CalendarDataView.LoadDataForNotification(notes.ToList());
-            base.OnAppearing();
-        }
-
+                isChildPageOpening = false;
+            }
+        
         private void ShowAppointmentEditPage(AppointmentItem appointment)
         {
             if (!isChildPageOpening)
@@ -112,17 +109,16 @@ namespace StudyN.Views
                     ShowNewAppointmentEditPage(e.IntervalInfo);
                     return;
                 }
-                
+
                 AppointmentItem appointment = e.AppointmentInfo.Appointment;
                 bool answer = await DisplayAlert("Are you sure?", appointment.Subject + " should be edited.", "Yes", "No");
-                
+
                 if (answer == true)
                 {
                     ShowAppointmentEditPage(appointment);
                 }
             }
         }
-
         private async void OnCalendarHold(object sender, SchedulerGestureEventArgs e)
         {
             if (e.AppointmentInfo != null)
