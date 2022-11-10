@@ -202,6 +202,7 @@ namespace StudyN.Views
             fileBody += "VERSION:2.0\n";
             fileBody += "PRODID:StudyN\n";
 
+
             // index of appointments
             int i = 0;
 
@@ -211,11 +212,14 @@ namespace StudyN.Views
                 // Increases index
                 i += 1;
 
+                DateTime startTime = TimeZoneInfo.ConvertTimeToUtc(appointment.Start);
+                DateTime endTime = TimeZoneInfo.ConvertTimeToUtc(appointment.End);
+
                 // Populates event information
                 fileBody += "BEGIN:VEVENT\n";
                 fileBody += "SUMMARY:" + appointment.Subject + "\n";
-                fileBody += "DTSTART:" + String.Format("{0:yyyyMMdd}T{0:HHmmss}Z\n", appointment.Start);
-                fileBody += "DTEND:" + String.Format("{0:yyyyMMdd}T{0:HHmmss}Z\n", appointment.End);
+                fileBody += "DTSTART:" + String.Format("{0:yyyyMMdd}T{0:HHmmss}Z\n", startTime);
+                fileBody += "DTEND:" + String.Format("{0:yyyyMMdd}T{0:HHmmss}Z\n", endTime);
                 fileBody += "UID:StudyN-appointment-" + i + "\n";
                 fileBody += "END:VEVENT\n";
             }
