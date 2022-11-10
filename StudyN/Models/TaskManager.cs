@@ -374,12 +374,15 @@ namespace StudyN.Models
         public ObservableCollection<TaskItem> TaskList { get; private set; }
         private ObservableCollection<TaskItem> CompletedTasks { get; set; }
 
+        public ObservableCollection<TaskItem> TaskListTest { get; private set; }
+
         //This constructor will create the normal TaskList and the list for
         //completed tasks, CompletedTasks
         public TaskDataManager()
         {
             TaskList = new ObservableCollection<TaskItem>();
             CompletedTasks = new ObservableCollection<TaskItem>();
+            TaskListTest = new ObservableCollection<TaskItem>();
         }
 
     }

@@ -13,6 +13,7 @@ namespace StudyN.Utilities
         static string DIR = FileSystem.AppDataDirectory;
         static string TASK_DIR = DIR + "/tasks/";
         static string COMPLETE_TASK_DIR = DIR + "/completedTask/";
+        static string TASK_DIR_TEST = DIR + "/testForTasks/";
         static string CATEGORY_DIR = DIR + "/categories/"; 
 
         public FileManager()
