@@ -192,6 +192,49 @@ namespace StudyN.Views
             }
         }
 
+        void onExportButtonTap(object sender, EventArgs args)
+        {
+            // Gets appointment data
+            var appointments = GlobalAppointmentData.CalendarManager.Appointments;
 
+            // Heading of ICS file
+            String fileBody = "BEGIN:VCALENDAR\n";
+            fileBody += "VERSION:2.0\n";
+            fileBody += "PRODID:StudyN\n";
+
+            // index of appointments
+            int i = 0;
+
+            // Runs for each appointment on the calendar
+            foreach (Appointment appointment in appointments)
+            {
+                // Increases index
+                i += 1;
+
+                // Populates event information
+                fileBody += "BEGIN:VEVENT\n";
+                fileBody += "SUMMARY:" + appointment.Subject + "\n";
+                fileBody += "DTSTART:" + String.Format("{0:yyyyMMdd}T{0:HHmmss}Z\n", appointment.Start);
+                fileBody += "DTEND:" + String.Format("{0:yyyyMMdd}T{0:HHmmss}Z\n", appointment.End);
+                fileBody += "UID:StudyN-appointment-" + i + "\n";
+                fileBody += "END:VEVENT\n";
+            }
+
+            // Last line of ICS file
+            fileBody += "END:VCALENDAR";
+
+            // Writes all information to ICS file
+            createICS(fileBody, "StudyN_ExportedCalendar.ics");
+        }
+
+        async void createICS(string text, string targetFileName)
+        {
+            // Write the file content to the app data directory
+            string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, targetFileName);
+            using FileStream outputStream = System.IO.File.OpenWrite(targetFile);
+            using StreamWriter streamWriter = new StreamWriter(outputStream);
+            await streamWriter.WriteAsync(text);
+            await DisplayAlert("Done!", "Calendar successfully exported.", "Ok");
+        }
     }
 } 
