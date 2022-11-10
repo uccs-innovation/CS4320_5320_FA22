@@ -79,6 +79,19 @@ namespace StudyN.Models
         public double PickerYPosition { get; set; }
     }
 
+    /// <summary>
+    /// Used to serialize categories into json files
+    /// Colors can't be serialized
+    /// </summary>
+    public class SerializedAppointmentCategory
+    {
+        public Guid Id { get; set; }
+        public string Caption { get; set; }
+        public string Color { get; set; }
+        public double PickerXPosition { get; set; }
+        public double PickerYPosition { get; set; }
+    }
+
     public class AppointmentStatus
     {
         public int Id { get; set; }
