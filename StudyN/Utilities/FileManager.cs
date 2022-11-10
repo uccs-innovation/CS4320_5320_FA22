@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Text.Json;
@@ -14,7 +14,6 @@ namespace StudyN.Utilities
         static string TASK_DIR = DIR + "/tasks/";
         static string COMPLETE_TASK_DIR = DIR + "/completedTask/";
         static string CATEGORY_DIR = DIR + "/categories/"; 
-        static string TASK_DIR_TEST = DIR + "/testForTasks/"; //For testing purposes
 
         public FileManager()
         {
@@ -23,7 +22,6 @@ namespace StudyN.Utilities
             // create directories
             System.IO.Directory.CreateDirectory(TASK_DIR);
             System.IO.Directory.CreateDirectory(COMPLETE_TASK_DIR);
-            System.IO.Directory.CreateDirectory(TASK_DIR_TEST); //For testing
             System.IO.Directory.CreateDirectory(CATEGORY_DIR);
         }
 
@@ -32,7 +30,6 @@ namespace StudyN.Utilities
             if(taskEvent.EventType == StudynEventType.AddTask)
             {
                 TasksAdded(taskEvent.Id);
-                SaveTaskTestOnApp(taskEvent.Id);
             }
             else if (taskEvent.EventType == StudynEventType.EditTask)
             {
@@ -73,8 +70,8 @@ namespace StudyN.Utilities
 
             File.WriteAllText(fileName, jsonString);
             // output, might be taken out later
-            Console.WriteLine("Tasks Added:");
-            Console.WriteLine("    " + taskId.ToString());
+            //Console.WriteLine("Tasks Added:");
+            //Console.WriteLine("    " + taskId.ToString());
 
         }
 
@@ -208,17 +205,6 @@ namespace StudyN.Utilities
             }
             return files; 
         }
-        //For testing
-        public static string[] LoadTaskFileTest()
-        {
-            string[] files = { };
-            if (Directory.Exists(TASK_DIR_TEST))
-            {
-                files = Directory.GetFiles(TASK_DIR_TEST);
-            }
-            return files;
-        }
-
 
         /// <summary>
         /// Loads the categories from the category directory
@@ -246,17 +232,5 @@ namespace StudyN.Utilities
             }
             return files;
         }
-
-        // Method that saves tasks data to specific location for testing
-        public static void SaveTaskTestOnApp(Guid taskId)
-        {
-            // serialaize tasks into task file for testing
-            string fileName = TASK_DIR_TEST + taskId + ".json";
-            var indent = new JsonSerializerOptions { WriteIndented = true };
-            TaskItem task = GlobalTaskData.TaskManager.GetTask(taskId);
-            string jsonString = JsonSerializer.Serialize(task, indent);
-            File.WriteAllText(fileName, jsonString);
-        }
-
     }
 }
