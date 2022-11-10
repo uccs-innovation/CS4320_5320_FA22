@@ -252,7 +252,6 @@ namespace StudyN.Utilities
             return files;
         }
 
-        public static void TaskEdited(Guid taskId)
         /// <summary>
         /// Loads the categories from the category directory
         /// </summary>
