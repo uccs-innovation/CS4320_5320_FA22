@@ -228,6 +228,8 @@ public class AutoScheduler : StudynSubscriber
             case StudynEventType.AddTask:
             case StudynEventType.EditTask:
             case StudynEventType.DeleteTask:
+                //run(taskEvent.Id);
+                break;
             case StudynEventType.AppointmentAdd:
             case StudynEventType.AppointmentEdit:
             case StudynEventType.AppointmentDelete:
