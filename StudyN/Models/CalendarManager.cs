@@ -451,8 +451,7 @@ namespace StudyN.Models
             {
                 CreateAppointmentCategories();
             }
-
-            CreateAppointmentCategories();
+
             CreateAppointmentStatuses();
             //CreateAppointments();
         }
