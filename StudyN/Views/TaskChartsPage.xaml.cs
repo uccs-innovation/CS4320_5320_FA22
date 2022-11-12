@@ -19,9 +19,10 @@ namespace StudyN.Views
         public TaskChartsPage()
         {
             BindingContext = ViewModel = new HomeViewModel();
-            //Initializes the Home Page the first time it is opened. Sets AutoFilterValue to Today so that only items that are due at some point today appear.
+            //Initializes the Home Page the first time it is opened.
+            //Sets AutoFilterValue to Today so that only items that are due at some point today appear.
             InitializeComponent();
-            DateFilter.AutoFilterValue = DateTime.Today;
+
 
             TaskDonutChart.ChartStyle = new PieChartStyle()
             {
@@ -72,8 +73,6 @@ namespace StudyN.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            //This refreshes the data from the DataSource for this page.
-            myList.RefreshData();
 
             // Populate the statistics fields
             int numTasksCompleted = GlobalTaskData.TaskManager.NumTasksCompletedToday();
