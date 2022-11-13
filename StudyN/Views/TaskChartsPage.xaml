@@ -7,7 +7,7 @@
              IconImageSource="overview"
              x:Class="StudyN.Views.TaskChartsPage">
     <!--Vertical Layout of Page.-->
-    <StackLayout x:Name="ParentStack" Orientation="Vertical" Spacing="5">
+    <StackLayout x:Name="ParentStack" Orientation="Vertical" Spacing="15">
         <!--Vertical Layout of Page.-->
         <Grid x:Name="StatGrid" RowSpacing="10" ColumnSpacing="10">
             <Grid.ColumnDefinitions>
@@ -24,6 +24,7 @@
                     StrokeThickness="2"
                     StrokeShape="Rectangle"
                     VerticalOptions="CenterAndExpand"
+                    Padding="3"
                     Grid.Row="0"
                     Grid.Column="0">
                 <StackLayout x:Name="TaskCompletedStack"
@@ -126,6 +127,7 @@
             </Border>
         </Grid>
 
+        <!--Donut Chart for Task/Hour percent-->
         <Label x:Name="TaskPercent"
             Text="Task"
             HorizontalOptions="CenterAndExpand"

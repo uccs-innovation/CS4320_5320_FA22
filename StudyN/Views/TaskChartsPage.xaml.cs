@@ -8,6 +8,7 @@ using DevExpress.Maui.DataGrid;
 using DevExpress.Maui.Charts;
 using StudyN.Models;
 
+//This file is part of the task overview under the Task page
 namespace StudyN.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -69,7 +70,7 @@ namespace StudyN.Views
 
         HomeViewModel ViewModel { get; }
 
-        //After intialization, this is executed each time the tabbed is click to reopen the page.
+        //After intialization, this is executed each time the icon is click to reopen the page.
         protected override void OnAppearing()
         {
             base.OnAppearing();
