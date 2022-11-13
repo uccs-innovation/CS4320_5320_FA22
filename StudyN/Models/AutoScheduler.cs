@@ -65,6 +65,92 @@ public class AutoScheduler : StudynSubscriber
         }
     }
 
+    private List<BlockContainer> CreateBlockContainers()
+    {
+        List<BlockContainer> blockContainers = new List<BlockContainer>();   
+        IOrderedEnumerable<TaskItem> sortedTasks = sortByWeight(); //Because we sort the tasks first, the containers should also be sorted
+        foreach(TaskItem task in sortedTasks)
+        {
+            if (task.DueTime < baseTime.AddMinutes(40320) && task.DueTime > baseTime) //Task is due within the 4 weeks the scheduler will schedule
+            { 
+                BlockContainer blockContainer = new BlockContainer();
+                blockContainer.task = task;
+                blockContainer.blockSize = 60; //60 minute block size. Could change this based on task data. IE different task categories could have different block sizes
+                blockContainer.blocks = new Block[(int)(task.TotalTimeNeeded*60 / blockContainer.blockSize)];
+                blockContainer.remainder = (int)(task.TotalTimeNeeded*60) % blockContainer.blockSize;
+                blockContainers.Add(blockContainer);
+            }
+;       }
+
+        return blockContainers;
+    }
+
+    private bool mapConflict(int start, int end) //return true if there would be a conflict if something were to be inserted into the minuteMap between start and end
+    {
+        for(int i = start; i < end; i++)
+        {
+            if(minuteMap[i].id != null) { return true; }
+        }
+        return false;
+    }
+    private void MapBlocks(List<BlockContainer> blockContainers)
+    {
+        foreach(BlockContainer blockContainer in blockContainers)
+        {
+            int offset = (int)(blockContainer.task.DueTime - baseTime).TotalMinutes - blockContainer.blockSize;
+            while (blockContainer.mappedBlocks < blockContainer.blocks.Length && offset >= 0)
+            {
+                if( !mapConflict(offset, offset + blockContainer.blockSize) ) 
+                {
+                    //match every minute in this span to the block container (aka task). Then create the task block
+                    for(int i = offset; i < offset + blockContainer.blockSize; i++) { minuteMap[i].id = blockContainer.task.TaskId; minuteMap[i].from = "autoScheduler"; minuteMap[i].name = blockContainer.task.Name; }
+
+                    blockContainer.blocks[ blockContainer.mappedBlocks ] = new Block(blockContainer.task.TaskId, new Guid(), offset, offset + blockContainer.blockSize);
+                    blockContainer.mappedBlocks++;
+                }
+                offset -= blockContainer.blockSize;
+            }
+
+            if(blockContainer.mappedBlocks < blockContainer.blocks.Length) //not all possible blocks were able to be mapped due to conflicts. So there is more remainder time now
+            {
+                blockContainer.remainder = blockContainer.remainder + (blockContainer.blocks.Length - blockContainer.mappedBlocks) * blockContainer.blockSize;
+            }
+        }
+    }
+
+    private void MapRemainders(List<BlockContainer> blockContainers)
+    {
+        foreach (BlockContainer blockContainer in blockContainers)
+        {
+            int offset = (int)(blockContainer.task.DueTime - baseTime).TotalMinutes;
+            while (blockContainer.remainder > 0 && offset >= 0)
+            {
+                if (minuteMap[offset].id == null) //If nothing has been mapped to this spot yet, put it here
+                {
+                    minuteMap[offset].id = blockContainer.task.TaskId;
+                    minuteMap[offset].from = "autoScheduler";
+                    minuteMap[offset].name = blockContainer.task.Name;
+                    blockContainer.remainder = blockContainer.remainder - 1;
+                }
+                offset--;
+            }
+
+            if(offset < 0) 
+            {
+                Console.WriteLine("UNSCHEDUABLE TASK");
+                pastDueTasks.Add(blockContainer.task);
+                taskPastDue = true;
+            }
+        }
+    }
+
+    private void MapTasks()
+    {
+        List<BlockContainer> containers = CreateBlockContainers();
+        MapBlocks(containers);
+        MapRemainders(containers);
+    }
+    /*
     //Map each task minute by minute back from its duedate. If something is already scheduled for that minute, look back to the minute before it.
     //It will map higher important tasks first. Therefore lower importance tasks will be scheduled around the higher importance ones.
     private void MapTasks()
@@ -103,6 +189,7 @@ public class AutoScheduler : StudynSubscriber
             }
         }
     }
+    */
 
     //All contiguous minute mappings should be transformed into a continous appointment. IE indexes in the minute mapping that are next to each other and have the same Guid should be combined together.
     private List<Appointment> CoalesceMinuteMapping()
@@ -254,4 +341,28 @@ internal class minuteSnapshot
     public string name;
     public string from; //Where it is from. IE cretaed by autoScheduler? From calendar? ics file?
     public minuteSnapshot() { id = null; from = ""; name = ""; }
+}
+
+internal class BlockContainer
+{
+    public TaskItem task;
+    public int mappedBlocks = 0;
+    public int blockSize;
+    public Block[] blocks;
+    public int remainder; //Minutes remaining after blocks are allocated. IE a task that is 1 hour 15 mins will have 15 minutes remaining (assuming 1 hour block size)
+}
+internal class Block
+{
+    public Guid taskID; //equals TaskID
+    public Guid blockID;
+    public int start; //start on minuteMap
+    public int end;   //end on minuteMap
+
+    public Block(Guid tid, Guid bid, int s, int e)
+    {
+        taskID = tid;
+        blockID = bid;
+        start = s;
+        end = e;
+    }
 }
