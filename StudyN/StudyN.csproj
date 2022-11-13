@@ -36,6 +36,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="ViewModels\DisplayViewModel.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="Platforms\Android\google-services.json" />
 	  <None Remove="Platforms\Android\private_key.json" />
 	  <None Remove="private_key.json" />
@@ -110,6 +114,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\CategoriesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\DisplayView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\integrate.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\TaskChartsPage.xaml">

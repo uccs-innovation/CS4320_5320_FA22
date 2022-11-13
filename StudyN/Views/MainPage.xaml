@@ -29,9 +29,15 @@
         <Tab Title="Settings" Icon="info">
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
-        
-        
-        
+        <Tab Title="Integrate" Icon="charts">
+            <ShellContent ContentTemplate="{DataTemplate local:integrate}" />
+        </Tab>
+        <Tab Title="View Integrated tasks" Icon="grid">
+            <ShellContent ContentTemplate="{DataTemplate local:DisplayView}"/>
+        </Tab>
+
+
+
     </TabBar>
 
 </Shell>

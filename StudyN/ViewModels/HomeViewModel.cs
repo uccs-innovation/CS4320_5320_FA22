@@ -53,6 +53,15 @@ namespace StudyN.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
+        async public void OnAppearing()
+        {
+            //IEnumerable<Item> items = await DataStore.GetItemsAsync(true);
+            //Items.Clear();
+            //foreach (Item item in items)
+            //{
+            //    Items.Add(item);
+            //}
+        }
 
     }
 }

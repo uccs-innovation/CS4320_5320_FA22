@@ -24,7 +24,7 @@ namespace StudyN.Views
 
         public TaskPage()
         {
-            InitializeComponent();
+            
 
             Console.WriteLine("TaskPage initialized");
 
