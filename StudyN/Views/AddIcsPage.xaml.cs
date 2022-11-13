@@ -88,8 +88,9 @@ public partial class AddIcsPage : ContentPage
         private DateTime end = new DateTime();
         private DateTime zdate = new DateTime();
         private TimeSpan duration = new TimeSpan();
-        private int category = 2; // default to Appointment
-        private int status = 1; // default to Busy
+        private int labelid = 2; // default to "Appointment" category
+        private int statusid = 1; // default to "Busy" status
+        private Guid guid = new Guid(); // create a Guid for the CreateAppointment method
         //private TimeSpan duration;
 
 
@@ -240,7 +241,7 @@ public partial class AddIcsPage : ContentPage
                     int room = rnd.Next(1000, 2000);
                     CalendarManager calendarManager = new CalendarManager();
                     
-                    calendarManager.CreateAppointment(id, name, start, duration, category, status, room); 
+                    calendarManager.CreateAppointment(id, name, start, duration, room, labelid, statusid, guid); 
                     start = new DateTime();
                     end = new DateTime();
                     duration = new TimeSpan();

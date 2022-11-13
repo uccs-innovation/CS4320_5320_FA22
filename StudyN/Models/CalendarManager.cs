@@ -54,18 +54,23 @@ namespace StudyN.Models
                                                 "Homework", "Project", "GYM",
                                                 "Going to get Food"};
 
-        //static Random rnd = new Random();
+        static Random rnd = new Random();
 
-        /*
-        void CreateAppointments()
+        
+        void CreateAppointments() // estepanek: revisid old hard-coded data for testing CreateAppointment method
         {
             int appointmentId = 1;
             int appointmentListIndex = 0;
             DateTime start;
             TimeSpan duration;
-            for (int i = -20; i < 20; i++)
+            Guid guid = new Guid();
+            int dayrange = 2;  // make the hard-coded data smaller
+            int apptcount = 3; // make the hard-coded data smaller
+            //for (int i = -20; i < 20; i++)
+            for (int i = -dayrange; i < dayrange; i++)
             {
-                for (int j = 0; j < 15; j++)
+                //for (int j = 0; j < 15; j++)
+                for (int j = 0; j < apptcount; j++)
                 {
                     int room = rnd.Next(1, 100);
                     start = BaseDate.AddDays(i).AddHours(rnd.Next(8, 17)).AddMinutes(rnd.Next(0, 40));
@@ -74,7 +79,11 @@ namespace StudyN.Models
                                         AppointmentTitles[appointmentListIndex],
                                         start,
                                         duration,
-                                        room);
+                                        room,
+                                        0,
+                                        1,
+                                        guid
+                                        );
                     appointmentId++;
                     appointmentListIndex++;
                     if (appointmentListIndex >= AppointmentTitles.Length - 1)
@@ -84,7 +93,7 @@ namespace StudyN.Models
                 }
             }
         }
-        */
+        
 
         void CreateAppointmentCategories()
         {
@@ -93,7 +102,7 @@ namespace StudyN.Models
             {
                 AppointmentCategory cat = new AppointmentCategory();
                 cat.Id = Guid.NewGuid();
-                cat.builtInId = i;
+                cat.BuiltInId = i;
                 cat.Caption = AppointmentCategoryTitles[i];
                 Console.WriteLine("Created appointment category Num_" + i.ToString() + " = " + cat.Caption);
                 cat.Color = AppointmentCategoryColors[i];
@@ -140,7 +149,10 @@ namespace StudyN.Models
                                             int room,
                                             int labelID,
                                             int statusID,
-                                            Guid guid = new Guid())
+                                            //Guid guid = new Guid()) // estepanek: I don't think we want to create
+                                                                      // a new Guid here, as we are supposed be passing the 
+                                                                      // taskId that already exists, so change it to:
+                                            Guid guid)
         {
             Appointment appt = new()
             {
@@ -148,8 +160,12 @@ namespace StudyN.Models
                 Start = start,
                 End = start.Add(duration),
                 Subject = appointmentTitle,
-                //LabelId = AppointmentCategories[rnd.Next(0, 5)].Id,
-                LabelId = labelID, // auto scheduler set this to 0 for StudyN block
+
+                LabelId = AppointmentCategories[rnd.Next(0, 5)].Id, // estepanek: returning this to hard coded color
+                                                                    //            so that it isn't broken
+                                                                    //            Addressing link of color to appointment
+                                                                    //            in another task
+                //LabelId = labelID, // auto scheduler set this to 0 for StudyN block
                 //StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 StatusId = statusID, // auto scheduler set this to 2 for BLocked
                 Location = string.Format("{0}", room),
@@ -372,7 +388,7 @@ namespace StudyN.Models
 
             CreateAppointmentCategories();
             CreateAppointmentStatuses();
-            //CreateAppointments();
+            CreateAppointments();
         }
     }
 }
