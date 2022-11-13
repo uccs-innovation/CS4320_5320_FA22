@@ -144,52 +144,47 @@ public class AutoScheduler : StudynSubscriber
         }
     }
 
+    private void PullBackBlocks(List<BlockContainer> blockContainers) //Pull blocks apart, so they're not all stacked up against the dueDate. Do this only if possible.
+    {
+        //containers are sorted by weight. So the more important ones come first, meaning the more important ones will be pulled back first (attempted to be placed earlier on the calendar). Which is good.
+        foreach (BlockContainer bc in blockContainers)
+        {
+            for(int i = 0; i < bc.mappedBlocks; i++) //For each block in the container
+            {
+                //Clear block from the minute map, and try to place it earlier
+                for(int j = bc.blocks[i].start; j < bc.blocks[i].end; j++)
+                {
+                    minuteMap[j].id = null;
+                    minuteMap[j].from = "";
+                    minuteMap[j].name = "";
+                }
+
+                int offset = 0;
+                while( mapConflict(offset, offset + bc.blockSize) && offset < bc.blocks[i].start ) //while we cant place it
+                {
+                    offset++;
+                }
+
+                //After the while loop the block will either be placed earlier, or in the same spot it was in originally
+                bc.blocks[i].start = offset; bc.blocks[i].end = offset + bc.blockSize;
+                for (int j = offset; j < offset + bc.blockSize; j++)
+                {
+                    minuteMap[j].id = bc.task.TaskId;
+                    minuteMap[j].from = "autoScheduler";
+                    minuteMap[j].name = bc.task.Name;
+                }
+            }
+        }
+    }
+
     private void MapTasks()
     {
         List<BlockContainer> containers = CreateBlockContainers();
         MapBlocks(containers);
         MapRemainders(containers);
+        PullBackBlocks(containers);
     }
-    /*
-    //Map each task minute by minute back from its duedate. If something is already scheduled for that minute, look back to the minute before it.
-    //It will map higher important tasks first. Therefore lower importance tasks will be scheduled around the higher importance ones.
-    private void MapTasks()
-    {
-        Console.WriteLine("autoScheduler.MapTasks()");
-        IOrderedEnumerable<TaskItem> sortedTasks = sortByWeight();
-        foreach (TaskItem task in sortedTasks) //Schedule the higher weight (IE high importance) tasks first, so if something is unscheduleable it will be a lower weight task
-        {
-            if(task.DueTime < baseTime.AddMinutes(40320) && task.DueTime > baseTime) //Task is due within the 4 weeks the scheduler will schedule
-            {
-                int offset = (int)(task.DueTime - baseTime).TotalMinutes;
-                int minutesMapped = 0;
-                while(minutesMapped < task.TotalTimeNeeded * 60)
-                {
-                    if(offset < 0) //meaning task cannot be completed unless its scheduled before baseTime (aka in the past)
-                    {
-                        Console.WriteLine("UNSCHEDUABLE TASK");
-                        pastDueTasks.Add(task);
-                        taskPastDue = true;
-                        break;
-                    }
-                    if(minuteMap[offset].id == null) //If nothing has been mapped to this spot yet, put it here
-                    {
-                        minuteMap[offset].id = task.TaskId;
-                        minuteMap[offset].from = "autoScheduler";
-                        minuteMap[offset].name = task.Name;
-                        minutesMapped++;
-                        offset--;
-                    }
-                    else //There IS something already mapped here. Dont map it but keep looking backwards
-                    {
-                        //This else statement can get a LOT more complicated in the future, depending on how we want to handle collisions
-                        offset--;
-                    }
-                }
-            }
-        }
-    }
-    */
+
 
     //All contiguous minute mappings should be transformed into a continous appointment. IE indexes in the minute mapping that are next to each other and have the same Guid should be combined together.
     private List<Appointment> CoalesceMinuteMapping()
@@ -274,8 +269,6 @@ public class AutoScheduler : StudynSubscriber
 
         return weight;
     }
-
-
 
 
     public void run(Guid id)
