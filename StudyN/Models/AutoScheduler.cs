@@ -160,14 +160,22 @@ public class AutoScheduler : StudynSubscriber
                 }
 
                 int offset = 0;
-                while( mapConflict(offset, offset + bc.blockSize) && offset < bc.blocks[i].start ) //while we cant place it
+                while( mapConflict(offset, offset + bc.blockSize) && offset < bc.blocks[i].start) //while we cant place it. After the while loop the block will either be placed earlier, or in the same spot it was in originally.
                 {
                     offset++;
                 }
 
-                //After the while loop the block will either be placed earlier, or in the same spot it was in originally
+                //We shouldn't technically NEED to check if the block will be placed within 40320 minutes, because it was already able to placed within that time frame. Worst case is that it just gets put where it already was.
+                if( offset > 0 && bc.task.TaskId == minuteMap[offset - 1].id) //If the minuteMap just before this block has the same id as this block (IE its apart of the same task), we should try to separate them a bit
+                {
+                    if( offset + bc.blockSize < bc.blocks[i].start && !mapConflict(offset + bc.blockSize, offset + 2*bc.blockSize) ) //If it is possible to push the block forward, push it forward by one block size. IE if where we are trying to put it now is earlier than where it was before.
+                    {
+                        offset = offset + bc.blockSize;
+                    } 
+                }
+                
                 bc.blocks[i].start = offset; bc.blocks[i].end = offset + bc.blockSize;
-                for (int j = offset; j < offset + bc.blockSize; j++)
+                for (int j = offset; j < offset + bc.blockSize; j++) //Place it in minuteMap
                 {
                     minuteMap[j].id = bc.task.TaskId;
                     minuteMap[j].from = "autoScheduler";
