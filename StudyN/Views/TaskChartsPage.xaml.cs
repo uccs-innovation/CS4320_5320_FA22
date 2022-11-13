@@ -115,7 +115,8 @@ namespace StudyN.Views
         }
 
 
-        //On a single tap of an appointment, this function opens the Appointment Edit Page by DevExpress with the current information filled it for that appointment.
+        //On a single tap of an appointment, this function opens the Appointment Edit Page
+        //by DevExpress with the current information filled it for that appointment.
         private void OnTapEditAppointment(object sender, DataGridGestureEventArgs e)
         {
             //Check to ensure an actual appointment is tapped.
