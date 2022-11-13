@@ -30,35 +30,54 @@ namespace StudyN.Models
 
         public void StopCurrent(DateTime datetimetaken)
         {
-            this.taskitemtime.StopTime(datetimetaken);
-            this.BeingTimed = false;
-            AddNewTimeTaskItemListOfTimes();
-            TaskItem taskitem = GlobalTaskData.TaskManager.GetTask(TaskidBeingTimed);
-
-            TimeSpan difference = this.taskitemtime.stop - this.taskitemtime.start;
-            this.taskitemtime.span = difference;
-            taskitem.CompletionProgress += GlobalTaskData.TaskManager.SumTimes(difference.Hours, difference.Minutes);
-            // make sure minutes don't go above 60
-            if(taskitem.GetCompletionProgressMinutes() >= 60)
+            try
             {
-                taskitem.CompletionProgress = GlobalTaskData.TaskManager.SumTimes((int)taskitem.CompletionProgress, taskitem.GetCompletionProgressMinutes());
+                //inserts stop time for taskitemtime object
+                this.taskitemtime.StopTime(datetimetaken);
+                //turns off being timed
+                this.BeingTimed = false;
+                //getting task
+                TaskItem taskitem = GlobalTaskData.TaskManager.GetTask(TaskidBeingTimed);
+                
+                TimeSpan difference = this.taskitemtime.stop - this.taskitemtime.start;
+                this.taskitemtime.span = difference;
+                taskitem.CompletionProgress += GlobalTaskData.TaskManager.SumTimes(difference.Hours, difference.Minutes);
+                // make sure minutes don't go above 60
+                if (taskitem.GetCompletionProgressMinutes() >= 60)
+                {
+                    taskitem.CompletionProgress = GlobalTaskData.TaskManager.SumTimes((int)taskitem.CompletionProgress, taskitem.GetCompletionProgressMinutes());
+                }
+                AddNewTimeTaskItemListOfTimes();
+
+                //Updates hard files
+                GlobalTaskData.TaskManager.EditTask(taskitem.TaskId,
+                                                    taskitem.Name,
+                                                    taskitem.Description,
+                                                    taskitem.DueTime,
+                                                    taskitem.Priority,
+                                                    taskitem.CompletionProgress,
+                                                    taskitem.TotalTimeNeeded,
+                                                    taskitem.TimeList);
+                this.TaskidBeingTimed = Guid.Empty;
+            } catch(NullReferenceException) {
+                Console.WriteLine("ERROR NULL REFERENCE EXCEPTION");
+                Console.WriteLine("Error occured in tasktimemanager - function : StopCurrent()");
             }
 
-            GlobalTaskData.TaskManager.EditTask(taskitem.TaskId,
-                                                taskitem.Name,
-                                                taskitem.Description,
-                                                taskitem.DueTime,
-                                                taskitem.Priority,
-                                                taskitem.CompletionProgress,
-                                                taskitem.TotalTimeNeeded,
-                                                taskitem.TimeList);
+
         }
 
         public void AddNewTimeTaskItemListOfTimes()
         {
-            TaskItem thetaskitem = GlobalTaskData.TaskManager.GetTask(TaskidBeingTimed);
+            try
+            {
+                TaskItem thetaskitem = GlobalTaskData.TaskManager.GetTask(TaskidBeingTimed);
+                thetaskitem.TimeList.Add(this.taskitemtime);
+            } catch (NullReferenceException) {
+                Console.WriteLine("ERROR NULL REFERENCE EXCEPTION");
+                Console.WriteLine("Error occured in tasktimemanager - function : AddNewTaskTImeItemListOfTimes()");
+            }
 
-            thetaskitem.TimeList.Add(this.taskitemtime); 
 
         }
 

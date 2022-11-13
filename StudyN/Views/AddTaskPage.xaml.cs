@@ -92,6 +92,7 @@ public partial class AddTaskPage : ContentPage
 
     async void HandleTimerOnOff(object sender, EventArgs args)
     {
+        Console.WriteLine("-------------------------------\nTaskID BeingEdited\n" + GlobalTaskData.ToEdit.TaskId);
         //gets guid and name of the current task.
         Guid currenttaskid = GlobalTaskData.ToEdit.TaskId;
         String taskname = GlobalTaskData.ToEdit.Name;
@@ -121,7 +122,7 @@ public partial class AddTaskPage : ContentPage
             //update button
             TimerButton.Text = "Stop Tracking";
             //start new timer
-            GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid,taskname);
+            GlobalTaskTimeData.TaskTimeManager.StartNew(gettime, currenttaskid, taskname);
         }
     }
 
