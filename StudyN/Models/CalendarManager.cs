@@ -168,6 +168,11 @@ namespace StudyN.Models
                                                                       // taskId that already exists, so change it to:
                                             Guid guid)
         {
+            // estepanek: I think this is causing Outside the Bounds of Array error,
+            // so going to hardcode it
+            //int catCount = AppointmentCategories.Count;
+            int catCount = 8;
+            //Console.WriteLine("AppointmentCategories.Count=" + catCount.ToString());
             Appointment appt = new()
             {
                 Id = appointmentId,
@@ -175,11 +180,18 @@ namespace StudyN.Models
                 End = start.Add(duration),
                 Subject = appointmentTitle,
 
-                LabelId = AppointmentCategories[rnd.Next(0, 5)].Id, // estepanek: returning this to hard coded color
-                                                                    //            so that it isn't broken
-                                                                    //            Addressing link of color to appointment
-                                                                    //            in another task
+                // estepanek: this one doesn't work with the Guid field
+                //LabelId = AppointmentCategories[rnd.Next(0, 5)].Id, // estepanek: returning this to hard coded color
+                //            so that it isn't broken
+                //            Addressing link of color to appointment
+                //            in another task
                 //LabelId = labelID, // auto scheduler set this to 0 for StudyN block
+                // estepanek: so try the new BuiltInId field
+
+                
+                LabelId = rnd.Next(0, (catCount-1)), // estepanek: for now choose a random array index for category/label/color
+
+
                 //StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 StatusId = statusID, // auto scheduler set this to 2 for BLocked
                 Location = string.Format("{0}", room),

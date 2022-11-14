@@ -132,7 +132,7 @@ public class AutoScheduler : StudynSubscriber
 
     private void addToCalendar()
     {
-        Console.WriteLine("Adding taskBlocks to calendar");
+        Console.WriteLine("------------Adding taskBlocks to calendar---------------------");
 
         int count = TaskBlockList.Count;
         Console.WriteLine("Number of taskblocks count = " + count.ToString()); // estepanek added for debugging
@@ -272,7 +272,7 @@ public class AutoScheduler : StudynSubscriber
         int findOverlapCalls = 1;
         while (overlaps != null)
         {
-            Console.WriteLine("Fixing overlap");
+            //Console.WriteLine("Fixing overlap");
 
             if (findOverlapCalls % 10 == 0)
             {
