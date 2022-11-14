@@ -4,8 +4,8 @@
              x:Class="StudyN.Views.AddIcsPage"
              Title="Import Calendar">
     <Grid>
-        <Grid RowDefinitions="0,*,Auto">
-            <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto" Padding="20,15,20,15" RowSpacing="10" TranslationY ="200">
+        <Grid RowDefinitions="Auto,Auto,Auto">
+            <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto" Padding="20,5,20,45" RowSpacing="30" TranslationY ="200">
                 <Entry
                         Grid.ColumnSpan="1"
                         Placeholder="Enter link to iCal file (.ics)"
@@ -29,19 +29,11 @@
                     TranslationX="-20"
                     TranslationY="270"/>
 
-            <Frame 
-                BorderColor="{DynamicResource Primary}"
-                CornerRadius="5"
-                Padding="8"
-                BackgroundColor="{DynamicResource NormalBackgroundColor}">
-                <StackLayout Spacing="3">
-                    <Button
-                        Text="Load File"
-                        Style="{StaticResource PrimaryButton}"
-                        Clicked="Browse_Clicked"/>
-                    <Entry
+            <Grid Grid.Row="10" RowDefinitions="Auto, Auto, Auto" Padding="20,30,20,45" RowSpacing="30" TranslationY ="200">
+
+                <Entry
                         Grid.ColumnSpan="1"
-                        Placeholder="Enter path to a directory"
+                        Placeholder="Enter path to a file"
                         ClearButtonVisibility="WhileEditing"
                         ReturnType="Go"
                         Keyboard="Url"
@@ -49,8 +41,19 @@
                         IsTextPredictionEnabled="false"
                         MaxLength="200"
                         TextChanged="Entry_DirPath"/>
-                </StackLayout>
-            </Frame>
+            </Grid>
+
+            <Button
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="1"        
+                    Text="Load File"
+                    Clicked="Browse_Clicked"
+                    VerticalOptions="Start"
+                    HorizontalOptions="End"
+                    TranslationX="-20"
+                    TranslationY="270"/>
+            
         </Grid>
     </Grid>
 </ContentPage>

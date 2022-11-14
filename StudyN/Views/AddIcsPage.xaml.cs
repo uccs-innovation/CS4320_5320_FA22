@@ -130,7 +130,7 @@ public partial class AddIcsPage : ContentPage
                     }
                     else
                     {
-                        line = line.Substring(last);  //go to the last dash and then pull number
+                        line = line.Substring((last + 1));  //go to the last dash and then pull number
                         id = Convert.ToInt32(line);
                     }
                 }
@@ -146,26 +146,30 @@ public partial class AddIcsPage : ContentPage
 
                     //find what kind of dstart
                     int last = line.LastIndexOf(":");
-                    line = line.Substring(last);
+                    line = line.Substring(last + 1);
 
                     //get date
                     string temp = line.Substring(0, 4);
                     year = Convert.ToInt32(temp);
-                    temp = line.Substring(4, 6);
+                    line = line.Substring(4);
+                    temp = line.Substring(0, 2);
                     month = Convert.ToInt32(temp);
-                    temp = line.Substring(6, 8);
+                    line = line.Substring(2);
+                    temp = line.Substring(0, 2);
                     day = Convert.ToInt32(temp);
 
                     if (line.Contains('T'))
                     {
-                        line = line.Substring(9);
+                        line = line.Substring(3);
 
                         //get time
                         temp = line.Substring(0, 2);
                         hour = Convert.ToInt32(temp);
-                        temp = line.Substring(2, 4);
+                        line = line.Substring(2);
+                        temp = line.Substring(0, 2);
                         minute = Convert.ToInt32(temp);
-                        temp = line.Substring(4, 6);
+                        line = line.Substring(2);
+                        temp = line.Substring(0, 2);
                         second = Convert.ToInt32(temp);
 
                         //insert into datetime
@@ -194,19 +198,23 @@ public partial class AddIcsPage : ContentPage
                     //get date
                     string temp = line.Substring(0, 4);
                     year = Convert.ToInt32(temp);
-                    temp = line.Substring(4, 6);
+                    line = line.Substring(4);
+                    temp = line.Substring(0, 2);
                     month = Convert.ToInt32(temp);
-                    temp = line.Substring(6, 8);
+                    line = line.Substring(2);
+                    temp = line.Substring(0, 2);
                     day = Convert.ToInt32(temp);
 
-                    line = line.Substring(9);
+                    line = line.Substring(3);
 
                     //get time
                     temp = line.Substring(0, 2);
                     hour = Convert.ToInt32(temp);
-                    temp = line.Substring(2, 4);
+                    line = line.Substring(2);
+                    temp = line.Substring(0, 2);
                     minute = Convert.ToInt32(temp);
-                    temp = line.Substring(4, 6);
+                    line = line.Substring(2);
+                    temp = line.Substring(0, 2);
                     second = Convert.ToInt32(temp);
 
                     //insert into datetime
@@ -233,14 +241,30 @@ public partial class AddIcsPage : ContentPage
         }
     }
 
-    private void Browse_Clicked(object sender, EventArgs e)
+    async private void Browse_Clicked(object sender, EventArgs e)
     {
-        string jsonfiletext;
-        string[] file = FileManager.loadFile(dirString);
-
-        if (file.Length > 0)
+        if (!string.IsNullOrEmpty(dirString))
         {
-            jsonfiletext = File.ReadAllText(file[0]);
+            string jsonfiletext;
+            string[] file = FileManager.loadFile(dirString);
+
+            if (file.Length > 0)
+            {
+                jsonfiletext = File.ReadAllText(file[0]);
+                Console.WriteLine(jsonfiletext);
+
+                //cal class to convert
+                GetAppointFromString convert = new GetAppointFromString(jsonfiletext);
+            }
+            else
+            {
+                //what went wrong
+                Console.WriteLine("\nException Caught!\n");
+                Console.WriteLine("No files to be read in matching input");
+
+                //jump ship (so no breaky)
+                await Shell.Current.GoToAsync(nameof(SettingsPage));
+            }
         }
     }
 }
