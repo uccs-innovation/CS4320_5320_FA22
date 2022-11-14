@@ -114,7 +114,28 @@
                 </StackLayout>
             </Frame>
 
-            
+            <Frame 
+                BorderColor="{DynamicResource Primary}"
+                CornerRadius="5"
+                Padding="8"
+                BackgroundColor="{DynamicResource NormalBackgroundColor}">
+                <StackLayout Spacing="3">
+                    <Button
+                        Text="Load File"
+                        Style="{StaticResource PrimaryButton}"
+                        Clicked="Button_ClickedLoad"/>
+                    <Entry
+                        Grid.ColumnSpan="1"
+                        Placeholder="Enter path to a directory"
+                        ClearButtonVisibility="WhileEditing"
+                        ReturnType="Go"
+                        Keyboard="Url"
+                        IsSpellCheckEnabled="false"
+                        IsTextPredictionEnabled="false"
+                        MaxLength="200"
+                        TextChanged="Entry_DirPath"/>
+                </StackLayout>
+            </Frame>
             <!-- Use frames to build different sections of the settings menu -->
 
             

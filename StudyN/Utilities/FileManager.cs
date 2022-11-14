@@ -13,6 +13,9 @@ namespace StudyN.Utilities
         static string DIR = FileSystem.AppDataDirectory;
         static string TASK_DIR = DIR + "/tasks/";
         static string COMPLETE_TASK_DIR = DIR + "/completedTask/";
+        static string TASK_DIR_TEST = DIR + "/testForTasks/";
+        static string CATEGORY_DIR = DIR + "/categories/"; 
+        static string APPT_DIR = DIR + "/appointments/";
 
         public FileManager()
         {
@@ -21,7 +24,8 @@ namespace StudyN.Utilities
             // create directories
             System.IO.Directory.CreateDirectory(TASK_DIR);
             System.IO.Directory.CreateDirectory(COMPLETE_TASK_DIR);
-
+            System.IO.Directory.CreateDirectory(CATEGORY_DIR);
+            System.IO.Directory.CreateDirectory(APPT_DIR);
         }
 
         public void OnNewStudynEvent(StudynEvent taskEvent)
@@ -42,6 +46,23 @@ namespace StudyN.Utilities
             {
                 TasksCompleted(taskEvent.Id);
             }
+            else if (taskEvent.EventType == StudynEventType.CategoryAdd)
+            {
+                CategoryAdded(taskEvent.Id);
+            }
+            else if (taskEvent.EventType == StudynEventType.CategoryEdit)
+            {
+                CategoryEdited(taskEvent.Id);
+            }
+            else if (taskEvent.EventType == StudynEventType.CategoryDelete)
+            {
+                CategoryDeleted(taskEvent.Id);
+            }
+            else if (taskEvent.EventType == StudynEventType.AppointmentAdd)
+            {
+                ApptAdded(taskEvent.Id);
+                return;
+            }
         }
 
         //This function will take a given task and save it to a new file
@@ -60,6 +81,24 @@ namespace StudyN.Utilities
             //Console.WriteLine("Tasks Added:");
             //Console.WriteLine("    " + taskId.ToString());
 
+        }
+
+        public static void ApptAdded(Guid apptId)
+        {
+
+            // serialaize tasks into task file
+            string fileName = APPT_DIR + GlobalAppointmentData.CalendarManager.GetAppointment(apptId).Subject + ".json";
+            var indent = new JsonSerializerOptions { WriteIndented = true };
+            Appointment appt = GlobalAppointmentData.CalendarManager.GetAppointment(apptId);
+
+            string jsonString = JsonSerializer.Serialize(appt, indent);
+
+            Console.WriteLine(fileName);
+            File.WriteAllText(fileName, jsonString);
+            // output, might be taken out later
+            //Console.WriteLine("Tasks Added:");
+            //Console.WriteLine("    " + taskId.ToString());
+            
         }
 
         //This function will take a task and delete the associated file
@@ -102,7 +141,76 @@ namespace StudyN.Utilities
             }
         }
 
+        public static void TaskEdited(Guid taskId)
+        {
+            TasksDeleted(taskId);
+            TasksAdded(taskId);
+            //Unneeded. Mainly just writes out files in directory for testing purposes. 
+            //LoadFileNames();
+        }
 
+        /// <summary>
+        /// Adds json file when a category is added
+        /// </summary>
+        /// <param name="catId"></param>
+        public static void CategoryAdded(Guid catId)
+        {
+            // serialize category into category file
+            string fileName = CATEGORY_DIR + catId + ".json";
+            var indent = new JsonSerializerOptions { WriteIndented = true };
+            AppointmentCategory category = GlobalAppointmentData.CalendarManager.GetAppointmentCategory(catId);
+            SerializedAppointmentCategory serializer = new SerializedAppointmentCategory();
+            serializer.Id = catId;
+            serializer.Caption = category.Caption;
+            serializer.Color = category.Color.ToHex();
+            serializer.PickerXPosition = category.PickerXPosition;
+            serializer.PickerYPosition = category.PickerYPosition;
+            string jsonString = JsonSerializer.Serialize(serializer, indent);
+            File.WriteAllText(fileName, jsonString);
+        }
+
+        /// <summary>
+        /// Deletes json file pertaining to a category
+        /// </summary>
+        /// <param name="catId"></param>
+        public static void CategoryDeleted(Guid catId)
+        {
+            // get name of category file
+            string fileName = CATEGORY_DIR + catId + ".json";
+            // makes sure file exists
+            if (File.Exists(fileName))
+            {
+                // Delete the file
+                File.Delete(fileName);
+            }
+            else
+            {
+                // else notify the file doesn't exist
+                Console.WriteLine("Erorr: File does not exist");
+            }
+        }
+
+        /// <summary>
+        /// Edits a category's json file
+        /// </summary>
+        /// <param name="catId"></param>
+        public static void CategoryEdited(Guid catId)
+        {
+            // get name of category file
+            string fileName = CATEGORY_DIR + catId + ".json";
+            // make sure file exists
+            if (File.Exists(fileName))
+            {
+                // serialize new date into category file, might be more wastefule to delete and make new file
+                CategoryAdded(catId);
+            }
+            else
+            {
+                // else notify the file doesn't exist, and add the file
+                Console.WriteLine("Error: File doesn't exist, adding new file");
+                CategoryAdded(catId);
+            }
+        }
 
         public static string[] LoadTaskFileNames()
         {
@@ -124,14 +232,50 @@ namespace StudyN.Utilities
             return files; 
         }
 
-
-
-        public static void TaskEdited(Guid taskId)
+        public static string[] LoadApptFileNames()
         {
-            TasksDeleted(taskId);
-            TasksAdded(taskId);
-            //Unneeded. Mainly just writes out files in directory for testing purposes. 
-            //LoadFileNames();
+            string[] files = { };
+            if (Directory.Exists(APPT_DIR))
+            {
+                Console.WriteLine("file:");
+                Console.WriteLine("file:");
+                Console.WriteLine("file:");
+                Console.WriteLine("file:");
+                Console.WriteLine("file:");
+                files = Directory.GetFiles(APPT_DIR);
+            }
+
+            foreach(string file in files)
+            {
+                Console.WriteLine("file:");
+                Console.WriteLine(file);
+            }
+            return files;
+        }
+
+        /// <summary>
+        /// Loads the categories from the category directory
+        /// </summary>
+        /// <returns></returns>
+        public static string[] LoadCategoryFileNames()
+        {
+            string[] files = { };
+            // if directory exists get files from it
+            if (Directory.Exists(CATEGORY_DIR))
+            {
+                files = Directory.GetFiles(CATEGORY_DIR);
+            }
+            return files;
+        }
+        //For testing
+        public static string[] LoadTaskFileTest(string directoryName)
+        {
+            string[] files = { };
+            if (Directory.Exists(DIR + directoryName))
+            {
+                files = Directory.GetFiles(DIR + directoryName);
+            }
+            return files;
         }
 
         public static string[] LoadFileNames()
@@ -145,5 +289,17 @@ namespace StudyN.Utilities
             }
             return files;
         }
+
+        // Method that saves tasks data to specific location for testing
+        public static void SaveTaskTestOnApp(Guid taskId)
+        {
+            // serialaize tasks into task file for testing
+            string fileName = TASK_DIR_TEST + taskId + ".json";
+            var indent = new JsonSerializerOptions { WriteIndented = true };
+            TaskItem task = GlobalTaskData.TaskManager.GetTask(taskId);
+            string jsonString = JsonSerializer.Serialize(task, indent);
+            File.WriteAllText(fileName, jsonString);
+        }
+
     }
 }

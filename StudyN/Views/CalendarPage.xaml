@@ -102,6 +102,11 @@
             </Button>
         </StackLayout>
     </Shell.TitleView>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Export"
+                     Clicked="onExportButtonTap"
+                     IconImageSource="export"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
             <dxsch:DayView x:Name="dayView"                           

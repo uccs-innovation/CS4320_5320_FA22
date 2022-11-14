@@ -10,54 +10,74 @@ namespace StudyN.Models
     public class TaskTimeDataManager
     {
         //lets us know if a task is being timed
-        public bool TaskIsBeingTimed;
-        public Guid TheTaskidBeingTimed;
+        public bool BeingTimed;
+        public Guid TaskidBeingTimed;
         public TaskItemTime taskitemtime;
-
+        public String TaskName;
         //initializes the object
         public TaskTimeDataManager()
         {
-            this.TaskIsBeingTimed = false;
+            this.BeingTimed = false;
         }
 
-        public void StartNew(DateTime datetimetaken, Guid taskid)
+        public void StartNew(DateTime datetimetaken, Guid taskid, String taskname)
         {
             this.taskitemtime = new TaskItemTime(datetimetaken, taskid);
-            this.TaskIsBeingTimed = true;
-            this.TheTaskidBeingTimed = taskid;
+            this.BeingTimed = true;
+            this.TaskidBeingTimed = taskid;
+            this.TaskName = taskname;
         }
 
         public void StopCurrent(DateTime datetimetaken)
         {
-            this.taskitemtime.StopTime(datetimetaken);
-            this.TaskIsBeingTimed = false;
-            AddNewTimeTaskItemListOfTimes();
-            TaskItem taskitem = GlobalTaskData.TaskManager.GetTask(TheTaskidBeingTimed);
-
-            TimeSpan difference = this.taskitemtime.stop - this.taskitemtime.start;
-            this.taskitemtime.span = difference;
-            taskitem.CompletionProgress += GlobalTaskData.TaskManager.SumTimes(difference.Hours, difference.Minutes);
-            // make sure minutes don't go above 60
-            if(taskitem.GetCompletionProgressMinutes() >= 60)
+            try
             {
-                taskitem.CompletionProgress = GlobalTaskData.TaskManager.SumTimes((int)taskitem.CompletionProgress, taskitem.GetCompletionProgressMinutes());
+                //inserts stop time for taskitemtime object
+                this.taskitemtime.StopTime(datetimetaken);
+                //turns off being timed
+                this.BeingTimed = false;
+                //getting task
+                TaskItem taskitem = GlobalTaskData.TaskManager.GetTask(TaskidBeingTimed);
+                
+                TimeSpan difference = this.taskitemtime.stop - this.taskitemtime.start;
+                this.taskitemtime.span = difference;
+                taskitem.CompletionProgress += GlobalTaskData.TaskManager.SumTimes(difference.Hours, difference.Minutes);
+                // make sure minutes don't go above 60
+                if (taskitem.GetCompletionProgressMinutes() >= 60)
+                {
+                    taskitem.CompletionProgress = GlobalTaskData.TaskManager.SumTimes((int)taskitem.CompletionProgress, taskitem.GetCompletionProgressMinutes());
+                }
+                AddNewTimeTaskItemListOfTimes();
+
+                //Updates hard files
+                GlobalTaskData.TaskManager.EditTask(taskitem.TaskId,
+                                                    taskitem.Name,
+                                                    taskitem.Description,
+                                                    taskitem.DueTime,
+                                                    taskitem.Priority,
+                                                    taskitem.CompletionProgress,
+                                                    taskitem.TotalTimeNeeded,
+                                                    taskitem.TimeList);
+                this.TaskidBeingTimed = Guid.Empty;
+            } catch(NullReferenceException) {
+                Console.WriteLine("ERROR NULL REFERENCE EXCEPTION");
+                Console.WriteLine("Error occured in tasktimemanager - function : StopCurrent()");
             }
 
-            GlobalTaskData.TaskManager.EditTask(taskitem.TaskId,
-                                                taskitem.Name,
-                                                taskitem.Description,
-                                                taskitem.DueTime,
-                                                taskitem.Priority,
-                                                taskitem.CompletionProgress,
-                                                taskitem.TotalTimeNeeded,
-                                                taskitem.TimeList);
+
         }
 
         public void AddNewTimeTaskItemListOfTimes()
         {
-            TaskItem thetaskitem = GlobalTaskData.TaskManager.GetTask(TheTaskidBeingTimed);
+            try
+            {
+                TaskItem thetaskitem = GlobalTaskData.TaskManager.GetTask(TaskidBeingTimed);
+                thetaskitem.TimeList.Add(this.taskitemtime);
+            } catch (NullReferenceException) {
+                Console.WriteLine("ERROR NULL REFERENCE EXCEPTION");
+                Console.WriteLine("Error occured in tasktimemanager - function : AddNewTaskTImeItemListOfTimes()");
+            }
 
-            thetaskitem.TimeList.Add(this.taskitemtime); 
 
         }
 
