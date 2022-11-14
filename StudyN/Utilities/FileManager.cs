@@ -301,5 +301,17 @@ namespace StudyN.Utilities
             File.WriteAllText(fileName, jsonString);
         }
 
+        //load any file from a file path on the phone
+        public static string[] loadFile(string directoryPath)
+        {
+            string[] files = { };
+
+            if (Directory.Exists(directoryPath))
+            {
+                files = Directory.GetFiles(directoryPath);
+            }
+
+            return files;
+        }
     }
 }

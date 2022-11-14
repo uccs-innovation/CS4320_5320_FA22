@@ -17,6 +17,7 @@
                         MaxLength="200"
                         TextChanged="Entry_TextChanged"/>
             </Grid>
+            
             <Button 
                     Grid.Row="1"
                     Grid.Column="1"
@@ -27,6 +28,29 @@
                     HorizontalOptions="End"
                     TranslationX="-20"
                     TranslationY="270"/>
+
+            <Frame 
+                BorderColor="{DynamicResource Primary}"
+                CornerRadius="5"
+                Padding="8"
+                BackgroundColor="{DynamicResource NormalBackgroundColor}">
+                <StackLayout Spacing="3">
+                    <Button
+                        Text="Load File"
+                        Style="{StaticResource PrimaryButton}"
+                        Clicked="Browse_Clicked"/>
+                    <Entry
+                        Grid.ColumnSpan="1"
+                        Placeholder="Enter path to a directory"
+                        ClearButtonVisibility="WhileEditing"
+                        ReturnType="Go"
+                        Keyboard="Url"
+                        IsSpellCheckEnabled="false"
+                        IsTextPredictionEnabled="false"
+                        MaxLength="200"
+                        TextChanged="Entry_DirPath"/>
+                </StackLayout>
+            </Frame>
         </Grid>
     </Grid>
 </ContentPage>
