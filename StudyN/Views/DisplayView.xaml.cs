@@ -15,14 +15,7 @@ namespace StudyN.Views
 
         private void CellClicked(object sender, DataGridGestureEventArgs e)
         {
-            /*if (e.Item != null && e.FieldName == "Completed")
-            {
-                DataGridView gridView = (DataGridView)sender;
-                gridView.BeginUpdate();
-                CalendarTask task = (CalendarTask)e.Item;
-                task.Parent.TaskComplete(task);
-                gridView.EndUpdate();
-            }*/
+           
             if (e.Item != null)
             {
                 var editForm = new EditFormPage(grid, grid.GetItem(e.RowHandle));
