@@ -69,21 +69,29 @@ namespace StudyN.Models
         }
     }
 
-
-    public class AppointmentCategory
+    // Built-in Scheduler DataStorage DataSource AppointmentLabelsSource
+    public class AppointmentLabel
     {
-        public Guid Id { get; set; }  // custom id
-        public int BuiltInId { get; set; } // built in id 
+        public int Id { get; set; }
         public string Caption { get; set; }
         public Color Color { get; set; }
-        public double PickerXPosition { get; set; }
-        public double PickerYPosition { get; set; }
     }
 
+    // Built-in Scheduler DataStorage DataSource AppointmentStatusesSource
     public class AppointmentStatus
     {
         public int Id { get; set; }
         public string Caption { get; set; }
         public Color Color { get; set; }
+    }
+
+    // Custom Categories
+    public class AppointmentCategory
+    {
+        public Guid Id { get; set; }  // custom id        
+        public string Caption { get; set; }
+        public Color Color { get; set; }
+        public double PickerXPosition { get; set; }
+        public double PickerYPosition { get; set; }
     }
 }

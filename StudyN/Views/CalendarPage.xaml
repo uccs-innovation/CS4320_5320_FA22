@@ -110,7 +110,7 @@
                     <dxsch:SchedulerDataStorage x:Name="SchedulerStorage">
                         <dxsch:SchedulerDataStorage.DataSource>
                             <dxsch:DataSource AppointmentsSource="{Binding Appointments}"
-                                              AppointmentLabelsSource="{Binding AppointmentCategories}"
+                                              AppointmentLabelsSource="{Binding AppointmentLabels}"
                                               AppointmentStatusesSource="{Binding AppointmentStatuses}">
                                 <dxsch:DataSource.AppointmentMappings>
                                     <dxsch:AppointmentMappings 

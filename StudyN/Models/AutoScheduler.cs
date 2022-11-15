@@ -142,7 +142,7 @@ public class AutoScheduler : StudynSubscriber
         //  random colors, but we need to get the appropriate category/labelId here
         //  and pass the guid of the category/labelId(color) in the LabelId parameter
         //  of the CreateAppointment method)        
-        int defaultLabelId = 0;  // estepanek: set to "StudyN Time" label/category 
+        int defaultLabelId = 1;  // estepanek: set to "StudyN Time" label/category 
         int defaultStatusId = 2; // estepanek: set to "Blocked" status
 
         String tmp_name = "";
@@ -150,18 +150,32 @@ public class AutoScheduler : StudynSubscriber
         TimeSpan tmp_duration;
         Guid tmp_guid;
 
-        for (int i = 0; i < TaskBlockList.Count; i++) {
-            Console.WriteLine("**************In addToCalendar for loop...");
+        //for (int i = 0; i < TaskBlockList.Count; i++) {
+        for (int i = 0; i < count; i++) 
+        {
+            Console.WriteLine("**************In addToCalendar for loop, index i=" + i.ToString());
             // estepanek: use tmp variables to see what is being sent to
             //            the CreateAppointment method
             tmp_name = TaskBlockList[i].Name;
+            Console.WriteLine("tmp_name=" + tmp_name);
             tmp_start = calPosAssoc[i];
+            Console.WriteLine("tmp_start=" + tmp_start.ToString());
             tmp_duration = calPosAssoc[i].AddHours(1) - calPosAssoc[i];
+            Console.WriteLine("tmp_duration=" + tmp_duration.ToString());
             tmp_guid = TaskBlockList[i].TaskId;
-            Console.WriteLine("CreateAppointment(...name,start,duration...guid..." + tmp_name + ", " + tmp_start.ToString() + ", " + tmp_duration.ToString() + ", " + tmp_guid.ToString());
+            Console.WriteLine("tmp_guid=" + tmp_guid.ToString());
+
             // estepanek: comment this one out and simplify it
             //calendarManager.CreateAppointment(-1, TaskBlockList[i].Name, calPosAssoc[i], calPosAssoc[i].AddHours(1) - calPosAssoc[i], -1, defaultLabelId, defaultStatusId, TaskBlockList[i].TaskId); //Assuming task block is 1 hour. IDK what "room" is. The GUID is set to be the overall task's GUID
-            calendarManager.CreateAppointment(-1, tmp_name, tmp_start, tmp_duration, -1, defaultLabelId, defaultStatusId, TaskBlockList[i].TaskId); //Assuming task block is 1 hour. IDK what "room" is. The GUID is set to be the overall task's GUID
+            //calendarManager.CreateAppointment(-1, // changed appointmentId to getNextAppointmentId counter in CalendarManager.  Seems to work a little better but not perfect.
+            // estepanek: removed the appointmentId parameter in case setting it to -1 was causing issues, I don't know but it seems to be working a little better maybe
+            calendarManager.CreateAppointment(tmp_name, 
+                                              tmp_start, 
+                                              tmp_duration, 
+                                              -1, 
+                                              defaultLabelId, 
+                                              defaultStatusId, 
+                                              TaskBlockList[i].TaskId); 
         }
 
         

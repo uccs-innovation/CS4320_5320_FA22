@@ -15,15 +15,16 @@ namespace StudyN.Models
     {
         public static DateTime BaseDate = DateTime.Today;
 
-        public static string[] AppointmentCategoryTitles = { "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work"};
-        public static Color[] AppointmentCategoryColors = { Color.FromArgb("#3333FF"),   // dark blue
-                                                        Color.FromArgb("#00FF00"),   // green                                                        
-                                                        Color.FromArgb("#D80073"),   // dark pink
-                                                        Color.FromArgb("#FFCB21"),   // mustard
-                                                        Color.FromArgb("#1BA1E2"),   // medium blue                                                        
-                                                        Color.FromArgb("#FF8000"),    // orange
-                                                        Color.FromArgb("#FF0000"),   // burgundy                                                         
-                                                        Color.FromArgb("#6A00FF") };   // purple
+        public static string[] AppointmentLabelTitles = { "Uncategorized", "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work"};
+        public static Color[] AppointmentLabelColors = {Color.FromArgb("#A0A0A0"),   // 1. gray
+                                                        Color.FromArgb("#3333FF"),   // 1. dark blue
+                                                        Color.FromArgb("#00FF00"),   // 3. green                                                        
+                                                        Color.FromArgb("#D80073"),   // 4. dark pink
+                                                        Color.FromArgb("#FFCB21"),   // 5. mustard
+                                                        Color.FromArgb("#1BA1E2"),   // 6. medium blue                                                        
+                                                        Color.FromArgb("#FF8000"),   // 7. orange
+                                                        Color.FromArgb("#FF0000"),   // 8. burgundy                                                         
+                                                        Color.FromArgb("#6A00FF") }; // 9. purple
         public static double[] AppointmentCategoryX = { 0.65f, 0.35f, 0.9f, 0.15f, 0.52f, 0.1f, 0.98f, 0.8f};
         // Uncategorized category
 
@@ -35,17 +36,20 @@ namespace StudyN.Models
 
             Caption = "Uncategorized",
 
-            Color = Color.FromArgb("#D9D9D9"),
-            PickerXPosition = 0.5f,
-            PickerYPosition = 1.0f
+            Color = Color.FromArgb("#D9D9D9"),
+
+            PickerXPosition = 0.5f,
+
+            PickerYPosition = 1.0f
+
         };
                                                                                       
         public static string[] AppointmentStatusTitles = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
-        public static Color[] AppointmentStatusColors = { Color.FromArgb("#00FF80"),   // light green
-                                                          Color.FromArgb("#FF3333"),  // red                                                        
-                                                          Color.FromArgb("#FF33FF"),   // magenta
-                                                          Color.FromArgb("#FFFF00"),  // yellow
-                                                          Color.FromArgb("#00FFFF") };// cyan
+        public static Color[] AppointmentStatusColors = { Color.FromArgb("#00FF80"),   // 1. light green
+                                                          Color.FromArgb("#FF3333"),   // 2. red                                                        
+                                                          Color.FromArgb("#FF33FF"),   // 3. magenta
+                                                          Color.FromArgb("#FFFF00"),   // 4. yellow
+                                                          Color.FromArgb("#00FFFF") }; // 5. cyan
                                                                                                                  
         //estepanek: I want to leave these hard-coded appointments
         //           here, because I think they are valuable in
@@ -61,6 +65,12 @@ namespace StudyN.Models
                                                 "TEST_Going to get Food"};
 
         static Random rnd = new Random();
+
+        private int nextId = 1; // estepanek: persist a counter somewhere later when appointments are persisted
+        public int getNextAppointmentId() // estepanek: quickie fix to appointment id issue
+        {
+            return nextId++;                        
+        }
 
         // estepanek: I uncommented out this code to use for
         //            testing and troubleshooting appointment colors.
@@ -89,13 +99,12 @@ namespace StudyN.Models
                     int room = rnd.Next(1, 100);
                     start = BaseDate.AddDays(i).AddHours(rnd.Next(8, 17)).AddMinutes(rnd.Next(0, 40));
                     duration = TimeSpan.FromMinutes(rnd.Next(20, 30));
-                    CreateAppointment(appointmentId,
-                                        AppointmentTitles[appointmentListIndex],
+                    CreateAppointment(AppointmentTitles[appointmentListIndex], // estepanek: generating TEST_ appointments
                                         start,
                                         duration,
                                         room,
-                                        0,
-                                        1,
+                                        appointmentListIndex, // set the LabelId to this for random color
+                                        1, // just default to Status = Busy (Red)
                                         guid
                                         );
                     appointmentId++;
@@ -107,27 +116,42 @@ namespace StudyN.Models
                 }
             }
         }
-        
 
-        void CreateAppointmentCategories()
+
+        //void CreateAppointmentCategories()
+        //{
+        //    int count = AppointmentCategoryTitles.Length;
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        AppointmentCategory cat = new AppointmentCategory();
+        //        cat.Id = Guid.NewGuid();
+        //        cat.BuiltInId = i;
+        //        cat.Caption = AppointmentCategoryTitles[i];
+        //        Console.WriteLine("Created appointment category Num_" + i.ToString() + " = " + cat.Caption);
+        //        cat.Color = AppointmentCategoryColors[i];
+        //        //cat.PickerXPosition = AppointmentCategoryX[i];
+        //        //cat.PickerYPosition = 0.5f;
+        //        AppointmentCategories.Add(cat);
+        //    }
+        //}
+
+        void CreateAppointmentLabels()
         {
-            int count = AppointmentCategoryTitles.Length;
+            int count = AppointmentLabelTitles.Length;
             for (int i = 0; i < count; i++)
             {
-                AppointmentCategory cat = new AppointmentCategory();
-                cat.Id = Guid.NewGuid();
-                cat.BuiltInId = i;
-                cat.Caption = AppointmentCategoryTitles[i];
-                Console.WriteLine("Created appointment category Num_" + i.ToString() + " = " + cat.Caption);
-                cat.Color = AppointmentCategoryColors[i];
-                //cat.PickerXPosition = AppointmentCategoryX[i];
-                //cat.PickerYPosition = 0.5f;
-                AppointmentCategories.Add(cat);
+                AppointmentLabel lab = new AppointmentLabel();
+                lab.Id = i;
+                lab.Caption = AppointmentLabelTitles[i];
+                Console.WriteLine("Created label Num_" + i.ToString() + " = " + lab.Caption);
+                lab.Color = AppointmentLabelColors[i];
+                AppointmentLabels.Add(lab);
             }
         }
 
         public AppointmentCategory GetAppointmentCategory(Guid id)
         {
+            //Console.WriteLine("In GetAppointmentCategory");
             int index = 0;
             AppointmentCategory category;
             while (true)
@@ -156,50 +180,30 @@ namespace StudyN.Models
             }
         }
 
-        public Appointment CreateAppointment(int appointmentId,
-                                            string appointmentTitle,
+        public Appointment CreateAppointment(string appointmentTitle,
                                             DateTime start,
                                             TimeSpan duration,
                                             int room,
-                                            int labelID,
-                                            int statusID,
-                                            //Guid guid = new Guid()) // estepanek: I don't think we want to create
-                                                                      // a new Guid here, as we are supposed be passing the 
-                                                                      // taskId that already exists, so change it to:
-                                            Guid guid)
+                                            int labelId,
+                                            int statusId,
+                                            Guid guid = new Guid())                                                                                                                                                                                  
         {
-            // estepanek: I think this is causing Outside the Bounds of Array error,
-            // so going to hardcode it
-            //int catCount = AppointmentCategories.Count;
-            int catCount = 8;
-            //Console.WriteLine("AppointmentCategories.Count=" + catCount.ToString());
             Appointment appt = new()
             {
-                Id = appointmentId,
+                Id = getNextAppointmentId(),
                 Start = start,
                 End = start.Add(duration),
                 Subject = appointmentTitle,
-
-                // estepanek: this one doesn't work with the Guid field
-                //LabelId = AppointmentCategories[rnd.Next(0, 5)].Id, // estepanek: returning this to hard coded color
-                //            so that it isn't broken
-                //            Addressing link of color to appointment
-                //            in another task
-                //LabelId = labelID, // auto scheduler set this to 0 for StudyN block
-                // estepanek: so try the new BuiltInId field
-
-                
-                LabelId = rnd.Next(0, (catCount-1)), // estepanek: for now choose a random array index for category/label/color
-
-
+                LabelId = labelId,                                             
                 //StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
-                StatusId = statusID, // auto scheduler set this to 2 for BLocked
+                StatusId = statusId, // auto scheduler set this to 2 for BLocked
                 Location = string.Format("{0}", room),
                 Description = string.Empty,
                 UniqueId = guid
             };
 
             Console.WriteLine("In CreateAppointment");
+            Console.WriteLine("appt.Id = " + appt.Id.ToString());
             Console.WriteLine("appt.Subject = " + appt.Subject.ToString());
             Console.WriteLine("appt.Start = " + appt.Start.ToString());
             Console.WriteLine("appt.LabelId = " + appt.LabelId.ToString());
@@ -210,7 +214,7 @@ namespace StudyN.Models
             // Publish appointment add event
             EventBus.PublishEvent(
                         new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
-
+            
             return appt;
         }
 
@@ -225,7 +229,8 @@ namespace StudyN.Models
 
                                                    Color categoryColor,
 
-                                                   double x, double y,
+                                                   double x, double y,
+
                                                    Guid id = new Guid())
 
         {
@@ -242,8 +247,10 @@ namespace StudyN.Models
 
                 Color = categoryColor,
 
-                PickerXPosition = x,
-                PickerYPosition = y
+                PickerXPosition = x,
+
+                PickerYPosition = y
+
             };
 
             // Adds category to category list
@@ -300,8 +307,10 @@ namespace StudyN.Models
 
             cat.Color = categoryColor;
 
-            cat.PickerXPosition = x;
-            cat.PickerYPosition = y;
+            cat.PickerXPosition = x;
+
+            cat.PickerYPosition = y;
+
             return true;
 
         }
@@ -323,7 +332,8 @@ namespace StudyN.Models
                         if(appointment.LabelId == category)
                         {
                             // Make appointment uncategorized
-                            appointment.LabelId = Uncategorized;
+                            //appointment.LabelId = Uncategorized; // estepanek:  this doesn't look right, should probably be Uncategorized.Id
+                            appointment.LabelId = 0; // changing it to setting label color to Uncategorized/gray for now
                         }
                     }
                     // Remove category
@@ -400,6 +410,7 @@ namespace StudyN.Models
 
         public ObservableCollection<Appointment> Appointments { get; private set; }
         public ObservableCollection<AppointmentCategory> AppointmentCategories { get; private set; }
+        public ObservableCollection<AppointmentLabel> AppointmentLabels { get; private set; }
         public ObservableCollection<AppointmentStatus> AppointmentStatuses { get; private set; }
 
 
@@ -407,12 +418,14 @@ namespace StudyN.Models
         {
             Appointments = new ObservableCollection<Appointment>();
             AppointmentCategories = new ObservableCollection<AppointmentCategory>();
+            AppointmentLabels = new ObservableCollection<AppointmentLabel>();
             AppointmentStatuses = new ObservableCollection<AppointmentStatus>();
             
             // Handle changes to collection
             Appointments.CollectionChanged  += new NotifyCollectionChangedEventHandler(AppointmentCollectionChanged);
 
-            CreateAppointmentCategories();
+            //CreateAppointmentCategories();
+            CreateAppointmentLabels();
             CreateAppointmentStatuses();
 
             // estepanek: this generates some hard-coded appointments

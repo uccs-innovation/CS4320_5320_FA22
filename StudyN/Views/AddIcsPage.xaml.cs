@@ -241,7 +241,7 @@ public partial class AddIcsPage : ContentPage
                     int room = rnd.Next(1000, 2000);
                     CalendarManager calendarManager = new CalendarManager();
                     
-                    calendarManager.CreateAppointment(id, name, start, duration, room, labelid, statusid, guid); 
+                    calendarManager.CreateAppointment(name, start, duration, room, labelid, statusid, guid); 
                     start = new DateTime();
                     end = new DateTime();
                     duration = new TimeSpan();
