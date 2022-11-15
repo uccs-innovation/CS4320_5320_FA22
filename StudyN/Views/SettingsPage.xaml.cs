@@ -45,9 +45,6 @@ namespace StudyN.Views
             }
         }
 
-        private async void Button_ClickedIcs(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync(nameof(AddIcsPage));
-        }
+      
     }
 }

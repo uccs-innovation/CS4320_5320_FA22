@@ -90,30 +90,7 @@
             </Frame>
 
             <!-- frame for import cal -->
-            <Frame 
-                BorderColor="{DynamicResource Primary}"
-                CornerRadius="5"
-                Padding="8"
-                BackgroundColor="{DynamicResource NormalBackgroundColor}">
-                <StackLayout Spacing="3">
-                    <Label 
-                        Text="Import Calendar"
-                        FontSize="12" 
-                        TextColor="{DynamicResource NormalHeaderText}"
-                        FontAttributes="Bold"/>
-                    <BoxView 
-                        Color="{DynamicResource Primary}"
-                        HeightRequest="2"
-                        HorizontalOptions="Fill" />
-
-                    <!-- button to go to ics file reading page -->
-                    <Button
-                        Text="Import Calendar"
-                        Style="{StaticResource PrimaryButton}"
-                        Clicked="Button_ClickedIcs" />
-                </StackLayout>
-            </Frame>
-
+            
             <Frame 
                 BorderColor="{DynamicResource Primary}"
                 CornerRadius="5"
