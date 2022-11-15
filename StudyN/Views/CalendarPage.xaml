@@ -102,6 +102,9 @@
         </StackLayout>
     </Shell.TitleView>
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Sleep Time"
+                     Clicked="OnSleepButtonTap"
+                     IconImageSource="clock_svgrepo"/>
         <ToolbarItem Text="Export"
                      Clicked="onExportButtonTap"
                      IconImageSource="export"/>
