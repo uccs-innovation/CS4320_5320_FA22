@@ -454,7 +454,8 @@ namespace StudyN.Models
             string filename = FileSystem.AppDataDirectory + "/sleepTime.json";
             if (File.Exists(filename))
             {
-                SleepTime = JsonConvert.DeserializeObject<SleepTime>(filename);
+                string jsonFileText = File.ReadAllText(filename);
+                SleepTime = JsonConvert.DeserializeObject<SleepTime>(jsonFileText);
             }
         }
 
