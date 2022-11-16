@@ -9,6 +9,7 @@ public partial class SleepTimePage : ContentPage
 	{
 		InitializeComponent();
 		BindingContext = new SleepTimeViewModel();
+		LoadSleepTime();
 	}
 
 	/// <summary>
@@ -26,5 +27,17 @@ public partial class SleepTimePage : ContentPage
 		// get out of Sleep Time Page
 		Routing.RegisterRoute(nameof(Views.CalendarPage), typeof(Views.CalendarPage));
 		await Shell.Current.GoToAsync("..");
+	}
+	
+	/// <summary>
+	/// Loads the sleep time object if it isn't null
+	/// </summary>
+	void LoadSleepTime()
+	{
+		// load sleep time start and stop times if they exist
+		if(GlobalAppointmentData.CalendarManager.SleepTime.StartTime != null && GlobalAppointmentData.CalendarManager.SleepTime.EndTime != null) {
+			this.startTime = GlobalAppointmentData.CalendarManager.SleepTime.StartTime;
+			this.endTime = GlobalAppointmentData.CalendarManager.SleepTime.EndTime;
+		}
 	}
 }
