@@ -10,6 +10,7 @@ using DevExpress.Utils;
 using DevExpress.XtraRichEdit.Model.History;
 using StudyN.Models;
 using StudyN.Utilities;
+using StudyN.Views;
 using static StudyN.Utilities.StudynEvent;
 
 //Because of the minuteMap, this iteration of the autoScheduler doesn't seem to have a need for blocks
@@ -81,6 +82,19 @@ public class AutoScheduler : StudynSubscriber
                 {
                     if(offset < 0) //meaning task cannot be completed unless its scheduled before baseTime (aka in the past)
                     {
+                        
+                        //pop up to ask if user would like to edit task that cannot be implemented 
+                        bool answer = await App.Current.MainPage.DisplayAlert("Warning", "The following task possesses a past due date: "
+                            + task.Name + "\n\nWould you like to edit task?", "Yes", "No");
+                        if (answer)
+                        {
+                            // TaskItem we need to edit...
+                            GlobalTaskData.ToEdit = task;
+                            // Get it in here
+                            await Shell.Current.GoToAsync(nameof(AddTaskPage));
+                        }
+                        
+                        
                         Console.WriteLine("UNSCHEDUABLE TASK");
                         pastDueTasks.Add(task);
                         taskPastDue = true;
@@ -180,6 +194,18 @@ public class AutoScheduler : StudynSubscriber
 
         else //Item is NOT possible to complete before deadline. Give it negative weight so it will be scheduled past its deadline, and be detected as unscheduable.
         {
+            
+            //pop up to ask if user would like to edit task that cannot be implemented 
+            bool answer = await App.Current.MainPage.DisplayAlert("Warning", "The following task cannot be completed on time: "
+                + task.Name + "\n\nWould you like to edit task?", "Yes", "No");
+            if (answer)
+            {
+                // TaskItem we need to edit...
+                GlobalTaskData.ToEdit = task;
+                // Get it in here
+                await Shell.Current.GoToAsync(nameof(AddTaskPage));
+            }
+            
             //taskPastDue = true;
             //pastDueTasks.Add(task);
             weight = null;
@@ -189,16 +215,28 @@ public class AutoScheduler : StudynSubscriber
     }
 
 
-
-
     public void run(Guid id)
     {
+        
+        //loading bar start
+        ProgressBar progressBar = new ProgressBar
+        {
+            Progress = 0,
+            ProgressColor = Colors.Gray
+        };
+        
         Console.WriteLine("Running autoScheduler");
         refreshData();
+        progressBar.ProgressTo(0.20, 100, Easing.Linear);
         MapAppointments();
+        progressBar.ProgressTo(0.4, 100, Easing.Linear);
         MapTasks();
+        progressBar.ProgressTo(0.6, 100, Easing.Linear);
         AddToCalendar( CoalesceMinuteMapping() );
+        progressBar.ProgressTo(0.8, 100, Easing.Linear);
         Console.WriteLine("Done running autoScheduler");
+        
+        progressBar.ProgressTo(1, 100, Easing.Linear);
 
         for (int i = 0; i < minuteMap.Length; i++)
         {
@@ -208,7 +246,8 @@ public class AutoScheduler : StudynSubscriber
             }
         }
     }
-
+    
+    
     private void refreshData()
     {
         taskPastDue = false;
