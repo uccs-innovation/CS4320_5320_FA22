@@ -22,10 +22,10 @@ public partial class SleepTimePage : ContentPage
 		if(this.startTime != null && this.endTime != null)
 		{
 			// if the start time and end time are inputed save them
-			DateTime fullStartTime = new DateTime(0000, 00, 00, this.startTime.Time.Value.Hour, 
-				this.startTime.Time.Value.Minute, this.startTime.Time.Value.Second);
-			DateTime fullEndTime = new DateTime(0000, 00, 00, this.endTime.Time.Value.Hour,
-				this.endTime.Time.Value.Minute,this.endTime.Time.Value.Second);
+			DateTime fullStartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 
+				this.startTime.Time.Value.Hour, this.startTime.Time.Value.Minute, this.startTime.Time.Value.Second);
+			DateTime fullEndTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 
+				this.endTime.Time.Value.Hour, this.endTime.Time.Value.Minute, this.endTime.Time.Value.Second);
 			GlobalAppointmentData.CalendarManager.SaveSleepTime(fullStartTime, fullEndTime);
 		}
 		// get out of Sleep Time Page
