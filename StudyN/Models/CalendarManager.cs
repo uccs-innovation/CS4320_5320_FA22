@@ -435,6 +435,7 @@ namespace StudyN.Models
         public ObservableCollection<Appointment> Appointments { get; private set; }
         public ObservableCollection<AppointmentCategory> AppointmentCategories { get; private set; }
         public ObservableCollection<AppointmentStatus> AppointmentStatuses { get; private set; }
+        public SleepTime SleepTime { get; private set; }
 
 
         public CalendarManager()
@@ -442,6 +443,7 @@ namespace StudyN.Models
             Appointments = new ObservableCollection<Appointment>();
             AppointmentCategories = new ObservableCollection<AppointmentCategory>();
             AppointmentStatuses = new ObservableCollection<AppointmentStatus>();
+            SleepTime = new SleepTime();
             
             // Handle changes to collection
             Appointments.CollectionChanged  += new NotifyCollectionChangedEventHandler(AppointmentCollectionChanged);

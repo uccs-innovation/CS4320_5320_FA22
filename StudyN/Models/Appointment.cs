@@ -100,4 +100,10 @@ namespace StudyN.Models
         public string Caption { get; set; }
         public Color Color { get; set; }
     }
+
+    public class SleepTime
+    {
+        public TimeIndicatorStyle StartTime { get; set; }
+        public TimeIndicatorStyle EndTime { get; set; }
+    }
 }
