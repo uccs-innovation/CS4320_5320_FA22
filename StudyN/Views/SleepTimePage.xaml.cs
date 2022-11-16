@@ -1,3 +1,4 @@
+using StudyN.Models;
 using StudyN.ViewModels;
 
 namespace StudyN.Views;
@@ -17,6 +18,12 @@ public partial class SleepTimePage : ContentPage
 	/// <param name="e"></param>
 	private async void OnSaveButtonTap(object sender, EventArgs e)
 	{
+		if(this.startTime != null && this.endTime != null)
+		{
+			// if the start time and end time are inputed save them
+			GlobalAppointmentData.CalendarManager.SaveSleepTime(this.startTime, this.endTime);
+		}
+		// get out of Sleep Time Page
 		Routing.RegisterRoute(nameof(Views.CalendarPage), typeof(Views.CalendarPage));
 		await Shell.Current.GoToAsync("..");
 	}

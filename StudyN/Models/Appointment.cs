@@ -1,4 +1,5 @@
 ﻿using DevExpress.Maui.Scheduler;
+using DevExpress.Maui.Editors;
 using StudyN.Utilities;
 using System;
 using System.Collections.Generic;
@@ -103,7 +104,7 @@ namespace StudyN.Models
 
     public class SleepTime
     {
-        public TimeIndicatorStyle StartTime { get; set; }
-        public TimeIndicatorStyle EndTime { get; set; }
+        public TimeEdit StartTime { get; set; }
+        public TimeEdit EndTime { get; set; }
     }
 }

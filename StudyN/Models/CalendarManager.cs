@@ -8,6 +8,7 @@ using System.Xml;
 using AndroidX.Fragment.App.StrictMode;
 using DevExpress.Maui.Scheduler;
 using DevExpress.Maui.Scheduler.Internal;
+using DevExpress.Maui.Editors;
 using Microsoft.Maui.Controls;
 using StudyN.Utilities;
 using DevExpress.Data.Mask;
@@ -297,6 +298,18 @@ namespace StudyN.Models
                     return;
                 }
             }
+        }
+
+        /// <summary>
+        /// Save sleep time
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        public void SaveSleepTime(TimeEdit startTime, TimeEdit endTime)
+        {
+            // save information into Sleep Time
+            SleepTime.StartTime = startTime;
+            SleepTime.EndTime = endTime;
         }
 
 
