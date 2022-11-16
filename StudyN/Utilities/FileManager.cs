@@ -58,6 +58,10 @@ namespace StudyN.Utilities
             {
                 CategoryDeleted(taskEvent.Id);
             }
+            else if (taskEvent.EventType == StudynEventType.SleepTimeChanged)
+            {
+                SleepTimeChanged();
+            }
             else if (taskEvent.EventType == StudynEventType.AppointmentAdd)
             {
                 ApptAdded(taskEvent.Id);
@@ -210,6 +214,18 @@ namespace StudyN.Utilities
                 Console.WriteLine("Error: File doesn't exist, adding new file");
                 CategoryAdded(catId);
             }
+        }
+
+        /// <summary>
+        /// When SleepTime changes, thoses changes get saved to a file
+        /// </summary>
+        public static void SleepTimeChanged()
+        {
+            // serialize sleep time into a file
+            string filename = DIR + "/sleepTime.json";
+            var indent = new JsonSerializerOptions { WriteIndented = true };
+            string jsonString = JsonSerializer.Serialize(GlobalAppointmentData.CalendarManager.SleepTime, indent);
+            File.WriteAllText(filename, jsonString);
         }
 
         public static string[] LoadTaskFileNames()

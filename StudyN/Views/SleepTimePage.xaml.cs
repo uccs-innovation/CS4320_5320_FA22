@@ -22,7 +22,11 @@ public partial class SleepTimePage : ContentPage
 		if(this.startTime != null && this.endTime != null)
 		{
 			// if the start time and end time are inputed save them
-			GlobalAppointmentData.CalendarManager.SaveSleepTime(this.startTime, this.endTime);
+			DateTime fullStartTime = new DateTime(0000, 00, 00, this.startTime.Time.Value.Hour, 
+				this.startTime.Time.Value.Minute, this.startTime.Time.Value.Second);
+			DateTime fullEndTime = new DateTime(0000, 00, 00, this.endTime.Time.Value.Hour,
+				this.endTime.Time.Value.Minute,this.endTime.Time.Value.Second);
+			GlobalAppointmentData.CalendarManager.SaveSleepTime(fullStartTime, fullEndTime);
 		}
 		// get out of Sleep Time Page
 		Routing.RegisterRoute(nameof(Views.CalendarPage), typeof(Views.CalendarPage));
@@ -35,9 +39,9 @@ public partial class SleepTimePage : ContentPage
 	void LoadSleepTime()
 	{
 		// load sleep time start and stop times if they exist
-		if(GlobalAppointmentData.CalendarManager.SleepTime.StartTime != null && GlobalAppointmentData.CalendarManager.SleepTime.EndTime != null) {
-			this.startTime = GlobalAppointmentData.CalendarManager.SleepTime.StartTime;
-			this.endTime = GlobalAppointmentData.CalendarManager.SleepTime.EndTime;
+		if(File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json")) {
+			this.startTime.Time = GlobalAppointmentData.CalendarManager.SleepTime.StartTime;
+			this.endTime.Time = GlobalAppointmentData.CalendarManager.SleepTime.EndTime;
 		}
 	}
 }

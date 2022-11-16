@@ -104,7 +104,7 @@ namespace StudyN.Models
 
     public class SleepTime
     {
-        public TimeEdit StartTime { get; set; }
-        public TimeEdit EndTime { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
     }
 }

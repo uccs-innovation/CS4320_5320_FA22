@@ -305,11 +305,13 @@ namespace StudyN.Models
         /// </summary>
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
-        public void SaveSleepTime(TimeEdit startTime, TimeEdit endTime)
+        public void SaveSleepTime(DateTime startTime, DateTime endTime)
         {
             // save information into Sleep Time
             SleepTime.StartTime = startTime;
             SleepTime.EndTime = endTime;
+            EventBus.PublishEvent(
+                new StudynEvent(Guid.NewGuid(), StudynEvent.StudynEventType.SleepTimeChanged));
         }
 
 
@@ -441,6 +443,18 @@ namespace StudyN.Models
                 category.PickerXPosition = deserializer.PickerXPosition;
                 category.PickerYPosition = deserializer.PickerYPosition;
                 AppointmentCategories.Add(category);
+            }
+        }
+
+        /// <summary>
+        /// Loads from sleep time json file into sleep time object
+        /// </summary>
+        public void LoadSleepTime()
+        {
+            string filename = FileSystem.AppDataDirectory + "/sleepTime.json";
+            if (File.Exists(filename))
+            {
+                SleepTime = JsonConvert.DeserializeObject<SleepTime>(filename);
             }
         }
 
