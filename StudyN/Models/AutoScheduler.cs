@@ -84,14 +84,14 @@ public class AutoScheduler : StudynSubscriber
                     {
                         
                         //pop up to ask if user would like to edit task that cannot be implemented 
-                        bool answer = await App.Current.MainPage.DisplayAlert("Warning", "The following task possesses a past due date: "
-                            + task.Name + "\n\nWould you like to edit task?", "Yes", "No");
-                        if (answer)
+                      //  bool answer = await App.Current.MainPage.DisplayAlert("Warning", "The following task possesses a past due date: "
+                        //    + task.Name + "\n\nWould you like to edit task?", "Yes", "No");
+                       // if (answer)
                         {
                             // TaskItem we need to edit...
                             GlobalTaskData.ToEdit = task;
                             // Get it in here
-                            await Shell.Current.GoToAsync(nameof(AddTaskPage));
+                            //await Shell.Current.GoToAsync(nameof(AddTaskPage));
                         }
                         
                         
@@ -196,14 +196,14 @@ public class AutoScheduler : StudynSubscriber
         {
             
             //pop up to ask if user would like to edit task that cannot be implemented 
-            bool answer = await App.Current.MainPage.DisplayAlert("Warning", "The following task cannot be completed on time: "
-                + task.Name + "\n\nWould you like to edit task?", "Yes", "No");
-            if (answer)
+          //  bool answer = await App.Current.MainPage.DisplayAlert("Warning", "The following task cannot be completed on time: "
+            //    + task.Name + "\n\nWould you like to edit task?", "Yes", "No");
+           // if (answer)
             {
                 // TaskItem we need to edit...
                 GlobalTaskData.ToEdit = task;
                 // Get it in here
-                await Shell.Current.GoToAsync(nameof(AddTaskPage));
+               // await Shell.Current.GoToAsync(nameof(AddTaskPage));
             }
             
             //taskPastDue = true;
