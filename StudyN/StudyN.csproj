@@ -40,6 +40,7 @@
 	  <None Remove="Platforms\Android\private_key.json" />
 	  <None Remove="private_key.json" />
 	  <None Remove="Resources\Images\image2vector.svg" />
+	  <None Remove="Resources\Images\logo.png" />
 	  <None Remove="Resources\Images\plus_button.png" />
 	</ItemGroup>
 
@@ -100,6 +101,9 @@
 
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\AboutUs.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\AddCategoryPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
