@@ -149,12 +149,13 @@ namespace StudyN.Models
             int count = AppointmentLabelTitles.Length;
             for (int i = 0; i < count; i++)
             {
+                Console.WriteLine("In CreateApointmentCategories");
                 AppointmentCategory cat = new AppointmentCategory();
                 cat.Id = Guid.NewGuid();
                 cat.Caption = AppointmentLabelTitles[i];
                 cat.Color = AppointmentLabelColors[i];
-                cat.PickerXPosition = AppointmentCategoryX[i];
-                cat.PickerYPosition = 0.5f;
+                //cat.PickerXPosition = AppointmentCategoryX[i];
+                //cat.PickerYPosition = 0.5f;
                 AppointmentCategories.Add(cat);
                 EventBus.PublishEvent(
                             new StudynEvent(cat.Id, StudynEvent.StudynEventType.CategoryAdd));
@@ -520,7 +521,7 @@ namespace StudyN.Models
             // check if pointer file doesn't exist before make default files
             if (FileManager.LoadCategoryFileNames().Length == 0)
             {
-                // CreateAppointmentCategories(); // estepanek: I had to comment this out because it is causing an IndexOutOfRangeException: Index was outside the bound of the array
+                 CreateAppointmentCategories(); 
             }
 
             CreateAppointmentLabels();
