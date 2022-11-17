@@ -1,4 +1,3 @@
-using DevExpress.XtraRichEdit.Model;
 using StudyN.Models;
 using System.Collections.ObjectModel;
 
@@ -7,11 +6,13 @@ namespace StudyN.ViewModels
     public class AnalyticsViewModel : BaseViewModel
     {
         public ObservableCollection<Event> CalendarEvents { get; set; }
+        public Color[] Palette { get; set; }
 
         public AnalyticsViewModel()
         {
             Title = "Analytics";
             InitializeEvents();
+            InitalizeColorPalette();
         }
 
         public void InitializeEvents()
@@ -19,10 +20,8 @@ namespace StudyN.ViewModels
             ObservableCollection<Event> EventCollection = new();
             var data = GlobalAppointmentData.CalendarManager;
             Dictionary<string, int> tempDict = new();
-            int numOfEvents = 0;
             foreach (var item in data.Appointments)
             {
-                numOfEvents++;
                 string caption = data.GetAppointmentCategory((Guid)item.LabelId).Caption;
                 if (!tempDict.ContainsKey(caption))
                 {
@@ -38,6 +37,30 @@ namespace StudyN.ViewModels
                 EventCollection.Add(new(key, tempDict[key]));
             }
             CalendarEvents = EventCollection;
+        }
+
+        public void InitalizeColorPalette()
+        {
+            var data = GlobalAppointmentData.CalendarManager;
+            Color[] ColorList = new Color[data.AppointmentCategories.Count];
+            int i = 0;
+            foreach (var item in data.Appointments)
+            {
+                Color color = data.GetAppointmentCategory((Guid)item.LabelId).Color;
+                if (!ColorList.Contains(color))
+                {
+                    ColorList[i] = color;
+                    i++;
+                }
+            }
+            for (int j = 0; j < ColorList.Length; j++)
+            {
+                if (ColorList[j] == null)
+                {
+                    ColorList[j] = Colors.White;
+                }
+            }
+            Palette = ColorList;
         }
 
         public class Event : BindableObject

@@ -12,14 +12,15 @@ using System.Threading.Tasks;
 namespace StudyN.Models
 {
     public class Appointment : AppointmentItem
-    {
-        public Guid UniqueId { get; set; }
+    {        
+        public Guid UniqueId { get; set; } = Guid.NewGuid();
+        public Guid ParentTaskId { get; set; }
         public string ReminderInfo { get; set; }
         public string Notes { get; set; }
 
         // properties for StudyN_Time category
         public bool IsGeneratedStudyNTime { get; set; }
-        public Guid ParentTaskId { get; set; }
+        
         public int StudyNBlock_Minutes { get; set; }
         public bool WasEdited { get; set; }
         public bool IsOrphan { get; set; }
@@ -46,6 +47,8 @@ namespace StudyN.Models
 
         public DateTime LastEdited { get; set; }
 
+        public string From { get; set; } //IE From "autoScheduler", from "userInput", from "ICS", etc...
+
         protected void ApptChanged(object sender, PropertyChangedEventArgs e)
         {
             // Publish Appointment Edit
@@ -63,7 +66,7 @@ namespace StudyN.Models
 
         public Appointment() : base()
         {
-            UniqueId = new Guid();
+            //UniqueId = new Guid();
             LastEdited = DateTime.Now;
             PropertyChanged += new PropertyChangedEventHandler(ApptChanged);
         }
@@ -77,7 +80,19 @@ namespace StudyN.Models
         public Color Color { get; set; }
     }
 
-    // Built-in Scheduler DataStorage DataSource AppointmentStatusesSource
+    /// <summary>
+    /// Used to serialize categories into json files
+    /// Colors can't be serialized
+    /// </summary>
+    public class SerializedAppointmentCategory
+    {
+        public Guid Id { get; set; }
+        public string Caption { get; set; }
+        public string Color { get; set; }
+        public double PickerXPosition { get; set; }
+        public double PickerYPosition { get; set; }
+    }
+
     public class AppointmentStatus
     {
         public int Id { get; set; }

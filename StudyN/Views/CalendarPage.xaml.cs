@@ -32,6 +32,8 @@ namespace StudyN.Views
             dailyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 255);
             EventBus.Subscribe(this);
 
+            
+
             // Reuse data storage between all the views
             weekView.DataStorage = dayView.DataStorage;
             monthView.DataStorage = dayView.DataStorage;
@@ -77,12 +79,16 @@ namespace StudyN.Views
             SchedulerStorage.RefreshData();
             //SchedulerStorage.AppointmentItems.Refresh(); //https://supportcenter.devexpress.com/ticket/details/q320528/slow-scheduler-refresh //https://supportcenter.devexpress.com/ticket/details/t615692/how-to-programmatically-refresh-scheduler
             InvalidateMeasure();
+            Console.WriteLine("in CalendarPage OnAppearing after InvalidateMeasure");
 
             isChildPageOpening = false;
 
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
+            Console.WriteLine("in CalendarPage OnAppearing after SchedulerStorage.GetAppointments");
             CalendarDataView.LoadDataForNotification(notes.ToList());
+            Console.WriteLine("in CalendarPage OnAppearing after loadDataForNotification");
             base.OnAppearing();
+            Console.WriteLine("in CalendarPage OnAppearing after base.OnAppearing");
         }
 
         private void ShowAppointmentEditPage(AppointmentItem appointment)
@@ -197,6 +203,53 @@ namespace StudyN.Views
             }
         }
 
+        void onExportButtonTap(object sender, EventArgs args)
+        {
+            // Gets appointment data
+            var appointments = GlobalAppointmentData.CalendarManager.Appointments;
 
+            // Heading of ICS file
+            String fileBody = "BEGIN:VCALENDAR\n";
+            fileBody += "VERSION:2.0\n";
+            fileBody += "PRODID:StudyN\n";
+
+
+            // index of appointments
+            int i = 0;
+
+            // Runs for each appointment on the calendar
+            foreach (Appointment appointment in appointments)
+            {
+                // Increases index
+                i += 1;
+
+                DateTime startTime = TimeZoneInfo.ConvertTimeToUtc(appointment.Start);
+                DateTime endTime = TimeZoneInfo.ConvertTimeToUtc(appointment.End);
+
+                // Populates event information
+                fileBody += "BEGIN:VEVENT\n";
+                fileBody += "SUMMARY:" + appointment.Subject + "\n";
+                fileBody += "DTSTART:" + String.Format("{0:yyyyMMdd}T{0:HHmmss}Z\n", startTime);
+                fileBody += "DTEND:" + String.Format("{0:yyyyMMdd}T{0:HHmmss}Z\n", endTime);
+                fileBody += "UID:StudyN-appointment-" + i + "\n";
+                fileBody += "END:VEVENT\n";
+            }
+
+            // Last line of ICS file
+            fileBody += "END:VCALENDAR";
+
+            // Writes all information to ICS file
+            createICS(fileBody, "StudyN_ExportedCalendar.ics");
+        }
+
+        async void createICS(string text, string targetFileName)
+        {
+            // Write the file content to the app data directory
+            string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, targetFileName);
+            using FileStream outputStream = System.IO.File.OpenWrite(targetFile);
+            using StreamWriter streamWriter = new StreamWriter(outputStream);
+            await streamWriter.WriteAsync(text);
+            await DisplayAlert("Done!", "Calendar successfully exported.", "Ok");
+        }
     }
 } 

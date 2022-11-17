@@ -5,6 +5,7 @@ using StudyN.Utilities;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Threading.Tasks;
+using DevExpress.CodeParser;
 
 namespace StudyN.Models
 {
@@ -228,6 +229,94 @@ namespace StudyN.Models
                 //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
                 CompletedTasks.Add(task);
             }
+
+            //gets test tasks
+            string[] testFile = FileManager.LoadTaskFileNames();
+            foreach (string file in testFile)
+            {
+                jsonfiletext = File.ReadAllText(file);
+                //Console.WriteLine(jsonfiletext);
+                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+                TaskListTest.Add(task);
+
+                if (task.TimeList != null)
+                {
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine("Writing out task times");
+                    foreach (TaskItemTime tasktime in task.TimeList)
+                    {
+                        Console.WriteLine("Time Start" + tasktime.start);
+                        Console.WriteLine("TimeStop" + tasktime.stop);
+                        Console.WriteLine("Timespanned" + tasktime.span);
+                    }
+                }
+            }
+        }
+
+        public void LoadFilesIntoListsTest(string dirName)
+        {
+            string jsonfiletext;
+
+            // gets completed tasks
+            string[] taskfilelist = FileManager.LoadTaskFileTest(dirName);
+            foreach (string file in taskfilelist)
+            {
+                jsonfiletext = File.ReadAllText(file);
+                //Console.WriteLine(jsonfiletext);
+                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                TaskList.Add(task);
+
+                if (task.TimeList != null)
+                {
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine("Writing out task times");
+                    foreach (TaskItemTime tasktime in task.TimeList)
+                    {
+                        Console.WriteLine("Time Start" + tasktime.start);
+                        Console.WriteLine("TimeStop" + tasktime.stop);
+                        Console.WriteLine("Timespanned" + tasktime.span);
+                    }
+                }
+            }
+
+
+
+            // gets completed tasks
+            string[] completedfiles = FileManager.LoadCompletedFileNames();
+            foreach (string file in completedfiles)
+            {
+                jsonfiletext = File.ReadAllText(file);
+                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+
+                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                CompletedTasks.Add(task);
+            }
+
+            //gets test tasks
+            string[] testFile = FileManager.LoadTaskFileTest(dirName);
+            foreach (string file in testFile)
+            {
+                jsonfiletext = File.ReadAllText(file);
+                //Console.WriteLine(jsonfiletext);
+                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+                TaskListTest.Add(task);
+
+                if (task.TimeList != null)
+                {
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine("Writing out task times");
+                    foreach (TaskItemTime tasktime in task.TimeList)
+                    {
+                        Console.WriteLine("Time Start" + tasktime.start);
+                        Console.WriteLine("TimeStop" + tasktime.stop);
+                        Console.WriteLine("Timespanned" + tasktime.span);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -254,8 +343,38 @@ namespace StudyN.Models
             return (double)hours + decimalMins;
         }
 
+        // Count the number of total tasks due today
+        public int NumTasksDueToday()
+        {
+            int numTasksDue = NumTasksCompletedToday();
+            foreach(TaskItem task in TaskList)
+            {
+                if (task.DueTime.Date == DateTime.Today)
+                {
+                    numTasksDue++;
+                }
+            }
+            return numTasksDue;
+        }
+
+        // Count the number of task completed that were due today
+        public int NumTasksCompletedToday()
+        {
+            int numCompleted = 0;
+            foreach(TaskItem task in CompletedTasks)
+            {
+                if(task.DueTime.Date == DateTime.Today)
+                {
+                    numCompleted++;
+                }
+            }
+            return numCompleted;
+        }
+
         public ObservableCollection<TaskItem> TaskList { get; private set; }
         private ObservableCollection<TaskItem> CompletedTasks { get; set; }
+
+        public ObservableCollection<TaskItem> TaskListTest { get; private set; }
 
         //This constructor will create the normal TaskList and the list for
         //completed tasks, CompletedTasks
@@ -263,6 +382,7 @@ namespace StudyN.Models
         {
             TaskList = new ObservableCollection<TaskItem>();
             CompletedTasks = new ObservableCollection<TaskItem>();
+            TaskListTest = new ObservableCollection<TaskItem>();
         }
 
     }

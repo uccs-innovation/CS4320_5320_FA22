@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System;
 using System.Threading.Tasks;
 using DevExpress.Maui.DataGrid;
+using DevExpress.Maui.Charts;
+using StudyN.Models;
 
 namespace StudyN.Views
 {
@@ -16,10 +18,52 @@ namespace StudyN.Views
 
         public HomePage()
         {
+            BindingContext = ViewModel = new HomeViewModel();
             //Initializes the Home Page the first time it is opened. Sets AutoFilterValue to Today so that only items that are due at some point today appear.
             InitializeComponent();
-            DateFilter.AutoFilterValue = DateTime.Today; 
-            BindingContext = ViewModel = new HomeViewModel();
+            DateFilter.AutoFilterValue = DateTime.Today;
+
+            TaskDonutChart.ChartStyle = new PieChartStyle()
+            {
+                Palette = new Color[]
+                {
+                    Color.FromArgb("#1db2f5"),
+                    Color.FromArgb("#dcdcdc")
+                }
+            };
+
+            HoursDonutChart.ChartStyle = TaskDonutChart.ChartStyle;
+
+            // Get total screen width in "maui units"
+            var screenWidthUnits = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
+            // Adjust for column spacing
+            screenWidthUnits -= (StatGrid.ColumnDefinitions.Count - 1) * StatGrid.ColumnSpacing;
+            // Adjust for padding of all parent components
+            screenWidthUnits -= (ParentStack.Padding.Left +
+                                 ParentStack.Padding.Right +
+                                 StatGrid.Padding.Left +
+                                 StatGrid.Padding.Right);
+            // Divide by number of columns to get each columns disired width in "maui units"
+            var widgetWidth = screenWidthUnits / StatGrid.ColumnDefinitions.Count;
+
+            // Set the width and height of all the stat boxes
+            TaskCompletedStack.WidthRequest = widgetWidth;
+            TaskCompletedStack.HeightRequest = widgetWidth;
+
+            TaskRemainingStack.WidthRequest = widgetWidth;
+            TaskRemainingStack.HeightRequest = widgetWidth;
+
+            TaskDonutChart.WidthRequest = widgetWidth;
+            TaskDonutChart.HeightRequest = widgetWidth;
+
+            HoursCompletedStack.WidthRequest = widgetWidth;
+            HoursCompletedStack.HeightRequest = widgetWidth;
+
+            HoursRemainingStack.WidthRequest = widgetWidth;
+            HoursRemainingStack.HeightRequest = widgetWidth;
+
+            HoursDonutChart.WidthRequest = widgetWidth;
+            HoursDonutChart.HeightRequest = widgetWidth;
         }
 
         HomeViewModel ViewModel { get; }
@@ -30,6 +74,45 @@ namespace StudyN.Views
             base.OnAppearing();
             //This refreshes the data from the DataSource for this page.
             myList.RefreshData();
+
+            // Populate the statistics fields
+            int numTasksCompleted = GlobalTaskData.TaskManager.NumTasksCompletedToday();
+            int numTasksDueToday = GlobalTaskData.TaskManager.NumTasksDueToday();
+
+            int numHoursCompleted = GlobalAppointmentData.CalendarManager.NumHoursCompletedToday();
+            int numHoursScheduled = GlobalAppointmentData.CalendarManager.NumHoursScheduledToday();
+
+            double taskPercentage = numTasksDueToday == 0 ?
+                                    0 : (((double)numTasksCompleted / (double)numTasksDueToday) * 100);
+
+            ViewModel.SetTaskPercentage(taskPercentage);
+
+            double hourPercentage = numHoursScheduled == 0 ?
+                                    0 : (((double)numHoursCompleted / (double)numHoursScheduled) * 100);
+
+            ViewModel.SetHourPercentage(hourPercentage);
+
+            string taskPercentageString = numTasksDueToday == 0 ?
+                                    "--%" : taskPercentage.ToString() + "%";
+
+            string hoursPercentageString = numHoursScheduled == 0 ?
+                                    "--%" : hourPercentage.ToString() + "%";
+
+            TaskSeries.CenterLabel = new PieCenterTextLabel
+            {
+                TextPattern = taskPercentageString
+            };
+
+            HourSeries.CenterLabel = new PieCenterTextLabel
+            {
+                TextPattern = hoursPercentageString
+            };
+
+            NumTasksCompleted.Text = numTasksCompleted.ToString();
+            NumTasksRemaining.Text = numTasksDueToday.ToString();
+
+            NumHoursCompleted.Text = numHoursCompleted.ToString();
+            NumHoursRemaining.Text = numHoursScheduled.ToString();
         }
 
 
