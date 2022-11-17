@@ -34,14 +34,8 @@ public class AutoScheduler : StudynSubscriber
         // set base time
         if(File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
         {
-            baseTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,
-                GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Hour,
-                GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Minute,
-                GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Second);
-            baseLimit = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,
-                GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Hour,
-                GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Minute,
-                GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Second);
+            baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
+            baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
         }
         else
         {
@@ -240,14 +234,8 @@ public class AutoScheduler : StudynSubscriber
         // set base time
         if (File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
         {
-            baseTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,
-                GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Hour,
-                GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Minute,
-                GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Second);
-            baseLimit = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,
-                GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Hour,
-                GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Minute,
-                GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Second);
+            baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
+            baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
         }
         else
         {
