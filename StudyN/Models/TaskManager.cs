@@ -150,6 +150,8 @@ namespace StudyN.Models
 
         public void CreateDailyReccuringTask(TaskItem ParentTask, DateTime EndDate, int numDays = 1)
         {
+            ParentTask.IsRecur = true;
+
             // Create a deepcopy
             DateTime dueTime = new DateTime(ParentTask.DueTime.Ticks).AddDays(numDays);
 
@@ -162,7 +164,7 @@ namespace StudyN.Models
                                         ParentTask.Priority,
                                         ParentTask.CompletionProgress,
                                         ParentTask.TotalTimeNeeded,
-                                        ParentTask.TaskId);
+                                        ParentTask.RecurId);
                 task.IsRecur = true;
                 // Create a deepcopy
                 dueTime = new DateTime(dueTime.Ticks).AddDays(numDays);
@@ -177,6 +179,8 @@ namespace StudyN.Models
 
         public void CreateMonthlyReccuringTask(TaskItem ParentTask, DateTime EndDate)
         {
+            ParentTask.IsRecur = true;
+
             // Create a deepcopy
             DateTime dueTime = new DateTime(ParentTask.DueTime.Ticks).AddMonths(1);
 
@@ -189,7 +193,7 @@ namespace StudyN.Models
                                         ParentTask.Priority,
                                         ParentTask.CompletionProgress,
                                         ParentTask.TotalTimeNeeded,
-                                        ParentTask.TaskId);
+                                        ParentTask.RecurId);
                 task.IsRecur = true;
                 // Create a deepcopy
                 dueTime = new DateTime(dueTime.Ticks).AddMonths(1);

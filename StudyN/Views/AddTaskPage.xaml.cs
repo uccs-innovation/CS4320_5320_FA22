@@ -268,6 +268,8 @@ public partial class AddTaskPage : ContentPage
         //Check to see if we are currently editing or adding a task
         if (editingExistingTask)
         {
+            task = GlobalTaskData.ToEdit;
+
             //Saves the informatiom when editing
             GlobalTaskData.TaskManager.EditTask(
                 GlobalTaskData.ToEdit.TaskId,
