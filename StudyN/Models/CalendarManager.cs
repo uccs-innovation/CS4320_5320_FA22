@@ -119,7 +119,8 @@ namespace StudyN.Models
                                             DateTime start,
                                             TimeSpan duration,
                                             int room,
-                                            Guid recurId = new Guid())
+                                            Guid recurId = new Guid(),
+                                            string from = "")
         {
             Guid guid = new Guid();
 
@@ -134,7 +135,7 @@ namespace StudyN.Models
                 Location = string.Format("{0}", room),
                 Description = string.Empty,
                 UniqueId = guid,
-                From = recurId.ToString()
+                From = from
             };
 
 
@@ -379,14 +380,17 @@ namespace StudyN.Models
                 if (task != null)
                 {
                     // Look at logged times
-                    foreach (TaskItemTime taskTime in task.TimeList)
+                    if (task.TimeList != null)
                     {
-                        // Add up times that finished before "now"
-                        // that started sometime today
-                        if (taskTime.stop < DateTime.Now
-                            && taskTime.start == DateTime.Today)
+                        foreach (TaskItemTime taskTime in task.TimeList)
                         {
-                            numMinCompleted += taskTime.span.TotalMinutes;
+                            // Add up times that finished before "now"
+                            // that started sometime today
+                            if (taskTime.stop < DateTime.Now
+                                && taskTime.start == DateTime.Today)
+                            {
+                                numMinCompleted += taskTime.span.TotalMinutes;
+                            }
                         }
                     }
                 }
