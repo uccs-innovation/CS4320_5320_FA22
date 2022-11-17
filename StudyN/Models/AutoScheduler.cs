@@ -32,7 +32,7 @@ public class AutoScheduler : StudynSubscriber
         minuteMap = new minuteSnapshot[40320]; //40320 minutes in 4 weeks. AutoScheduler will only scheduler out 4 weeks.
         for (int i = 0; i < minuteMap.Length; i++) { minuteMap[i] = new minuteSnapshot(); }
         // set base time
-        if (File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
+        if(File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
         {
             baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
             baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
@@ -132,7 +132,7 @@ public class AutoScheduler : StudynSubscriber
                 offset -= blockContainer.blockSize;
             }
 
-            if (blockContainer.mappedBlocks < blockContainer.blocks.Length) //not all possible blocks were able to be mapped due to conflicts. So there is more remainder time now
+            if(blockContainer.mappedBlocks < blockContainer.blocks.Length) //not all possible blocks were able to be mapped due to conflicts. So there is more remainder time now
             {
                 blockContainer.remainder = blockContainer.remainder + (blockContainer.blocks.Length - blockContainer.mappedBlocks) * blockContainer.blockSize;
             }
@@ -156,7 +156,7 @@ public class AutoScheduler : StudynSubscriber
                 offset--;
             }
 
-            if (offset < 0)
+            if(offset < 0) 
             {
                 Console.WriteLine("UNSCHEDUABLE TASK");
                 pastDueTasks.Add(blockContainer.task);
@@ -171,10 +171,10 @@ public class AutoScheduler : StudynSubscriber
         foreach (BlockContainer bc in blockContainers)
         {
             Console.WriteLine(bc.task.Name + " has " + bc.mappedBlocks + " blocks.");
-            for (int i = 0; i < bc.mappedBlocks; i++) //For each block in the container
+            for(int i = 0; i < bc.mappedBlocks; i++) //For each block in the container
             {
                 //Clear block from the minute map, and try to place it earlier
-                for (int j = bc.blocks[i].start; j < bc.blocks[i].end; j++)
+                for(int j = bc.blocks[i].start; j < bc.blocks[i].end; j++)
                 {
                     minuteMap[j].id = null;
                     minuteMap[j].from = "";
@@ -182,7 +182,7 @@ public class AutoScheduler : StudynSubscriber
                 }
 
                 int offset = 0;
-                while (mapConflict(offset, offset + bc.blockSize) && offset < bc.blocks[i].start) //while we cant place it. After the while loop the block will either be placed earlier, or in the same spot it was in originally.
+                while( mapConflict(offset, offset + bc.blockSize) && offset < bc.blocks[i].start) //while we cant place it. After the while loop the block will either be placed earlier, or in the same spot it was in originally.
                 {
                     offset++;
                 }
@@ -203,14 +203,14 @@ public class AutoScheduler : StudynSubscriber
                                 }*/
 
                 //ATTEMPT TO SPACE OUT TOUCHING BLOCKS IF THEY ARE FROM SAME TASK
-                if (offset > 0)
+                if(offset > 0)
                 {
                     if (minuteMap[offset - 1].id == bc.task.TaskId)
                     {
-                        while (mapConflict(offset + bc.blockSize, offset + 2 * bc.blockSize))
+                        while(mapConflict(offset + bc.blockSize, offset + 2 * bc.blockSize))
                         {
                             offset++; //We are trying to sort block wise. Perhaps this should be offset += blockSize??????
-                            if (!mapConflict(offset + bc.blockSize, offset + 2 * bc.blockSize))
+                            if(!mapConflict(offset + bc.blockSize, offset + 2 * bc.blockSize)) 
                             {
                                 if (minuteMap[offset - 1 + bc.blockSize].id == bc.task.TaskId) //If theres not a mapConflict, but the block is touching another block of the same task, attempt to push it forward another block size
                                 {
@@ -221,11 +221,11 @@ public class AutoScheduler : StudynSubscriber
                         offset = offset + bc.blockSize;
                     }
                 }
-
-                if (offset < bc.blocks[i].start) { bc.blocks[i].start = offset; bc.blocks[i].end = offset + bc.blockSize; } //If the block was succesfully spaced out and STILL placed earlier than where it originally was
+                
+                if(offset < bc.blocks[i].start){ bc.blocks[i].start = offset; bc.blocks[i].end = offset + bc.blockSize; } //If the block was succesfully spaced out and STILL placed earlier than where it originally was
 
                 //for (int j = offset; j < offset + bc.blockSize; j++) //Place it in minuteMap
-                for (int j = bc.blocks[i].start; j < bc.blocks[i].end; j++) //Place it in minuteMap
+                for(int j = bc.blocks[i].start; j < bc.blocks[i].end; j++) //Place it in minuteMap
                 {
                     minuteMap[j].id = bc.task.TaskId;
                     minuteMap[j].from = "autoScheduler";
@@ -280,7 +280,7 @@ public class AutoScheduler : StudynSubscriber
         {
             if (appt.From == "autoScheduler")
             {
-                GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+                GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
 
             }
         }

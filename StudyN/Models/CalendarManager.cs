@@ -375,14 +375,17 @@ namespace StudyN.Models
                 if (task != null)
                 {
                     // Look at logged times
-                    foreach (TaskItemTime taskTime in task.TimeList)
+                    if (task.TimeList != null)
                     {
-                        // Add up times that finished before "now"
-                        // that started sometime today
-                        if (taskTime.stop < DateTime.Now
-                            && taskTime.start == DateTime.Today)
+                        foreach (TaskItemTime taskTime in task.TimeList)
                         {
-                            numMinCompleted += taskTime.span.TotalMinutes;
+                            // Add up times that finished before "now"
+                            // that started sometime today
+                            if (taskTime.stop < DateTime.Now
+                                && taskTime.start == DateTime.Today)
+                            {
+                                numMinCompleted += taskTime.span.TotalMinutes;
+                            }
                         }
                     }
                 }
