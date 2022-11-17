@@ -49,7 +49,7 @@
             HorizontalOptions="Center"
             BorderColor="Transparent"
             BorderWidth="1"
-            TextColor="#000"
+            TextColor="Black"
             FontSize="15"
             BackgroundColor="Transparent"
             Clicked="OnWeeklyClicked"
@@ -60,13 +60,12 @@
                             <VisualState.Setters>
                                 <Setter Property="Scale"
                             Value="1" />
-                                <Setter Property="TextColor" Value="#000"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Pressed">
                             <VisualState.Setters>
-                                <Setter Property="Scale" Value="0.8" />
-                                <Setter Property="TextColor" Value="#000"/>
+                                <Setter Property="Scale"
+                            Value="0.8" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
