@@ -30,6 +30,7 @@ public partial class SleepTimePage : ContentPage
 		}
 		// get out of Sleep Time Page
 		Routing.RegisterRoute(nameof(Views.CalendarPage), typeof(Views.CalendarPage));
+		Routing.RegisterRoute(nameof(Views.SettingsPage), typeof(Views.SettingsPage));
 		await Shell.Current.GoToAsync("..");
 	}
 	

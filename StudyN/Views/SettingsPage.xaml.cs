@@ -49,5 +49,11 @@ namespace StudyN.Views
         {
             await Shell.Current.GoToAsync(nameof(AddIcsPage));
         }
+
+        private async void Button_ClickedSleep(object sender, EventArgs e)
+        {
+            Routing.RegisterRoute(nameof(Views.SleepTimePage), typeof(Views.SleepTimePage));
+            await Shell.Current.GoToAsync(nameof(Views.SleepTimePage));
+        }
     }
 }
