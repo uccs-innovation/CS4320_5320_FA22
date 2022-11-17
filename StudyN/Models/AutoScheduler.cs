@@ -48,17 +48,18 @@ public class AutoScheduler : StudynSubscriber
     private void MapAppointments()
     {
         Console.WriteLine("autoScheduler.MapAppointments()");
-        foreach(Appointment appt in appts)
+        var apptsCopy = appts.ToList();
+        foreach (Appointment appt in apptsCopy)
         {
             if (appt.From == "autoScheduler") //If the appointment is from the autoScheduler, delete it from the calendar so we can reschedule it without duplicating it
             {
                 Console.WriteLine("rescheduling appointment from autoScheduler");
-                //appts.Remove(appt);
+                appts.Remove(appt);
                 //GlobalAppointmentData.CalendarManager.DeleteAppointment(minuteMap[i].id); //To be able to delete an appointment, the calnedarManager needs a function to do so
             } 
         }
 
-        foreach (Appointment appt in appts)
+        foreach (Appointment appt in apptsCopy)
         {
             DateTime start, end;
             start = appt.Start; end = appt.End;
@@ -269,12 +270,11 @@ public class AutoScheduler : StudynSubscriber
         Console.WriteLine("autoScheduler adding to calendar");
         foreach(Appointment appt in appts)
         {
-            GlobalAppointmentData.CalendarManager.CreateAppointment(
-                -1,
-                appt.Subject,
-                appt.Start,
-                appt.End - appt.Start,
-                -1); //idk what "room" is for CreateAppointment() method
+            if (appt.From == "autoScheduler")
+            {
+                GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+
+            }
         }
     }
 
