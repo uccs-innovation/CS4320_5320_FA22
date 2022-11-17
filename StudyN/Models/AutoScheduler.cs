@@ -21,11 +21,15 @@ public class AutoScheduler : StudynSubscriber
     ObservableCollection<TaskItem> tasks;
     private minuteSnapshot[] minuteMap;
     public bool taskPastDue;
+    public bool taskNoTimeAlert;
+    public bool taskPastDueAlert;
     public List<TaskItem> pastDueTasks;
 
     public AutoScheduler()
     {
         taskPastDue = false;
+        taskNoTimeAlert = false;
+        taskPastDueAlert = false;
         tasks = GlobalTaskData.TaskManager.TaskList;
         appts = GlobalAppointmentData.CalendarManager.Appointments;
         pastDueTasks = new List<TaskItem>();
@@ -82,16 +86,14 @@ public class AutoScheduler : StudynSubscriber
                 {
                     if(offset < 0) //meaning task cannot be completed unless its scheduled before baseTime (aka in the past)
                     {
-                        
+                        ALERT_PastDue(task.Name);
                         //pop up to ask if user would like to edit task that cannot be implemented 
-                        bool answer = await App.Current.MainPage.DisplayAlert("Warning", "The following task possesses a past due date: "
-                            + task.Name + "\n\nWould you like to edit task?", "Yes", "No");
-                        if (answer)
+                        if (taskPastDueAlert)
                         {
                             // TaskItem we need to edit...
                             GlobalTaskData.ToEdit = task;
                             // Get it in here
-                            await Shell.Current.GoToAsync(nameof(AddTaskPage));
+                            Shell.Current.GoToAsync(nameof(AddTaskPage));
                         }
                         
                         
@@ -116,6 +118,15 @@ public class AutoScheduler : StudynSubscriber
                 }
             }
         }
+    }
+
+
+    public async void ALERT_PastDue(string taskname)
+    {
+
+        taskPastDueAlert = await App.Current.MainPage.DisplayAlert("Warning", "The following task possesses a past due date: "
+            + taskname + "\n\nWould you like to edit task?", "Yes", "No");
+        
     }
 
     //All contiguous minute mappings should be transformed into a continous appointment. IE indexes in the minute mapping that are next to each other and have the same Guid should be combined together.
@@ -194,16 +205,16 @@ public class AutoScheduler : StudynSubscriber
 
         else //Item is NOT possible to complete before deadline. Give it negative weight so it will be scheduled past its deadline, and be detected as unscheduable.
         {
-            
+
             //pop up to ask if user would like to edit task that cannot be implemented 
-            bool answer = await App.Current.MainPage.DisplayAlert("Warning", "The following task cannot be completed on time: "
-                + task.Name + "\n\nWould you like to edit task?", "Yes", "No");
-            if (answer)
+            ALERT_NoTime(task.Name);
+            Console.WriteLine("Making Progress");
+            if (taskNoTimeAlert)
             {
                 // TaskItem we need to edit...
                 GlobalTaskData.ToEdit = task;
                 // Get it in here
-                await Shell.Current.GoToAsync(nameof(AddTaskPage));
+                Shell.Current.GoToAsync(nameof(AddTaskPage));
             }
             
             //taskPastDue = true;
@@ -212,6 +223,15 @@ public class AutoScheduler : StudynSubscriber
         }
 
         return weight;
+    }
+
+    public async void ALERT_NoTime(string taskname)
+    {
+        Console.WriteLine("Managed to get to ALERT_NoTime.");
+        taskNoTimeAlert = await App.Current.MainPage.DisplayAlert("Warning", "The following task cannot be completed on time: "
+                + taskname + "\n\nWould you like to edit task?", "Yes", "No");
+        Console.WriteLine("Got the Answer.");
+
     }
 
 
