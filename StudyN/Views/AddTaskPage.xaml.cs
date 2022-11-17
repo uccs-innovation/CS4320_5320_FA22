@@ -262,40 +262,52 @@ public partial class AddTaskPage : ContentPage
         //Check to see if we are currently editing or adding a task
         if (editingExistingTask)
         {
-            //Gets task list
-            ObservableCollection<TaskItem> taskList = new ObservableCollection<TaskItem>();
-            for (int i = 0; i < taskList.Count; i++)
-            {
-                //If information is not the same, then it gets saved for all
-                if (taskList[i].Description != this.description.Text)
+            bool beingtimed = GlobalTaskTimeData.TaskTimeManager.BeingTimed;
+            Guid taskidTimed = GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed;
+            Guid taskidInEdit = GlobalTaskData.ToEdit.TaskId;
+            if (beingtimed && taskidTimed == taskidInEdit) {
+                await DisplayAlert("Task Being Timed", "You cannot edit task while task is being timed. Please stop timing task and try again.", "OK");
+            } else {
+                //Gets task list
+                ObservableCollection<TaskItem> taskList = new ObservableCollection<TaskItem>();
+                for (int i = 0; i < taskList.Count; i++)
                 {
-                    taskList[i].Description = this.description.Text;
+                    //If information is not the same, then it gets saved for all
+                    if (taskList[i].Description != this.description.Text)
+                    {
+                        taskList[i].Description = this.description.Text;
+                    }
+                    if (taskList[i].DueTime != dateTime)
+                    {
+                        taskList[i].DueTime = dateTime;
+                    }
+                    if (taskList[i].CompletionProgress != timeLogged)
+                    {
+                        taskList[i].CompletionProgress = timeLogged;
+                    }
+                    if (taskList[i].TotalTimeNeeded != totalTime)
+                    {
+                        taskList[i].TotalTimeNeeded = totalTime;
+                    }
                 }
-                if (taskList[i].DueTime != dateTime)
-                {
-                    taskList[i].DueTime = dateTime;
-                }
-                if (taskList[i].CompletionProgress != timeLogged)
-                {
-                    taskList[i].CompletionProgress = timeLogged;
-                }
-                if (taskList[i].TotalTimeNeeded != totalTime)
-                {
-                    taskList[i].TotalTimeNeeded = totalTime;
-                }
+                //Saves the informatiom when editing
+                GlobalTaskData.TaskManager.EditTask(GlobalTaskData.ToEdit.TaskId,
+                                                    this.name.Text,
+                                                    this.description.Text,
+                                                    dateTime,
+                                                    (int)this.priority.Value,
+                                                    timeLogged,
+                                                    totalTime,
+                                                    GlobalTaskData.ToEdit.TimeList);
+                task = GlobalTaskData.ToEdit;
+                GlobalTaskData.ToEdit = null;
+                editRecurringTasks(task);
+                HandleRecurrenceOnAddEdit(sender, e, task);
+                runAutoScheduler(task.TaskId);
+                await Shell.Current.GoToAsync("..");
+
             }
-            //Saves the informatiom when editing
-            GlobalTaskData.TaskManager.EditTask(
-                GlobalTaskData.ToEdit.TaskId,
-                this.name.Text,
-                this.description.Text,
-                dateTime,
-                (int)this.priority.Value,
-                timeLogged,
-                totalTime);
-            task = GlobalTaskData.ToEdit;
-            GlobalTaskData.ToEdit = null;
-            editRecurringTasks(task);
+
         }
         else
         {
@@ -307,8 +319,18 @@ public partial class AddTaskPage : ContentPage
                     (int)this.priority.Value,
                     timeLogged,
                     totalTime);
+            HandleRecurrenceOnAddEdit(sender, e, task);
+            runAutoScheduler(task.TaskId);
+            await Shell.Current.GoToAsync("..");
         }
+        //Returning to the previous page
 
+
+    }
+
+
+    async void HandleRecurrenceOnAddEdit(object sender, EventArgs e, TaskItem task)
+    {
 
 
         // Handles recurrence after everything is added into the task
@@ -336,20 +358,15 @@ public partial class AddTaskPage : ContentPage
                 {
                     HandleRecurrenceMonth(sender, e, task, recurrencedateTime);
                 }
-            } else { //if recurrence date is null send user alert failure to recurr 
+            }
+            else
+            { //if recurrence date is null send user alert failure to recurr 
                 await DisplayAlert("Recurrance End Date Not Set! ",
                "Sorry you must set a recurrence end date in order " +
                "to schedule recurrence. Please try again.", "OK");
             }
 
         }
-
-
-
-        //Returning to the previous page
-        await Shell.Current.GoToAsync("..");
-
-        runAutoScheduler(task.TaskId);
     }
 
     //This function will load the values held in each field of a task into the respective forms

@@ -60,8 +60,11 @@ namespace StudyN.Models
                                                     taskitem.TimeList);
                 this.TaskidBeingTimed = Guid.Empty;
             } catch(NullReferenceException) {
+                Console.WriteLine("*****************************************");
                 Console.WriteLine("ERROR NULL REFERENCE EXCEPTION");
                 Console.WriteLine("Error occured in tasktimemanager - function : StopCurrent()");
+                Console.WriteLine("*****************************************");
+
             }
 
 
@@ -74,8 +77,11 @@ namespace StudyN.Models
                 TaskItem thetaskitem = GlobalTaskData.TaskManager.GetTask(TaskidBeingTimed);
                 thetaskitem.TimeList.Add(this.taskitemtime);
             } catch (NullReferenceException) {
+                Console.WriteLine("*****************************************");
                 Console.WriteLine("ERROR NULL REFERENCE EXCEPTION");
                 Console.WriteLine("Error occured in tasktimemanager - function : AddNewTaskTImeItemListOfTimes()");
+                Console.WriteLine("*****************************************");
+
             }
 
 
