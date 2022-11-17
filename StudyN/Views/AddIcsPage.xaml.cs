@@ -42,10 +42,13 @@ public partial class AddIcsPage : ContentPage
      * if successful, run to class to convert massive ass string to appointments
      * else, jump ship
     */
-	private async void Submit_Button(object sender, EventArgs e) { 
+	private async void Submit_Button(object sender, EventArgs e)
+    { 
         Console.WriteLine(link);
-        if (!string.IsNullOrEmpty(link)) {
-            try {
+        if (!string.IsNullOrEmpty(link))
+        {
+            try
+            {
                 //var content = client.GetStringAsync(link);
                 //Result = content.Result;
 
@@ -63,24 +66,47 @@ public partial class AddIcsPage : ContentPage
 
                 //go to calanders page to show off new appointments
                 //await Shell.Current.GoToAsync(nameof(CalendarPage));
+
+                // Tell user import was complete
+                await DisplayAlert("Import Complete",
+                    "Calendar successfully imported.",
+                    "Ok");
             }
-            catch (HttpRequestException ex) {
+            catch (Exception ex)
+            {
                 //what went wrong
                 Console.WriteLine("\nException Caught!\n");
                 Console.WriteLine("Message :{0} ", ex.Message);
 
+                // Tell user link was invalid
+                await DisplayAlert("Unable to Import",
+                    "Entered link was invalid. \n" +
+                    "Please enter a valid link.",
+                    "Ok");
+
                 //jump ship (so no breaky)
-                await Shell.Current.GoToAsync(nameof(SettingsPage));
+                //await Shell.Current.GoToAsync(nameof(SettingsPage));
             }
+        }
+        else
+        {
+            // Tell user to enter a link
+            await DisplayAlert("Unable to Import",
+                    "Please enter a valid link.",
+                    "Ok");
         }
     }
 
     //this takes in the string into a string
-    private void Entry_TextChanged(object sender, TextChangedEventArgs e) {
-        link = e.NewTextValue;    }
+    private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        link = e.NewTextValue;
+    }
 
-    private void Entry_DirPath(object sender, TextChangedEventArgs e) {
-        dirString = e.NewTextValue;    }
+    private void Entry_DirPath(object sender, TextChangedEventArgs e)
+    {
+        dirString = e.NewTextValue;
+    }
 
     static Random rnd = new Random();
 
@@ -97,8 +123,10 @@ public partial class AddIcsPage : ContentPage
 
 
         //constructor that takes string and calls convert to break it
-        public GetAppointFromString(string r) {
-            convert(r);        }
+        public GetAppointFromString(string r)
+        {
+            convert(r);
+        }
 
         /*
          * parse through string to find event start
