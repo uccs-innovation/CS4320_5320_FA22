@@ -200,7 +200,7 @@ namespace StudyN.Models
             }
         }
 
-        public void EditReccuring(TaskItem editedTask)
+        public void EditRecurring(TaskItem editedTask)
         {
             if(!editedTask.IsRecur) { return; }
 

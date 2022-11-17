@@ -280,7 +280,22 @@ public partial class AddTaskPage : ContentPage
                 timeLogged,
                 totalTime);
 
-            GlobalTaskData.TaskManager.EditReccuring(GlobalTaskData.ToEdit);
+            if(task.IsRecur)
+            {
+                bool editSeries = await DisplayAlert("Recurring Event", "Would you like to edit all events in the series?", "Yes", "No");
+                if(editSeries)
+                {
+                    GlobalTaskData.TaskManager.EditRecurring(GlobalTaskData.ToEdit);
+                }
+                else
+                {
+                    // If only editing this one event. Remove it's
+                    // assocaiation with other events in the series.
+                    GlobalTaskData.ToEdit.RecurId = new Guid();
+                    GlobalTaskData.ToEdit.IsRecur = false;
+                }
+            }
+            
             GlobalTaskData.ToEdit = null;
         }
         else
