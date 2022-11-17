@@ -138,7 +138,12 @@ public class AutoScheduler : StudynSubscriber
         Console.WriteLine("autoScheduler adding to calendar");
         foreach(Appointment appt in appts)
         {
-            GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+            GlobalAppointmentData.CalendarManager.CreateAppointment(
+                -1,
+                appt.Subject,
+                appt.Start,
+                appt.End - appt.Start,
+                -1); //idk what "room" is for CreateAppointment() method
         }
     }
 

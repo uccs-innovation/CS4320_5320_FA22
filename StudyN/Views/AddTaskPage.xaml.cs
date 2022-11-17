@@ -13,6 +13,7 @@ using static Android.Util.EventLogTags;
 using static Android.Provider.Settings;
 using Android.Renderscripts;
 using DevExpress.CodeParser;
+using DevExpress.Maui.DataGrid;
 
 public partial class AddTaskPage : ContentPage
 {
@@ -39,7 +40,6 @@ public partial class AddTaskPage : ContentPage
             //CreateDummyTaskTimeLogData();
             TimeListLog.ItemsSource = GlobalTaskData.ToEdit.TimeList;
             this.displayLabel.Text = String.Format("Priority: " + GlobalTaskData.ToEdit.Priority);
-
         }
         else
         {
@@ -50,6 +50,8 @@ public partial class AddTaskPage : ContentPage
             editingExistingTask = false;
             SetValues();            
         }
+
+        SetRecurrenceComboBoxVisible();
 
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
 
@@ -242,48 +244,30 @@ public partial class AddTaskPage : ContentPage
     private async void HandleAddTaskButton(object sender, EventArgs e)
     {
         // Make sure we aren't storing nulls
-        this.name.Text = this.name.Text == null ? "Unnamed Task" : this.name.Text;
-        this.description.Text = this.description.Text == null ? "" : this.description.Text;
-        int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
-        int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
-        int totalHours = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
-        int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
-        this.date.Date = this.date.Date == null ? DateTime.Now.AddYears(1) : this.date.Date;
-        this.time.Time = this.time.Time == null ? DateTime.Now.AddYears(1) : this.time.Time;
+        name.Text = name.Text == null ? "Unnamed Task" : name.Text;
+        description.Text = description.Text == null ? "" : description.Text;
+        int hoursLogged = hSpent.Value == null ? 0 : (int)hSpent.Value;
+        int minutesLogged = mSpent.Value == null ? 0 : (int)mSpent.Value;
+        int totalHours = hComplete.Value == null ? 0 : (int)hComplete.Value;
+        int totalMinutes = mComplete.Value == null ? 0 : (int)mComplete.Value;
+        date.Date = date.Date == null ? DateTime.Now.AddYears(1) : date.Date;
+        time.Time = time.Time == null ? DateTime.Now.AddYears(1) : time.Time;
+
         // Turn logged time and total time into time doubles
         double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
         double totalTime = GlobalTaskData.TaskManager.SumTimes(totalHours, totalMinutes);
 
-        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
-            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
+        DateTime dateTime = new DateTime(date.Date.Value.Year,
+                                        date.Date.Value.Month,
+                                        date.Date.Value.Day,
+                                        time.Time.Value.Hour,
+                                        time.Time.Value.Minute,
+                                        time.Time.Value.Second);
 
         TaskItem task;
-
         //Check to see if we are currently editing or adding a task
         if (editingExistingTask)
         {
-            //Gets task list
-            ObservableCollection<TaskItem> taskList = new ObservableCollection<TaskItem>();
-            for (int i = 0; i < taskList.Count; i++)
-            {
-                //If information is not the same, then it gets saved for all
-                if (taskList[i].Description != this.description.Text)
-                {
-                    taskList[i].Description = this.description.Text;
-                }
-                if (taskList[i].DueTime != dateTime)
-                {
-                    taskList[i].DueTime = dateTime;
-                }
-                if (taskList[i].CompletionProgress != timeLogged)
-                {
-                    taskList[i].CompletionProgress = timeLogged;
-                }
-                if (taskList[i].TotalTimeNeeded != totalTime)
-                {
-                    taskList[i].TotalTimeNeeded = totalTime;
-                }
-            }
             //Saves the informatiom when editing
             GlobalTaskData.TaskManager.EditTask(
                 GlobalTaskData.ToEdit.TaskId,
@@ -293,9 +277,28 @@ public partial class AddTaskPage : ContentPage
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime);
+
+            if (GlobalTaskData.ToEdit.IsRecur)
+            {
+                bool editSeries = await DisplayAlert("Recurring Event",
+                                                     "Would you like to edit all events in the series?",
+                                                     "Yes",
+                                                     "No");
+                if(editSeries)
+                {
+                    GlobalTaskData.TaskManager.EditRecurring(GlobalTaskData.ToEdit);
+                }
+                else
+                {
+                    // If only editing this one event. Remove it's
+                    // assocaiation with other events in the series.
+                    GlobalTaskData.ToEdit.RecurId = Guid.NewGuid();
+                    GlobalTaskData.ToEdit.IsRecur = false;
+                }
+            }
+
             task = GlobalTaskData.ToEdit;
             GlobalTaskData.ToEdit = null;
-            editRecurringTasks(task);
         }
         else
         {
@@ -309,42 +312,37 @@ public partial class AddTaskPage : ContentPage
                     totalTime);
         }
 
-
-
         // Handles recurrence after everything is added into the task
-        this.recurrenceDate.Date = this.recurrenceDate.Date == null ? DateTime.Now : this.recurrenceDate.Date;
-        //if buttons are checked
-
-        if (dailyRadioButton.IsChecked || weeklyRadioButton.IsChecked || monthlyRadioButton.IsChecked)
+        if (IsRecurrenceSelected() && recurrenceDate.Date != null)
         {
             DateTime recurrencedateTime = new DateTime(this.recurrenceDate.Date.Value.Year,
                                            this.recurrenceDate.Date.Value.Month,
                                            this.recurrenceDate.Date.Value.Day);
             //and date for end of recurrence is after this current moment (otherwise recurrence doesn't matter
-            if (this.recurrenceDate.Date > DateTime.Now)
+            if (recurrenceDate.Date > DateTime.Now.Date)
             {
-                Console.WriteLine(this.recurrenceDate);
-                if (dailyRadioButton.IsChecked == true)
+                Console.WriteLine(recurrenceDate);
+                if (RecurrenceComboBox.SelectedIndex == 1)
                 {
-                    HandleRecurrenceDay(sender, e, task, recurrencedateTime);
+                    GlobalTaskData.TaskManager.CreateDailyReccuringTask(task, recurrencedateTime);
                 }
-                else if (weeklyRadioButton.IsChecked == true)
+                else if (RecurrenceComboBox.SelectedIndex == 2)
                 {
-                    HandleRecurrenceWeek(sender, e, task, recurrencedateTime);
+                    GlobalTaskData.TaskManager.CreateWeeklyReccuringTask(task, recurrencedateTime);
                 }
-                else if (monthlyRadioButton.IsChecked == true)
+                else if (RecurrenceComboBox.SelectedIndex == 3)
                 {
-                    HandleRecurrenceMonth(sender, e, task, recurrencedateTime);
+                    GlobalTaskData.TaskManager.CreateMonthlyReccuringTask(task, recurrencedateTime);
                 }
-            } else { //if recurrence date is null send user alert failure to recurr 
-                await DisplayAlert("Recurrance End Date Not Set! ",
-               "Sorry you must set a recurrence end date in order " +
-               "to schedule recurrence. Please try again.", "OK");
             }
-
+            else
+            {
+                //if recurrence date is null send user alert failure to recurr 
+                await DisplayAlert("Recurrance End Date Not Set! ",
+                                   "Sorry you must set a recurrence end date in order " +
+                                   "to schedule recurrence. Please try again.", "OK");
+            }
         }
-
-
 
         //Returning to the previous page
         await Shell.Current.GoToAsync("..");
@@ -364,6 +362,11 @@ public partial class AddTaskPage : ContentPage
         this.mComplete.Value = GlobalTaskData.ToEdit.GetTotalMinutesNeeded();
         this.hSpent.Value = (int)GlobalTaskData.ToEdit.CompletionProgress;
         this.mSpent.Value = GlobalTaskData.ToEdit.GetCompletionProgressMinutes();
+
+        if(GlobalTaskData.ToEdit.IsRecur)
+        {
+            reccurenceDateLayout.IsVisible = true;
+        }
     }
 
     //This function will set the date and time forms to the current time
@@ -389,114 +392,25 @@ public partial class AddTaskPage : ContentPage
         }
     }
 
-    //These functions will be used to add recurrence of a selected task for day/week/month
-    private void HandleRecurrenceDay(object sender, EventArgs e, TaskItem task, DateTime enddate)
+    private bool IsRecurrenceSelected()
     {
-        int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
-        int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
-        int totalHours = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
-        int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
-        double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
-        double totalTime = GlobalTaskData.TaskManager.SumTimes(totalHours, totalMinutes);
-        this.date.Date = this.date.Date == null ? DateTime.MaxValue : this.date.Date;
-        this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
-        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
-            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-
-        while (dateTime <= enddate)
-        {
-            dateTime = dateTime.AddDays(1); //every day
-            //If we are not editing, use TaskManager's AddTask function to create and save the task
-            GlobalTaskData.TaskManager.AddTask(
-                this.name.Text,
-                this.description.Text,
-                dateTime,
-                (int)this.priority.Value,
-                timeLogged,
-                totalTime,
-                task.TaskId.ToString());
-        }
-    }
-    private void HandleRecurrenceWeek(object sender, EventArgs e, TaskItem task, DateTime enddate)
-    {
-        int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
-        int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
-        int totalhours = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
-        int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
-        double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
-        double totalTime = GlobalTaskData.TaskManager.SumTimes(totalhours, totalMinutes);
-        this.date.Date = this.date.Date == null ? DateTime.MaxValue : this.date.Date;
-        this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
-        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
-            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-
-        while (dateTime <= enddate)
-        {
-            dateTime = dateTime.AddDays(7); //every week
-            //If we are not editing, use TaskManager's AddTask function to create and save the task
-            GlobalTaskData.TaskManager.AddTask(
-                this.name.Text,
-                this.description.Text,
-                dateTime,
-                (int)this.priority.Value,
-                timeLogged,
-                totalTime,
-                task.TaskId.ToString());
-        }
-
-    }
-    private void HandleRecurrenceMonth(object sender, EventArgs e, TaskItem task, DateTime enddate)
-    {
-        int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
-        int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
-        int totalHours = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
-        int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
-        double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
-        double totalTime = GlobalTaskData.TaskManager.SumTimes(totalHours, totalMinutes);
-        this.date.Date = this.date.Date == null ? DateTime.MaxValue : this.date.Date;
-        this.time.Time = this.time.Time == null ? DateTime.MaxValue : this.time.Time;
-        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
-            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
-        while (dateTime <= enddate)
-        {
-            dateTime = dateTime.AddMonths(1); //months
-            //If we are not editing, use TaskManager's AddTask function to create and save the task
-            GlobalTaskData.TaskManager.AddTask(
-                this.name.Text,
-                this.description.Text,
-                dateTime,
-                (int)this.priority.Value,
-                timeLogged,
-                totalTime,
-                task.TaskId.ToString());
-        }
-        
+        return RecurrenceComboBox.SelectedIndex != 0;
     }
 
-    private void editRecurringTasks(TaskItem toEdit)
+    private void SetRecurrenceComboBoxVisible()
     {
-        string toComp;
-        if(!toEdit.Recur.Equals(""))
+        if (IsRecurrenceSelected())
         {
-            toComp = toEdit.Recur;
+            reccurenceDateLayout.IsVisible = true;
         }
         else
         {
-            toComp = toEdit.TaskId.ToString();
+            reccurenceDateLayout.IsVisible = false;
         }
-        foreach (var task in GlobalTaskData.TaskManager.TaskList)
-        {
-            if(toComp.Equals(task.Recur) || task.TaskId.ToString().Equals(toComp))
-            {
-                GlobalTaskData.TaskManager.EditTask(
-                task.TaskId,
-                toEdit.Name,
-                toEdit.Description,
-                task.DueTime,
-                task.Priority,
-                toEdit.CompletionProgress,
-                toEdit.TotalTimeNeeded);
-            }
-        }
+    }
+
+    private void RecurrenceComboBoxChanged(Object sender, EventArgs e)
+    {
+        SetRecurrenceComboBoxVisible();
     }
 }

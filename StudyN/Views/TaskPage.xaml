@@ -40,7 +40,8 @@
 
     </ContentPage.ToolbarItems>
     <!-- DataGrid -->
-    <dxg:DataGridView ItemsSource="{Binding TaskList}"
+    <dxg:DataGridView x:Name="DataGrid"
+                      ItemsSource="{Binding TaskList}"
                       Tap="CellClicked"
                       LongPress="RowLongPressed"
                       CustomCellStyle="HighlightSelectedRows"

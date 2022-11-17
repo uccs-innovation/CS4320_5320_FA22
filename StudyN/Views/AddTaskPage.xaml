@@ -41,18 +41,17 @@
 
             <!--Grid rows definitions-->
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" /><!--Task Name Row                    0-->
-                <RowDefinition Height="50" /><!--Description                      1-->
-                <RowDefinition Height="50" /><!--Time and Date Entry              2-->
-                <RowDefinition Height="50" /><!--Hours and Minutes to Spend       3-->
-                <RowDefinition Height="50" /><!--Hours and Minutes Completed      4-->
-                <RowDefinition Height="50" /><!--Priority slider                  5-->
-                <RowDefinition Height="50" /><!--recurrence                       7-->
-                <RowDefinition Height="50" /><!--Delete And Complete              8-->
-                <RowDefinition Height="50" /><!--Timer                            9-->
-                <RowDefinition Height="20" /><!--Time List Log Label              10-->                
-                <RowDefinition Height="20" /><!--Time List Log Header             11-->
-                <RowDefinition Height="70"/><!--Time List Log                     12-->
+                <RowDefinition Height="Auto"/><!--Task Name            0-->
+                <RowDefinition Height="Auto"/><!--Description          1-->
+                <RowDefinition Height="Auto"/><!--Date and Time        2-->
+                <RowDefinition Height="Auto"/><!--Estimate Hours       3-->
+                <RowDefinition Height="Auto"/><!--Actual Hours         4-->
+                <RowDefinition Height="Auto"/><!--Priority slider      5-->
+                <RowDefinition Height="Auto"/><!--Recurrence Layout    7-->
+                <RowDefinition Height="Auto"/><!--Task Tracker Button  8-->
+                <RowDefinition Height="Auto"/><!--Log Label            9-->
+                <RowDefinition Height="Auto"/><!--Log Header          10-->
+                <RowDefinition Height="Auto"/><!--Log Grid            11-->
             </Grid.RowDefinitions>
 
             <!--Grid column definitions-->
@@ -152,104 +151,95 @@
                 x:Name="mSpent"/>
 
             <!--Priority Slider and Label-->
-            <StackLayout
-                Grid.Row="5"
-                Grid.ColumnSpan="5"
-                Padding="0, -10">
+            <StackLayout Grid.Row="5"
+                         Grid.ColumnSpan="5"
+                         Padding="0, -10">
                 <Label x:Name="rotatingLabel"
-               Text="Priority"
-               FontSize="18"
-               HorizontalOptions="Center"
-               VerticalOptions="Center" />
-                <Slider 
-                Maximum="5"
-                Minimum="1"
-                Value="3"
-                ValueChanged="HandleSliderValueChanged" 
-                x:Name="priority" />
+                       Text="Priority"
+                       FontSize="18"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+                <Slider  Maximum="5"
+                         Minimum="1"
+                         Value="3"
+                         ValueChanged="HandleSliderValueChanged" 
+                         x:Name="priority" />
                 <Label x:Name="displayLabel"
-               Text="{Binding Source={x:Reference priority},
-                              Path=Value,
-                              StringFormat='{0:F0}'}"
-               HorizontalOptions="Center"
-               VerticalOptions="Center" />
+                       Text="{Binding Source={x:Reference priority},
+                                      Path=Value,
+                                      StringFormat='{0:F0}'}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
             </StackLayout>
 
 
-            <!--Buttons for Recurrance tasks, row 6-->
-            <StackLayout Orientation="Horizontal"
-                         HorizontalOptions="Start"
-                         Spacing="1"
+            <!--Recurrance -->
+            <StackLayout Orientation="Vertical"
                          Grid.Row="6"
                          Grid.ColumnSpan="2">
-                <Label x:Name="RecurrenceLabel"
-                   Text="Recurrence:"
-                   HorizontalOptions="StartAndExpand"
-                   VerticalOptions="Center"
-                   FontSize="16" />
-                <RadioButton
-                    x:Name="dailyRadioButton"
-                    Content="Day"
-                    HorizontalOptions="EndAndExpand"
-                    IsChecked="False"/>
-                <RadioButton
-                    x:Name="weeklyRadioButton"
-                    Content="Week"
-                    HorizontalOptions="CenterAndExpand"
-                    IsChecked="False"/>
-                <RadioButton
-                    x:Name="monthlyRadioButton"
-                    Content="Month"
-                    HorizontalOptions="End"
-                    IsChecked="False"/>
+                <StackLayout Orientation="Horizontal">
+                    <Label x:Name="RecurrenceLabel"
+                            Text="Recurrence:"
+                            HorizontalOptions="Start"
+                            VerticalOptions="Center"
+                            FontSize="16"/>
+                    <!--Combobox for Recurrance tasks-->
+                    <dxe:ComboBoxEdit x:Name="RecurrenceComboBox"
+                                      HorizontalOptions="EndAndExpand"
+                                      SelectedIndex="0"
+                                      SelectionChanged="RecurrenceComboBoxChanged">
+                        <dxe:ComboBoxEdit.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>None</x:String>
+                                <x:String>Daily</x:String>
+                                <x:String>Weekly</x:String>
+                                <x:String>Monthly</x:String>
+                            </x:Array>
+                        </dxe:ComboBoxEdit.ItemsSource>
+                    </dxe:ComboBoxEdit>
+                </StackLayout>
+                <!--Label and DateTime Box For Reccurence end date-->
+                <StackLayout x:Name="reccurenceDateLayout"
+                             Orientation="Horizontal">
+                    <Label Text="Recurrence End Date:"
+                           FontSize="16"
+                           HorizontalOptions="Start"
+                           VerticalOptions="Center"/>
+                    <dxe:DateEdit x:Name="recurrenceDate"
+                                  DisplayFormat="d"
+                                  PlaceholderText="--/--/----"
+                                  IsLabelFloating="False"
+                                  Margin="1"
+                                  HorizontalOptions="EndAndExpand"/>
+                </StackLayout>
             </StackLayout>
-
-            
-            <!--Label and DateTime Box For Reccurence end date-->
-            <Label Text="Recurrence End Date:"
-                   Grid.Row="7"
-                   Grid.ColumnSpan="1"
-                   FontSize="16"
-                   HorizontalOptions="StartAndExpand"
-                   VerticalOptions="Center"></Label>
-
-
-            <dxe:DateEdit 
-                DisplayFormat="d"
-                Grid.Row="7"
-                Grid.Column="2"
-                PlaceholderText="--/--/----"
-                IsLabelFloating="False"
-                Margin="1"
-                x:Name="recurrenceDate" />
-
 
             <Button
                 x:Name="TimerButton"
                 Text="{Binding IsStartOrStop}"
-                Grid.Row="8"
+                Grid.Row="7"
                 Grid.ColumnSpan="2"
                 CornerRadius="7"
                 Margin="1"
                 Clicked="HandleTimerOnOff"
                 Command="{Binding ButtonVisibility}"/>
 
-            <!--Label Header Title for Task Time Log, row 10-->
+            <!--Label Header Title for Task Time Log-->
             <Label 
                 x:Name="LogTitle"
                 Text="Task Time Log"
                 HorizontalOptions="Start"
                 VerticalOptions="Center" 
-                Grid.Row="9"
+                Grid.Row="8"
                 Grid.ColumnSpan="1"
                 FontAttributes="Bold"    
                 FontSize="16" />
 
-            <!--Labels for column headers for Task Time Log, row 11-->
+            <!--Labels for column headers for Task Time Log-->
             <Label 
                 x:Name="LogStart"
                 Text="  Start Time" 
-                Grid.Row="10"
+                Grid.Row="9"
                 Grid.ColumnSpan="2" 
                 HorizontalTextAlignment="Start"
                 VerticalTextAlignment="Center"
@@ -258,7 +248,7 @@
             <Label
                 x:Name="LogStop"
                 Text="Stop Time"                
-                Grid.Row="10"
+                Grid.Row="9"
                 Grid.ColumnSpan="2"
                 HorizontalTextAlignment="Center"
                 VerticalTextAlignment="Center"
@@ -267,18 +257,18 @@
             <Label
                 x:Name="LogDuration"
                 Text="Duration     "                 
-                Grid.Row="10"
+                Grid.Row="9"
                 Grid.ColumnSpan="2"                
                 HorizontalTextAlignment="End"
                 VerticalTextAlignment="Center"
                 FontAttributes="Bold"    
                 FontSize="10" />
 
-            <!--Task Time Log Collection View, row 12-->
+            <!--Task Time Log Collection View-->
             <CollectionView ItemsSource="{Binding TimeList}"
                             x:Name="TimeListLog"
                             ItemsLayout="VerticalList"                            
-                            Grid.Row="11"
+                            Grid.Row="10"
                             Grid.ColumnSpan="2"
                             BackgroundColor="WhiteSmoke"
                             VerticalScrollBarVisibility="Always"
@@ -319,9 +309,7 @@
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-
             </CollectionView>
-
         </Grid>
     </ContentPage.Content>
 
