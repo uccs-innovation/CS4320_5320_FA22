@@ -317,35 +317,35 @@ public partial class AddTaskPage : ContentPage
         this.recurrenceDate.Date = this.recurrenceDate.Date == null ? DateTime.Now : this.recurrenceDate.Date;
         //if buttons are checked
 
-        //if (dailyRadioButton.IsChecked || weeklyRadioButton.IsChecked || monthlyRadioButton.IsChecked)
-        //{
-        //    DateTime recurrencedateTime = new DateTime(this.recurrenceDate.Date.Value.Year,
-        //                                   this.recurrenceDate.Date.Value.Month,
-        //                                   this.recurrenceDate.Date.Value.Day);
-        //    //and date for end of recurrence is after this current moment (otherwise recurrence doesn't matter
-        //    if (this.recurrenceDate.Date > DateTime.Now)
-        //    {
-        //        Console.WriteLine(this.recurrenceDate);
-        //        if (dailyRadioButton.IsChecked == true)
-        //        {
-        //            HandleRecurrenceDay(sender, e, task, recurrencedateTime);
-        //        }
-        //        else if (weeklyRadioButton.IsChecked == true)
-        //        {
-        //            HandleRecurrenceWeek(sender, e, task, recurrencedateTime);
-        //        }
-        //        else if (monthlyRadioButton.IsChecked == true)
-        //        {
-        //            HandleRecurrenceMonth(sender, e, task, recurrencedateTime);
-        //        }
-        //    } else { //if recurrence date is null send user alert failure to recurr 
-        //        await DisplayAlert("Recurrance End Date Not Set! ",
-        //       "Sorry you must set a recurrence end date in order " +
-        //       "to schedule recurrence. Please try again.", "OK");
-        //    }
-        //}
-
-
+        if (IsRecurrenceSelected())
+        {
+            DateTime recurrencedateTime = new DateTime(this.recurrenceDate.Date.Value.Year,
+                                           this.recurrenceDate.Date.Value.Month,
+                                           this.recurrenceDate.Date.Value.Day);
+            //and date for end of recurrence is after this current moment (otherwise recurrence doesn't matter
+            if (this.recurrenceDate.Date > DateTime.Now)
+            {
+                Console.WriteLine(this.recurrenceDate);
+                if (RecurrenceComboBox.SelectedIndex == 1)
+                {
+                    HandleRecurrenceDay(sender, e, task, recurrencedateTime);
+                }
+                else if (RecurrenceComboBox.SelectedIndex == 2)
+                {
+                    HandleRecurrenceWeek(sender, e, task, recurrencedateTime);
+                }
+                else if (RecurrenceComboBox.SelectedIndex == 3)
+                {
+                    HandleRecurrenceMonth(sender, e, task, recurrencedateTime);
+                }
+            }
+            else
+            { //if recurrence date is null send user alert failure to recurr 
+                await DisplayAlert("Recurrance End Date Not Set! ",
+               "Sorry you must set a recurrence end date in order " +
+               "to schedule recurrence. Please try again.", "OK");
+            }
+        }
 
         //Returning to the previous page
         await Shell.Current.GoToAsync("..");
@@ -506,15 +506,20 @@ public partial class AddTaskPage : ContentPage
         }
     }
 
+    private bool IsRecurrenceSelected()
+    {
+        return RecurrenceComboBox.SelectedIndex != 0;
+    }
+
     private void SetRecurrenceComboBoxVisible()
     {
-        if (RecurrenceComboBox.SelectedIndex == 0)
+        if (IsRecurrenceSelected())
         {
-            reccurenceDateLayout.IsVisible = false;
+            reccurenceDateLayout.IsVisible = true;
         }
         else
         {
-            reccurenceDateLayout.IsVisible = true;
+            reccurenceDateLayout.IsVisible = false;
         }
     }
 
