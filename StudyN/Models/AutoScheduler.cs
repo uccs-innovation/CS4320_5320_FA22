@@ -91,11 +91,13 @@ public class AutoScheduler : StudynSubscriber
                 blockContainer.blockSize = 60; //60 minute block size. Could change this based on task data. IE different task categories could have different block sizes
 
                 // Gets time left for task blocks to be scheduled. Defaults to 1 hour if the progress exceeds the estimate.
-                int timeNeeded = (int)(task.GetTotalMinutesNeeded() - task.GetCompletionProgressMinutes());
-                if (timeNeeded < 0) { timeNeeded = 60; }
+                int hourNeeded = (int)(task.TotalTimeNeeded - task.CompletionProgress);
+                int minNeeded = (int)(task.GetTotalMinutesNeeded() - task.GetCompletionProgressMinutes());
+                int remainingMinutesNeeded = (hourNeeded * 60) + minNeeded;
+                if (remainingMinutesNeeded < 0) { remainingMinutesNeeded = 60; }
 
-                blockContainer.blocks = new Block[timeNeeded / blockContainer.blockSize];
-                blockContainer.remainder = timeNeeded % blockContainer.blockSize;
+                blockContainer.blocks = new Block[remainingMinutesNeeded / blockContainer.blockSize];
+                blockContainer.remainder = remainingMinutesNeeded % blockContainer.blockSize;
                 blockContainers.Add(blockContainer);
             }
 ;
@@ -301,7 +303,10 @@ public class AutoScheduler : StudynSubscriber
     {
         //Higher weight means item of more importance, IE schedule earlier
         double? weight = 1;
-        double remainingMinutesNeeded = task.GetTotalMinutesNeeded() - task.GetCompletionProgressMinutes();
+
+        double hourNeeded = (task.TotalTimeNeeded - task.CompletionProgress);
+        double minNeeded = (task.GetTotalMinutesNeeded() - task.GetCompletionProgressMinutes());
+        double remainingMinutesNeeded = (hourNeeded * 60) + minNeeded;
 
         //Amount of days between (now + estimated time remaining to complete task), and task due date
         double leadtime = (task.DueTime - (DateTime.Now.AddMinutes(remainingMinutesNeeded))).TotalDays;
