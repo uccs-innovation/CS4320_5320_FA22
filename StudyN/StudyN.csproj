@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0-android</TargetFrameworks>
@@ -26,10 +26,10 @@
 		<MauiIcon Include="Resources\appicon.jpg" Color="#FFFFFF" />
 		
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splashscreen.jpg" Color="#FFFFFF" />
+		<MauiSplashScreen Include="Resources\Splash\splashscreen.svg" Resize="False"/>
 		
 		<!-- Images -->
-		<MauiImage Include="Resources\Images\*" />
+		<MauiImage Include="Resources\Images\*"/>
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -38,9 +38,11 @@
 	<ItemGroup>
 	  <None Remove="Platforms\Android\google-services.json" />
 	  <None Remove="Platforms\Android\private_key.json" />
+	  <None Remove="Platforms\Android\Resources\drawable\maui_splash.xml" />
 	  <None Remove="private_key.json" />
 	  <None Remove="Resources\Images\image2vector.svg" />
 	  <None Remove="Resources\Images\plus_button.png" />
+	  <None Remove="Resources\Splash\splashscreen.svg" />
 	</ItemGroup>
 
 	<ItemGroup>		
@@ -79,44 +81,44 @@
 
 	<ItemGroup>
 	  <Compile Update="NotificationService\NotificationService.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Compile>
 	  <Compile Update="Views\TaskChartsPage.xaml.cs">
-	    <DependentUpon>TaskChartsPage.xaml</DependentUpon>
+		<DependentUpon>TaskChartsPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\SettingsPage.xaml.cs">
-	    <DependentUpon>SettingsPage.xaml</DependentUpon>
+		<DependentUpon>SettingsPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\CalendarPage.xaml.cs">
-	    <DependentUpon>CalendarPage.xaml</DependentUpon>
+		<DependentUpon>CalendarPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\TaskPage.xaml.cs">
-	    <DependentUpon>TaskPage.xaml</DependentUpon>
+		<DependentUpon>TaskPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\HomePage.xaml.cs">
-	    <DependentUpon>HomePage.xaml</DependentUpon>
+		<DependentUpon>HomePage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\AddCategoryPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
+		<Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\AddIcsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
+		<Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\AddTaskPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
+		<Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\CategoriesPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
+		<Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SleepTimePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
+		<Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\TaskChartsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
+		 <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
 
@@ -134,9 +136,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-    	  <MauiImage Include="Resources\Images\export.png" />
+		<MauiImage Include="Resources\Images\export.png" />
 	</ItemGroup>
-
+	
 	<PropertyGroup>
 		<UseInterpreter Condition="$(TargetFramework.Contains('-ios'))">True</UseInterpreter>
 		<UseInterpreter Condition="$(TargetFramework.Contains('-android'))">False</UseInterpreter>
@@ -144,7 +146,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-android|AnyCPU'">
-	  <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+		<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
 	</PropertyGroup>
 
 </Project>
