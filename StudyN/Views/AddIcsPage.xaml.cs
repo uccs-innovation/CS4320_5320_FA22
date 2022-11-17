@@ -83,9 +83,6 @@ public partial class AddIcsPage : ContentPage
                     "Entered link was invalid. \n" +
                     "Please enter a valid link.",
                     "Ok");
-
-                //jump ship (so no breaky)
-                //await Shell.Current.GoToAsync(nameof(SettingsPage));
             }
         }
         else
@@ -283,6 +280,11 @@ public partial class AddIcsPage : ContentPage
 
                 //cal class to convert
                 GetAppointFromString convert = new GetAppointFromString(jsonfiletext);
+
+                // Tell user file was file
+                await DisplayAlert("Import Complete",
+                    "File was successfully imported.",
+                    "Ok");
             }
             else
             {
@@ -290,9 +292,18 @@ public partial class AddIcsPage : ContentPage
                 Console.WriteLine("\nException Caught!\n");
                 Console.WriteLine("No files to be read in matching input");
 
-                //jump ship (so no breaky)
-                await Shell.Current.GoToAsync(nameof(SettingsPage));
+                // Tell user file was not found
+                await DisplayAlert("Unable to Import",
+                    "File was not found at that directory.",
+                    "Ok");
             }
+        }
+        else
+        {
+            // Tell user dir was not inputted
+            await DisplayAlert("Unable to Import",
+                "Please enter a valid directory.",
+                "Ok");
         }
     }
 }
