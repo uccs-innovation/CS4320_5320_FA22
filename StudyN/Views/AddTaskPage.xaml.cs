@@ -277,9 +277,9 @@ public partial class AddTaskPage : ContentPage
                 (int)this.priority.Value,
                 timeLogged,
                 totalTime);
-            task = GlobalTaskData.ToEdit;
+
+            GlobalTaskData.TaskManager.EditReccuring(GlobalTaskData.ToEdit);
             GlobalTaskData.ToEdit = null;
-            editRecurringTasks(task);
         }
         else
         {
@@ -370,23 +370,6 @@ public partial class AddTaskPage : ContentPage
                 tasksString += task.Name + ", ";
             } 
             DisplayAlert("The following tasks cannot be completed on-time!", tasksString, "OK");
-        }
-    }
-
-    private void editRecurringTasks(TaskItem toEdit)
-    {
-        foreach (var task in GlobalTaskData.TaskManager.TaskList)
-        {
-            if(toEdit.RecurId == task.RecurId)
-            {
-                GlobalTaskData.TaskManager.EditTask(task.TaskId,
-                                                    toEdit.Name,
-                                                    toEdit.Description,
-                                                    task.DueTime,
-                                                    task.Priority,
-                                                    toEdit.CompletionProgress,
-                                                    toEdit.TotalTimeNeeded);
-            }
         }
     }
 

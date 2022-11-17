@@ -155,15 +155,15 @@ namespace StudyN.Models
 
             while (dueTime.Date <= EndDate.Date)
             {
-                GlobalTaskData.TaskManager.AddTask(
-                    ParentTask.Name,
-                    ParentTask.Description,
-                    dueTime,
-                    ParentTask.Priority,
-                    ParentTask.CompletionProgress,
-                    ParentTask.TotalTimeNeeded,
-                    ParentTask.TaskId);
-
+                TaskItem task = GlobalTaskData.TaskManager.AddTask(
+                                        ParentTask.Name,
+                                        ParentTask.Description,
+                                        dueTime,
+                                        ParentTask.Priority,
+                                        ParentTask.CompletionProgress,
+                                        ParentTask.TotalTimeNeeded,
+                                        ParentTask.TaskId);
+                task.IsRecur = true;
                 // Create a deepcopy
                 dueTime = new DateTime(dueTime.Ticks).AddDays(numDays);
             }
@@ -182,17 +182,34 @@ namespace StudyN.Models
 
             while (dueTime.Date <= EndDate.Date)
             {
-                GlobalTaskData.TaskManager.AddTask(
-                    ParentTask.Name,
-                    ParentTask.Description,
-                    dueTime,
-                    ParentTask.Priority,
-                    ParentTask.CompletionProgress,
-                    ParentTask.TotalTimeNeeded,
-                    ParentTask.TaskId);
-
+                TaskItem task = GlobalTaskData.TaskManager.AddTask(
+                                        ParentTask.Name,
+                                        ParentTask.Description,
+                                        dueTime,
+                                        ParentTask.Priority,
+                                        ParentTask.CompletionProgress,
+                                        ParentTask.TotalTimeNeeded,
+                                        ParentTask.TaskId);
+                task.IsRecur = true;
                 // Create a deepcopy
                 dueTime = new DateTime(dueTime.Ticks).AddMonths(1);
+            }
+        }
+
+        public void EditReccuring(TaskItem editedTask)
+        {
+            if(!editedTask.IsRecur) { return; }
+
+            foreach(TaskItem task in TaskList)
+            {
+                if(task.RecurId == editedTask.RecurId)
+                {
+                    task.Name = editedTask.Name;
+                    task.Description = editedTask.Description;
+                    // Change the time of date without changing the date
+                    task.DueTime = task.DueTime.Date + editedTask.DueTime.TimeOfDay;
+                    task.Priority = editedTask.Priority;
+                }
             }
         }
 
