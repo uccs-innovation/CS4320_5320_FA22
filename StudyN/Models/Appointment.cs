@@ -1,4 +1,5 @@
 ﻿using DevExpress.Maui.Scheduler;
+using DevExpress.Maui.Editors;
 using StudyN.Utilities;
 using System;
 using System.Collections.Generic;
@@ -99,5 +100,11 @@ namespace StudyN.Models
         public int Id { get; set; }
         public string Caption { get; set; }
         public Color Color { get; set; }
+    }
+
+    public class SleepTime
+    {
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
     }
 }

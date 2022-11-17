@@ -22,7 +22,9 @@ namespace StudyN.Utilities
             // Category Events
             CategoryAdd,
             CategoryEdit,
-            CategoryDelete
+            CategoryDelete,
+            // SleepTime Event
+            SleepTimeChanged
         }
 
         public StudynEvent(Guid id, StudynEventType eventType)

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyN.Views.SleepTimePage"
+             xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
+             xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
+             xmlns:dxee="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:local="clr-namespace:StudyN.Views"
+             Title="Sleep Time">
+    <!-- Save Button -->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save"
+                     Clicked="OnSaveButtonTap"
+                     IconImageSource="whitesave"/>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        
+        <!-- Grid for organization -->
+        <Grid Margin="10"
+              Padding="5"
+              RowSpacing="10"
+              ColumnSpacing="10">
+            
+            <!-- Grid rows definitions -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" /> <!-- Row for start time -->
+                <RowDefinition Height="50" /> <!-- Row for end time -->
+            </Grid.RowDefinitions>
+            
+            <!-- Get user input on start time -->
+            <dxe:TimeEdit
+                TimeFormatMode="HourFormat12"
+                Grid.ColumnSpan="2"
+                LabelText="Start Time"
+                PlaceholderText="--:--"
+                IsLabelFloating="False"
+                Margin="1"
+                x:Name="startTime" />
+
+            <!-- Get user input on end time -->
+            <dxe:TimeEdit
+                TimeFormatMode="HourFormat12"
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                LabelText="End Time"
+                PlaceholderText="--:--"
+                IsLabelFloating="False"
+                Margin="1"
+                x:Name="endTime" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

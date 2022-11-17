@@ -16,6 +16,7 @@ using static StudyN.Utilities.StudynEvent;
 public class AutoScheduler : StudynSubscriber
 {
     private DateTime baseTime; //The base time the autoscheduler will use to do all its calculations
+    private DateTime baseLimit; //The base time the autoscheduler will stop calculating at
     ObservableCollection<Appointment> appts;
     ObservableCollection<TaskItem> tasks;
     private minuteSnapshot[] minuteMap;
@@ -30,7 +31,17 @@ public class AutoScheduler : StudynSubscriber
         pastDueTasks = new List<TaskItem>();
         minuteMap = new minuteSnapshot[40320]; //40320 minutes in 4 weeks. AutoScheduler will only scheduler out 4 weeks.
         for(int i = 0; i < minuteMap.Length; i++) { minuteMap[i] = new minuteSnapshot(); }
-        baseTime = DateTime.Now;
+        // set base time
+        if(File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
+        {
+            baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
+            baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
+        }
+        else
+        {
+            baseTime = DateTime.Now;
+            baseLimit = DateTime.Now;
+        }
     }
    
     //Put appointments from the global appointments list into the minute mapping, for future use in scheduling
@@ -258,7 +269,12 @@ public class AutoScheduler : StudynSubscriber
         Console.WriteLine("autoScheduler adding to calendar");
         foreach(Appointment appt in appts)
         {
-            GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+            GlobalAppointmentData.CalendarManager.CreateAppointment(
+                -1,
+                appt.Subject,
+                appt.Start,
+                appt.End - appt.Start,
+                -1); //idk what "room" is for CreateAppointment() method
         }
     }
 
@@ -333,7 +349,17 @@ public class AutoScheduler : StudynSubscriber
         pastDueTasks = new List<TaskItem>();
         minuteMap = new minuteSnapshot[40320];
         for (int i = 0; i < minuteMap.Length; i++) { minuteMap[i] = new minuteSnapshot(); }
-        baseTime = DateTime.Now;
+        // set base time
+        if (File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
+        {
+            baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
+            baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
+        }
+        else
+        {
+            baseTime = DateTime.Now;
+            baseLimit = DateTime.Now;
+        }
     }
 
     public void OnNewStudynEvent(StudynEvent taskEvent)
@@ -347,6 +373,7 @@ public class AutoScheduler : StudynSubscriber
             case StudynEventType.DeleteTask:
                 //run(taskEvent.Id);
                 break;
+            case StudynEventType.SleepTimeChanged:
             case StudynEventType.AppointmentAdd:
             case StudynEventType.AppointmentEdit:
             case StudynEventType.AppointmentDelete:
