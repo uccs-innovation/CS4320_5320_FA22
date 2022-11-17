@@ -6,38 +6,14 @@ using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DevExpress.CodeParser;
+using DevExpress.XtraRichEdit.Model;
+using System;
 
 namespace StudyN.Models
 {
     //This class manages all of our tasks and preforms actions related to them
     public class TaskDataManager
     {
-
-        public TaskItem AddTask(string name,
-                                string description,
-                                DateTime dueTime,
-                                int priority,
-                                double CompletionProgress,
-                                double TotalTimeNeeded)
-        {
-            //Creating new task with sent parameters
-            TaskItem newTask  = new TaskItem(name,
-                                            description,
-                                            dueTime,
-                                            priority,
-                                            CompletionProgress,
-                                            TotalTimeNeeded,
-                                            "");
-
-            //This will add the tasks to the list
-            TaskList.Add(newTask);
-
-            // Publish task add event
-            EventBus.PublishEvent(
-                        new StudynEvent(newTask.TaskId, StudynEvent.StudynEventType.AddTask));
-
-            return newTask;
-        }
         //This function will add a new task to our list of tasks
         public TaskItem AddTask(string name,
                                string description,
@@ -45,7 +21,7 @@ namespace StudyN.Models
                                int priority,
                                double CompletionProgress,
                                double TotalTimeNeeded,
-                               string recur)
+                               Guid recurId = new Guid())
         {
             //Creating new task with sent parameters
             TaskItem newTask = new TaskItem(name,
@@ -54,10 +30,7 @@ namespace StudyN.Models
                                             priority,
                                             CompletionProgress,
                                             TotalTimeNeeded,
-                                            recur);
-
-
-
+                                            recurId);
 
             //This will add the tasks to the list
             TaskList.Add(newTask);
@@ -72,7 +45,6 @@ namespace StudyN.Models
         //This will return a requested task using its id
         public TaskItem GetTask(Guid taskId)
         {
-            
             //Checking each item in the current task list
             foreach (TaskItem task in TaskList)
             {
@@ -107,8 +79,6 @@ namespace StudyN.Models
                                 List<TaskItemTime> TimeList = null,
                                 bool updateFile = true)
         {
-
-
             //Retrieving the task
             TaskItem task = GetTask(taskId);
 
@@ -177,7 +147,54 @@ namespace StudyN.Models
                 }
             }
         }
-        
+
+        public void CreateDailyReccuringTask(TaskItem ParentTask, DateTime EndDate, int numDays = 1)
+        {
+            // Create a deepcopy
+            DateTime dueTime = new DateTime(ParentTask.DueTime.Ticks).AddDays(numDays);
+
+            while (dueTime.Date <= EndDate.Date)
+            {
+                GlobalTaskData.TaskManager.AddTask(
+                    ParentTask.Name,
+                    ParentTask.Description,
+                    dueTime,
+                    ParentTask.Priority,
+                    ParentTask.CompletionProgress,
+                    ParentTask.TotalTimeNeeded,
+                    ParentTask.TaskId);
+
+                // Create a deepcopy
+                dueTime = new DateTime(dueTime.Ticks).AddDays(numDays);
+            }
+        }
+
+
+        public void CreateWeeklyReccuringTask(TaskItem ParentTask, DateTime EndDate)
+        {
+            CreateDailyReccuringTask(ParentTask, EndDate, 7);
+        }
+
+        public void CreateMonthlyReccuringTask(TaskItem ParentTask, DateTime EndDate)
+        {
+            // Create a deepcopy
+            DateTime dueTime = new DateTime(ParentTask.DueTime.Ticks).AddMonths(1);
+
+            while (dueTime.Date <= EndDate.Date)
+            {
+                GlobalTaskData.TaskManager.AddTask(
+                    ParentTask.Name,
+                    ParentTask.Description,
+                    dueTime,
+                    ParentTask.Priority,
+                    ParentTask.CompletionProgress,
+                    ParentTask.TotalTimeNeeded,
+                    ParentTask.TaskId);
+
+                // Create a deepcopy
+                dueTime = new DateTime(dueTime.Ticks).AddMonths(1);
+            }
+        }
 
         //This function will delete every task for the ids avalaible
         public void DeleteListOfTasks(List<Guid> taskIds)
@@ -281,8 +298,6 @@ namespace StudyN.Models
                     }
                 }
             }
-
-
 
             // gets completed tasks
             string[] completedfiles = FileManager.LoadCompletedFileNames();
