@@ -42,6 +42,7 @@ public class AutoScheduler : StudynSubscriber
             if (appt.From == "autoScheduler") //If the appointment is from the autoScheduler, delete it from the calendar so we can reschedule it without duplicating it
             {
                 Console.WriteLine("rescheduling appointment from autoScheduler");
+                //appts.Remove(appt);
                 //GlobalAppointmentData.CalendarManager.DeleteAppointment(minuteMap[i].id); //To be able to delete an appointment, the calnedarManager needs a function to do so
             } 
         }
@@ -149,6 +150,7 @@ public class AutoScheduler : StudynSubscriber
         //containers are sorted by weight. So the more important ones come first, meaning the more important ones will be pulled back first (attempted to be placed earlier on the calendar). Which is good.
         foreach (BlockContainer bc in blockContainers)
         {
+            Console.WriteLine(bc.task.Name + " has " + bc.mappedBlocks + " blocks.");
             for(int i = 0; i < bc.mappedBlocks; i++) //For each block in the container
             {
                 //Clear block from the minute map, and try to place it earlier
@@ -166,16 +168,44 @@ public class AutoScheduler : StudynSubscriber
                 }
 
                 //We shouldn't technically NEED to check if the block will be placed within 40320 minutes, because it was already able to placed within that time frame. Worst case is that it just gets put where it already was.
-                if( offset > 0 && bc.task.TaskId == minuteMap[offset - 1].id) //If the minuteMap just before this block has the same id as this block (IE its apart of the same task), we should try to separate them a bit
+                /*                if( offset > 0 && bc.task.TaskId == minuteMap[offset - 1].id ) //If the minuteMap just before this block has the same id as this block (IE its apart of the same task), we should try to separate them a bit
+                                {
+                                    while (offset < bc.blocks[i].start)
+                                    {
+                                        if (offset + bc.blockSize < bc.blocks[i].start && (minuteMap[offset - 1 + bc.blockSize].id != bc.task.TaskId) && !mapConflict(offset + bc.blockSize, offset + 2 * bc.blockSize)) //If it is possible to push the block forward, push it forward by one block size. IE if where we are trying to put it now is earlier than where it was before.
+                                        {
+                                            Console.WriteLine("spacing out block");
+                                            offset = offset + bc.blockSize;
+                                            break;
+                                        }
+                                        offset++;
+                                    }
+                                }*/
+
+                //ATTEMPT TO SPACE OUT TOUCHING BLOCKS IF THEY ARE FROM SAME TASK
+                if(offset > 0)
                 {
-                    if( offset + bc.blockSize < bc.blocks[i].start && !mapConflict(offset + bc.blockSize, offset + 2*bc.blockSize) ) //If it is possible to push the block forward, push it forward by one block size. IE if where we are trying to put it now is earlier than where it was before.
+                    if (minuteMap[offset - 1].id == bc.task.TaskId)
                     {
+                        while(mapConflict(offset + bc.blockSize, offset + 2 * bc.blockSize))
+                        {
+                            offset++; //We are trying to sort block wise. Perhaps this should be offset += blockSize??????
+                            if(!mapConflict(offset + bc.blockSize, offset + 2 * bc.blockSize)) 
+                            {
+                                if (minuteMap[offset - 1 + bc.blockSize].id == bc.task.TaskId) //If theres not a mapConflict, but the block is touching another block of the same task, attempt to push it forward another block size
+                                {
+                                    offset = offset + bc.blockSize;
+                                }
+                            }
+                        }
                         offset = offset + bc.blockSize;
-                    } 
+                    }
                 }
                 
-                bc.blocks[i].start = offset; bc.blocks[i].end = offset + bc.blockSize;
-                for (int j = offset; j < offset + bc.blockSize; j++) //Place it in minuteMap
+                if(offset < bc.blocks[i].start){ bc.blocks[i].start = offset; bc.blocks[i].end = offset + bc.blockSize; } //If the block was succesfully spaced out and STILL placed earlier than where it originally was
+
+                //for (int j = offset; j < offset + bc.blockSize; j++) //Place it in minuteMap
+                for(int j = bc.blocks[i].start; j < bc.blocks[i].end; j++) //Place it in minuteMap
                 {
                     minuteMap[j].id = bc.task.TaskId;
                     minuteMap[j].from = "autoScheduler";
