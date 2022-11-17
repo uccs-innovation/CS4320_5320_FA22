@@ -30,7 +30,8 @@ namespace StudyN.Utilities
 
         public void OnNewStudynEvent(StudynEvent taskEvent)
         {
-            if(taskEvent.EventType == StudynEventType.AddTask)
+            Console.WriteLine("YYYYYYYYYYYYYYYY11981911561616516YYYyadfadfadsfsfasdf");
+            if (taskEvent.EventType == StudynEventType.AddTask)
             {
                 TasksAdded(taskEvent.Id);
             }

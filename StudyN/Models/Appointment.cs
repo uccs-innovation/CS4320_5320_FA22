@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static StudyN.Utilities.StudynEvent;
 
 namespace StudyN.Models
 {
@@ -59,7 +60,8 @@ namespace StudyN.Models
                 // Publish task delete appointment
 
                 EventBus.PublishEvent(
-                            new StudynEvent(this.UniqueId, StudynEvent.StudynEventType.AppointmentEdit));
+                            new StudynEvent(UniqueId, StudynEventType.AppointmentEdit));
+                
             }
         }
 
@@ -68,6 +70,7 @@ namespace StudyN.Models
             UniqueId = new Guid();
             LastEdited = DateTime.Now;
             PropertyChanged += new PropertyChangedEventHandler(ApptChanged);
+
         }
     }
 
