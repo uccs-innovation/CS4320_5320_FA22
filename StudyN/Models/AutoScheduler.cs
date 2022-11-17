@@ -109,6 +109,7 @@ public class AutoScheduler : StudynSubscriber
     {
         Console.WriteLine("autoScheduler.CoalesceMinuteMapping()");
         List<Appointment> coalescedAppointments = new List<Appointment>();
+
         Guid? curGuid = null;
         int guidStart = 0;
         for(int i = 0; i < minuteMap.Length; i++)
@@ -136,9 +137,20 @@ public class AutoScheduler : StudynSubscriber
     private void AddToCalendar(List<Appointment> appts)
     {
         Console.WriteLine("autoScheduler adding to calendar");
-        foreach(Appointment appt in appts)
+
+        int defaultLabelId = 1;  // default Label/Color set to "StudyN Time" 
+        int defaultStatusId = 2; // default Status set to "Blocked" 
+
+        foreach (Appointment appt in appts)
         {
-            GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+            GlobalAppointmentData.CalendarManager.CreateAppointment(appt.Subject, 
+                                                                    appt.Start, 
+                                                                    appt.End - appt.Start, 
+                                                                    -1, // location field not used
+                                                                    defaultLabelId,
+                                                                    defaultStatusId,
+                                                                    appt.UniqueId, 
+                                                                    "autoScheduler"); //idk what "room" is for CreateAppointment() method
         }
     }
 
@@ -188,9 +200,6 @@ public class AutoScheduler : StudynSubscriber
         return weight;
     }
 
-
-
-
     public void run(Guid id)
     {
         Console.WriteLine("Running autoScheduler");
@@ -208,8 +217,8 @@ public class AutoScheduler : StudynSubscriber
             }
         }
     }
-
-    private void refreshData()
+   
+     private void refreshData()
     {
         taskPastDue = false;
         pastDueTasks = new List<TaskItem>();
