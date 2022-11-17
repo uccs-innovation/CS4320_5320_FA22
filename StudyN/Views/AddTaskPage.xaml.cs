@@ -13,6 +13,7 @@ using static Android.Util.EventLogTags;
 using static Android.Provider.Settings;
 using Android.Renderscripts;
 using DevExpress.CodeParser;
+using DevExpress.Maui.DataGrid;
 
 public partial class AddTaskPage : ContentPage
 {
@@ -39,7 +40,6 @@ public partial class AddTaskPage : ContentPage
             //CreateDummyTaskTimeLogData();
             TimeListLog.ItemsSource = GlobalTaskData.ToEdit.TimeList;
             this.displayLabel.Text = String.Format("Priority: " + GlobalTaskData.ToEdit.Priority);
-
         }
         else
         {
@@ -50,6 +50,8 @@ public partial class AddTaskPage : ContentPage
             editingExistingTask = false;
             SetValues();            
         }
+
+        SetRecurrenceComboBoxVisible();
 
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
 
@@ -315,34 +317,33 @@ public partial class AddTaskPage : ContentPage
         this.recurrenceDate.Date = this.recurrenceDate.Date == null ? DateTime.Now : this.recurrenceDate.Date;
         //if buttons are checked
 
-        if (dailyRadioButton.IsChecked || weeklyRadioButton.IsChecked || monthlyRadioButton.IsChecked)
-        {
-            DateTime recurrencedateTime = new DateTime(this.recurrenceDate.Date.Value.Year,
-                                           this.recurrenceDate.Date.Value.Month,
-                                           this.recurrenceDate.Date.Value.Day);
-            //and date for end of recurrence is after this current moment (otherwise recurrence doesn't matter
-            if (this.recurrenceDate.Date > DateTime.Now)
-            {
-                Console.WriteLine(this.recurrenceDate);
-                if (dailyRadioButton.IsChecked == true)
-                {
-                    HandleRecurrenceDay(sender, e, task, recurrencedateTime);
-                }
-                else if (weeklyRadioButton.IsChecked == true)
-                {
-                    HandleRecurrenceWeek(sender, e, task, recurrencedateTime);
-                }
-                else if (monthlyRadioButton.IsChecked == true)
-                {
-                    HandleRecurrenceMonth(sender, e, task, recurrencedateTime);
-                }
-            } else { //if recurrence date is null send user alert failure to recurr 
-                await DisplayAlert("Recurrance End Date Not Set! ",
-               "Sorry you must set a recurrence end date in order " +
-               "to schedule recurrence. Please try again.", "OK");
-            }
-
-        }
+        //if (dailyRadioButton.IsChecked || weeklyRadioButton.IsChecked || monthlyRadioButton.IsChecked)
+        //{
+        //    DateTime recurrencedateTime = new DateTime(this.recurrenceDate.Date.Value.Year,
+        //                                   this.recurrenceDate.Date.Value.Month,
+        //                                   this.recurrenceDate.Date.Value.Day);
+        //    //and date for end of recurrence is after this current moment (otherwise recurrence doesn't matter
+        //    if (this.recurrenceDate.Date > DateTime.Now)
+        //    {
+        //        Console.WriteLine(this.recurrenceDate);
+        //        if (dailyRadioButton.IsChecked == true)
+        //        {
+        //            HandleRecurrenceDay(sender, e, task, recurrencedateTime);
+        //        }
+        //        else if (weeklyRadioButton.IsChecked == true)
+        //        {
+        //            HandleRecurrenceWeek(sender, e, task, recurrencedateTime);
+        //        }
+        //        else if (monthlyRadioButton.IsChecked == true)
+        //        {
+        //            HandleRecurrenceMonth(sender, e, task, recurrencedateTime);
+        //        }
+        //    } else { //if recurrence date is null send user alert failure to recurr 
+        //        await DisplayAlert("Recurrance End Date Not Set! ",
+        //       "Sorry you must set a recurrence end date in order " +
+        //       "to schedule recurrence. Please try again.", "OK");
+        //    }
+        //}
 
 
 
@@ -364,6 +365,11 @@ public partial class AddTaskPage : ContentPage
         this.mComplete.Value = GlobalTaskData.ToEdit.GetTotalMinutesNeeded();
         this.hSpent.Value = (int)GlobalTaskData.ToEdit.CompletionProgress;
         this.mSpent.Value = GlobalTaskData.ToEdit.GetCompletionProgressMinutes();
+
+        if(GlobalTaskData.ToEdit.IsRecur)
+        {
+            reccurenceDateLayout.IsVisible = true;
+        }
     }
 
     //This function will set the date and time forms to the current time
@@ -498,5 +504,22 @@ public partial class AddTaskPage : ContentPage
                 toEdit.TotalTimeNeeded);
             }
         }
+    }
+
+    private void SetRecurrenceComboBoxVisible()
+    {
+        if (RecurrenceComboBox.SelectedIndex == 0)
+        {
+            reccurenceDateLayout.IsVisible = false;
+        }
+        else
+        {
+            reccurenceDateLayout.IsVisible = true;
+        }
+    }
+
+    private void RecurrenceComboBoxChanged(Object sender, EventArgs e)
+    {
+        SetRecurrenceComboBoxVisible();
     }
 }

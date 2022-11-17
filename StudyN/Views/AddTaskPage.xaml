@@ -176,53 +176,45 @@
             </StackLayout>
 
 
-            <!--Buttons for Recurrance tasks, row 6-->
-            <StackLayout Orientation="Horizontal"
-                         HorizontalOptions="Start"
-                         Spacing="1"
-                         Grid.Row="6"
-                         Grid.ColumnSpan="2">
-                <Label x:Name="RecurrenceLabel"
-                   Text="Recurrence:"
-                   HorizontalOptions="StartAndExpand"
-                   VerticalOptions="Center"
-                   FontSize="16" />
-                <RadioButton
-                    x:Name="dailyRadioButton"
-                    Content="Day"
-                    HorizontalOptions="EndAndExpand"
-                    IsChecked="False"/>
-                <RadioButton
-                    x:Name="weeklyRadioButton"
-                    Content="Week"
-                    HorizontalOptions="CenterAndExpand"
-                    IsChecked="False"/>
-                <RadioButton
-                    x:Name="monthlyRadioButton"
-                    Content="Month"
-                    HorizontalOptions="End"
-                    IsChecked="False"/>
-            </StackLayout>
+            <!--Combobox for Recurrance tasks, row 6-->
+            <Label x:Name="RecurrenceLabel"
+                    Text="Recurrence:"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    FontSize="16"
+                    Grid.Row="6"
+                    Grid.ColumnSpan="1"/>
+            <dxe:ComboBoxEdit x:Name="RecurrenceComboBox"
+                              Grid.Row="6"
+                              Grid.Column="2"
+                              SelectedIndex="0"
+                              SelectionChanged="RecurrenceComboBoxChanged">
+                <dxe:ComboBoxEdit.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>None</x:String>
+                        <x:String>Daily</x:String>
+                        <x:String>Weekly</x:String>
+                        <x:String>Monthly</x:String>
+                    </x:Array>
+                </dxe:ComboBoxEdit.ItemsSource>
+            </dxe:ComboBoxEdit>
 
-            
+
             <!--Label and DateTime Box For Reccurence end date-->
-            <Label Text="Recurrence End Date:"
-                   Grid.Row="7"
-                   Grid.ColumnSpan="1"
-                   FontSize="16"
-                   HorizontalOptions="StartAndExpand"
-                   VerticalOptions="Center"></Label>
-
-
-            <dxe:DateEdit 
-                DisplayFormat="d"
-                Grid.Row="7"
-                Grid.Column="2"
-                PlaceholderText="--/--/----"
-                IsLabelFloating="False"
-                Margin="1"
-                x:Name="recurrenceDate" />
-
+            <StackLayout x:Name="reccurenceDateLayout"
+                         Orientation="Horizontal"
+                         Grid.Row="7"
+                         Grid.ColumnSpan="2">
+                <Label Text="Recurrence End Date:"
+                       FontSize="16"
+                       HorizontalOptions="StartAndExpand"
+                       VerticalOptions="Center"></Label>
+                <dxe:DateEdit x:Name="recurrenceDate"
+                              DisplayFormat="d"
+                              PlaceholderText="--/--/----"
+                              IsLabelFloating="False"
+                              Margin="1"/>
+            </StackLayout>
 
             <Button
                 x:Name="TimerButton"
