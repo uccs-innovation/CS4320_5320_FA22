@@ -119,7 +119,8 @@ namespace StudyN.Models
                                             DateTime start,
                                             DateTime end,
                                             int room,
-                                            Guid recurId = new Guid())
+                                            Guid recurId = new Guid(),
+                                            string from = "")
         {
             Guid guid = new();
             Appointment appt = new()
