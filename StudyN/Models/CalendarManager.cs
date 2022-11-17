@@ -8,6 +8,7 @@ using System.Xml;
 using AndroidX.Fragment.App.StrictMode;
 using DevExpress.Maui.Scheduler;
 using DevExpress.Maui.Scheduler.Internal;
+using DevExpress.Maui.Editors;
 using Microsoft.Maui.Controls;
 using StudyN.Utilities;
 using DevExpress.Data.Mask;
@@ -254,6 +255,20 @@ namespace StudyN.Models
             }
         }
 
+        /// <summary>
+        /// Save sleep time
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        public void SaveSleepTime(DateTime startTime, DateTime endTime)
+        {
+            // save information into Sleep Time
+            SleepTime.StartTime = startTime;
+            SleepTime.EndTime = endTime;
+            EventBus.PublishEvent(
+                new StudynEvent(Guid.NewGuid(), StudynEvent.StudynEventType.SleepTimeChanged));
+        }
+
 
         // Properly handle appointments associated with a newly completed task
         public void TaskCompleted(Guid uniqueId)
@@ -288,6 +303,19 @@ namespace StudyN.Models
                 }
             }
 
+        }
+
+        /// <summary>
+        /// Loads from sleep time json file into sleep time object
+        /// </summary>
+        public void LoadSleepTime()
+        {
+            string filename = FileSystem.AppDataDirectory + "/sleepTime.json";
+            if (File.Exists(filename))
+            {
+                string jsonFileText = File.ReadAllText(filename);
+                SleepTime = JsonConvert.DeserializeObject<SleepTime>(jsonFileText);
+            }
         }
 
         private void AppointmentCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -389,6 +417,7 @@ namespace StudyN.Models
         public ObservableCollection<Appointment> Appointments { get; private set; }
         public ObservableCollection<AppointmentCategory> AppointmentCategories { get; private set; }
         public ObservableCollection<AppointmentStatus> AppointmentStatuses { get; private set; }
+        public SleepTime SleepTime { get; private set; }
 
 
         public CalendarManager()
@@ -396,6 +425,7 @@ namespace StudyN.Models
             Appointments = new ObservableCollection<Appointment>();
             AppointmentCategories = new ObservableCollection<AppointmentCategory>();
             AppointmentStatuses = new ObservableCollection<AppointmentStatus>();
+            SleepTime = new SleepTime();
 
             // Handle changes to collection
             Appointments.CollectionChanged  += new NotifyCollectionChangedEventHandler(AppointmentCollectionChanged);
