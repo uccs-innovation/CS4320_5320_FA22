@@ -117,23 +117,18 @@ namespace StudyN.Models
         public Appointment CreateAppointment(int appointmentId,
                                             string appointmentTitle,
                                             DateTime start,
-                                            TimeSpan duration,
+                                            DateTime end,
                                             int room,
                                             Guid recurId = new Guid())
         {
-            Guid guid = new Guid();
-
+            Guid guid = new();
             Appointment appt = new()
             {
                 Id = appointmentId,
                 Start = start,
-                End = start.Add(duration),
+                End = end,
                 Subject = appointmentTitle,
-                LabelId = AppointmentCategories[rnd.Next(0, 5)].Id,
-                StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
-                Location = string.Format("{0}", room),
-                Description = string.Empty,
-                UniqueId = guid,
+                Location = room.ToString(),
                 From = recurId.ToString()
             };
 

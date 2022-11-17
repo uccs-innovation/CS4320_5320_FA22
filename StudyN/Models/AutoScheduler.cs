@@ -153,7 +153,7 @@ public class AutoScheduler : StudynSubscriber
                 -1,
                 appt.Subject,
                 appt.Start,
-                appt.End - appt.Start,
+                appt.End,
                 -1); //idk what "room" is for CreateAppointment() method
         }
     }

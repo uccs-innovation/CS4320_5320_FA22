@@ -18,6 +18,7 @@
 
 namespace StudyN.Views;
 
+using System.Globalization;
 using System.Net;
 using Android.Media;
 using Android.Service.Autofill;
@@ -49,12 +50,6 @@ public partial class AddIcsPage : ContentPage
         {
             try
             {
-                //var content = client.GetStringAsync(link);
-                //Result = content.Result;
-
-                //Uri uri = new Uri(link);
-                //await Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
-
                 //convert string in link to https ping, and return response back to a string
                 using HttpResponseMessage response = await client.GetAsync(link);
                 response.EnsureSuccessStatusCode();
@@ -64,15 +59,12 @@ public partial class AddIcsPage : ContentPage
                 //cal class to convert
                 GetAppointFromString convert = new GetAppointFromString(responseBody);
 
-                //go to calanders page to show off new appointments
-                //await Shell.Current.GoToAsync(nameof(CalendarPage));
-
                 // Tell user import was complete
                 await DisplayAlert("Import Complete",
                     "Calendar successfully imported.",
                     "Ok");
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex)
             {
                 //what went wrong
                 Console.WriteLine("\nException Caught!\n");
@@ -161,103 +153,73 @@ public partial class AddIcsPage : ContentPage
                 }
                 if (line.Contains("DTSTART"))
                 {
-                    //set some variables
-                    int year = 0;
-                    int month = 0;
-                    int day = 0;
-                    int hour = 0;
-                    int minute = 0;
-                    int second = 0;
-
                     //find what kind of dstart
                     int last = line.LastIndexOf(":");
                     line = line.Substring(last + 1);
 
                     //get date
-                    string temp = line.Substring(0, 4);
-                    year = Convert.ToInt32(temp);
-                    line = line.Substring(4);
-                    temp = line.Substring(0, 2);
-                    month = Convert.ToInt32(temp);
-                    line = line.Substring(2);
-                    temp = line.Substring(0, 2);
-                    day = Convert.ToInt32(temp);
+                    string date = line.Substring(0, 8);
 
-                    if (line.Contains('T'))
+                    if (line.Contains('Z'))
                     {
-                        line = line.Substring(3);
-
                         //get time
-                        temp = line.Substring(0, 2);
-                        hour = Convert.ToInt32(temp);
-                        line = line.Substring(2);
-                        temp = line.Substring(0, 2);
-                        minute = Convert.ToInt32(temp);
-                        line = line.Substring(2);
-                        temp = line.Substring(0, 2);
-                        second = Convert.ToInt32(temp);
+                        string time = line.Substring(10, 6);
+                        if (time.Contains('Z'))
+                        {
+                            time = "0" + line.Substring(10, 5);
+                        }
 
                         //insert into datetime
-                        start = new DateTime(year, month, day, hour, minute, second);
+                        DateTime.TryParseExact(date + time, "yyyyMMddHHmmss", null, DateTimeStyles.None, out start);
                     }
                     else
                     {
                         //insert into datetime
-                        start = new DateTime(year, month, day);
+                        DateTime.TryParseExact(date, "yyyyMMdd", null, DateTimeStyles.None, out start);
                     }
                 }
 
                 if (line.Contains("DTEND"))
                 {
-                    //set some variables
-                    int year = 0;
-                    int month = 0;
-                    int day = 0;
-                    int hour = 0;
-                    int minute = 0;
-                    int second = 0;
-
                     int last = line.LastIndexOf(":");
-                    line = line.Substring(last);
+                    line = line.Substring(last + 1);
+
+                    Console.WriteLine(line);
 
                     //get date
-                    string temp = line.Substring(0, 4);
-                    year = Convert.ToInt32(temp);
-                    line = line.Substring(4);
-                    temp = line.Substring(0, 2);
-                    month = Convert.ToInt32(temp);
-                    line = line.Substring(2);
-                    temp = line.Substring(0, 2);
-                    day = Convert.ToInt32(temp);
+                    string date = line.Substring(0, 8);
 
-                    line = line.Substring(3);
+                    if (line.Contains('Z'))
+                    {
+                        //get time
+                        string time = line.Substring(10, 6);
+                        if (time.Contains('Z'))
+                        {
+                            time = "0" + line.Substring(10, 5);
+                        }
 
-                    //get time
-                    temp = line.Substring(0, 2);
-                    hour = Convert.ToInt32(temp);
-                    line = line.Substring(2);
-                    temp = line.Substring(0, 2);
-                    minute = Convert.ToInt32(temp);
-                    line = line.Substring(2);
-                    temp = line.Substring(0, 2);
-                    second = Convert.ToInt32(temp);
-
-                    //insert into datetime
-                    end = new DateTime(year, month, day, hour, minute, second);
+                        //insert into datetime
+                        DateTime.TryParseExact(date + time, "yyyyMMddHHmmss", null, DateTimeStyles.None, out end);
+                    }
+                    else
+                    {
+                        //insert into datetime
+                        DateTime.TryParseExact(date, "yyyyMMdd", null, DateTimeStyles.None, out end);
+                    }
                 }
-
-                //set duration, to 0 if no end date
-                if (!end.Equals(zdate))
-                    duration = end - start;
 
                 if (line.Contains("END:VEVENT"))
                 {
-                    int room = rnd.Next(1000, 2000);
+                    int room = 0;
+                    if (id == 0)
+                    {
+                        id = rnd.Next(1000, 999999);  //random id if not given a uid
+                    }
                     CalendarManager calendarManager = new CalendarManager();
-                    calendarManager.CreateAppointment(id, name, start, duration, room);
+                    calendarManager.CreateAppointment(id, name, start, end, room);
+                    id = 0;
                     start = new DateTime();
                     end = new DateTime();
-                    duration = new TimeSpan();
                 }
 
                 //read another line
