@@ -10,13 +10,13 @@ using DevExpress.Utils;
 using DevExpress.XtraRichEdit.Model.History;
 using StudyN.Models;
 using StudyN.Utilities;
-using StudyN.Views;
 using static StudyN.Utilities.StudynEvent;
 
 //Because of the minuteMap, this iteration of the autoScheduler doesn't seem to have a need for blocks
 public class AutoScheduler : StudynSubscriber
 {
     private DateTime baseTime; //The base time the autoscheduler will use to do all its calculations
+    private DateTime baseLimit; //The base time the autoscheduler will stop calculating at
     ObservableCollection<Appointment> appts;
     ObservableCollection<TaskItem> tasks;
     private minuteSnapshot[] minuteMap;
@@ -31,23 +31,35 @@ public class AutoScheduler : StudynSubscriber
         pastDueTasks = new List<TaskItem>();
         minuteMap = new minuteSnapshot[40320]; //40320 minutes in 4 weeks. AutoScheduler will only scheduler out 4 weeks.
         for(int i = 0; i < minuteMap.Length; i++) { minuteMap[i] = new minuteSnapshot(); }
-        baseTime = DateTime.Now;
+        // set base time
+        if(File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
+        {
+            baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
+            baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
+        }
+        else
+        {
+            baseTime = DateTime.Now;
+            baseLimit = DateTime.Now;
+        }
     }
    
     //Put appointments from the global appointments list into the minute mapping, for future use in scheduling
     private void MapAppointments()
     {
         Console.WriteLine("autoScheduler.MapAppointments()");
-        foreach(Appointment appt in appts)
+        var apptsCopy = appts.ToList();
+        foreach (Appointment appt in apptsCopy)
         {
             if (appt.From == "autoScheduler") //If the appointment is from the autoScheduler, delete it from the calendar so we can reschedule it without duplicating it
             {
                 Console.WriteLine("rescheduling appointment from autoScheduler");
+                appts.Remove(appt);
                 //GlobalAppointmentData.CalendarManager.DeleteAppointment(minuteMap[i].id); //To be able to delete an appointment, the calnedarManager needs a function to do so
             } 
         }
 
-        foreach (Appointment appt in appts)
+        foreach (Appointment appt in apptsCopy)
         {
             DateTime start, end;
             start = appt.Start; end = appt.End;
@@ -66,57 +78,163 @@ public class AutoScheduler : StudynSubscriber
         }
     }
 
-    //Map each task minute by minute back from its duedate. If something is already scheduled for that minute, look back to the minute before it.
-    //It will map higher important tasks first. Therefore lower importance tasks will be scheduled around the higher importance ones.
-    private void MapTasks()
+    private List<BlockContainer> CreateBlockContainers()
     {
-        Console.WriteLine("autoScheduler.MapTasks()");
-        IOrderedEnumerable<TaskItem> sortedTasks = sortByWeight();
-        foreach (TaskItem task in sortedTasks) //Schedule the higher weight (IE high importance) tasks first, so if something is unscheduleable it will be a lower weight task
+        List<BlockContainer> blockContainers = new List<BlockContainer>();   
+        IOrderedEnumerable<TaskItem> sortedTasks = sortByWeight(); //Because we sort the tasks first, the containers should also be sorted
+        foreach(TaskItem task in sortedTasks)
         {
-            if(task.DueTime < baseTime.AddMinutes(40320) && task.DueTime > baseTime) //Task is due within the 4 weeks the scheduler will schedule
+            if (task.DueTime < baseTime.AddMinutes(40320) && task.DueTime > baseTime) //Task is due within the 4 weeks the scheduler will schedule
+            { 
+                BlockContainer blockContainer = new BlockContainer();
+                blockContainer.task = task;
+                blockContainer.blockSize = 60; //60 minute block size. Could change this based on task data. IE different task categories could have different block sizes
+                blockContainer.blocks = new Block[(int)(task.TotalTimeNeeded*60 / blockContainer.blockSize)];
+                blockContainer.remainder = (int)(task.TotalTimeNeeded*60) % blockContainer.blockSize;
+                blockContainers.Add(blockContainer);
+            }
+;       }
+
+        return blockContainers;
+    }
+
+    private bool mapConflict(int start, int end) //return true if there would be a conflict if something were to be inserted into the minuteMap between start and end
+    {
+        for(int i = start; i < end; i++)
+        {
+            if(minuteMap[i].id != null) { return true; }
+        }
+        return false;
+    }
+    private void MapBlocks(List<BlockContainer> blockContainers)
+    {
+        foreach(BlockContainer blockContainer in blockContainers)
+        {
+            int offset = (int)(blockContainer.task.DueTime - baseTime).TotalMinutes - blockContainer.blockSize;
+            while (blockContainer.mappedBlocks < blockContainer.blocks.Length && offset >= 0)
             {
-                int offset = (int)(task.DueTime - baseTime).TotalMinutes;
-                int minutesMapped = 0;
-                while(minutesMapped < task.TotalTimeNeeded * 60)
+                if( !mapConflict(offset, offset + blockContainer.blockSize) ) 
                 {
-                    if(offset < 0) //meaning task cannot be completed unless its scheduled before baseTime (aka in the past)
+                    //match every minute in this span to the block container (aka task). Then create the task block
+                    for(int i = offset; i < offset + blockContainer.blockSize; i++) { minuteMap[i].id = blockContainer.task.TaskId; minuteMap[i].from = "autoScheduler"; minuteMap[i].name = blockContainer.task.Name; }
+
+                    blockContainer.blocks[ blockContainer.mappedBlocks ] = new Block(blockContainer.task.TaskId, new Guid(), offset, offset + blockContainer.blockSize);
+                    blockContainer.mappedBlocks++;
+                }
+                offset -= blockContainer.blockSize;
+            }
+
+            if(blockContainer.mappedBlocks < blockContainer.blocks.Length) //not all possible blocks were able to be mapped due to conflicts. So there is more remainder time now
+            {
+                blockContainer.remainder = blockContainer.remainder + (blockContainer.blocks.Length - blockContainer.mappedBlocks) * blockContainer.blockSize;
+            }
+        }
+    }
+
+    private void MapRemainders(List<BlockContainer> blockContainers)
+    {
+        foreach (BlockContainer blockContainer in blockContainers)
+        {
+            int offset = (int)(blockContainer.task.DueTime - baseTime).TotalMinutes;
+            while (blockContainer.remainder > 0 && offset >= 0)
+            {
+                if (minuteMap[offset].id == null) //If nothing has been mapped to this spot yet, put it here
+                {
+                    minuteMap[offset].id = blockContainer.task.TaskId;
+                    minuteMap[offset].from = "autoScheduler";
+                    minuteMap[offset].name = blockContainer.task.Name;
+                    blockContainer.remainder = blockContainer.remainder - 1;
+                }
+                offset--;
+            }
+
+            if(offset < 0) 
+            {
+                Console.WriteLine("UNSCHEDUABLE TASK");
+                pastDueTasks.Add(blockContainer.task);
+                taskPastDue = true;
+            }
+        }
+    }
+
+    private void PullBackBlocks(List<BlockContainer> blockContainers) //Pull blocks apart, so they're not all stacked up against the dueDate. Do this only if possible.
+    {
+        //containers are sorted by weight. So the more important ones come first, meaning the more important ones will be pulled back first (attempted to be placed earlier on the calendar). Which is good.
+        foreach (BlockContainer bc in blockContainers)
+        {
+            Console.WriteLine(bc.task.Name + " has " + bc.mappedBlocks + " blocks.");
+            for(int i = 0; i < bc.mappedBlocks; i++) //For each block in the container
+            {
+                //Clear block from the minute map, and try to place it earlier
+                for(int j = bc.blocks[i].start; j < bc.blocks[i].end; j++)
+                {
+                    minuteMap[j].id = null;
+                    minuteMap[j].from = "";
+                    minuteMap[j].name = "";
+                }
+
+                int offset = 0;
+                while( mapConflict(offset, offset + bc.blockSize) && offset < bc.blocks[i].start) //while we cant place it. After the while loop the block will either be placed earlier, or in the same spot it was in originally.
+                {
+                    offset++;
+                }
+
+                //We shouldn't technically NEED to check if the block will be placed within 40320 minutes, because it was already able to placed within that time frame. Worst case is that it just gets put where it already was.
+                /*                if( offset > 0 && bc.task.TaskId == minuteMap[offset - 1].id ) //If the minuteMap just before this block has the same id as this block (IE its apart of the same task), we should try to separate them a bit
+                                {
+                                    while (offset < bc.blocks[i].start)
+                                    {
+                                        if (offset + bc.blockSize < bc.blocks[i].start && (minuteMap[offset - 1 + bc.blockSize].id != bc.task.TaskId) && !mapConflict(offset + bc.blockSize, offset + 2 * bc.blockSize)) //If it is possible to push the block forward, push it forward by one block size. IE if where we are trying to put it now is earlier than where it was before.
+                                        {
+                                            Console.WriteLine("spacing out block");
+                                            offset = offset + bc.blockSize;
+                                            break;
+                                        }
+                                        offset++;
+                                    }
+                                }*/
+
+                //ATTEMPT TO SPACE OUT TOUCHING BLOCKS IF THEY ARE FROM SAME TASK
+                if(offset > 0)
+                {
+                    if (minuteMap[offset - 1].id == bc.task.TaskId)
                     {
-                        
-                        //pop up to ask if user would like to edit task that cannot be implemented 
-                      //  bool answer = await App.Current.MainPage.DisplayAlert("Warning", "The following task possesses a past due date: "
-                        //    + task.Name + "\n\nWould you like to edit task?", "Yes", "No");
-                       // if (answer)
+                        while(mapConflict(offset + bc.blockSize, offset + 2 * bc.blockSize))
                         {
-                            // TaskItem we need to edit...
-                            GlobalTaskData.ToEdit = task;
-                            // Get it in here
-                            //await Shell.Current.GoToAsync(nameof(AddTaskPage));
+                            offset++; //We are trying to sort block wise. Perhaps this should be offset += blockSize??????
+                            if(!mapConflict(offset + bc.blockSize, offset + 2 * bc.blockSize)) 
+                            {
+                                if (minuteMap[offset - 1 + bc.blockSize].id == bc.task.TaskId) //If theres not a mapConflict, but the block is touching another block of the same task, attempt to push it forward another block size
+                                {
+                                    offset = offset + bc.blockSize;
+                                }
+                            }
                         }
-                        
-                        
-                        Console.WriteLine("UNSCHEDUABLE TASK");
-                        pastDueTasks.Add(task);
-                        taskPastDue = true;
-                        break;
+                        offset = offset + bc.blockSize;
                     }
-                    if(minuteMap[offset].id == null) //If nothing has been mapped to this spot yet, put it here
-                    {
-                        minuteMap[offset].id = task.TaskId;
-                        minuteMap[offset].from = "autoScheduler";
-                        minuteMap[offset].name = task.Name;
-                        minutesMapped++;
-                        offset--;
-                    }
-                    else //There IS something already mapped here. Dont map it but keep looking backwards
-                    {
-                        //This else statement can get a LOT more complicated in the future, depending on how we want to handle collisions
-                        offset--;
-                    }
+                }
+                
+                if(offset < bc.blocks[i].start){ bc.blocks[i].start = offset; bc.blocks[i].end = offset + bc.blockSize; } //If the block was succesfully spaced out and STILL placed earlier than where it originally was
+
+                //for (int j = offset; j < offset + bc.blockSize; j++) //Place it in minuteMap
+                for(int j = bc.blocks[i].start; j < bc.blocks[i].end; j++) //Place it in minuteMap
+                {
+                    minuteMap[j].id = bc.task.TaskId;
+                    minuteMap[j].from = "autoScheduler";
+                    minuteMap[j].name = bc.task.Name;
                 }
             }
         }
     }
+
+    private void MapTasks()
+    {
+        List<BlockContainer> containers = CreateBlockContainers();
+        MapBlocks(containers);
+        MapRemainders(containers);
+        PullBackBlocks(containers);
+    }
+
 
     //All contiguous minute mappings should be transformed into a continous appointment. IE indexes in the minute mapping that are next to each other and have the same Guid should be combined together.
     private List<Appointment> CoalesceMinuteMapping()
@@ -152,7 +270,11 @@ public class AutoScheduler : StudynSubscriber
         Console.WriteLine("autoScheduler adding to calendar");
         foreach(Appointment appt in appts)
         {
-            GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+            if (appt.From == "autoScheduler")
+            {
+                GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+
+            }
         }
     }
 
@@ -194,18 +316,6 @@ public class AutoScheduler : StudynSubscriber
 
         else //Item is NOT possible to complete before deadline. Give it negative weight so it will be scheduled past its deadline, and be detected as unscheduable.
         {
-            
-            //pop up to ask if user would like to edit task that cannot be implemented 
-          //  bool answer = await App.Current.MainPage.DisplayAlert("Warning", "The following task cannot be completed on time: "
-            //    + task.Name + "\n\nWould you like to edit task?", "Yes", "No");
-           // if (answer)
-            {
-                // TaskItem we need to edit...
-                GlobalTaskData.ToEdit = task;
-                // Get it in here
-               // await Shell.Current.GoToAsync(nameof(AddTaskPage));
-            }
-            
             //taskPastDue = true;
             //pastDueTasks.Add(task);
             weight = null;
@@ -217,26 +327,12 @@ public class AutoScheduler : StudynSubscriber
 
     public void run(Guid id)
     {
-        
-        //loading bar start
-        ProgressBar progressBar = new ProgressBar
-        {
-            Progress = 0,
-            ProgressColor = Colors.Gray
-        };
-        
         Console.WriteLine("Running autoScheduler");
         refreshData();
-        progressBar.ProgressTo(0.20, 100, Easing.Linear);
         MapAppointments();
-        progressBar.ProgressTo(0.4, 100, Easing.Linear);
         MapTasks();
-        progressBar.ProgressTo(0.6, 100, Easing.Linear);
         AddToCalendar( CoalesceMinuteMapping() );
-        progressBar.ProgressTo(0.8, 100, Easing.Linear);
         Console.WriteLine("Done running autoScheduler");
-        
-        progressBar.ProgressTo(1, 100, Easing.Linear);
 
         for (int i = 0; i < minuteMap.Length; i++)
         {
@@ -246,15 +342,24 @@ public class AutoScheduler : StudynSubscriber
             }
         }
     }
-    
-    
+
     private void refreshData()
     {
         taskPastDue = false;
         pastDueTasks = new List<TaskItem>();
         minuteMap = new minuteSnapshot[40320];
         for (int i = 0; i < minuteMap.Length; i++) { minuteMap[i] = new minuteSnapshot(); }
-        baseTime = DateTime.Now;
+        // set base time
+        if (File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
+        {
+            baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
+            baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
+        }
+        else
+        {
+            baseTime = DateTime.Now;
+            baseLimit = DateTime.Now;
+        }
     }
 
     public void OnNewStudynEvent(StudynEvent taskEvent)
@@ -268,6 +373,7 @@ public class AutoScheduler : StudynSubscriber
             case StudynEventType.DeleteTask:
                 //run(taskEvent.Id);
                 break;
+            case StudynEventType.SleepTimeChanged:
             case StudynEventType.AppointmentAdd:
             case StudynEventType.AppointmentEdit:
             case StudynEventType.AppointmentDelete:
@@ -293,4 +399,28 @@ internal class minuteSnapshot
     public string name;
     public string from; //Where it is from. IE cretaed by autoScheduler? From calendar? ics file?
     public minuteSnapshot() { id = null; from = ""; name = ""; }
+}
+
+internal class BlockContainer
+{
+    public TaskItem task;
+    public int mappedBlocks = 0;
+    public int blockSize;
+    public Block[] blocks;
+    public int remainder; //Minutes remaining after blocks are allocated. IE a task that is 1 hour 15 mins will have 15 minutes remaining (assuming 1 hour block size)
+}
+internal class Block
+{
+    public Guid taskID; //equals TaskID
+    public Guid blockID;
+    public int start; //start on minuteMap
+    public int end;   //end on minuteMap
+
+    public Block(Guid tid, Guid bid, int s, int e)
+    {
+        taskID = tid;
+        blockID = bid;
+        start = s;
+        end = e;
+    }
 }

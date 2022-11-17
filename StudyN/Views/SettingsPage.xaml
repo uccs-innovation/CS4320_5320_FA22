@@ -136,6 +136,28 @@
                         TextChanged="Entry_DirPath"/>
                 </StackLayout>
             </Frame>
+            <!-- Frame for giving sleep time -->
+            <Frame
+                BorderColor="{DynamicResource Primary}"
+                CornerRadius="5"
+                Padding="8"
+                BackgroundColor="{DynamicResource NormalBackgroundColor}">
+                <StackLayout Spacing="3">
+                    <Label
+                        Text="Sleep Time"
+                        FontSize="12"
+                        TextColor="{DynamicResource NormalHeaderText}"
+                        FontAttributes="Bold"/>
+                    <BoxView
+                        Color="{DynamicResource Primary}"
+                        HeightRequest="2"
+                        HorizontalOptions="Fill"/>
+                    <Button
+                        Text="Set Sleep Time"
+                        Style="{StaticResource PrimaryButton}"
+                        Clicked="Button_ClickedSleep"/>
+                </StackLayout>
+            </Frame>
             <!-- Use frames to build different sections of the settings menu -->
 
             

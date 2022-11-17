@@ -8,6 +8,7 @@
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              ios:Page.UseSafeArea="true"
              x:Class="StudyN.Views.CalendarPage">
+    
     <Shell.TitleView>
         <StackLayout
             Orientation="Horizontal"
@@ -49,7 +50,7 @@
             HorizontalOptions="Center"
             BorderColor="Transparent"
             BorderWidth="1"
-            TextColor="#000"
+            TextColor="Black"
             FontSize="15"
             BackgroundColor="Transparent"
             Clicked="OnWeeklyClicked"
@@ -60,13 +61,12 @@
                             <VisualState.Setters>
                                 <Setter Property="Scale"
                             Value="1" />
-                                <Setter Property="TextColor" Value="#000"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Pressed">
                             <VisualState.Setters>
-                                <Setter Property="Scale" Value="0.8" />
-                                <Setter Property="TextColor" Value="#000"/>
+                                <Setter Property="Scale"
+                            Value="0.8" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -103,6 +103,9 @@
         </StackLayout>
     </Shell.TitleView>
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Sleep Time"
+                     Clicked="OnSleepButtonTap"
+                     IconImageSource="clock_svgrepo"/>
         <ToolbarItem Text="Export"
                      Clicked="onExportButtonTap"
                      IconImageSource="export"/>
