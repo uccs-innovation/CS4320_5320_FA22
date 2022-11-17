@@ -348,6 +348,7 @@ namespace StudyN.Models
 
                     foreach (Appointment appt in apptList)
                     {
+                        Console.WriteLine("ASDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                         // Publish add appointment
                         EventBus.PublishEvent(
                                     new StudynEvent(appt.UniqueId,
@@ -361,6 +362,7 @@ namespace StudyN.Models
             }
             if (e.Action == NotifyCollectionChangedAction.Remove)
             {
+                Console.WriteLine("ASDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 // Publish delete appointment
                 EventBus.PublishEvent(
                             new StudynEvent(new Guid(),

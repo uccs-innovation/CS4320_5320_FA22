@@ -57,9 +57,9 @@ namespace StudyN.Models
             {
                 LastEdited = DateTime.Now;
                 // Publish task delete appointment
+
                 EventBus.PublishEvent(
-                            new StudynEvent(UniqueId,
-                            StudynEvent.StudynEventType.AppointmentEdit));
+                            new StudynEvent(this.UniqueId, StudynEvent.StudynEventType.AppointmentEdit));
             }
         }
 

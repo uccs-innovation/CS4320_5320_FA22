@@ -19,6 +19,7 @@ namespace StudyN.Utilities
             AppointmentAdd,
             AppointmentEdit,
             AppointmentDelete,
+            h,
             // Category Events
             CategoryAdd,
             CategoryEdit,
