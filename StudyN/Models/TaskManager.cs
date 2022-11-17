@@ -23,6 +23,11 @@ namespace StudyN.Models
                                double TotalTimeNeeded,
                                Guid recurId = new Guid())
         {
+            if(recurId == Guid.Empty)
+            {
+                recurId = Guid.NewGuid();
+            }
+
             //Creating new task with sent parameters
             TaskItem newTask = new TaskItem(name,
                                             description,
@@ -213,6 +218,10 @@ namespace StudyN.Models
                     // Change the time of date without changing the date
                     task.DueTime = task.DueTime.Date + editedTask.DueTime.TimeOfDay;
                     task.Priority = editedTask.Priority;
+
+                    // Publish task edit event
+                    EventBus.PublishEvent(
+                                new StudynEvent(task.TaskId, StudynEvent.StudynEventType.EditTask));
                 }
             }
         }

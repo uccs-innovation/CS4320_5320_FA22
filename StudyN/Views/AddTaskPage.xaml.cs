@@ -268,8 +268,6 @@ public partial class AddTaskPage : ContentPage
         //Check to see if we are currently editing or adding a task
         if (editingExistingTask)
         {
-            task = GlobalTaskData.ToEdit;
-
             //Saves the informatiom when editing
             GlobalTaskData.TaskManager.EditTask(
                 GlobalTaskData.ToEdit.TaskId,
@@ -280,9 +278,12 @@ public partial class AddTaskPage : ContentPage
                 timeLogged,
                 totalTime);
 
-            if(task.IsRecur)
+            if (GlobalTaskData.ToEdit.IsRecur)
             {
-                bool editSeries = await DisplayAlert("Recurring Event", "Would you like to edit all events in the series?", "Yes", "No");
+                bool editSeries = await DisplayAlert("Recurring Event",
+                                                     "Would you like to edit all events in the series?",
+                                                     "Yes",
+                                                     "No");
                 if(editSeries)
                 {
                     GlobalTaskData.TaskManager.EditRecurring(GlobalTaskData.ToEdit);
@@ -291,11 +292,12 @@ public partial class AddTaskPage : ContentPage
                 {
                     // If only editing this one event. Remove it's
                     // assocaiation with other events in the series.
-                    GlobalTaskData.ToEdit.RecurId = new Guid();
+                    GlobalTaskData.ToEdit.RecurId = Guid.NewGuid();
                     GlobalTaskData.ToEdit.IsRecur = false;
                 }
             }
-            
+
+            task = GlobalTaskData.ToEdit;
             GlobalTaskData.ToEdit = null;
         }
         else
