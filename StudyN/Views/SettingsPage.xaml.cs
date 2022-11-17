@@ -32,7 +32,17 @@ namespace StudyN.Views
 
         private void Button_ClickedLoad(object sender, EventArgs e)
         {
-            GlobalTaskData.TaskManager.LoadFilesIntoListsTest(dirString);
+            Load_Error.IsVisible = false;
+            Load_Successful.IsVisible = false;
+            if (dirString != null && dirString != "")
+            {
+                Load_Successful.IsVisible = true;
+                GlobalTaskData.TaskManager.LoadFilesIntoListsTest(dirString);
+            }
+            else
+            {
+                Load_Error.IsVisible = true;
+            }
         }
 
         private void Button_ClickedLight(object sender, EventArgs e)

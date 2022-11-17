@@ -23,7 +23,7 @@ namespace StudyN.Views
             EventBreakdown.Series[0].LegendTextPattern = "{L}: {V}";
             if (ViewModel.CalendarEvents.Count > 5)
             {
-                EventBreakdown.Series[0].VisibleInLegend = false;
+                EventBreakdown.Series[0].VisibleInLegend = true;
                 EventBreakdown.Hint.Enabled = true;
             }
             else

@@ -42,7 +42,10 @@ public partial class AddIcsPage : ContentPage
      * if successful, run to class to convert massive ass string to appointments
      * else, jump ship
     */
-	private async void Submit_Button(object sender, EventArgs e) { 
+	private async void Submit_Button(object sender, EventArgs e)
+    {
+        Html_Error.IsVisible = false;
+        Html_Successful.IsVisible = false;
         Console.WriteLine(link);
         if (!string.IsNullOrEmpty(link)) {
             try {
@@ -57,6 +60,7 @@ public partial class AddIcsPage : ContentPage
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(responseBody);
+                Html_Successful.IsVisible = true;
 
                 //cal class to convert
                 GetAppointFromString convert = new GetAppointFromString(responseBody);
@@ -64,13 +68,14 @@ public partial class AddIcsPage : ContentPage
                 //go to calanders page to show off new appointments
                 //await Shell.Current.GoToAsync(nameof(CalendarPage));
             }
-            catch (HttpRequestException ex) {
+            catch (InvalidOperationException ex) {
                 //what went wrong
                 Console.WriteLine("\nException Caught!\n");
                 Console.WriteLine("Message :{0} ", ex.Message);
-
+                Html_Error.IsVisible = true;
                 //jump ship (so no breaky)
-                await Shell.Current.GoToAsync(nameof(SettingsPage));
+
+                //await Shell.Current.GoToAsync(nameof(SettingsPage));
             }
         }
     }

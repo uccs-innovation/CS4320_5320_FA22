@@ -120,6 +120,11 @@
                 Padding="8"
                 BackgroundColor="{DynamicResource NormalBackgroundColor}">
                 <StackLayout Spacing="3">
+                    <Label 
+                        Text="Load Tasks"
+                        FontSize="12" 
+                        TextColor="{DynamicResource NormalHeaderText}"
+                        FontAttributes="Bold"/>
                     <Button
                         Text="Load File"
                         Style="{StaticResource PrimaryButton}"
@@ -134,6 +139,18 @@
                         IsTextPredictionEnabled="false"
                         MaxLength="200"
                         TextChanged="Entry_DirPath"/>
+                    <Label 
+                        Text=" Invalid directory path!"
+                        FontSize="12" 
+                        x:Name="Load_Error"
+                        IsVisible="false"
+                        TextColor="Red"/>
+                    <Label 
+                        Text=" Directory path successfully loaded!"
+                        FontSize="12" 
+                        x:Name="Load_Successful"
+                        IsVisible="false"
+                        TextColor="Green"/>
                 </StackLayout>
             </Frame>
             <!-- Frame for giving sleep time -->

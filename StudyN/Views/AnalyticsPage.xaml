@@ -32,7 +32,7 @@
                                             <dxc:TextStyle Color="#424651" Size="18"/>
                                         </dxc:PieSeriesLabelStyle.TextStyle>
                                     </dxc:PieSeriesLabelStyle>
-                                 </dxc:PieSeriesLabel.Style>
+                                </dxc:PieSeriesLabel.Style>
                             </dxc:PieSeriesLabel>
                         </dxc:PieSeries.Label>
                         <dxc:PieSeries.Data>
