@@ -41,18 +41,17 @@
 
             <!--Grid rows definitions-->
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" /><!--Task Name Row                    0-->
-                <RowDefinition Height="50" /><!--Description                      1-->
-                <RowDefinition Height="50" /><!--Time and Date Entry              2-->
-                <RowDefinition Height="50" /><!--Hours and Minutes to Spend       3-->
-                <RowDefinition Height="50" /><!--Hours and Minutes Completed      4-->
-                <RowDefinition Height="50" /><!--Priority slider                  5-->
-                <RowDefinition Height="50" /><!--recurrence                       7-->
-                <RowDefinition Height="50" /><!--Delete And Complete              8-->
-                <RowDefinition Height="50" /><!--Timer                            9-->
-                <RowDefinition Height="20" /><!--Time List Log Label              10-->                
-                <RowDefinition Height="20" /><!--Time List Log Header             11-->
-                <RowDefinition Height="70"/><!--Time List Log                     12-->
+                <RowDefinition Height="Auto"/><!--Task Name            0-->
+                <RowDefinition Height="Auto"/><!--Description          1-->
+                <RowDefinition Height="Auto"/><!--Date and Time        2-->
+                <RowDefinition Height="Auto"/><!--Estimate Hours       3-->
+                <RowDefinition Height="Auto"/><!--Actual Hours         4-->
+                <RowDefinition Height="Auto"/><!--Priority slider      5-->
+                <RowDefinition Height="Auto"/><!--Recurrence Layout    7-->
+                <RowDefinition Height="Auto"/><!--Task Tracker Button  8-->
+                <RowDefinition Height="Auto"/><!--Log Label            9-->
+                <RowDefinition Height="Auto"/><!--Log Header          10-->
+                <RowDefinition Height="Auto"/><!--Log Grid            11-->
             </Grid.RowDefinitions>
 
             <!--Grid column definitions-->
