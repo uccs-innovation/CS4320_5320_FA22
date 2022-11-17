@@ -6,6 +6,7 @@
     <Grid>
         <Grid RowDefinitions="Auto,Auto,Auto">
             <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto" Padding="20,5,20,45" RowSpacing="30" TranslationY ="200">
+
                 <Entry
                         Grid.ColumnSpan="1"
                         Placeholder="Enter link to iCal file (.ics)"
@@ -17,7 +18,18 @@
                         MaxLength="200"
                         TextChanged="Entry_TextChanged"/>
             </Grid>
-            
+            <Label Text="Invalid HTML found. Please enter again!" 
+                   TextColor="Red"
+                   x:Name="Html_Error"
+                   TranslationX="25"
+                   TranslationY="260"
+                   IsVisible="False"/>
+            <Label Text="ICal link successfully linked!" 
+                   TextColor="Green"
+                   x:Name="Html_Successful"
+                   TranslationX="25"
+                   TranslationY="260"
+                   IsVisible="false"/>
             <Button 
                     Grid.Row="1"
                     Grid.Column="1"
@@ -30,7 +42,6 @@
                     TranslationY="270"/>
 
             <Grid Grid.Row="10" RowDefinitions="Auto, Auto, Auto" Padding="20,30,20,45" RowSpacing="30" TranslationY ="200">
-
                 <Entry
                         Grid.ColumnSpan="1"
                         Placeholder="Enter path to a file"
