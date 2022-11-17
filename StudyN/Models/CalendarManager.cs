@@ -140,10 +140,8 @@ namespace StudyN.Models
             }
         }
 
-        // estepanek: I had to comment out the call to this method due to
-        // IndexOutOfRangeException.  Work needs to be done to figure out
-        // how to have the custom categories interrelate with the appointment
-        // labels
+        // estepanek: I had to comment out the picker position
+        // settings because they were causing an error
         public void CreateAppointmentCategories()
         {
             int count = AppointmentLabelTitles.Length;
