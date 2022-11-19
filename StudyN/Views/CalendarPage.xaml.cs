@@ -25,6 +25,10 @@ namespace StudyN.Views
             InitializeComponent();
             ViewModel = new CalendarViewModel();
             BindingContext = _calendarDataView = new CalendarDataView(); //Use to pull data of CalendarData under Models
+            SchedulerStorage.DataSource.AppointmentsSource = _calendarDataView.Appointments;
+            //SchedulerStorage.DataSource.AppointmentLabelsSource = _calendarDataView.AppointmentCategories; // estepanek: this wasn't working
+            SchedulerStorage.DataSource.AppointmentLabelsSource = _calendarDataView.AppointmentLabels;   // so I'm un-coupling custom categories from the appointment
+            SchedulerStorage.DataSource.AppointmentStatusesSource = _calendarDataView.AppointmentStatuses; 
             dailyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 255);
             EventBus.Subscribe(this);
 
@@ -75,12 +79,16 @@ namespace StudyN.Views
             SchedulerStorage.RefreshData();
             //SchedulerStorage.AppointmentItems.Refresh(); //https://supportcenter.devexpress.com/ticket/details/q320528/slow-scheduler-refresh //https://supportcenter.devexpress.com/ticket/details/t615692/how-to-programmatically-refresh-scheduler
             InvalidateMeasure();
+            Console.WriteLine("in CalendarPage OnAppearing after InvalidateMeasure");
 
             isChildPageOpening = false;
 
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
+            Console.WriteLine("in CalendarPage OnAppearing after SchedulerStorage.GetAppointments");
             CalendarDataView.LoadDataForNotification(notes.ToList());
+            Console.WriteLine("in CalendarPage OnAppearing after loadDataForNotification");
             base.OnAppearing();
+            Console.WriteLine("in CalendarPage OnAppearing after base.OnAppearing");
         }
 
         private void ShowAppointmentEditPage(AppointmentItem appointment)
@@ -140,7 +148,7 @@ namespace StudyN.Views
 
         public void OnNewStudynEvent(StudynEvent sEvent)
         {
-            Console.WriteLine("in CalendarPage.OnNewStudynEvent");
+            //Console.WriteLine("in CalendarPage.OnNewStudynEvent"); //estepanek: I had to comment this out, because it made the console output hard to read
             // On any appointment event, refresh the data
             if (sEvent.EventType == StudynEventType.AppointmentAdd
                 || sEvent.EventType == StudynEventType.AppointmentEdit
@@ -160,6 +168,7 @@ namespace StudyN.Views
 
             public IReadOnlyList<Appointment> Appointments { get => data.Appointments; }
             public IReadOnlyList<AppointmentCategory> AppointmentCategories { get => data.AppointmentCategories; }
+            public IReadOnlyList<AppointmentLabel> AppointmentLabels { get => data.AppointmentLabels; }
             public IReadOnlyList<AppointmentStatus> AppointmentStatuses { get => data.AppointmentStatuses; }
 
             public CalendarDataView()

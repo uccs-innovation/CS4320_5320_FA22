@@ -9,11 +9,39 @@ using DevExpress.CodeParser;
 using DevExpress.XtraRichEdit.Model;
 using System;
 
+
 namespace StudyN.Models
 {
     //This class manages all of our tasks and preforms actions related to them
     public class TaskDataManager
     {
+
+
+        public TaskItem AddTask(string name,
+                                string description,
+                                DateTime dueTime,
+                                int priority,
+                                double CompletionProgress,
+                                double TotalTimeNeeded)
+        {
+            //Creating new task with sent parameters
+            TaskItem newTask  = new TaskItem(name,
+                                            description,
+                                            dueTime,
+                                            priority,
+                                            CompletionProgress,
+                                            TotalTimeNeeded,
+                                            "");
+
+            //This will add the tasks to the list
+            TaskList.Add(newTask);
+
+            // Publish task add event
+            EventBus.PublishEvent(
+                        new StudynEvent(newTask.TaskId, StudynEvent.StudynEventType.AddTask));
+
+            return newTask;
+        }
         //This function will add a new task to our list of tasks
         public TaskItem AddTask(string name,
                                string description,
@@ -28,6 +56,7 @@ namespace StudyN.Models
                 recurId = Guid.NewGuid();
             }
 
+
             //Creating new task with sent parameters
             TaskItem newTask = new TaskItem(name,
                                             description,
@@ -36,6 +65,7 @@ namespace StudyN.Models
                                             CompletionProgress,
                                             TotalTimeNeeded,
                                             recurId);
+
 
             //This will add the tasks to the list
             TaskList.Add(newTask);
@@ -50,6 +80,8 @@ namespace StudyN.Models
         //This will return a requested task using its id
         public TaskItem GetTask(Guid taskId)
         {
+
+          
             //Checking each item in the current task list
             foreach (TaskItem task in TaskList)
             {
@@ -84,6 +116,10 @@ namespace StudyN.Models
                                 List<TaskItemTime> TimeList = null,
                                 bool updateFile = true)
         {
+
+          
+          
+          
             //Retrieving the task
             TaskItem task = GetTask(taskId);
 
@@ -226,6 +262,7 @@ namespace StudyN.Models
             }
         }
 
+
         //This function will delete every task for the ids avalaible
         public void DeleteListOfTasks(List<Guid> taskIds)
         {
@@ -285,19 +322,6 @@ namespace StudyN.Models
                 //Console.WriteLine(jsonfiletext);
                 TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
                 TaskListTest.Add(task);
-
-                if (task.TimeList != null)
-                {
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("Writing out task times");
-                    foreach (TaskItemTime tasktime in task.TimeList)
-                    {
-                        Console.WriteLine("Time Start" + tasktime.start);
-                        Console.WriteLine("TimeStop" + tasktime.stop);
-                        Console.WriteLine("Timespanned" + tasktime.span);
-                    }
-                }
             }
         }
 
@@ -314,19 +338,6 @@ namespace StudyN.Models
                 TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
                 //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
                 TaskList.Add(task);
-
-                if (task.TimeList != null)
-                {
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("Writing out task times");
-                    foreach (TaskItemTime tasktime in task.TimeList)
-                    {
-                        Console.WriteLine("Time Start" + tasktime.start);
-                        Console.WriteLine("TimeStop" + tasktime.stop);
-                        Console.WriteLine("Timespanned" + tasktime.span);
-                    }
-                }
             }
 
             // gets completed tasks
@@ -348,19 +359,6 @@ namespace StudyN.Models
                 //Console.WriteLine(jsonfiletext);
                 TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
                 TaskListTest.Add(task);
-
-                if (task.TimeList != null)
-                {
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("Writing out task times");
-                    foreach (TaskItemTime tasktime in task.TimeList)
-                    {
-                        Console.WriteLine("Time Start" + tasktime.start);
-                        Console.WriteLine("TimeStop" + tasktime.stop);
-                        Console.WriteLine("Timespanned" + tasktime.span);
-                    }
-                }
             }
         }
 

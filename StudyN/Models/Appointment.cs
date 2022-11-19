@@ -13,14 +13,15 @@ using System.Threading.Tasks;
 namespace StudyN.Models
 {
     public class Appointment : AppointmentItem
-    {
+    {        
         public Guid UniqueId { get; set; } = Guid.NewGuid();
+        public Guid ParentTaskId { get; set; }
         public string ReminderInfo { get; set; }
         public string Notes { get; set; }
 
         // properties for StudyN_Time category
         public bool IsGeneratedStudyNTime { get; set; }
-        public Guid ParentTaskId { get; set; }
+        
         public int StudyNBlock_Minutes { get; set; }
         public bool WasEdited { get; set; }
         public bool IsOrphan { get; set; }
@@ -66,20 +67,18 @@ namespace StudyN.Models
 
         public Appointment() : base()
         {
-            UniqueId = new Guid();
+            //UniqueId = new Guid();
             LastEdited = DateTime.Now;
             PropertyChanged += new PropertyChangedEventHandler(ApptChanged);
         }
     }
 
-
-    public class AppointmentCategory
+    // Built-in Scheduler DataStorage DataSource AppointmentLabelsSource
+    public class AppointmentLabel
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Caption { get; set; }
         public Color Color { get; set; }
-        public double PickerXPosition { get; set; }
-        public double PickerYPosition { get; set; }
     }
 
     /// <summary>
@@ -106,5 +105,15 @@ namespace StudyN.Models
     {
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+    }
+  
+    // Custom Categories
+    public class AppointmentCategory
+    {
+        public Guid Id { get; set; }  // custom id        
+        public string Caption { get; set; }
+        public Color Color { get; set; }
+        public double PickerXPosition { get; set; }
+        public double PickerYPosition { get; set; }
     }
 }
