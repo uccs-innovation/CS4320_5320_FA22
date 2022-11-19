@@ -8,6 +8,7 @@ using System.Xml;
 using AndroidX.Fragment.App.StrictMode;
 using DevExpress.Maui.Scheduler;
 using DevExpress.Maui.Scheduler.Internal;
+using DevExpress.Maui.Editors;
 using Microsoft.Maui.Controls;
 using StudyN.Utilities;
 using DevExpress.Data.Mask;
@@ -23,6 +24,7 @@ namespace StudyN.Models
     public class CalendarManager
     {
         public static DateTime BaseDate = DateTime.Today;
+
 
         public static string[] AppointmentLabelTitles = { "Uncategorized", "StudyN Time", "Class", "Appointment", "Assignment", "Free Time", "Exam", "Office Hours", "Work" };
         public static Color[] AppointmentLabelColors = {Color.FromArgb("#A0A0A0"),   // 1. gray
@@ -150,6 +152,7 @@ namespace StudyN.Models
                 Console.WriteLine("In CreateApointmentCategories");
                 AppointmentCategory cat = new AppointmentCategory();
                 cat.Id = Guid.NewGuid();
+
                 cat.Caption = AppointmentLabelTitles[i];
                 cat.Color = AppointmentLabelColors[i];
                 //cat.PickerXPosition = AppointmentCategoryX[i];
@@ -188,6 +191,7 @@ namespace StudyN.Models
                 AppointmentStatuses.Add(stat);
             }
         }
+
 
         public Appointment CreateAppointment(string appointmentTitle,
                                             DateTime start,
@@ -245,35 +249,21 @@ namespace StudyN.Models
         /// <param name="id"></param>
         /// <returns></returns>
         public AppointmentCategory CreateCategory(string categoryName,
-
                                                    Color categoryColor,
-
                                                    double x, double y,
-
                                                    Guid id = new Guid())
-
         {
-
             // Makes a new category
-
             AppointmentCategory cat = new()
-
             {
-
                 Id = id,
-
                 Caption = categoryName,
-
                 Color = categoryColor,
-
                 PickerXPosition = x,
-
                 PickerYPosition = y
-
             };
 
             // Adds category to category list
-
             AppointmentCategories.Add(cat);
 
             EventBus.PublishEvent(
@@ -294,6 +284,7 @@ namespace StudyN.Models
                                  Color categoryColor,
                                  double x, double y,
                                  Guid id)
+
 
         {
 
@@ -369,6 +360,21 @@ namespace StudyN.Models
             }
         }
 
+        /// <summary>
+        /// Save sleep time
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        public void SaveSleepTime(DateTime startTime, DateTime endTime)
+        {
+            // save information into Sleep Time
+            SleepTime.StartTime = startTime;
+            SleepTime.EndTime = endTime;
+            EventBus.PublishEvent(
+                new StudynEvent(Guid.NewGuid(), StudynEvent.StudynEventType.SleepTimeChanged));
+        }
+
+
 
         // Properly handle appointments associated with a newly completed task
         public void TaskCompleted(Guid uniqueId)
@@ -401,6 +407,20 @@ namespace StudyN.Models
                 {
                     apt.End = DateTime.Now;
                 }
+            }
+
+        }
+
+        /// <summary>
+        /// Loads from sleep time json file into sleep time object
+        /// </summary>
+        public void LoadSleepTime()
+        {
+            string filename = FileSystem.AppDataDirectory + "/sleepTime.json";
+            if (File.Exists(filename))
+            {
+                string jsonFileText = File.ReadAllText(filename);
+                SleepTime = JsonConvert.DeserializeObject<SleepTime>(jsonFileText);
             }
         }
 
@@ -465,14 +485,17 @@ namespace StudyN.Models
                 if (task != null)
                 {
                     // Look at logged times
-                    foreach (TaskItemTime taskTime in task.TimeList)
+                    if (task.TimeList != null)
                     {
-                        // Add up times that finished before "now"
-                        // that started sometime today
-                        if (taskTime.stop < DateTime.Now
-                            && taskTime.start == DateTime.Today)
+                        foreach (TaskItemTime taskTime in task.TimeList)
                         {
-                            numMinCompleted += taskTime.span.TotalMinutes;
+                            // Add up times that finished before "now"
+                            // that started sometime today
+                            if (taskTime.stop < DateTime.Now
+                                && taskTime.start == DateTime.Today)
+                            {
+                                numMinCompleted += taskTime.span.TotalMinutes;
+                            }
                         }
                     }
                 }
@@ -500,10 +523,12 @@ namespace StudyN.Models
         }
 
 
+
         public ObservableCollection<Appointment> Appointments { get; private set; }
         public ObservableCollection<AppointmentCategory> AppointmentCategories { get; private set; }
         public ObservableCollection<AppointmentLabel> AppointmentLabels { get; private set; }
         public ObservableCollection<AppointmentStatus> AppointmentStatuses { get; private set; }
+        public SleepTime SleepTime { get; private set; }
 
 
         public CalendarManager()
@@ -512,9 +537,10 @@ namespace StudyN.Models
             AppointmentCategories = new ObservableCollection<AppointmentCategory>();
             AppointmentLabels = new ObservableCollection<AppointmentLabel>();
             AppointmentStatuses = new ObservableCollection<AppointmentStatus>();
+            SleepTime = new SleepTime();
 
             // Handle changes to collection
-            Appointments.CollectionChanged += new NotifyCollectionChangedEventHandler(AppointmentCollectionChanged);
+            Appointments.CollectionChanged  += new NotifyCollectionChangedEventHandler(AppointmentCollectionChanged);
 
             // check if pointer file doesn't exist before make default files
             if (FileManager.LoadCategoryFileNames().Length == 0)
@@ -523,6 +549,7 @@ namespace StudyN.Models
             }
 
             CreateAppointmentLabels();
+
             CreateAppointmentStatuses();
 
             // estepanek: this generates some hard-coded appointments
@@ -586,6 +613,43 @@ namespace StudyN.Models
             //If not found in either list, return null
             return null;
         }
+
+        public void LoadFilesIntoLists()
+        {
+            string jsonfiletext;
+
+            // gets completed tasks
+            string[] apptfilelist = FileManager.LoadApptFileNames();
+            foreach (string file in apptfilelist)
+            {
+                jsonfiletext = File.ReadAllText(file);
+                Console.WriteLine(jsonfiletext);
+                Appointment appt = JsonConvert.DeserializeObject<Appointment>(jsonfiletext);
+
+                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+
+                Appointments.Add(appt);
+            }
+
+
+        }
+
+        public Appointment GetAppointment(Guid taskId)
+        {
+            //Checking each item in the current task list
+            foreach (Appointment appt in Appointments)
+            {
+                //If the task is found, return the task
+                if (appt.UniqueId == taskId)
+                {
+                    return appt;
+                }
+            }
+
+            //If not found in either list, return null
+            return null;
+        }
+
     }
 }
 

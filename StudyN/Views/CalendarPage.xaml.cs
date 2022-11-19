@@ -251,5 +251,10 @@ namespace StudyN.Views
             await streamWriter.WriteAsync(text);
             await DisplayAlert("Done!", "Calendar successfully exported.", "Ok");
         }
+        private async void OnSleepButtonTap(object sender, EventArgs e)
+        {
+            Routing.RegisterRoute(nameof(Views.SleepTimePage), typeof(Views.SleepTimePage));
+            await Shell.Current.GoToAsync(nameof(Views.SleepTimePage));
+        }
     }
 } 

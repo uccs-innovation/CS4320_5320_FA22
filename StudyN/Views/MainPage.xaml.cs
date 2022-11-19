@@ -8,17 +8,18 @@ namespace StudyN.Views
     {
         public MainPage()
         {
-            InitializeComponent();
-            BindingContext = new MainViewModel();
-
             GlobalTaskTimeData.TaskTimeManager = new TaskTimeDataManager();
             GlobalTaskData.TaskManager = new TaskDataManager();
             GlobalTaskData.TaskManager.LoadFilesIntoLists();
 
             GlobalAppointmentData.CalendarManager = new CalendarManager();
             GlobalAppointmentData.CalendarManager.LoadFilesIntoAppointCategories();
+            GlobalAppointmentData.CalendarManager.LoadSleepTime();
             GlobalAutoScheduler.AutoScheduler = new AutoScheduler();
             GlobalAppointmentData.CalendarManager.LoadFilesIntoLists();
+
+            InitializeComponent();
+            BindingContext = new MainViewModel();
         }
     }
 }

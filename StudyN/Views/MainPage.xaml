@@ -29,9 +29,16 @@
         <Tab Title="Settings" Icon="info">
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
+        <Tab Title="About us" Icon="info">
+            <ShellContent ContentTemplate="{DataTemplate local:AboutUs}" />
+        </Tab>
+        <ShellContent Route="HomePage">
+            <local:HomePage/>
+        </ShellContent>
+
         
-        
-        
+
+
     </TabBar>
 
 </Shell>

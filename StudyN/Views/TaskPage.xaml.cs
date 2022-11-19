@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Android.Gms.Tasks;
+using Android.Widget;
 using DevExpress.Maui.DataGrid;
 using StudyN.Models;
 using StudyN.ViewModels;
@@ -62,7 +63,11 @@ namespace StudyN.Views
 
         protected override void OnAppearing()
         {
-            isChildPageOpening = false;
+            if (isChildPageOpening)
+            {
+                DataGrid.EndUpdate();
+                isChildPageOpening = false;
+            }
         }
 
         //This function will by the cancel button to reset the selection menu to its
@@ -73,9 +78,8 @@ namespace StudyN.Views
             {
                 ToolbarItem toolbar = sender as ToolbarItem;
                 ContentPage contentPage = toolbar.Parent as ContentPage;
-                DataGridView gridView = contentPage.Content as DataGridView;
 
-                gridView.BeginUpdate();
+                DataGrid.BeginUpdate();
                 
                 //Clearing the selected tasks and resetting the menu to its default
                 //setting
@@ -83,7 +87,7 @@ namespace StudyN.Views
                 rowHandleList.Clear();
                 ShowLongPressMenu(false);
 
-                gridView.EndUpdate();
+                DataGrid.EndUpdate();
             }
             catch(NullReferenceException execption)
             {
@@ -98,9 +102,8 @@ namespace StudyN.Views
             {
                 ToolbarItem toolbar = sender as ToolbarItem;
                 ContentPage contentPage = toolbar.Parent as ContentPage;
-                DataGridView gridView = contentPage.Content as DataGridView;
 
-                gridView.BeginUpdate();
+                DataGrid.BeginUpdate();
 
                 //We will first create a list of tasks before populating it with all
                 //of the selected tasks
@@ -144,7 +147,7 @@ namespace StudyN.Views
                 rowHandleList.Clear();
                 ShowLongPressMenu(false);
 
-                gridView.EndUpdate();
+                DataGrid.EndUpdate();
             }
             catch (NullReferenceException execption)
             {
@@ -159,9 +162,8 @@ namespace StudyN.Views
             {
                 ToolbarItem toolbar = sender as ToolbarItem;
                 ContentPage contentPage = toolbar.Parent as ContentPage;
-                DataGridView gridView = contentPage.Content as DataGridView;
 
-                gridView.BeginUpdate();
+                DataGrid.BeginUpdate();
 
                 // For each of our selected tasks, we will "complete" them using
                 // TaskManager's CompleteTask function
@@ -201,7 +203,7 @@ namespace StudyN.Views
                 rowHandleList.Clear();
                 ShowLongPressMenu(false);
 
-                gridView.EndUpdate();
+                DataGrid.EndUpdate();
             }
             catch (NullReferenceException execption)
             {
@@ -241,9 +243,8 @@ namespace StudyN.Views
             if (e.Item != null && e.FieldName != "DueTime")
             {
                 TaskItem task = e.Item as TaskItem;
-                DataGridView gridView = sender as DataGridView;
 
-                gridView.BeginUpdate();
+                DataGrid.BeginUpdate();
 
                 // Add/Remove from list as needed
                 if (selectedTasks.Contains(task))
@@ -267,7 +268,7 @@ namespace StudyN.Views
                     ShowLongPressMenu(false);
                 }
 
-                gridView.EndUpdate();
+                DataGrid.EndUpdate();
             }
         }
 
@@ -280,6 +281,7 @@ namespace StudyN.Views
             {
                 if (!isLongPressMenuVisible && !isChildPageOpening)
                 {
+                    DataGrid.BeginUpdate();
                     isChildPageOpening = true;
                     // TaskItem we need to edit...
                     TaskItem task = (TaskItem)e.Item;
@@ -299,6 +301,7 @@ namespace StudyN.Views
         {
             if (!isChildPageOpening)
             {
+                DataGrid.BeginUpdate();
                 isChildPageOpening = true;
                 GlobalTaskData.ToEdit = null;
                 await Shell.Current.GoToAsync(nameof(AddTaskPage));

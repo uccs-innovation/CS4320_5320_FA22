@@ -22,11 +22,13 @@ using System.Net;
 using Android.Media;
 using Android.Service.Autofill;
 using StudyN.Models;
+using StudyN.Utilities;
 using static System.Net.Mime.MediaTypeNames;
 
 public partial class AddIcsPage : ContentPage
 {
     protected string link;
+    protected string dirString;
     public static string Result { get; set; }
     static readonly HttpClient client = new HttpClient();
 
@@ -60,7 +62,7 @@ public partial class AddIcsPage : ContentPage
                 GetAppointFromString convert = new GetAppointFromString(responseBody);
 
                 //go to calanders page to show off new appointments
-                await Shell.Current.GoToAsync(nameof(CalendarPage));
+                //await Shell.Current.GoToAsync(nameof(CalendarPage));
             }
             catch (HttpRequestException ex) {
                 //what went wrong
@@ -76,6 +78,9 @@ public partial class AddIcsPage : ContentPage
     //this takes in the string into a string
     private void Entry_TextChanged(object sender, TextChangedEventArgs e) {
         link = e.NewTextValue;    }
+
+    private void Entry_DirPath(object sender, TextChangedEventArgs e) {
+        dirString = e.NewTextValue;    }
 
     static Random rnd = new Random();
 
@@ -114,44 +119,73 @@ public partial class AddIcsPage : ContentPage
             while (line != null)
             {
                 //parse out each individual piece
-                if (line.Contains("SUMMARY") == true)
+                if (line.Contains("SUMMARY"))
                 {
                     line = line.Substring(8);
                     name = line;
                 }
-                if (line.Contains("UID:event-assignment") == true)
+                if (line.Contains("UID:"))
                 {
-                    line = line.Substring(21);
-                    id = Convert.ToInt32(line);
+                    int last = line.LastIndexOf("-");
+                    if (last == -1)
+                    {
+                        id = rnd.Next(1000, 999999);  //random id if not given a uid
+                    }
+                    else
+                    {
+                        line = line.Substring((last + 1));  //go to the last dash and then pull number
+                        id = Convert.ToInt32(line);
+                    }
                 }
-                if (line.Contains("UID:event-calendar") == true)
-                {
-                    line = line.Substring(25);
-                    id = Convert.ToInt32(line);
-                }
-                if (line.Contains("DTSTART;") == true)
+                if (line.Contains("DTSTART"))
                 {
                     //set some variables
                     int year = 0;
                     int month = 0;
                     int day = 0;
-                    
-                    //get year
-                    line = line.Substring(30);
-                    year = Convert.ToInt32(line);
-                    year = year / 10000;
-                    //get month
+                    int hour = 0;
+                    int minute = 0;
+                    int second = 0;
+
+                    //find what kind of dstart
+                    int last = line.LastIndexOf(":");
+                    line = line.Substring(last + 1);
+
+                    //get date
+                    string temp = line.Substring(0, 4);
+                    year = Convert.ToInt32(temp);
                     line = line.Substring(4);
-                    month = Convert.ToInt32(line);
-                    month = month / 100;
-                    //get day
+                    temp = line.Substring(0, 2);
+                    month = Convert.ToInt32(temp);
                     line = line.Substring(2);
-                    day = Convert.ToInt32(line);
+                    temp = line.Substring(0, 2);
+                    day = Convert.ToInt32(temp);
 
-                    //insert into datetime
-                    start = new DateTime(year, month, day);
+                    if (line.Contains('T'))
+                    {
+                        line = line.Substring(3);
+
+                        //get time
+                        temp = line.Substring(0, 2);
+                        hour = Convert.ToInt32(temp);
+                        line = line.Substring(2);
+                        temp = line.Substring(0, 2);
+                        minute = Convert.ToInt32(temp);
+                        line = line.Substring(2);
+                        temp = line.Substring(0, 2);
+                        second = Convert.ToInt32(temp);
+
+                        //insert into datetime
+                        start = new DateTime(year, month, day, hour, minute, second);
+                    }
+                    else
+                    {
+                        //insert into datetime
+                        start = new DateTime(year, month, day);
+                    }
                 }
-                if (line.Contains("DTSTART:") == true)
+
+                if (line.Contains("DTEND"))
                 {
                     //set some variables
                     int year = 0;
@@ -161,72 +195,30 @@ public partial class AddIcsPage : ContentPage
                     int minute = 0;
                     int second = 0;
 
-                    line = line.Substring(8);
-                    string date = line.Substring(0, 8);
-                    line = line.Substring(9);
-                    string time = line.Substring(0, 6);
+                    int last = line.LastIndexOf(":");
+                    line = line.Substring(last);
 
-                    //get year
-                    year = Convert.ToInt32(date);
-                    year = year / 10000;
-                    //get month
-                    date = date.Substring(4);
-                    month = Convert.ToInt32(date);
-                    month = month / 100;
-                    //get day
-                    date = date.Substring(2);
-                    day = Convert.ToInt32(date);
+                    //get date
+                    string temp = line.Substring(0, 4);
+                    year = Convert.ToInt32(temp);
+                    line = line.Substring(4);
+                    temp = line.Substring(0, 2);
+                    month = Convert.ToInt32(temp);
+                    line = line.Substring(2);
+                    temp = line.Substring(0, 2);
+                    day = Convert.ToInt32(temp);
 
-                    //get year
-                    hour = Convert.ToInt32(time);
-                    hour = hour / 10000;
-                    //get month
-                    time = time.Substring(2);
-                    minute = Convert.ToInt32(time);
-                    minute = minute / 100;
-                    //get day
-                    time = time.Substring(2);
-                    second = Convert.ToInt32(time);
+                    line = line.Substring(3);
 
-                    //insert into datetime
-                    start = new DateTime(year, month, day, hour, minute, second);
-                }
-                if (line.Contains("DTEND") == true)
-                {
-                    //set some variables
-                    int year = 0;
-                    int month = 0;
-                    int day = 0;
-                    int hour = 0;
-                    int minute = 0;
-                    int second = 0;
-
-                    line = line.Substring(6);
-                    string date = line.Substring(0, 8);
-                    line = line.Substring(9);
-                    string time = line.Substring(0, 6);
-
-                    //get year
-                    year = Convert.ToInt32(date);
-                    year = year / 10000;
-                    //get month
-                    date = date.Substring(4);
-                    month = Convert.ToInt32(date);
-                    month = month / 100;
-                    //get day
-                    date = date.Substring(2);
-                    day = Convert.ToInt32(date);
-
-                    //get year
-                    hour = Convert.ToInt32(time);
-                    hour = hour / 10000;
-                    //get month
-                    time = time.Substring(2);
-                    minute = Convert.ToInt32(time);
-                    minute = minute / 100;
-                    //get day
-                    time = time.Substring(2);
-                    second = Convert.ToInt32(time);
+                    //get time
+                    temp = line.Substring(0, 2);
+                    hour = Convert.ToInt32(temp);
+                    line = line.Substring(2);
+                    temp = line.Substring(0, 2);
+                    minute = Convert.ToInt32(temp);
+                    line = line.Substring(2);
+                    temp = line.Substring(0, 2);
+                    second = Convert.ToInt32(temp);
 
                     //insert into datetime
                     end = new DateTime(year, month, day, hour, minute, second);
@@ -236,7 +228,7 @@ public partial class AddIcsPage : ContentPage
                 if (!end.Equals(zdate))
                     duration = end - start;
 
-                if (line.Contains("END:VEVENT") == true)
+                if (line.Contains("END:VEVENT"))
                 {
                     int room = rnd.Next(1000, 2000);
                     CalendarManager calendarManager = new CalendarManager();
@@ -249,6 +241,33 @@ public partial class AddIcsPage : ContentPage
 
                 //read another line
                 line = sr.ReadLine();
+            }
+        }
+    }
+
+    async private void Browse_Clicked(object sender, EventArgs e)
+    {
+        if (!string.IsNullOrEmpty(dirString))
+        {
+            string jsonfiletext;
+            string[] file = FileManager.loadFile(dirString);
+
+            if (file.Length > 0)
+            {
+                jsonfiletext = File.ReadAllText(file[0]);
+                Console.WriteLine(jsonfiletext);
+
+                //cal class to convert
+                GetAppointFromString convert = new GetAppointFromString(jsonfiletext);
+            }
+            else
+            {
+                //what went wrong
+                Console.WriteLine("\nException Caught!\n");
+                Console.WriteLine("No files to be read in matching input");
+
+                //jump ship (so no breaky)
+                await Shell.Current.GoToAsync(nameof(SettingsPage));
             }
         }
     }
