@@ -48,7 +48,7 @@ public partial class AddTaskPage : ContentPage
             completeButton.IsEnabled = false;
             trashButton.IsEnabled = false;
             editingExistingTask = false;
-            SetValues();            
+            SetValues();
         }
 
         SetRecurrenceComboBoxVisible();
@@ -67,7 +67,7 @@ public partial class AddTaskPage : ContentPage
         //checks text of timer button. If it's not being tracked we want to see 
         //track task. Otherwise we want to see stop tracking
         SetTimerButton();
-    }   
+    }
 
     void SetTimerButton()
     {
@@ -108,7 +108,7 @@ public partial class AddTaskPage : ContentPage
         if (currentlytiming)
         {
             //if the task is being time and the current task id matches the task being timed
-            if(currenttaskid == taskidtimed)
+            if (currenttaskid == taskidtimed)
             {
                 TimerButton.Text = "Track Task";
                 GlobalTaskTimeData.TaskTimeManager.StopCurrent(gettime);
@@ -120,7 +120,9 @@ public partial class AddTaskPage : ContentPage
             {
                 AlertUserTaskTracking(gettime, currenttaskid);
             }
-        } else {
+        }
+        else
+        {
             //update button
             TimerButton.Text = "Stop Tracking";
             //start new timer
@@ -145,7 +147,7 @@ public partial class AddTaskPage : ContentPage
         String tasknameInEdit = GlobalTaskData.ToEdit.Name;
         String tasknameTimed = GlobalTaskTimeData.TaskTimeManager.TaskName;
         //alert currently tracking
-        string alertstr = "Would you like to stop tracking task " +  tasknameTimed
+        string alertstr = "Would you like to stop tracking task " + tasknameTimed
         + " and begin tracking " + tasknameInEdit;
         bool tracknew = await DisplayAlert("Task Already Being Tracked", alertstr, "Yes", "No");
         //if user wants to stop tracking old and start tracking new
@@ -165,7 +167,7 @@ public partial class AddTaskPage : ContentPage
     {
         //gets variables for check
         bool beingtimed = GlobalTaskTimeData.TaskTimeManager.BeingTimed;
-        Guid taskidTimed= GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed;
+        Guid taskidTimed = GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed;
         Guid taskidInEdit = GlobalTaskData.ToEdit.TaskId;
         //if task is being timed and task in edit is the one being timed
         if (beingtimed && taskidTimed == taskidInEdit)
@@ -175,12 +177,15 @@ public partial class AddTaskPage : ContentPage
             string alertstr = "Would you like to stop tracking task " + tasknameTimed + " and delete the task?";
             bool deletetracked = await DisplayAlert("Task Is Being Timed!", alertstr, "Yes", "No");
             //If user confirms delete
-            if(deletetracked) {
+            if (deletetracked)
+            {
                 GlobalTaskTimeData.TaskTimeManager.StopCurrent(DateTime.Now);
                 DeleteTask();
                 await Shell.Current.GoToAsync("..");
-            } 
-        } else {
+            }
+        }
+        else
+        {
             DeleteTask();
             await Shell.Current.GoToAsync("..");
         }
@@ -244,72 +249,61 @@ public partial class AddTaskPage : ContentPage
     private async void HandleAddTaskButton(object sender, EventArgs e)
     {
         // Make sure we aren't storing nulls
-        this.name.Text = this.name.Text == null ? "Unnamed Task" : this.name.Text;
-        this.description.Text = this.description.Text == null ? "" : this.description.Text;
-        int hoursLogged = this.hSpent.Value == null ? 0 : (int)this.hSpent.Value;
-        int minutesLogged = this.mSpent.Value == null ? 0 : (int)this.mSpent.Value;
-        int totalHours = this.hComplete.Value == null ? 0 : (int)this.hComplete.Value;
-        int totalMinutes = this.mComplete.Value == null ? 0 : (int)this.mComplete.Value;
-        this.date.Date = this.date.Date == null ? DateTime.Now.AddYears(1) : this.date.Date;
-        this.time.Time = this.time.Time == null ? DateTime.Now.AddYears(1) : this.time.Time;
+        name.Text = name.Text == null ? "Unnamed Task" : name.Text;
+        description.Text = description.Text == null ? "" : description.Text;
+        int hoursLogged = hSpent.Value == null ? 0 : (int)hSpent.Value;
+        int minutesLogged = mSpent.Value == null ? 0 : (int)mSpent.Value;
+        int totalHours = hComplete.Value == null ? 0 : (int)hComplete.Value;
+        int totalMinutes = mComplete.Value == null ? 0 : (int)mComplete.Value;
+        date.Date = date.Date == null ? DateTime.Now.AddYears(1) : date.Date;
+        time.Time = time.Time == null ? DateTime.Now.AddYears(1) : time.Time;
+
         // Turn logged time and total time into time doubles
         double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
         double totalTime = GlobalTaskData.TaskManager.SumTimes(totalHours, totalMinutes);
 
-        DateTime dateTime = new DateTime(this.date.Date.Value.Year, this.date.Date.Value.Month, this.date.Date.Value.Day,
-            this.time.Time.Value.Hour, this.time.Time.Value.Minute, this.time.Time.Value.Second);
+        DateTime dateTime = new DateTime(date.Date.Value.Year,
+                                        date.Date.Value.Month,
+                                        date.Date.Value.Day,
+                                        time.Time.Value.Hour,
+                                        time.Time.Value.Minute,
+                                        time.Time.Value.Second);
 
         TaskItem task;
-
         //Check to see if we are currently editing or adding a task
         if (editingExistingTask)
         {
-            bool beingtimed = GlobalTaskTimeData.TaskTimeManager.BeingTimed;
-            Guid taskidTimed = GlobalTaskTimeData.TaskTimeManager.TaskidBeingTimed;
-            Guid taskidInEdit = GlobalTaskData.ToEdit.TaskId;
-            if (beingtimed && taskidTimed == taskidInEdit) {
-                await DisplayAlert("Task Being Timed", "You cannot edit task while task is being timed. Please stop timing task and try again.", "OK");
-            } else {
-                //Gets task list
-                ObservableCollection<TaskItem> taskList = new ObservableCollection<TaskItem>();
-                for (int i = 0; i < taskList.Count; i++)
-                {
-                    //If information is not the same, then it gets saved for all
-                    if (taskList[i].Description != this.description.Text)
-                    {
-                        taskList[i].Description = this.description.Text;
-                    }
-                    if (taskList[i].DueTime != dateTime)
-                    {
-                        taskList[i].DueTime = dateTime;
-                    }
-                    if (taskList[i].CompletionProgress != timeLogged)
-                    {
-                        taskList[i].CompletionProgress = timeLogged;
-                    }
-                    if (taskList[i].TotalTimeNeeded != totalTime)
-                    {
-                        taskList[i].TotalTimeNeeded = totalTime;
-                    }
-                }
-                //Saves the informatiom when editing
-                GlobalTaskData.TaskManager.EditTask(GlobalTaskData.ToEdit.TaskId,
-                                                    this.name.Text,
-                                                    this.description.Text,
-                                                    dateTime,
-                                                    (int)this.priority.Value,
-                                                    timeLogged,
-                                                    totalTime,
-                                                    GlobalTaskData.ToEdit.TimeList);
-                task = GlobalTaskData.ToEdit;
-                GlobalTaskData.ToEdit = null;
-                editRecurringTasks(task);
-                HandleRecurrenceOnAddEdit(sender, e, task);
-                runAutoScheduler(task.TaskId);
-                await Shell.Current.GoToAsync("..");
+            //Saves the informatiom when editing
+            GlobalTaskData.TaskManager.EditTask(
+                GlobalTaskData.ToEdit.TaskId,
+                this.name.Text,
+                this.description.Text,
+                dateTime,
+                (int)this.priority.Value,
+                timeLogged,
+                totalTime);
 
+            if (GlobalTaskData.ToEdit.IsRecur)
+            {
+                bool editSeries = await DisplayAlert("Recurring Event",
+                                                     "Would you like to edit all tasks in the series?",
+                                                     "Yes",
+                                                     "No");
+                if (editSeries)
+                {
+                    GlobalTaskData.TaskManager.EditRecurring(GlobalTaskData.ToEdit);
+                }
+                else
+                {
+                    // If only editing this one event. Remove it's
+                    // assocaiation with other events in the series.
+                    GlobalTaskData.ToEdit.RecurId = Guid.NewGuid();
+                    GlobalTaskData.ToEdit.IsRecur = false;
+                }
             }
 
+            task = GlobalTaskData.ToEdit;
+            GlobalTaskData.ToEdit = null;
         }
         else
         {
@@ -321,52 +315,44 @@ public partial class AddTaskPage : ContentPage
                     (int)this.priority.Value,
                     timeLogged,
                     totalTime);
-            HandleRecurrenceOnAddEdit(sender, e, task);
-            runAutoScheduler(task.TaskId);
-            await Shell.Current.GoToAsync("..");
         }
 
-    }
-
-
-    async void HandleRecurrenceOnAddEdit(object sender, EventArgs e, TaskItem task)
-    {
-
-
         // Handles recurrence after everything is added into the task
-        this.recurrenceDate.Date = this.recurrenceDate.Date == null ? DateTime.Now : this.recurrenceDate.Date;
-        //if buttons are checked
-
-        if (dailyRadioButton.IsChecked || weeklyRadioButton.IsChecked || monthlyRadioButton.IsChecked)
+        if (IsRecurrenceSelected() && recurrenceDate.Date != null)
         {
             DateTime recurrencedateTime = new DateTime(this.recurrenceDate.Date.Value.Year,
                                            this.recurrenceDate.Date.Value.Month,
                                            this.recurrenceDate.Date.Value.Day);
             //and date for end of recurrence is after this current moment (otherwise recurrence doesn't matter
-            if (this.recurrenceDate.Date > DateTime.Now)
+            if (recurrenceDate.Date > DateTime.Now.Date)
             {
-                Console.WriteLine(this.recurrenceDate);
-                if (dailyRadioButton.IsChecked == true)
+                Console.WriteLine(recurrenceDate);
+                if (RecurrenceComboBox.SelectedIndex == 1)
                 {
-                    HandleRecurrenceDay(sender, e, task, recurrencedateTime);
+                    GlobalTaskData.TaskManager.CreateDailyReccuringTask(task, recurrencedateTime);
                 }
-                else if (weeklyRadioButton.IsChecked == true)
+                else if (RecurrenceComboBox.SelectedIndex == 2)
                 {
-                    HandleRecurrenceWeek(sender, e, task, recurrencedateTime);
+                    GlobalTaskData.TaskManager.CreateWeeklyReccuringTask(task, recurrencedateTime);
                 }
-                else if (monthlyRadioButton.IsChecked == true)
+                else if (RecurrenceComboBox.SelectedIndex == 3)
                 {
-                    HandleRecurrenceMonth(sender, e, task, recurrencedateTime);
+                    GlobalTaskData.TaskManager.CreateMonthlyReccuringTask(task, recurrencedateTime);
                 }
             }
             else
-            { //if recurrence date is null send user alert failure to recurr 
+            {
+                //if recurrence date is null send user alert failure to recurr 
                 await DisplayAlert("Recurrance End Date Not Set! ",
-               "Sorry you must set a recurrence end date in order " +
-               "to schedule recurrence. Please try again.", "OK");
+                                   "Sorry you must set a recurrence end date in order " +
+                                   "to schedule recurrence. Please try again.", "OK");
             }
-
         }
+
+        //Returning to the previous page
+        await Shell.Current.GoToAsync("..");
+
+        runAutoScheduler(task.TaskId);
     }
 
     //This function will load the values held in each field of a task into the respective forms
@@ -382,7 +368,7 @@ public partial class AddTaskPage : ContentPage
         this.hSpent.Value = (int)GlobalTaskData.ToEdit.CompletionProgress;
         this.mSpent.Value = GlobalTaskData.ToEdit.GetCompletionProgressMinutes();
 
-        if(GlobalTaskData.ToEdit.IsRecur)
+        if (GlobalTaskData.ToEdit.IsRecur)
         {
             reccurenceDateLayout.IsVisible = true;
         }
@@ -406,7 +392,7 @@ public partial class AddTaskPage : ContentPage
             foreach (TaskItem task in GlobalAutoScheduler.AutoScheduler.pastDueTasks)
             {
                 tasksString += task.Name + ", ";
-            } 
+            }
             DisplayAlert("The following tasks cannot be completed on-time!", tasksString, "OK");
         }
     }

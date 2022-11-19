@@ -563,59 +563,6 @@ namespace StudyN.Models
 
         public void LoadFilesIntoLists()
         {
-            Console.WriteLine("In LoadFilesIntoLists");
-            string jsonfiletext;
-
-            // gets completed tasks
-            string[] apptfilelist = FileManager.LoadApptFileNames();
-            int fileCount = apptfilelist.Length;
-            Console.WriteLine("apptfilelist.length = " + fileCount);
-
-            foreach (string file in apptfilelist)
-            {
-                Console.WriteLine("file = " + file);
-                jsonfiletext = File.ReadAllText(file);
-                Console.WriteLine("jsonfiletext = " + jsonfiletext);
-
-                Appointment appt = new Appointment(); // estepanek: need to create object to prevent NullReferenceException
-                Console.WriteLine("After create new appt object.");
-
-                appt = JsonConvert.DeserializeObject<Appointment>(jsonfiletext);                
-
-                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
-
-                //CreateAppointment(appt.Id, appt.Subject, appt.Start, appt.End, appt.Location); //estepanek: don't think we need this, because 
-                // we are reading in the entire appointment
-                // and can therefore just add it
-                Console.WriteLine("Adding appt object to Appointments collection after deserializing it from JSON");
-                Appointments.Add(appt); // add it directly (don't need to call CreateAppointment)
-            }
-
-
-        }
-
-        public Appointment GetAppointment(Guid taskId)
-        {
-
-
-
-            //Checking each item in the current task list
-
-            foreach (Appointment appt in Appointments)
-            {
-                //If the task is found, return the task
-                if (appt.UniqueId == taskId)
-                {
-                    return appt;
-                }
-            }
-
-            //If not found in either list, return null
-            return null;
-        }
-
-        public void LoadFilesIntoLists()
-        {
             string jsonfiletext;
 
             // gets completed tasks

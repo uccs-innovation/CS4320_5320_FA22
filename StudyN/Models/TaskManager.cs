@@ -31,7 +31,7 @@ namespace StudyN.Models
                                             priority,
                                             CompletionProgress,
                                             TotalTimeNeeded,
-                                            "");
+                                            Guid.Empty);
 
             //This will add the tasks to the list
             TaskList.Add(newTask);
