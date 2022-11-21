@@ -428,7 +428,28 @@ namespace StudyN.Models
             TaskList = new ObservableCollection<TaskItem>();
             CompletedTasks = new ObservableCollection<TaskItem>();
             TaskListTest = new ObservableCollection<TaskItem>();
-        }
+        } 
 
+        /****************************************************************/
+        //Method checks what task was added to the list last
+        public TaskItem GetLastTask(Guid taskId)
+        {
+            //Checking each item in the current task list
+            foreach (TaskItem task in TaskList)
+            {
+                //Checks for last task added
+                for (int i = 0; i < TaskList.Count - 1; i++)
+                {
+                    //If the task is found, return last task added
+                    if (task.TaskId == taskId)
+                    {
+                        return task;
+                    }
+                }
+            }
+            //If none task added return null
+            return null;
+        }
+        
     }
 }
