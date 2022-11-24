@@ -21,6 +21,7 @@ namespace StudyN.Views;
 using System.Net;
 using Android.Media;
 using Android.Service.Autofill;
+using DevExpress.XtraRichEdit.Import.Html;
 using StudyN.Models;
 using StudyN.Utilities;
 using static System.Net.Mime.MediaTypeNames;
@@ -33,8 +34,10 @@ public partial class AddIcsPage : ContentPage
     static readonly HttpClient client = new HttpClient();
 
     //initialize page
-    public AddIcsPage() {
-		InitializeComponent();	}
+    public AddIcsPage()
+    {
+        InitializeComponent();
+    }
 
     /*
      * handle submit button pushed and take in string as link
@@ -42,50 +45,34 @@ public partial class AddIcsPage : ContentPage
      * if successful, run to class to convert massive ass string to appointments
      * else, jump ship
     */
-	private async void Submit_Button(object sender, EventArgs e) { 
+    private async void Submit_Button(object sender, EventArgs e)
+    {
         Console.WriteLine(link);
-        if (!string.IsNullOrEmpty(link)) {
-            try {
-                //var content = client.GetStringAsync(link);
-                //Result = content.Result;
-
-                //Uri uri = new Uri(link);
-                //await Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
-
-                //convert string in link to https ping, and return response back to a string
-                using HttpResponseMessage response = await client.GetAsync(link);
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(responseBody);
-
-                //cal class to convert
-                GetAppointFromString convert = new GetAppointFromString(responseBody);
-
-                //go to calanders page to show off new appointments
-                //await Shell.Current.GoToAsync(nameof(CalendarPage));
-            }
-            catch (HttpRequestException ex) {
-                //what went wrong
-                Console.WriteLine("\nException Caught!\n");
-                Console.WriteLine("Message :{0} ", ex.Message);
-
-                //jump ship (so no breaky)
-                await Shell.Current.GoToAsync(nameof(SettingsPage));
-            }
+        if (!string.IsNullOrEmpty(link))
+        {
+            HttpResponseMessage response = await client.GetAsync(link);
+            var content1 = client.GetStringAsync(link);
+            var content = content1.Result;
+            Console.WriteLine(content1.Result);
         }
     }
 
     //this takes in the string into a string
-    private void Entry_TextChanged(object sender, TextChangedEventArgs e) {
-        link = e.NewTextValue;    }
+    private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        link = e.NewTextValue;
+    }
 
-    private void Entry_DirPath(object sender, TextChangedEventArgs e) {
-        dirString = e.NewTextValue;    }
+    private void Entry_DirPath(object sender, TextChangedEventArgs e)
+    {
+        dirString = e.NewTextValue;
+    }
 
     static Random rnd = new Random();
 
     //break massive string to individual appointments
-    class GetAppointFromString {
+    class GetAppointFromString
+    {
         private string line;
         private int id;
         private string name;
@@ -97,8 +84,10 @@ public partial class AddIcsPage : ContentPage
 
 
         //constructor that takes string and calls convert to break it
-        public GetAppointFromString(string r) {
-            convert(r);        }
+        public GetAppointFromString(string r)
+        {
+            convert(r);
+        }
 
         /*
          * parse through string to find event start

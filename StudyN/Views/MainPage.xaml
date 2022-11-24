@@ -32,6 +32,9 @@
         <Tab Title="About us" Icon="info">
             <ShellContent ContentTemplate="{DataTemplate local:AboutUs}" />
         </Tab>
+        <Tab Title="Import" Icon="grid">
+            <ShellContent ContentTemplate="{DataTemplate local:ExportCal}" />
+        </Tab>
         <ShellContent Route="HomePage">
             <local:HomePage/>
         </ShellContent>

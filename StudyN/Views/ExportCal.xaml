@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
+             xmlns:ViewModels="clr-namespace:StudyN.ViewModels"
+             xmlns:local="clr-namespace:StudyN.Views"
+             Title="Tasks"
+             IconImageSource="grid"
+             x:Class="StudyN.Views.ExportCal">
+    <ContentPage.BindingContext>
+        <ViewModels:TaskDataViewModel />
+    </ContentPage.BindingContext>
+    <dxg:DataGridView x:Name="grid" ItemsSource="{Binding CalendarTasks}" Tap="CellClicked">
+        <!--Set the Columns to use.-->
+        <dxg:DataGridView.Columns>
+            <dxg:CheckBoxColumn FieldName="Completed" Caption=" " Width="15" />
+            <dxg:TextColumn FieldName="Name" Caption="Task Name" />
+            <dxg:TextColumn FieldName="Description" Caption="Task Description" />
+            <dxg:TextColumn FieldName="StartTime" Caption="Start Time" />
+            <dxg:TextColumn FieldName="EndTime" Caption="End Time" />
+            <dxg:NumberColumn FieldName="EstimateTime" Caption="Estimate Time" />
+
+
+
+        </dxg:DataGridView.Columns>
+
+        <!--Customize the appearance of grid cells.-->
+        <dxg:DataGridView.CellStyle>
+            <dxg:CellStyle Padding="3" CheckBoxPadding="3"/>
+        </dxg:DataGridView.CellStyle>
+        <!--Customize the appearance of column headers.-->
+        <dxg:DataGridView.ColumnHeaderStyle>
+            <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
+        </dxg:DataGridView.ColumnHeaderStyle>
+
+    </dxg:DataGridView>
+</ContentPage>
