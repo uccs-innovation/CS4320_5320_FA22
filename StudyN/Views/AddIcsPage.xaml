@@ -6,7 +6,7 @@
              x:Class="StudyN.Views.AddIcsPage"
              Title="{Binding Title}"
              IconImageSource="charts">
-    <ContentPage.Content>
+
         <Grid>
             <Grid RowDefinitions="0,*,Auto">
                 <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto" Padding="20,15,20,15" RowSpacing="10" TranslationY ="200">
@@ -31,7 +31,31 @@
                     HorizontalOptions="End"
                     TranslationX="-20"
                     TranslationY="270"/>
+                <Grid Grid.Row="10" RowDefinitions="Auto, Auto, Auto" Padding="20,30,20,45" RowSpacing="30" TranslationY ="200">
+
+                    <Entry
+                        Grid.ColumnSpan="1"
+                        Placeholder="Enter path to a file"
+                        ClearButtonVisibility="WhileEditing"
+                        ReturnType="Go"
+                        Keyboard="Url"
+                        IsSpellCheckEnabled="false"
+                        IsTextPredictionEnabled="false"
+                        MaxLength="200"
+                        TextChanged="Entry_DirPath"/>
+                </Grid>
+
+                <Button
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="1"        
+                    Text="Load File"
+                    Clicked="Browse_Clicked"
+                    VerticalOptions="Start"
+                    HorizontalOptions="End"
+                    TranslationX="-20"
+                    TranslationY="270"/>
             </Grid>
         </Grid>
-    </ContentPage.Content>
+
 </ContentPage>
