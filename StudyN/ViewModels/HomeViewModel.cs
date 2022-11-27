@@ -53,6 +53,10 @@ namespace StudyN.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
+        async public void OnAppearing()
+        {
+
+        }
 
     }
 }

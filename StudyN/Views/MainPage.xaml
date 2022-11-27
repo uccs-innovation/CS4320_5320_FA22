@@ -32,6 +32,10 @@
         <Tab Title="About us" Icon="info">
             <ShellContent ContentTemplate="{DataTemplate local:AboutUs}" />
         </Tab>
+        
+        <Tab Title="Displayint" Icon="grid">
+            <ShellContent ContentTemplate="{DataTemplate local:DisplayView}" />
+        </Tab>
         <ShellContent Route="HomePage">
             <local:HomePage/>
         </ShellContent>
