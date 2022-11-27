@@ -33,7 +33,7 @@
             <ShellContent ContentTemplate="{DataTemplate local:AboutUs}" />
         </Tab>
         
-        <Tab Title="Displayint" Icon="grid">
+        <Tab Title="Display Integrated Calendar" Icon="grid">
             <ShellContent ContentTemplate="{DataTemplate local:DisplayView}" />
         </Tab>
         <ShellContent Route="HomePage">
