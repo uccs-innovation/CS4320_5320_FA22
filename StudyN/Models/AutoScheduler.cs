@@ -7,6 +7,7 @@ using System.Linq;
 using Android.Accessibilityservice.AccessibilityService;
 using DevExpress.CodeParser;
 using DevExpress.Utils;
+using DevExpress.XtraRichEdit.Layout;
 using DevExpress.XtraRichEdit.Model.History;
 using StudyN.Models;
 using StudyN.Utilities;
@@ -17,6 +18,7 @@ public class AutoScheduler : StudynSubscriber
 {
     private DateTime baseTime; //The base time the autoscheduler will use to do all its calculations
     private DateTime baseLimit; //The base time the autoscheduler will stop calculating at
+    private bool sleepTimeCheck; //True if there is a sleep time
     ObservableCollection<Appointment> appts;
     ObservableCollection<TaskItem> tasks;
     private minuteSnapshot[] minuteMap;
@@ -36,11 +38,13 @@ public class AutoScheduler : StudynSubscriber
         {
             baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
             baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
+            sleepTimeCheck = true;
         }
         else
         {
             baseTime = DateTime.Now;
             baseLimit = DateTime.Now;
+            sleepTimeCheck = false;
         }
     }
    
@@ -273,7 +277,6 @@ public class AutoScheduler : StudynSubscriber
             if (appt.From == "autoScheduler")
             {
                 GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
-
             }
         }
     }
@@ -354,11 +357,13 @@ public class AutoScheduler : StudynSubscriber
         {
             baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
             baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
+            sleepTimeCheck = true;
         }
         else
         {
             baseTime = DateTime.Now;
             baseLimit = DateTime.Now;
+            sleepTimeCheck = false;
         }
     }
 
