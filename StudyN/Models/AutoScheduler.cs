@@ -176,6 +176,7 @@ public class AutoScheduler : StudynSubscriber
         Guid id = Guid.NewGuid();
         int index = offset;
         bool overflowing = false;
+        // Map out sleep time for every day
         while(index < 40321)
         {
             for(int i = index; i < index + span; i++)
