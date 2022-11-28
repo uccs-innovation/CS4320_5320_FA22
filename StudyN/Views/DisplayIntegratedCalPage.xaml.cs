@@ -6,9 +6,9 @@ using StudyN.ViewModels;
 namespace StudyN.Views
 {
     //[XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class DisplayView : ContentPage
+    public partial class DisplayIntegratedCalPage : ContentPage
     {
-        public DisplayView()
+        public DisplayIntegratedCalPage()
         {
             InitializeComponent();
         }

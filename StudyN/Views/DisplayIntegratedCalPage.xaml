@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:StudyN.Views"
              Title="Tasks"
              IconImageSource="grid"
-             x:Class="StudyN.Views.DisplayView">
+             x:Class="StudyN.Views.DisplayIntegratedCalPage">
     <ContentPage.BindingContext>
         <ViewModels:TaskDataViewModel />
     </ContentPage.BindingContext>

@@ -82,6 +82,9 @@
 	  <Compile Update="NotificationService\NotificationService.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Compile>
+	  <Compile Update="Views\DisplayIntegratedCalPage.xaml.cs">
+	    <DependentUpon>DisplayIntegratedCalPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\TaskChartsPage.xaml.cs">
 	    <DependentUpon>TaskChartsPage.xaml</DependentUpon>
 	  </Compile>
@@ -116,7 +119,7 @@
 	  <MauiXaml Update="Views\CategoriesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\DisplayView.xaml">
+	  <MauiXaml Update="Views\DisplayIntegratedCalPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SleepTimePage.xaml">

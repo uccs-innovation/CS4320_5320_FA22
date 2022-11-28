@@ -5,14 +5,14 @@ using StudyN.Models;
 
 namespace StudyN.ViewModels
 {
-    public class DisplayViewModel : INotifyPropertyChanged
+    public class DisplayIntegratedCalViewModel : INotifyPropertyChanged
     {
         private CalendarTasksData data;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<CalendarTask> CalendarTasks { get => data.CalendarTasks; }
 
-        public DisplayViewModel()
+        public DisplayIntegratedCalViewModel()
         {
             data = new CalendarTasksData();
         }
@@ -24,5 +24,6 @@ namespace StudyN.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
+
     }
 }
