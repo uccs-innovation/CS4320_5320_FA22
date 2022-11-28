@@ -22,7 +22,16 @@ namespace StudyN.ViewModels
             Dictionary<string, int> tempDict = new();
             foreach (var item in data.Appointments)
             {
-                string caption = data.GetAppointmentCategory((Guid)item.LabelId).Caption;
+                Guid labelId = Guid.Parse(item.LabelId.ToString());
+                AppointmentCategory category = data.GetAppointmentCategory(labelId);
+                if (category == null)
+                {
+                    Console.WriteLine("Invalid Category Id: ");
+                    Console.WriteLine("    Label Id: " + labelId.ToString());
+                    continue;
+                }
+
+                string caption = data.GetAppointmentCategory(labelId).Caption;
                 if (!tempDict.ContainsKey(caption))
                 {
                     tempDict.Add(caption, 1);
@@ -46,7 +55,16 @@ namespace StudyN.ViewModels
             int i = 0;
             foreach (var item in data.Appointments)
             {
-                Color color = data.GetAppointmentCategory((Guid)item.LabelId).Color;
+                Guid labelId = Guid.Parse(item.LabelId.ToString());
+                AppointmentCategory category = data.GetAppointmentCategory(labelId);
+                if (category == null)
+                {
+                    Console.WriteLine("Invalid Category Id: ");
+                    Console.WriteLine("    Label Id: " + labelId.ToString());
+                    continue;
+                }
+
+                Color color = category.Color;
                 if (!ColorList.Contains(color))
                 {
                     ColorList[i] = color;
