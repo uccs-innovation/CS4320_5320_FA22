@@ -38,6 +38,11 @@ public class AutoScheduler : StudynSubscriber
         {
             baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
             baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
+            if(baseLimit < baseTime)
+            {
+                // if sleep time starts in the next day, then add a day to base limit
+                baseLimit.AddDays(1);
+            }
             sleepTimeCheck = true;
         }
         else
@@ -369,6 +374,11 @@ public class AutoScheduler : StudynSubscriber
         {
             baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
             baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
+            if (baseLimit < baseTime)
+            {
+                // if sleep time starts in the next day, then add a day to base limit
+                baseLimit.AddDays(1);
+            }
             sleepTimeCheck = true;
         }
         else
