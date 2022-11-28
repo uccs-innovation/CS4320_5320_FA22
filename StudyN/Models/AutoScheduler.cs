@@ -12,7 +12,6 @@ using StudyN.Models;
 using StudyN.Utilities;
 using static StudyN.Utilities.StudynEvent;
 
-//Because of the minuteMap, this iteration of the autoScheduler doesn't seem to have a need for blocks
 public class AutoScheduler : StudynSubscriber
 {
     private DateTime baseTime; //The base time the autoscheduler will use to do all its calculations
@@ -49,14 +48,20 @@ public class AutoScheduler : StudynSubscriber
     {
         Console.WriteLine("autoScheduler.MapAppointments()");
         var apptsCopy = appts.ToList();
+        List<Appointment> apptsToRemove = new List<Appointment>();
         foreach (Appointment appt in apptsCopy)
         {
             if (appt.From == "autoScheduler") //If the appointment is from the autoScheduler, delete it from the calendar so we can reschedule it without duplicating it
             {
                 Console.WriteLine("rescheduling appointment from autoScheduler");
-                appts.Remove(appt);
+                apptsToRemove.Add(appt);
+                //apptsCopy.Remove(appt);
                 //GlobalAppointmentData.CalendarManager.DeleteAppointment(minuteMap[i].id); //To be able to delete an appointment, the calnedarManager needs a function to do so
             } 
+        } 
+        foreach(Appointment appt in apptsToRemove)
+        {
+            apptsCopy.Remove(appt);
         }
 
         foreach (Appointment appt in apptsCopy)
@@ -233,7 +238,9 @@ public class AutoScheduler : StudynSubscriber
         MapBlocks(containers);
         MapRemainders(containers);
         PullBackBlocks(containers);
-        foreach(TaskItem task in tasks){ task.hasBeenAutoScheduled = true; }
+        foreach(TaskItem task in tasks){
+            if (task.DueTime < baseTime.AddMinutes(40320) && task.DueTime > baseTime) { task.hasBeenAutoScheduled = true; } //If the task is within the autoScheduling window, then it was autoScheduled
+        }
     }
 
 
