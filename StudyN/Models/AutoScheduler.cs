@@ -272,6 +272,8 @@ public class AutoScheduler : StudynSubscriber
         {
             if (appt.From == "autoScheduler")
             {
+                Console.WriteLine("appt.Start: " + appt.Start.ToString());
+                Console.WriteLine("appt.End: " + appt.End.ToString());
                 GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
 
             }
