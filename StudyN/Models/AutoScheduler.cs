@@ -161,6 +161,14 @@ public class AutoScheduler : StudynSubscriber
         }
     }
 
+    /// <summary>
+    /// Makes sleep time blocks in auto scheduler
+    /// </summary>
+    private void MapSleepTime()
+    {
+
+    }
+
     private void PullBackBlocks(List<BlockContainer> blockContainers) //Pull blocks apart, so they're not all stacked up against the dueDate. Do this only if possible.
     {
         //containers are sorted by weight. So the more important ones come first, meaning the more important ones will be pulled back first (attempted to be placed earlier on the calendar). Which is good.
@@ -332,6 +340,10 @@ public class AutoScheduler : StudynSubscriber
     {
         Console.WriteLine("Running autoScheduler");
         refreshData();
+        // Map sleep time if sleep time exists
+        if (sleepTimeCheck)
+        MapSleepTime();
+
         MapAppointments();
         MapTasks();
         AddToCalendar( CoalesceMinuteMapping() );
