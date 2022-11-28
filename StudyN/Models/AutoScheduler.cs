@@ -41,7 +41,7 @@ public class AutoScheduler : StudynSubscriber
             if(baseLimit < baseTime)
             {
                 // if sleep time starts in the next day, then add a day to base limit
-                baseLimit.AddDays(1);
+                baseLimit = baseLimit.AddDays(1);
             }
             sleepTimeCheck = true;
         }
@@ -171,7 +171,32 @@ public class AutoScheduler : StudynSubscriber
     /// </summary>
     private void MapSleepTime()
     {
-
+        int offset = (int)(baseLimit - baseTime).TotalMinutes;
+        int span = (int)(baseTime.AddDays(1) - baseLimit).TotalMinutes;
+        Guid id = Guid.NewGuid();
+        int index = offset;
+        bool overflowing = false;
+        while(index < 40321)
+        {
+            for(int i = index; i < index + span; i++)
+            {
+                if(i >= 40321)
+                {
+                    overflowing = true;
+                    break;
+                }
+                else
+                {
+                    minuteMap[i].id = id;
+                    minuteMap[i].from = "sleeptime";
+                    minuteMap[i].name = "Sleep";
+                }
+            }
+            if (!overflowing) { 
+                // add a day to index
+                index += 1440;
+            }
+        }
     }
 
     private void PullBackBlocks(List<BlockContainer> blockContainers) //Pull blocks apart, so they're not all stacked up against the dueDate. Do this only if possible.
@@ -377,7 +402,7 @@ public class AutoScheduler : StudynSubscriber
             if (baseLimit < baseTime)
             {
                 // if sleep time starts in the next day, then add a day to base limit
-                baseLimit.AddDays(1);
+                baseLimit = baseLimit.AddDays(1);
             }
             sleepTimeCheck = true;
         }
