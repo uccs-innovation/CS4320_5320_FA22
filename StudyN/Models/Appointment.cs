@@ -48,7 +48,7 @@ namespace StudyN.Models
         public DateTime LastEdited { get; set; }
 
         public string From { get; set; } //IE From "autoScheduler", from "userInput", from "ICS", etc...
-
+        public bool hasBeenAutoScheduled { get; set; }
         protected void ApptChanged(object sender, PropertyChangedEventArgs e)
         {
             // Publish Appointment Edit

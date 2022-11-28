@@ -233,6 +233,7 @@ public class AutoScheduler : StudynSubscriber
         MapBlocks(containers);
         MapRemainders(containers);
         PullBackBlocks(containers);
+        foreach(TaskItem task in tasks){ task.hasBeenAutoScheduled = true; }
     }
 
 
@@ -275,7 +276,6 @@ public class AutoScheduler : StudynSubscriber
                 Console.WriteLine("appt.Start: " + appt.Start.ToString());
                 Console.WriteLine("appt.End: " + appt.End.ToString());
                 GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
-
             }
         }
     }

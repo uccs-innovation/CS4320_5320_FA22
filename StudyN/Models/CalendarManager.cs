@@ -120,7 +120,8 @@ namespace StudyN.Models
                                             TimeSpan duration,
                                             int room,
                                             Guid taskId, //recurId = new Guid(),
-                                            string from = "")
+                                            string from = "",
+                                            bool autoScheduled = false)
         {
             Guid guid = new Guid();
 
@@ -135,7 +136,7 @@ namespace StudyN.Models
                 Location = string.Format("{0}", room),
                 Description = string.Empty,
                 UniqueId = taskId,
-                From = from
+                From = from,
             };
 
 
