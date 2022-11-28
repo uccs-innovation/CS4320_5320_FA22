@@ -315,7 +315,11 @@ public class AutoScheduler : StudynSubscriber
         {
             if (appt.From == "autoScheduler")
             {
-                GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+                // make sure sleep time isn't being added to calendar
+                if (appt.Subject != "Sleep")
+                {
+                    GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+                }
             }
         }
     }
