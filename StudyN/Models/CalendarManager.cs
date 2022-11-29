@@ -131,7 +131,7 @@ namespace StudyN.Models
                 Start = start,
                 End = start.Add(duration),
                 Subject = appointmentTitle,
-                LabelId = AppointmentCategories[rnd.Next(0, AppointmentCategories.Count - 1)].Id,
+                LabelId = rnd.Next(1, AppointmentCategories.Count),
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
                 Description = string.Empty,
