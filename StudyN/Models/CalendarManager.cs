@@ -167,6 +167,10 @@ namespace StudyN.Models
                                                    double x, double y,
                                                    Guid id = new Guid())
         {
+            if(id == Guid.Empty)
+            {
+                id = Guid.NewGuid();
+            }
             // Makes a new category
             AppointmentCategory cat = new AppointmentCategory();
             if(AppointmentCategories.Count == 0)
