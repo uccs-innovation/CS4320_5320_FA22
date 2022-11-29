@@ -131,7 +131,7 @@ namespace StudyN.Models
                 Start = start,
                 End = start.Add(duration),
                 Subject = appointmentTitle,
-                LabelId = rnd.Next(1, AppointmentCategories.Count),
+                LabelId = AppointmentCategories[rnd.Next(0, AppointmentCategories.Count - 1)].Id,
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
                 Description = string.Empty,
@@ -170,7 +170,7 @@ namespace StudyN.Models
             // Makes a new category
             AppointmentCategory cat = new()
             {
-                Id = AppointmentCategories.Count + 1,
+                Id = AppointmentCategories[AppointmentCategories.Count - 1].Id + 1,
                 Caption = categoryName,
                 Color = categoryColor,
                 PickerXPosition = x,
@@ -247,13 +247,6 @@ namespace StudyN.Models
                         {
                             // Make appointment uncategorized
                             appointment.LabelId = Uncategorized.Id;
-                        }
-                    }
-                    // reduce the id of the categories after this removed category
-                    if(category.Id < AppointmentCategories.Count - 1) { 
-                        for (int i = category.Id; i < AppointmentCategories.Count; i++)
-                        {
-                            AppointmentCategories[i].Id--;
                         }
                     }
                     // Remove category
