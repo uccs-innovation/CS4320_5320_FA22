@@ -119,14 +119,14 @@ namespace StudyN.Models
                                             DateTime start,
                                             TimeSpan duration,
                                             int room,
-                                            Guid recurId = new Guid(),
+                                            Guid taskId, //recurId = new Guid(),
                                             string from = "")
         {
             Guid guid = new Guid();
 
             Appointment appt = new()
             {
-                Id = appointmentId,
+                //Id = appointmentId,
                 Start = start,
                 End = start.Add(duration),
                 Subject = appointmentTitle,
@@ -134,7 +134,7 @@ namespace StudyN.Models
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
                 Description = string.Empty,
-                UniqueId = guid,
+                UniqueId = taskId,
                 From = from
             };
 
