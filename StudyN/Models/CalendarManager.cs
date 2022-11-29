@@ -168,15 +168,25 @@ namespace StudyN.Models
                                                    Guid id = new Guid())
         {
             // Makes a new category
-            AppointmentCategory cat = new()
+            AppointmentCategory cat = new AppointmentCategory();
+            if(AppointmentCategories.Count == 0)
             {
-                Id = AppointmentCategories[AppointmentCategories.Count - 1].Id + 1,
-                Caption = categoryName,
-                Color = categoryColor,
-                PickerXPosition = x,
-                PickerYPosition = y,
-                UniqueId = id
-            };
+                cat.Id = 1;
+                cat.Caption = categoryName;
+                cat.Color = categoryColor;
+                cat.PickerXPosition = x;
+                cat.PickerYPosition = y;
+                cat.UniqueId = id;
+            }
+            else
+            {
+                cat.Id = AppointmentCategories[AppointmentCategories.Count - 1].Id + 1;
+                cat.Caption = categoryName;
+                cat.Color = categoryColor;
+                cat.PickerXPosition = x;
+                cat.PickerYPosition = y;
+                cat.UniqueId = id;
+            }
 
             // Adds category to category list
             AppointmentCategories.Add(cat);
