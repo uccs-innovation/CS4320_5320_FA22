@@ -170,7 +170,7 @@ namespace StudyN.Models
             // Makes a new category
             AppointmentCategory cat = new()
             {
-                Id = AppointmentCategories.Count,
+                Id = AppointmentCategories.Count + 1,
                 Caption = categoryName,
                 Color = categoryColor,
                 PickerXPosition = x,
@@ -251,7 +251,7 @@ namespace StudyN.Models
                     }
                     // reduce the id of the categories after this removed category
                     if(category.Id < AppointmentCategories.Count - 1) { 
-                        for (int i = category.Id + 1; i < AppointmentCategories.Count; i++)
+                        for (int i = category.Id; i < AppointmentCategories.Count; i++)
                         {
                             AppointmentCategories[i].Id--;
                         }

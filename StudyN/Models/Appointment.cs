@@ -80,7 +80,7 @@ namespace StudyN.Models
         public Color Color { get; set; }
         public double PickerXPosition { get; set; }
         public double PickerYPosition { get; set; }
-        public Guid UniqueId { get; set; }
+        public Guid UniqueId { get; set; } = Guid.NewGuid();
     }
 
     /// <summary>
