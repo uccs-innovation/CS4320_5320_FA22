@@ -44,12 +44,12 @@ namespace StudyN.Models
 
         public static AppointmentCategory Uncategorized = new()
         {
-            Id = Guid.NewGuid(),
+            Id = 0,
             Caption = "Uncategorized",
             Color = Color.FromArgb("#D9D9D9"),
             PickerXPosition = 0.5f,
-            PickerYPosition = 1.0f
-
+            PickerYPosition = 1.0f,
+            UniqueId = Guid.NewGuid()
         };
                                                                                       
         public static string[] AppointmentStatusTitles = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
@@ -75,14 +75,15 @@ namespace StudyN.Models
             for (int i = 0; i < count; i++)
             {
                 AppointmentCategory cat = new AppointmentCategory();
-                cat.Id = Guid.NewGuid();
+                cat.Id = i + 1;
                 cat.Caption = AppointmentCategoryTitles[i];
                 cat.Color = AppointmentCategoryColors[i];
                 cat.PickerXPosition = AppointmentCategoryX[i];
                 cat.PickerYPosition = 0.5f;
+                cat.UniqueId = Guid.NewGuid();
                 AppointmentCategories.Add(cat);
                 EventBus.PublishEvent(
-                            new StudynEvent(cat.Id, StudynEvent.StudynEventType.CategoryAdd));
+                            new StudynEvent(cat.UniqueId, StudynEvent.StudynEventType.CategoryAdd));
             }
         }
 
@@ -92,7 +93,7 @@ namespace StudyN.Models
             foreach (AppointmentCategory category in AppointmentCategories)
             {
                 // if the category is found return it
-                if (category.Id == id)
+                if (category.UniqueId == id)
                 {
                     return category;
                 }
@@ -130,7 +131,7 @@ namespace StudyN.Models
                 Start = start,
                 End = start.Add(duration),
                 Subject = appointmentTitle,
-                LabelId = AppointmentCategories[rnd.Next(0, 5)].Id,
+                LabelId = AppointmentCategories[rnd.Next(0, AppointmentCategories.Count - 1)].Id,
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
                 Description = string.Empty,
@@ -169,18 +170,19 @@ namespace StudyN.Models
             // Makes a new category
             AppointmentCategory cat = new()
             {
-                Id = id,
+                Id = AppointmentCategories.Count,
                 Caption = categoryName,
                 Color = categoryColor,
                 PickerXPosition = x,
-                PickerYPosition = y
+                PickerYPosition = y,
+                UniqueId = id
             };
 
             // Adds category to category list
             AppointmentCategories.Add(cat);
 
             EventBus.PublishEvent(
-                        new StudynEvent(cat.Id, StudynEvent.StudynEventType.CategoryAdd));
+                        new StudynEvent(cat.UniqueId, StudynEvent.StudynEventType.CategoryAdd));
 
             return cat;
 
@@ -203,7 +205,7 @@ namespace StudyN.Models
 
             foreach (AppointmentCategory category in AppointmentCategories)
             {
-                if (category.Id == id)
+                if (category.UniqueId == id)
                 {
                     cat = category;
                 }
@@ -236,7 +238,7 @@ namespace StudyN.Models
             // Search for category
             foreach (AppointmentCategory category in AppointmentCategories)
             {
-                if (category.Id == id)
+                if (category.UniqueId == id)
                 {
                     // go through the appointments with the category
                     foreach (Appointment appointment in Appointments)
@@ -244,7 +246,14 @@ namespace StudyN.Models
                         if (appointment.LabelId == category)
                         {
                             // Make appointment uncategorized
-                            appointment.LabelId = Uncategorized;
+                            appointment.LabelId = Uncategorized.Id;
+                        }
+                    }
+                    // reduce the id of the categories after this removed category
+                    if(category.Id < AppointmentCategories.Count - 1) { 
+                        for (int i = category.Id + 1; i < AppointmentCategories.Count; i++)
+                        {
+                            AppointmentCategories[i].Id--;
                         }
                     }
                     // Remove category
@@ -403,17 +412,21 @@ namespace StudyN.Models
             string jsonFileText;
             // gets categories
             string[] categoryFileList = FileManager.LoadCategoryFileNames();
+            // for giving each category an id
+            int id = 1;
             foreach (string file in categoryFileList)
             {
                 jsonFileText = File.ReadAllText(file);
                 SerializedAppointmentCategory deserializer = JsonConvert.DeserializeObject<SerializedAppointmentCategory>(jsonFileText);
                 AppointmentCategory category = new AppointmentCategory();
-                category.Id = deserializer.Id;
+                category.Id = id;
+                category.UniqueId = deserializer.Id;
                 category.Caption = deserializer.Caption;
                 category.Color = Color.FromArgb(deserializer.Color);
                 category.PickerXPosition = deserializer.PickerXPosition;
                 category.PickerYPosition = deserializer.PickerYPosition;
                 AppointmentCategories.Add(category);
+                id++;
             }
         }
 

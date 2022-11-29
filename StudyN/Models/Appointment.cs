@@ -75,11 +75,12 @@ namespace StudyN.Models
 
     public class AppointmentCategory
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Caption { get; set; }
         public Color Color { get; set; }
         public double PickerXPosition { get; set; }
         public double PickerYPosition { get; set; }
+        public Guid UniqueId { get; set; }
     }
 
     /// <summary>
