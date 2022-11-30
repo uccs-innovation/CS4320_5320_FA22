@@ -10,6 +10,7 @@ namespace StudyN.Models
                         int priority,
                         double completionProgress,
                         double totalTimeNeeded,
+                        DateTime dateNow,
                         Guid recurId)
         {
             this.Name = name;
@@ -18,6 +19,7 @@ namespace StudyN.Models
             this.Priority = priority;
             this.CompletionProgress = completionProgress;
             this.TotalTimeNeeded = totalTimeNeeded;
+            this.TimeNow = dateNow;
             this.RecurId = recurId;
         }
 
@@ -30,6 +32,7 @@ namespace StudyN.Models
         public double TotalTimeNeeded { get; set; } = 0;
         public int Priority { get; set; } = 3;
         public bool BeingTimed { get; set; } = false;
+        public DateTime TimeNow { get; set; } 
         public List<TaskItemTime> TimeList { get; set; } = new List<TaskItemTime>();
 
 

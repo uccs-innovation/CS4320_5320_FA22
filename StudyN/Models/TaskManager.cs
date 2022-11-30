@@ -35,6 +35,7 @@ namespace StudyN.Models
                                             priority,
                                             CompletionProgress,
                                             TotalTimeNeeded,
+                                            DateTime.Now,
                                             recurId);
 
             //This will add the tasks to the list
@@ -437,10 +438,10 @@ namespace StudyN.Models
         public TaskItem GetLastTask()
         {
             //Checking each item in the current task list
-            foreach (TaskItem task in TimeSpan)
+            foreach (TaskItem dateNow in TimeSpan)
             {
                 //If tasklist empty return null else return last task added
-                if (TaskList != null)
+                if (dateNow != null)
                 {
                     return TimeSpan.Last() ;
                 }
