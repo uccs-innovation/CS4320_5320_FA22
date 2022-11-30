@@ -419,10 +419,7 @@ namespace StudyN.Models
 
         public ObservableCollection<TaskItem> TaskList { get; private set; }
         private ObservableCollection<TaskItem> CompletedTasks { get; set; }
-
         public ObservableCollection<TaskItem> TaskListTest { get; private set; }
-        //Data timespan for when task was added
-        public ObservableCollection<TaskItem> TimeSpan { get =>TaskList; }
 
         //This constructor will create the normal TaskList and the list for
         //completed tasks, CompletedTasks
@@ -433,22 +430,24 @@ namespace StudyN.Models
             TaskListTest = new ObservableCollection<TaskItem>();
         } 
 
-        /****************************************************************/
         //Method checks what task was added to the list last
         public TaskItem GetLastTask()
         {
-            //Checking each item in the current task list
-            foreach (TaskItem dateNow in TimeSpan)
-            {
-                //If tasklist empty return null else return last task added
-                if (dateNow != null)
-                {
-                    return TimeSpan.Last() ;
-                }
+            //Set to arbitrary task
+            TaskItem latestTask = TaskList.Last();
 
+            //Checking each item in the current task list
+            foreach (TaskItem task in TaskList)
+            {
+                /* Check if the time span was just added
+                and saves it as the latest Task */
+                if (task.DateNow >= DateTime.Now)
+                {
+                    latestTask = task;
+                }
             }
-            //If none task found return null
-            return null;
+            //return latest added task
+            return latestTask;
         }
 
     }

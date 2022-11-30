@@ -19,7 +19,7 @@ namespace StudyN.Models
             this.Priority = priority;
             this.CompletionProgress = completionProgress;
             this.TotalTimeNeeded = totalTimeNeeded;
-            this.TimeNow = dateNow;
+            this.DateNow = dateNow; //for timespan to check latest task added
             this.RecurId = recurId;
         }
 
@@ -32,7 +32,7 @@ namespace StudyN.Models
         public double TotalTimeNeeded { get; set; } = 0;
         public int Priority { get; set; } = 3;
         public bool BeingTimed { get; set; } = false;
-        public DateTime TimeNow { get; set; } 
+        public DateTime DateNow { get;} 
         public List<TaskItemTime> TimeList { get; set; } = new List<TaskItemTime>();
 
 
