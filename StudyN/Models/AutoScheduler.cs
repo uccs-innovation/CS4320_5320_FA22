@@ -13,7 +13,6 @@ using StudyN.Models;
 using StudyN.Utilities;
 using static StudyN.Utilities.StudynEvent;
 
-//Because of the minuteMap, this iteration of the autoScheduler doesn't seem to have a need for blocks
 public class AutoScheduler : StudynSubscriber
 {
     private DateTime baseTime; //The base time the autoscheduler will use to do all its calculations
@@ -54,18 +53,22 @@ public class AutoScheduler : StudynSubscriber
     }
    
     //Put appointments from the global appointments list into the minute mapping, for future use in scheduling
-    private void MapAppointments()
+    private void MapAppointments(bool moveOldBlocks)
     {
         Console.WriteLine("autoScheduler.MapAppointments()");
         var apptsCopy = appts.ToList();
+        List<Appointment> apptsToRemove = new List<Appointment>();
         foreach (Appointment appt in apptsCopy)
         {
-            if (appt.From == "autoScheduler") //If the appointment is from the autoScheduler, delete it from the calendar so we can reschedule it without duplicating it
+            if (appt.From == "autoScheduler" && moveOldBlocks) //If the appointment is from the autoScheduler, delete it from the calendar so we can reschedule it without duplicating it
             {
                 Console.WriteLine("rescheduling appointment from autoScheduler");
-                appts.Remove(appt);
-                //GlobalAppointmentData.CalendarManager.DeleteAppointment(minuteMap[i].id); //To be able to delete an appointment, the calnedarManager needs a function to do so
+                apptsToRemove.Add(appt);
             } 
+        } 
+        foreach(Appointment appt in apptsToRemove)
+        {
+            apptsCopy.Remove(appt);
         }
 
         foreach (Appointment appt in apptsCopy)
@@ -87,10 +90,10 @@ public class AutoScheduler : StudynSubscriber
         }
     }
 
-    private List<BlockContainer> CreateBlockContainers()
+    private List<BlockContainer> CreateBlockContainers(List<TaskItem> tasksToMap)
     {
         List<BlockContainer> blockContainers = new List<BlockContainer>();   
-        IOrderedEnumerable<TaskItem> sortedTasks = sortByWeight(); //Because we sort the tasks first, the containers should also be sorted
+        IOrderedEnumerable<TaskItem> sortedTasks = sortByWeight(tasksToMap); //Because we sort the tasks first, the containers should also be sorted
         foreach(TaskItem task in sortedTasks)
         {
             if (task.DueTime < baseTime.AddMinutes(40320) && task.DueTime > baseTime) //Task is due within the 4 weeks the scheduler will schedule
@@ -270,12 +273,15 @@ public class AutoScheduler : StudynSubscriber
         }
     }
 
-    private void MapTasks()
+    private void MapTasks(List<TaskItem> tasksToMap)
     {
-        List<BlockContainer> containers = CreateBlockContainers();
+        List<BlockContainer> containers = CreateBlockContainers(tasksToMap);
         MapBlocks(containers);
         MapRemainders(containers);
         PullBackBlocks(containers);
+        foreach(TaskItem task in tasksToMap){
+            if (task.DueTime < baseTime.AddMinutes(40320) && task.DueTime > baseTime) { task.hasBeenAutoScheduled = true; } //If the task is within the autoScheduling window, then it was autoScheduled
+        }
     }
 
 
@@ -318,16 +324,18 @@ public class AutoScheduler : StudynSubscriber
                 // make sure sleep time isn't being added to calendar
                 if (appt.Subject != "Sleep")
                 {
-                    GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+                Console.WriteLine("appt.Start: " + appt.Start.ToString());
+                Console.WriteLine("appt.End: " + appt.End.ToString());
+                GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
                 }
             }
         }
     }
 
-    private IOrderedEnumerable<TaskItem> sortByWeight()
+    private IOrderedEnumerable<TaskItem> sortByWeight(List<TaskItem> tasksToMap)
     {
         List<TaskItem> tempTasks = new List<TaskItem>();
-        foreach (TaskItem task in tasks)
+        foreach (TaskItem task in tasksToMap)
         {
             TaskItem tempTask = task;
             tempTask.weight = calculateWeight(tempTask);
@@ -379,8 +387,22 @@ public class AutoScheduler : StudynSubscriber
         if (sleepTimeCheck)
         MapSleepTime();
 
-        MapAppointments();
-        MapTasks();
+        MapAppointments(false);
+
+        List<TaskItem> nonScheduledTasks = new List<TaskItem>();
+        foreach(TaskItem task in tasks)
+        {
+            if(!task.hasBeenAutoScheduled) { nonScheduledTasks.Add(task); } 
+        }
+
+        MapTasks(nonScheduledTasks); //First only map tasks that haven't been scheduled yet.
+        if(pastDueTasks.Count > 0)  //If something was unabled to be scheduled when mapping JUST the nonScheduledTasks, rerun with every task
+        {
+            refreshData();
+            MapAppointments(true);
+            MapTasks(tasks.ToList());
+        }
+
         AddToCalendar( CoalesceMinuteMapping() );
         Console.WriteLine("Done running autoScheduler");
 

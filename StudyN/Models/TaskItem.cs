@@ -39,6 +39,8 @@ namespace StudyN.Models
 
         public double? weight { get; set; } = null;
 
+        public bool hasBeenAutoScheduled { get; set; } = false;
+
 
         //Method for each task %
         public double? Percent
