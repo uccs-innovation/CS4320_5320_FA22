@@ -39,9 +39,6 @@ namespace StudyN.Models
         public static double[] AppointmentCategoryX = { 0.65f, 0.35f, 0.9f, 0.15f, 0.52f, 0.1f, 0.98f, 0.8f};
 
         // Uncategorized category
-
-
-
         public static AppointmentCategory Uncategorized = new()
         {
             Id = 0,
@@ -68,6 +65,8 @@ namespace StudyN.Models
 
         static Random rnd = new Random();
 
+        // keeps the current highest category id
+        int catId = 1;
 
         public void CreateAppointmentCategories()
         {
@@ -75,12 +74,13 @@ namespace StudyN.Models
             for (int i = 0; i < count; i++)
             {
                 AppointmentCategory cat = new AppointmentCategory();
-                cat.Id = i + 1;
+                cat.Id = catId;
                 cat.Caption = AppointmentCategoryTitles[i];
                 cat.Color = AppointmentCategoryColors[i];
                 cat.PickerXPosition = AppointmentCategoryX[i];
                 cat.PickerYPosition = 0.5f;
                 cat.UniqueId = Guid.NewGuid();
+                catId++;
                 AppointmentCategories.Add(cat);
                 EventBus.PublishEvent(
                             new StudynEvent(cat.UniqueId, StudynEvent.StudynEventType.CategoryAdd));
@@ -182,15 +182,17 @@ namespace StudyN.Models
                 cat.PickerXPosition = x;
                 cat.PickerYPosition = y;
                 cat.UniqueId = id;
+                catId = 1;
             }
             else
             {
-                cat.Id = AppointmentCategories[AppointmentCategories.Count - 1].Id + 1;
+                cat.Id = catId + 1;
                 cat.Caption = categoryName;
                 cat.Color = categoryColor;
                 cat.PickerXPosition = x;
                 cat.PickerYPosition = y;
                 cat.UniqueId = id;
+                catId++;
             }
 
             // Adds category to category list
@@ -420,21 +422,23 @@ namespace StudyN.Models
             string jsonFileText;
             // gets categories
             string[] categoryFileList = FileManager.LoadCategoryFileNames();
-            // for giving each category an id
-            int id = 1;
             foreach (string file in categoryFileList)
             {
                 jsonFileText = File.ReadAllText(file);
                 SerializedAppointmentCategory deserializer = JsonConvert.DeserializeObject<SerializedAppointmentCategory>(jsonFileText);
                 AppointmentCategory category = new AppointmentCategory();
-                category.Id = id;
-                category.UniqueId = deserializer.Id;
+                category.Id = deserializer.Id;
+                category.UniqueId = deserializer.UniqueId;
                 category.Caption = deserializer.Caption;
                 category.Color = Color.FromArgb(deserializer.Color);
                 category.PickerXPosition = deserializer.PickerXPosition;
                 category.PickerYPosition = deserializer.PickerYPosition;
                 AppointmentCategories.Add(category);
-                id++;
+                // if new id is higher than current catId make catId new id
+                if(deserializer.Id > catId)
+                {
+                    catId = deserializer.Id;
+                }
             }
         }
 
