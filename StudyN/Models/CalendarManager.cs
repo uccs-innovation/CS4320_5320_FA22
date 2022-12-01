@@ -420,6 +420,8 @@ namespace StudyN.Models
 
 
         public ObservableCollection<Appointment> Appointments { get; private set; }
+
+        public ObservableCollection<Appointment> AutoAppointments { get; set; }
         public ObservableCollection<AppointmentCategory> AppointmentCategories { get; private set; }
         public ObservableCollection<AppointmentStatus> AppointmentStatuses { get; private set; }
         public SleepTime SleepTime { get; private set; }
@@ -428,6 +430,7 @@ namespace StudyN.Models
         public CalendarManager()
         {
             Appointments = new ObservableCollection<Appointment>();
+            AutoAppointments = new ObservableCollection<Appointment>();
             AppointmentCategories = new ObservableCollection<AppointmentCategory>();
             AppointmentStatuses = new ObservableCollection<AppointmentStatus>();
             SleepTime = new SleepTime();
@@ -480,6 +483,8 @@ namespace StudyN.Models
             //If not found in either list, return null
             return null;
         }
+
+
     }
 }
 

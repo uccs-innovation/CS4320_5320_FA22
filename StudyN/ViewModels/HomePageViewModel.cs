@@ -10,13 +10,21 @@ namespace StudyN.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<TaskItem> TaskList { get => GlobalTaskData.TaskManager.TaskList; }
+        public ObservableCollection<Appointment> ApptList { get => GlobalAppointmentData.CalendarManager.Appointments; }
 
         public HomePageViewModel()
         {
             
         }
 
- 
+        protected void RaisePropertyChanged(string name)
+        {
+            Console.WriteLine("property changed");
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
 
     }
 }

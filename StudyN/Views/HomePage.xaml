@@ -16,41 +16,18 @@
     
     
     <ContentPage.ToolbarItems>
-        <!-- Standard Options -->
-        <ToolbarItem Text="Add" 
-                     
-                     IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
-
-
-        <!-- Press and hold options -->
-        <ToolbarItem Text="Cancel"
-                     
-                     Priority="0"
-                     IconImageSource="whitecancel" />
-        <ToolbarItem Text="Trash"
-                     
-                     Priority="1"
-                     IconImageSource="whitetrashcan" />
-        <ToolbarItem Text="Complete"
-                     
-                     Priority="2"
-                     IconImageSource="whitecheckbox" />
-        <ToolbarItem Text="Chart"
-                     
-                     Priority="3"
-                     IconImageSource="charts" />
-
+       
     </ContentPage.ToolbarItems>
-    
-    
+
     <!-- DataGrid -->
-    <dxg:DataGridView x:Name="Grid"        
+    <dxg:DataGridView x:Name="Grid"      
+                      ItemsSource="{Binding ApptList}"
                       ColumnHeaderHeight="0">
+        
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
-            <dxg:TextColumn FieldName="Name" Caption="Task" />
-            <dxg:DateColumn FieldName="DueTime" Caption="Due" DisplayFormat="h:mm tt" IsGrouped="True"/>
-            <dxg:TextColumn FieldName="Percent" Caption="Percent" DisplayFormat="P0" />
+            <dxg:TextColumn FieldName="Subject" Caption="" IsGrouped="True"/>
+            <dxg:DateColumn FieldName="Start" Caption="Due" DisplayFormat="h:mm tt"/>
         </dxg:DataGridView.Columns>
         <!--Customize the appearance of group row.-->
         <dxg:DataGridView.GroupRowStyle>
@@ -72,4 +49,5 @@
             <dxg:TotalSummaryStyle FontSize="16"/>
         </dxg:DataGridView.TotalSummaryStyle>
     </dxg:DataGridView>
+
 </ContentPage>
