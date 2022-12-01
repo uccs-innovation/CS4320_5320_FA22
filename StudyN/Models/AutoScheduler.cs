@@ -7,6 +7,7 @@ using System.Linq;
 using Android.Accessibilityservice.AccessibilityService;
 using DevExpress.CodeParser;
 using DevExpress.Utils;
+using DevExpress.XtraRichEdit.Layout;
 using DevExpress.XtraRichEdit.Model.History;
 using StudyN.Models;
 using StudyN.Utilities;
@@ -16,6 +17,7 @@ public class AutoScheduler : StudynSubscriber
 {
     private DateTime baseTime; //The base time the autoscheduler will use to do all its calculations
     private DateTime baseLimit; //The base time the autoscheduler will stop calculating at
+    private bool sleepTimeCheck; //True if there is a sleep time
     ObservableCollection<Appointment> appts;
     ObservableCollection<TaskItem> tasks;
     private minuteSnapshot[] minuteMap;
@@ -35,11 +37,18 @@ public class AutoScheduler : StudynSubscriber
         {
             baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
             baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
+            if(baseLimit < baseTime)
+            {
+                // if sleep time starts in the next day, then add a day to base limit
+                baseLimit = baseLimit.AddDays(1);
+            }
+            sleepTimeCheck = true;
         }
         else
         {
             baseTime = DateTime.Now;
             baseLimit = DateTime.Now;
+            sleepTimeCheck = false;
         }
     }
    
@@ -156,6 +165,40 @@ public class AutoScheduler : StudynSubscriber
                 Console.WriteLine("UNSCHEDUABLE TASK");
                 pastDueTasks.Add(blockContainer.task);
                 taskPastDue = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Makes sleep time blocks in auto scheduler
+    /// </summary>
+    private void MapSleepTime()
+    {
+        int offset = (int)(baseLimit - baseTime).TotalMinutes;
+        int span = (int)(baseTime.AddDays(1) - baseLimit).TotalMinutes;
+        Guid id = Guid.NewGuid();
+        int index = offset;
+        bool overflowing = false;
+        // Map out sleep time for every day
+        while(index < 40321)
+        {
+            for(int i = index; i < index + span; i++)
+            {
+                if(i >= 40321)
+                {
+                    overflowing = true;
+                    break;
+                }
+                else
+                {
+                    minuteMap[i].id = id;
+                    minuteMap[i].from = "sleeptime";
+                    minuteMap[i].name = "Sleep";
+                }
+            }
+            if (!overflowing) { 
+                // add a day to index
+                index += 1440;
             }
         }
     }
@@ -278,9 +321,13 @@ public class AutoScheduler : StudynSubscriber
         {
             if (appt.From == "autoScheduler")
             {
-                Console.WriteLine("appt.Start: " + appt.Start.ToString());
-                Console.WriteLine("appt.End: " + appt.End.ToString());
-                GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+                // make sure sleep time isn't being added to calendar
+                if (appt.Subject != "Sleep")
+                {
+                    Console.WriteLine("appt.Start: " + appt.Start.ToString());
+                    Console.WriteLine("appt.End: " + appt.End.ToString());
+                    GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+                }
             }
         }
     }
@@ -336,6 +383,10 @@ public class AutoScheduler : StudynSubscriber
     {
         Console.WriteLine("Running autoScheduler");
         refreshData();
+        // Map sleep time if sleep time exists
+        if (sleepTimeCheck)
+            MapSleepTime();
+
         MapAppointments(false);
 
         List<TaskItem> nonScheduledTasks = new List<TaskItem>();
@@ -351,7 +402,6 @@ public class AutoScheduler : StudynSubscriber
             MapAppointments(true);
             MapTasks(tasks.ToList());
         }
-
 
         AddToCalendar( CoalesceMinuteMapping() );
         Console.WriteLine("Done running autoScheduler");
@@ -376,11 +426,18 @@ public class AutoScheduler : StudynSubscriber
         {
             baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
             baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
+            if (baseLimit < baseTime)
+            {
+                // if sleep time starts in the next day, then add a day to base limit
+                baseLimit = baseLimit.AddDays(1);
+            }
+            sleepTimeCheck = true;
         }
         else
         {
             baseTime = DateTime.Now;
             baseLimit = DateTime.Now;
+            sleepTimeCheck = false;
         }
     }
 
