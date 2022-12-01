@@ -19,8 +19,8 @@ namespace StudyN.Models
                                string description,
                                DateTime dueTime,
                                int priority,
-                               double CompletionProgress,
-                               double TotalTimeNeeded,
+                               double timeWorked,
+                               double timeEstimated,
                                Guid recurId = new Guid())
         {
             if(recurId == Guid.Empty)
@@ -33,8 +33,8 @@ namespace StudyN.Models
                                             description,
                                             dueTime,
                                             priority,
-                                            CompletionProgress,
-                                            TotalTimeNeeded,
+                                            timeWorked,
+                                            timeEstimated,
                                             DateTime.Now,
                                             recurId);
 
@@ -80,8 +80,8 @@ namespace StudyN.Models
                                 string description,
                                 DateTime dueTime,
                                 int priority,
-                                double CompletionProgress,
-                                double TotalTimeNeeded,
+                                double timeWorked,
+                                double timeEstimated,
                                 List<TaskItemTime> TimeList = null,
                                 bool updateFile = true)
         {
@@ -98,8 +98,8 @@ namespace StudyN.Models
             task.Description = description;
             task.DueTime = dueTime;
             task.Priority = priority;
-            task.CompletionProgress = CompletionProgress;
-            task.TotalTimeNeeded = TotalTimeNeeded;
+            task.TimeWorked = timeWorked;
+            task.TimeEstimated = timeEstimated;
             task.TimeList = TimeList;
 
             // Publish task edit event
@@ -168,8 +168,8 @@ namespace StudyN.Models
                                         ParentTask.Description,
                                         dueTime,
                                         ParentTask.Priority,
-                                        ParentTask.CompletionProgress,
-                                        ParentTask.TotalTimeNeeded,
+                                        ParentTask.TimeWorked,
+                                        ParentTask.TimeEstimated,
                                         ParentTask.RecurId);
                 task.IsRecur = true;
                 // Create a deepcopy
@@ -197,8 +197,8 @@ namespace StudyN.Models
                                         ParentTask.Description,
                                         dueTime,
                                         ParentTask.Priority,
-                                        ParentTask.CompletionProgress,
-                                        ParentTask.TotalTimeNeeded,
+                                        ParentTask.TimeWorked,
+                                        ParentTask.TimeEstimated,
                                         ParentTask.RecurId);
                 task.IsRecur = true;
                 // Create a deepcopy

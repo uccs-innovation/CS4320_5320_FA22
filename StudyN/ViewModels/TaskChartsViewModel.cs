@@ -18,8 +18,8 @@ namespace StudyN.ViewModels
             foreach (TaskItem task in TaskList)
             {
                 String taskName = task.Name;
-                double timeWorked = task.CompletionProgress;
-                double timeNeeded = task.TotalTimeNeeded;
+                double timeWorked = task.TimeWorked;
+                double timeNeeded = task.TimeEstimated;
                 
                 TasksTimeWorked.Add(new TaskData(taskName, (int)timeWorked));
                 if (timeNeeded - timeWorked > 0)
