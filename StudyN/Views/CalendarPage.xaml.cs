@@ -107,15 +107,10 @@ namespace StudyN.Views
         {
             if(File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
             {
-                dayView.WorkTime = (GlobalAppointmentData.CalendarManager.SleepTime.EndTime -
-                    GlobalAppointmentData.CalendarManager.SleepTime.StartTime);
-                weekView.WorkTime = (GlobalAppointmentData.CalendarManager.SleepTime.EndTime -
-                    GlobalAppointmentData.CalendarManager.SleepTime.StartTime);
-            }
-            else
-            {
-                dayView.WorkTime = (DateTime.Today.AddDays(1).AddHours(0) - DateTime.Today.AddHours(0));
-                weekView.WorkTime = (DateTime.Today.AddDays(1).AddHours(0) - DateTime.Today.AddHours(0));
+                //dayView.WorkTime = (GlobalAppointmentData.CalendarManager.SleepTime.EndTime -
+                    //GlobalAppointmentData.CalendarManager.SleepTime.StartTime);
+                //weekView.WorkTime = (GlobalAppointmentData.CalendarManager.SleepTime.EndTime -
+                    //GlobalAppointmentData.CalendarManager.SleepTime.StartTime);
             }
         }
 
