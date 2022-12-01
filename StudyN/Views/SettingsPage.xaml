@@ -45,50 +45,6 @@
                 </StackLayout>
             </Frame>
 
-            <!-- frame for font -->
-            <Frame 
-                BorderColor="{DynamicResource Primary}"
-                CornerRadius="5"
-                Padding="8"
-                BackgroundColor="{DynamicResource NormalBackgroundColor}">
-                <StackLayout Spacing="3">
-                    <Label 
-                        Text="Font"
-                        FontSize="12" 
-                        TextColor="{DynamicResource NormalHeaderText}"
-                        FontAttributes="Bold"/>
-                    <BoxView 
-                        Color="{DynamicResource Primary}"
-                        HeightRequest="2"
-                        HorizontalOptions="Fill" />
-
-                    <!-- put stuff here -->
-                    <Label Text="Put stuff here"/>
-                </StackLayout>
-            </Frame>
-
-            <!-- frame for idk -->
-            <Frame 
-                BorderColor="{DynamicResource Primary}"
-                CornerRadius="5"
-                Padding="8"
-                BackgroundColor="{DynamicResource NormalBackgroundColor}">
-                <StackLayout Spacing="3">
-                    <Label 
-                        Text="STUFF"
-                        FontSize="12" 
-                        TextColor="{DynamicResource NormalHeaderText}"
-                        FontAttributes="Bold"/>
-                    <BoxView 
-                        Color="{DynamicResource Primary}"
-                        HeightRequest="2"
-                        HorizontalOptions="Fill" />
-
-                    <!-- put stuff here -->
-                    <Label Text="Put stuff here"/>
-                </StackLayout>
-            </Frame>
-
             <!-- frame for import cal -->
             <Frame 
                 BorderColor="{DynamicResource Primary}"

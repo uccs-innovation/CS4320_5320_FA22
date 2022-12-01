@@ -119,14 +119,15 @@ namespace StudyN.Models
                                             DateTime start,
                                             TimeSpan duration,
                                             int room,
-                                            Guid recurId = new Guid(),
-                                            string from = "")
+                                            Guid taskId, //recurId = new Guid(),
+                                            string from = "",
+                                            bool autoScheduled = false)
         {
             Guid guid = new Guid();
 
             Appointment appt = new()
             {
-                Id = appointmentId,
+                //Id = appointmentId,
                 Start = start,
                 End = start.Add(duration),
                 Subject = appointmentTitle,
@@ -134,8 +135,8 @@ namespace StudyN.Models
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
                 Description = string.Empty,
-                UniqueId = guid,
-                From = from
+                UniqueId = taskId,
+                From = from,
             };
 
 
@@ -419,6 +420,8 @@ namespace StudyN.Models
 
 
         public ObservableCollection<Appointment> Appointments { get; private set; }
+
+        public ObservableCollection<Appointment> AutoAppointments { get; set; }
         public ObservableCollection<AppointmentCategory> AppointmentCategories { get; private set; }
         public ObservableCollection<AppointmentStatus> AppointmentStatuses { get; private set; }
         public SleepTime SleepTime { get; private set; }
@@ -427,6 +430,7 @@ namespace StudyN.Models
         public CalendarManager()
         {
             Appointments = new ObservableCollection<Appointment>();
+            AutoAppointments = new ObservableCollection<Appointment>();
             AppointmentCategories = new ObservableCollection<AppointmentCategory>();
             AppointmentStatuses = new ObservableCollection<AppointmentStatus>();
             SleepTime = new SleepTime();
@@ -479,6 +483,8 @@ namespace StudyN.Models
             //If not found in either list, return null
             return null;
         }
+
+
     }
 }
 
