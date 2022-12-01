@@ -19,6 +19,31 @@
        
     </ContentPage.ToolbarItems>
 
+    <StackLayout x:Name="ParentStack" Orientation="Vertical" Spacing="0">
+        <ListView ItemsSource="{Binding TaskList}">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <Grid Padding="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <Label Grid.Column="1"
+                           Text="{Binding Name}"
+                           FontAttributes="Bold" />
+
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+        </ListView>
+
     <!-- DataGrid -->
     <dxg:DataGridView x:Name="Grid"      
                       ItemsSource="{Binding ApptList}"
@@ -50,5 +75,5 @@
             <dxg:TotalSummaryStyle FontSize="16"/>
         </dxg:DataGridView.TotalSummaryStyle>
     </dxg:DataGridView>
-
+    </StackLayout>
 </ContentPage>
