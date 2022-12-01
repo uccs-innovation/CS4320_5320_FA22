@@ -10,6 +10,7 @@ namespace StudyN.Models
                         int priority,
                         double completionProgress,
                         double totalTimeNeeded,
+                        DateTime dateNow,
                         Guid recurId)
         {
             this.Name = name;
@@ -18,6 +19,7 @@ namespace StudyN.Models
             this.Priority = priority;
             this.CompletionProgress = completionProgress;
             this.TotalTimeNeeded = totalTimeNeeded;
+            this.DateNow = dateNow; //for timespan to check latest task added
             this.RecurId = recurId;
         }
 
@@ -30,6 +32,7 @@ namespace StudyN.Models
         public double TotalTimeNeeded { get; set; } = 0;
         public int Priority { get; set; } = 3;
         public bool BeingTimed { get; set; } = false;
+        public DateTime DateNow { get;} 
         public List<TaskItemTime> TimeList { get; set; } = new List<TaskItemTime>();
 
 
@@ -38,6 +41,8 @@ namespace StudyN.Models
         public bool IsRecur { get; set; } = false;
 
         public double? weight { get; set; } = null;
+
+        public bool hasBeenAutoScheduled { get; set; } = false;
 
 
         //Method for each task %

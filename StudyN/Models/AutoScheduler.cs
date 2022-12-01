@@ -7,16 +7,17 @@ using System.Linq;
 using Android.Accessibilityservice.AccessibilityService;
 using DevExpress.CodeParser;
 using DevExpress.Utils;
+using DevExpress.XtraRichEdit.Layout;
 using DevExpress.XtraRichEdit.Model.History;
 using StudyN.Models;
 using StudyN.Utilities;
 using static StudyN.Utilities.StudynEvent;
 
-//Because of the minuteMap, this iteration of the autoScheduler doesn't seem to have a need for blocks
 public class AutoScheduler : StudynSubscriber
 {
     private DateTime baseTime; //The base time the autoscheduler will use to do all its calculations
     private DateTime baseLimit; //The base time the autoscheduler will stop calculating at
+    private bool sleepTimeCheck; //True if there is a sleep time
     ObservableCollection<Appointment> appts;
     ObservableCollection<TaskItem> tasks;
     private minuteSnapshot[] minuteMap;
@@ -30,103 +31,106 @@ public class AutoScheduler : StudynSubscriber
         appts = GlobalAppointmentData.CalendarManager.Appointments;
         pastDueTasks = new List<TaskItem>();
         minuteMap = new minuteSnapshot[40320]; //40320 minutes in 4 weeks. AutoScheduler will only scheduler out 4 weeks.
-        for (int i = 0; i < minuteMap.Length; i++) { minuteMap[i] = new minuteSnapshot(); }
+        for(int i = 0; i < minuteMap.Length; i++) { minuteMap[i] = new minuteSnapshot(); }
         // set base time
         if(File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
         {
             baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
             baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
+            if(baseLimit < baseTime)
+            {
+                // if sleep time starts in the next day, then add a day to base limit
+                baseLimit = baseLimit.AddDays(1);
+            }
+            sleepTimeCheck = true;
         }
         else
         {
             baseTime = DateTime.Now;
             baseLimit = DateTime.Now;
+            sleepTimeCheck = false;
         }
     }
-
+   
     //Put appointments from the global appointments list into the minute mapping, for future use in scheduling
-    private void MapAppointments()
+    private void MapAppointments(bool moveOldBlocks)
     {
         Console.WriteLine("autoScheduler.MapAppointments()");
         var apptsCopy = appts.ToList();
+        List<Appointment> apptsToRemove = new List<Appointment>();
         foreach (Appointment appt in apptsCopy)
         {
-            if (appt.From == "autoScheduler") //If the appointment is from the autoScheduler, delete it from the calendar so we can reschedule it without duplicating it
+            if (appt.From == "autoScheduler" && moveOldBlocks) //If the appointment is from the autoScheduler, delete it from the calendar so we can reschedule it without duplicating it
             {
                 Console.WriteLine("rescheduling appointment from autoScheduler");
-                appts.Remove(appt);
-                //GlobalAppointmentData.CalendarManager.DeleteAppointment(minuteMap[i].id); //To be able to delete an appointment, the calnedarManager needs a function to do so
-            }
+                apptsToRemove.Add(appt);
+            } 
+        } 
+        foreach(Appointment appt in apptsToRemove)
+        {
+            apptsCopy.Remove(appt);
         }
 
         foreach (Appointment appt in apptsCopy)
         {
             DateTime start, end;
             start = appt.Start; end = appt.End;
-            if (end < baseTime.AddMinutes(40320) && end > baseTime) //If the appointment falls wholly within the 4 week autoscheduling time frame
+            if(end < baseTime.AddMinutes(40320) && end > baseTime) //If the appointment falls wholly within the 4 week autoscheduling time frame
             {
-                if (start < baseTime) { start = baseTime; } //If appointment is going on right now, treat it as if it starts right now
+                if(start < baseTime) { start = baseTime; } //If appointment is going on right now, treat it as if it starts right now
                 int offset = (int)(start - baseTime).TotalMinutes;
-                int span = (int)(end - start).TotalMinutes;
-                for (int i = offset; i < offset + span; i++)
+                int span = (int)(end - start).TotalMinutes; 
+                for(int i = offset; i < offset + span; i++)
                 {
-                    minuteMap[i].id = appt.UniqueId;
+                    minuteMap[i].id = appt.UniqueId; 
                     minuteMap[i].from = "appts";
-                    minuteMap[i].name = appt.Subject;
+                    minuteMap[i].name = appt.Subject; 
                 }
             }
         }
     }
 
-    private List<BlockContainer> CreateBlockContainers()
+    private List<BlockContainer> CreateBlockContainers(List<TaskItem> tasksToMap)
     {
-        List<BlockContainer> blockContainers = new List<BlockContainer>();
-        IOrderedEnumerable<TaskItem> sortedTasks = sortByWeight(); //Because we sort the tasks first, the containers should also be sorted
-        foreach (TaskItem task in sortedTasks)
+        List<BlockContainer> blockContainers = new List<BlockContainer>();   
+        IOrderedEnumerable<TaskItem> sortedTasks = sortByWeight(tasksToMap); //Because we sort the tasks first, the containers should also be sorted
+        foreach(TaskItem task in sortedTasks)
         {
             if (task.DueTime < baseTime.AddMinutes(40320) && task.DueTime > baseTime) //Task is due within the 4 weeks the scheduler will schedule
-            {
+            { 
                 BlockContainer blockContainer = new BlockContainer();
                 blockContainer.task = task;
                 blockContainer.blockSize = 60; //60 minute block size. Could change this based on task data. IE different task categories could have different block sizes
-
-                // Gets time left for task blocks to be scheduled. Defaults to 1 hour if the progress exceeds the estimate.
-                int hourNeeded = (int)(task.TotalTimeNeeded - task.CompletionProgress);
-                int minNeeded = (int)(task.GetTotalMinutesNeeded() - task.GetCompletionProgressMinutes());
-                int remainingMinutesNeeded = (hourNeeded * 60) + minNeeded;
-                if (remainingMinutesNeeded < 0) { remainingMinutesNeeded = 60; }
-
-                blockContainer.blocks = new Block[remainingMinutesNeeded / blockContainer.blockSize];
-                blockContainer.remainder = remainingMinutesNeeded % blockContainer.blockSize;
+                blockContainer.blocks = new Block[(int)(task.TotalTimeNeeded*60 / blockContainer.blockSize)];
+                blockContainer.remainder = (int)(task.TotalTimeNeeded*60) % blockContainer.blockSize;
                 blockContainers.Add(blockContainer);
             }
-;
-        }
+;       }
 
         return blockContainers;
     }
 
     private bool mapConflict(int start, int end) //return true if there would be a conflict if something were to be inserted into the minuteMap between start and end
     {
-        for (int i = start; i < end; i++)
+        for(int i = start; i < end; i++)
         {
-            if (minuteMap[i].id != null) { return true; }
+            if(minuteMap[i].id != null) { return true; }
         }
         return false;
     }
     private void MapBlocks(List<BlockContainer> blockContainers)
     {
-        foreach (BlockContainer blockContainer in blockContainers)
+        foreach(BlockContainer blockContainer in blockContainers)
         {
             int offset = (int)(blockContainer.task.DueTime - baseTime).TotalMinutes - blockContainer.blockSize;
             while (blockContainer.mappedBlocks < blockContainer.blocks.Length && offset >= 0)
             {
-                if (!mapConflict(offset, offset + blockContainer.blockSize))
+                if( !mapConflict(offset, offset + blockContainer.blockSize) ) 
                 {
                     //match every minute in this span to the block container (aka task). Then create the task block
-                    for (int i = offset; i < offset + blockContainer.blockSize; i++) { minuteMap[i].id = blockContainer.task.TaskId; minuteMap[i].from = "autoScheduler"; minuteMap[i].name = blockContainer.task.Name; }
+                    for(int i = offset; i < offset + blockContainer.blockSize; i++) { minuteMap[i].id = blockContainer.task.TaskId; minuteMap[i].from = "autoScheduler"; minuteMap[i].name = blockContainer.task.Name; }
 
-                    blockContainer.blocks[blockContainer.mappedBlocks] = new Block(blockContainer.task.TaskId, new Guid(), offset, offset + blockContainer.blockSize);
+                    blockContainer.blocks[ blockContainer.mappedBlocks ] = new Block(blockContainer.task.TaskId, new Guid(), offset, offset + blockContainer.blockSize);
                     blockContainer.mappedBlocks++;
                 }
                 offset -= blockContainer.blockSize;
@@ -161,6 +165,40 @@ public class AutoScheduler : StudynSubscriber
                 Console.WriteLine("UNSCHEDUABLE TASK");
                 pastDueTasks.Add(blockContainer.task);
                 taskPastDue = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Makes sleep time blocks in auto scheduler
+    /// </summary>
+    private void MapSleepTime()
+    {
+        int offset = (int)(baseLimit - baseTime).TotalMinutes;
+        int span = (int)(baseTime.AddDays(1) - baseLimit).TotalMinutes;
+        Guid id = Guid.NewGuid();
+        int index = offset;
+        bool overflowing = false;
+        // Map out sleep time for every day
+        while(index < 40321)
+        {
+            for(int i = index; i < index + span; i++)
+            {
+                if(i >= 40321)
+                {
+                    overflowing = true;
+                    break;
+                }
+                else
+                {
+                    minuteMap[i].id = id;
+                    minuteMap[i].from = "sleeptime";
+                    minuteMap[i].name = "Sleep";
+                }
+            }
+            if (!overflowing) { 
+                // add a day to index
+                index += 1440;
             }
         }
     }
@@ -235,12 +273,15 @@ public class AutoScheduler : StudynSubscriber
         }
     }
 
-    private void MapTasks()
+    private void MapTasks(List<TaskItem> tasksToMap)
     {
-        List<BlockContainer> containers = CreateBlockContainers();
+        List<BlockContainer> containers = CreateBlockContainers(tasksToMap);
         MapBlocks(containers);
         MapRemainders(containers);
         PullBackBlocks(containers);
+        foreach(TaskItem task in tasksToMap){
+            if (task.DueTime < baseTime.AddMinutes(40320) && task.DueTime > baseTime) { task.hasBeenAutoScheduled = true; } //If the task is within the autoScheduling window, then it was autoScheduled
+        }
     }
 
 
@@ -251,11 +292,11 @@ public class AutoScheduler : StudynSubscriber
         List<Appointment> coalescedAppointments = new List<Appointment>();
         Guid? curGuid = null;
         int guidStart = 0;
-        for (int i = 0; i < minuteMap.Length; i++)
+        for(int i = 0; i < minuteMap.Length; i++)
         {
-            if (curGuid != minuteMap[i].id)
+            if(curGuid != minuteMap[i].id)
             {
-                if (i > 0 && minuteMap[i - 1].id != null)
+                if(i > 0 && minuteMap[i - 1].id != null) 
                 {
                     Appointment appt = new Appointment();
                     appt.Start = baseTime.AddMinutes(guidStart);
@@ -276,20 +317,25 @@ public class AutoScheduler : StudynSubscriber
     private void AddToCalendar(List<Appointment> appts)
     {
         Console.WriteLine("autoScheduler adding to calendar");
-        foreach (Appointment appt in appts)
+        foreach(Appointment appt in appts)
         {
             if (appt.From == "autoScheduler")
             {
-                GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
-
+                // make sure sleep time isn't being added to calendar
+                if (appt.Subject != "Sleep")
+                {
+                    Console.WriteLine("appt.Start: " + appt.Start.ToString());
+                    Console.WriteLine("appt.End: " + appt.End.ToString());
+                    GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+                }
             }
         }
     }
 
-    private IOrderedEnumerable<TaskItem> sortByWeight()
+    private IOrderedEnumerable<TaskItem> sortByWeight(List<TaskItem> tasksToMap)
     {
         List<TaskItem> tempTasks = new List<TaskItem>();
-        foreach (TaskItem task in tasks)
+        foreach (TaskItem task in tasksToMap)
         {
             TaskItem tempTask = task;
             tempTask.weight = calculateWeight(tempTask);
@@ -303,10 +349,13 @@ public class AutoScheduler : StudynSubscriber
     {
         //Higher weight means item of more importance, IE schedule earlier
         double? weight = 1;
+        //double remainingMinutesNeeded = task.TotalTimeNeeded * (1 - task.CompletionProgress / 100);   //Assuming task.TotaltimeNeeded is in minutes,
+        //and assuming the numerical value of completion
+        //progresses represents a percent
+        //IE 85 = 85% complete
 
-        double hourNeeded = (task.TotalTimeNeeded - task.CompletionProgress);
-        double minNeeded = (task.GetTotalMinutesNeeded() - task.GetCompletionProgressMinutes());
-        double remainingMinutesNeeded = (hourNeeded * 60) + minNeeded;
+        double remainingMinutesNeeded = task.TotalTimeNeeded * 60; //completionProgress seems to be bugged, so currently not using. BUT WE SHOULD USE THE ABOVE LINE IDEALLY
+
 
         //Amount of days between (now + estimated time remaining to complete task), and task due date
         double leadtime = (task.DueTime - (DateTime.Now.AddMinutes(remainingMinutesNeeded))).TotalDays;
@@ -334,9 +383,27 @@ public class AutoScheduler : StudynSubscriber
     {
         Console.WriteLine("Running autoScheduler");
         refreshData();
-        MapAppointments();
-        MapTasks();
-        AddToCalendar(CoalesceMinuteMapping());
+        // Map sleep time if sleep time exists
+        if (sleepTimeCheck)
+            MapSleepTime();
+
+        MapAppointments(false);
+
+        List<TaskItem> nonScheduledTasks = new List<TaskItem>();
+        foreach(TaskItem task in tasks)
+        {
+            if(!task.hasBeenAutoScheduled) { nonScheduledTasks.Add(task); } 
+        }
+
+        MapTasks(nonScheduledTasks); //First only map tasks that haven't been scheduled yet.
+        if(pastDueTasks.Count > 0)  //If something was unabled to be scheduled when mapping JUST the nonScheduledTasks, rerun with every task
+        {
+            refreshData();
+            MapAppointments(true);
+            MapTasks(tasks.ToList());
+        }
+
+        AddToCalendar( CoalesceMinuteMapping() );
         Console.WriteLine("Done running autoScheduler");
 
         for (int i = 0; i < minuteMap.Length; i++)
@@ -359,11 +426,18 @@ public class AutoScheduler : StudynSubscriber
         {
             baseTime = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.EndTime.TimeOfDay;
             baseLimit = DateTime.Today + GlobalAppointmentData.CalendarManager.SleepTime.StartTime.TimeOfDay;
+            if (baseLimit < baseTime)
+            {
+                // if sleep time starts in the next day, then add a day to base limit
+                baseLimit = baseLimit.AddDays(1);
+            }
+            sleepTimeCheck = true;
         }
         else
         {
             baseTime = DateTime.Now;
             baseLimit = DateTime.Now;
+            sleepTimeCheck = false;
         }
     }
 
@@ -382,24 +456,24 @@ public class AutoScheduler : StudynSubscriber
             case StudynEventType.AppointmentAdd:
             case StudynEventType.AppointmentEdit:
             case StudynEventType.AppointmentDelete:
-                {
-                    run(taskEvent.Id);
-                    break;
-                }
+            {
+                run(taskEvent.Id); 
+                break;
+            }
             case StudynEventType.CompleteTask:
-                {
-                    // Console Logging just so we can see in the output something is happening
-                    Console.WriteLine("Scheduler Has CompleteTask Events!");
-                    GlobalAppointmentData.CalendarManager.TaskCompleted(taskEvent.Id);
-                    break;
-                }
+            {
+                // Console Logging just so we can see in the output something is happening
+                Console.WriteLine("Scheduler Has CompleteTask Events!");
+                GlobalAppointmentData.CalendarManager.TaskCompleted(taskEvent.Id);
+                break;
+            }
         }
     }
 
 }
 
 internal class minuteSnapshot
-{
+{   
     public Guid? id;
     public string name;
     public string from; //Where it is from. IE cretaed by autoScheduler? From calendar? ics file?
