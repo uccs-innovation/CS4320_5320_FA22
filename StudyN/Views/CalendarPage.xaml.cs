@@ -1,4 +1,5 @@
 ﻿using DevExpress.Maui.Scheduler;
+using DevExpress.Maui.Scheduler.Internal;
 using DevExpress.Web.ASPxScheduler.Forms;
 using DevExpress.XamarinAndroid.Scheduler;
 using DevExpress.XtraScheduler.Native;
@@ -7,6 +8,7 @@ using StudyN.Models; //Calls Calendar Data
 using StudyN.Utilities;
 using StudyN.ViewModels;
 using System.ComponentModel;
+using System.Globalization;
 using static StudyN.Utilities.StudynEvent;
 
 namespace StudyN.Views
@@ -78,6 +80,7 @@ namespace StudyN.Views
 
             isChildPageOpening = false;
 
+            HandelSleepTime();
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
             CalendarDataView.LoadDataForNotification(notes.ToList());
             base.OnAppearing();
@@ -107,10 +110,24 @@ namespace StudyN.Views
         {
             if(File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
             {
-                //dayView.WorkTime = (GlobalAppointmentData.CalendarManager.SleepTime.EndTime -
-                    //GlobalAppointmentData.CalendarManager.SleepTime.StartTime);
-                //weekView.WorkTime = (GlobalAppointmentData.CalendarManager.SleepTime.EndTime -
-                    //GlobalAppointmentData.CalendarManager.SleepTime.StartTime);
+                // Make the work time start at the end and end at the start of sleep time
+                string startTime = GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Hour + ":" +
+                    GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Minute + ":" +
+                    GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Second;
+                string endTime = GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Hour + ":" +
+                    GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Minute + ":" +
+                    GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Second;
+                CultureInfo workTimeCI = new CultureInfo(" - ", false);
+                TimeSpanRange startTimeRange = TimeSpanRange.Parse(startTime, workTimeCI);
+                TimeSpanRange endTimeRange = TimeSpanRange.Parse(endTime, workTimeCI);
+                dayView.WorkTime = TimeSpanRange.Union(endTimeRange, startTimeRange);
+                weekView.WorkTime = TimeSpanRange.Union(endTimeRange, startTimeRange);
+            }
+            else
+            {
+                // Make every minute work time
+                dayView.WorkTime = TimeSpanRange.Day;
+                weekView.WorkTime = TimeSpanRange.Day;
             }
         }
 
