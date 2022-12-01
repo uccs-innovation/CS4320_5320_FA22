@@ -115,27 +115,29 @@ namespace StudyN.Views
                     GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Date;
                 TimeSpan endTime = GlobalAppointmentData.CalendarManager.SleepTime.EndTime - 
                     GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Date;
-                Color workColor = Color.FromArgb("#fffff");
+                Color workColor = Color.FromArgb("#fffffe");
                 Color sleepColor = Color.FromArgb("#f1f1f1");
+                dayView.CellStyle = new DayViewCellStyle();
+                weekView.CellStyle = new DayViewCellStyle();
                 if(startTime > endTime)
                 {
                     // make sure the colors are correct
                     dayView.WorkTime = new TimeSpanRange(endTime, startTime);
-                    //dayView.CellStyle.WorkTimeBackgroundColor = workColor;
-                    //dayView.CellStyle.BackgroundColor = sleepColor;
+                    dayView.CellStyle.WorkTimeBackgroundColor = workColor;
+                    dayView.CellStyle.BackgroundColor = sleepColor;
                     weekView.WorkTime = new TimeSpanRange(endTime, startTime);
-                    //weekView.CellStyle.WorkTimeBackgroundColor = workColor;
-                    //weekView.CellStyle.BackgroundColor = sleepColor;
+                    weekView.CellStyle.WorkTimeBackgroundColor = workColor;
+                    weekView.CellStyle.BackgroundColor = sleepColor;
                 }
                 else
                 {
                     // make work time sleep time
                     dayView.WorkTime = new TimeSpanRange(startTime, endTime);
-                    //dayView.CellStyle.WorkTimeBackgroundColor = sleepColor;
-                    //dayView.CellStyle.BackgroundColor = workColor;
+                    dayView.CellStyle.WorkTimeBackgroundColor = sleepColor;
+                    dayView.CellStyle.BackgroundColor = workColor;
                     weekView.WorkTime = new TimeSpanRange(startTime, endTime);
-                    //weekView.CellStyle.WorkTimeBackgroundColor = sleepColor;
-                    //weekView.CellStyle.BackgroundColor = workColor;
+                    weekView.CellStyle.WorkTimeBackgroundColor = sleepColor;
+                    weekView.CellStyle.BackgroundColor = workColor;
                 }
                 
             }
