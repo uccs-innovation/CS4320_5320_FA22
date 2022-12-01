@@ -434,7 +434,7 @@ namespace StudyN.Models
                 //category.PickerXPosition = deserializer.PickerXPosition;
                 //category.PickerYPosition = deserializer.PickerYPosition;
                 AppointmentCategories.Add(category);
-                // if new id is higher than current catId make catId new id
+                //if new id is higher than current catId make catId new id
                 //if(deserializer.Id > catId)
                 {
                 //    catId = deserializer.Id;
