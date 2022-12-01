@@ -117,11 +117,10 @@ namespace StudyN.Views
                 string endTime = GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Hour + ":" +
                     GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Minute + ":" +
                     GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Second;
-                CultureInfo workTimeCI = new CultureInfo(" - ", false);
-                TimeSpanRange startTimeRange = TimeSpanRange.Parse(startTime, workTimeCI);
-                TimeSpanRange endTimeRange = TimeSpanRange.Parse(endTime, workTimeCI);
-                dayView.WorkTime = TimeSpanRange.Union(endTimeRange, startTimeRange);
-                weekView.WorkTime = TimeSpanRange.Union(endTimeRange, startTimeRange);
+                CultureInfo workTimeCI = new CultureInfo(" - " + startTime, false);
+                TimeSpanRange workTime = TimeSpanRange.Parse(endTime, workTimeCI);
+                dayView.WorkTime = workTime;
+                weekView.WorkTime = workTime;
             }
             else
             {
