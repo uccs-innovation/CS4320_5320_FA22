@@ -425,19 +425,19 @@ namespace StudyN.Models
             foreach (string file in categoryFileList)
             {
                 jsonFileText = File.ReadAllText(file);
-                SerializedAppointmentCategory deserializer = JsonConvert.DeserializeObject<SerializedAppointmentCategory>(jsonFileText);
+                //SerializedAppointmentCategory deserializer = JsonConvert.DeserializeObject<SerializedAppointmentCategory>(jsonFileText);
                 AppointmentCategory category = new AppointmentCategory();
-                category.Id = deserializer.Id;
-                category.UniqueId = deserializer.UniqueId;
-                category.Caption = deserializer.Caption;
-                category.Color = Color.FromArgb(deserializer.Color);
-                category.PickerXPosition = deserializer.PickerXPosition;
-                category.PickerYPosition = deserializer.PickerYPosition;
+                //category.Id = deserializer.Id;
+                //category.UniqueId = deserializer.UniqueId;
+                //category.Caption = deserializer.Caption;
+                //category.Color = Color.FromArgb(deserializer.Color);
+                //category.PickerXPosition = deserializer.PickerXPosition;
+                //category.PickerYPosition = deserializer.PickerYPosition;
                 AppointmentCategories.Add(category);
                 // if new id is higher than current catId make catId new id
-                if(deserializer.Id > catId)
+                //if(deserializer.Id > catId)
                 {
-                    catId = deserializer.Id;
+                //    catId = deserializer.Id;
                 }
             }
         }

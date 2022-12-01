@@ -11,6 +11,7 @@
              xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
              xmlns:dxdf="clr-namespace:DevExpress.Maui.DataForm;assembly=DevExpress.Maui.Editors"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             xmlns:telerik="http://schemas.telerik.com/2022/xaml/maui"
              ios:Page.UseSafeArea="true"
              x:Class="StudyN.Views.SettingsPage">
     <ContentPage.Content>
@@ -42,6 +43,8 @@
                         Text="Dark Mode"
                         Style="{StaticResource PrimaryButton}"
                         Clicked="Button_ClickedDark"/>
+                    
+                    
                 </StackLayout>
             </Frame>
 
