@@ -61,7 +61,7 @@ namespace StudyN.Views
 				GlobalAppointmentData.CalendarManager.EditCategory(this.name.Text, this.color, 
 																	this.colorPicker.PointerRingPositionXUnits, 
 																	this.colorPicker.PointerRingPositionYUnits,
-																	GlobalAppointmentData.EditCategory.Id);
+																	GlobalAppointmentData.EditCategory.UniqueId);
 				cat = GlobalAppointmentData.EditCategory;
 				GlobalAppointmentData.EditCategory = null;
 			}
@@ -87,7 +87,7 @@ namespace StudyN.Views
 		/// <param name="e"></param>
 		private async void RemoveButtonClicked(object sender, EventArgs e)
 		{
-			GlobalAppointmentData.CalendarManager.RemoveCategory(GlobalAppointmentData.EditCategory.Id);
+			GlobalAppointmentData.CalendarManager.RemoveCategory(GlobalAppointmentData.EditCategory.UniqueId);
 			GlobalAppointmentData.EditCategory= null;
 			Routing.RegisterRoute(nameof(Views.CategoriesPage), typeof(Views.CategoriesPage));
 			await Shell.Current.GoToAsync("..");
