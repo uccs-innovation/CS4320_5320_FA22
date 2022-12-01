@@ -111,16 +111,12 @@ namespace StudyN.Views
             if(File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
             {
                 // Make the work time start at the end and end at the start of sleep time
-                string startTime = GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Hour + ":" +
-                    GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Minute + ":" +
-                    GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Second;
-                string endTime = GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Hour + ":" +
-                    GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Minute + ":" +
-                    GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Second;
-                CultureInfo workTimeCI = new CultureInfo(" - " + startTime, false);
-                TimeSpanRange workTime = TimeSpanRange.Parse(endTime, workTimeCI);
-                dayView.WorkTime = workTime;
-                weekView.WorkTime = workTime;
+                TimeSpan startTime = GlobalAppointmentData.CalendarManager.SleepTime.StartTime - 
+                    GlobalAppointmentData.CalendarManager.SleepTime.StartTime.Date;
+                TimeSpan endTime = GlobalAppointmentData.CalendarManager.SleepTime.EndTime - 
+                    GlobalAppointmentData.CalendarManager.SleepTime.EndTime.Date;
+                dayView.WorkTime = new TimeSpanRange(endTime, startTime);
+                weekView.WorkTime = new TimeSpanRange(endTime, startTime);
             }
             else
             {
