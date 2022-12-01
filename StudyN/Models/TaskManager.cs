@@ -441,7 +441,7 @@ namespace StudyN.Models
             {
                 /* Check if the time span was just added
                 and saves it as the latest Task */
-                if (task.DateNow >= DateTime.Now)
+                if (task.DateNow >= latestTask.DateNow)
                 {
                     latestTask = task;
                 }
