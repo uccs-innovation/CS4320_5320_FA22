@@ -78,13 +78,22 @@ namespace StudyN.Models
 
         }
 
-       
+
+
+        public void TaskComplete(CalendarTask task)
+        {
+            task.Completed = !task.Completed;
+            CompletedTasks.Add(task);
+            CalendarTasks.Remove(task);
+        }
 
         public ObservableCollection<CalendarTask> CalendarTasks { get; private set; }
+        private ObservableCollection<CalendarTask> CompletedTasks { get; set; }
 
         public CalendarTasksData()
         {
             CalendarTasks = new ObservableCollection<CalendarTask>();
+            CompletedTasks = new ObservableCollection<CalendarTask>();
             GenerateCalendarTaskss();
         }
     }

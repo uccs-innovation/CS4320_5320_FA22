@@ -1,16 +1,19 @@
 using DevExpress.Maui.DataGrid;
 using StudyN.Models;
 using StudyN.ViewModels;
-//using static AndroidX.Concurrent.Futures.CallbackToFutureAdapter;
+using static AndroidX.Concurrent.Futures.CallbackToFutureAdapter;
 
 namespace StudyN.Views
 {
-    //[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DisplayIntegratedCalPage : ContentPage
     {
-        public DisplayIntegratedCalPage()
+        public  DisplayIntegratedCalPage()
         {
-            InitializeComponent();
+            
+                InitializeComponent();
+            
+            
         }
 
         private void CellClicked(object sender, DataGridGestureEventArgs e)

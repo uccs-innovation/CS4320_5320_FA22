@@ -43,7 +43,7 @@ namespace StudyN.Views
             base.OnAppearing();
             ViewModel.OnAppearing();
         }
-        protected async void Submit_Button(object sender, EventArgs e)
+        public async void Submit_Button(object sender, EventArgs e)
         {
             Console.WriteLine(link);
             if (!string.IsNullOrEmpty(link))
@@ -52,6 +52,8 @@ namespace StudyN.Views
                 var content1 = client.GetStringAsync(link);
                 content = content1.Result;
                 Console.WriteLine(content1.Result);
+                await Shell.Current.GoToAsync(nameof(DisplayIntegratedCalPage));
+
             }
         }
 

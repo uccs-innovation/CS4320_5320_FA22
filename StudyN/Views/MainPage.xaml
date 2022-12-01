@@ -33,9 +33,7 @@
             <ShellContent ContentTemplate="{DataTemplate local:AboutUs}" />
         </Tab>
         
-        <Tab Title="Display Integrated Calendar" Icon="grid">
-            <ShellContent ContentTemplate="{DataTemplate local:DisplayIntegratedCalPage}" />
-        </Tab>
+        
         <ShellContent Route="HomePage">
             <local:HomePage/>
         </ShellContent>
