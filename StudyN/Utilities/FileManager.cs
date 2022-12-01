@@ -62,11 +62,11 @@ namespace StudyN.Utilities
             {
                 SleepTimeChanged();
             }
-            else if (taskEvent.EventType == StudynEventType.AppointmentAdd)
+            /*else if (taskEvent.EventType == StudynEventType.AppointmentAdd)
             {
                 ApptAdded(taskEvent.Id);
                 return;
-            }
+            }*/
         }
 
         //This function will take a given task and save it to a new file
@@ -251,7 +251,7 @@ namespace StudyN.Utilities
         public static string[] LoadApptFileNames()
         {
             string[] files = { };
-            if (Directory.Exists(APPT_DIR))
+           /*if (Directory.Exists(APPT_DIR))
             {
                 Console.WriteLine("file:");
                 Console.WriteLine("file:");
@@ -265,7 +265,7 @@ namespace StudyN.Utilities
             {
                 Console.WriteLine("file:");
                 Console.WriteLine(file);
-            }
+            }*/
             return files;
         }
 
