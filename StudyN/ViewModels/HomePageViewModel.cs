@@ -12,9 +12,26 @@ namespace StudyN.ViewModels
         public ObservableCollection<TaskItem> TaskList { get => GlobalTaskData.TaskManager.TaskList; }
         public ObservableCollection<Appointment> ApptList { get => GlobalAppointmentData.CalendarManager.Appointments; }
 
+
         public HomePageViewModel()
         {
             
+        }
+
+        public void GetDailyList()
+        {
+            foreach (Appointment app in ApptList.ToList())
+            {
+                Console.WriteLine(app.Subject);
+                Console.WriteLine(app.End.Date.ToString());
+                Console.WriteLine(DateTime.Now.Date.ToString());
+                Console.WriteLine(app.End.Date.ToString() != DateTime.Now.Date.ToString());
+                if (app.End.Date.ToString() != DateTime.Now.Date.ToString())
+                {
+                    ApptList.Remove(app);
+                }
+            }
+
         }
 
         protected void RaisePropertyChanged(string name)
@@ -24,7 +41,7 @@ namespace StudyN.ViewModels
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
+           
         }
-
     }
 }

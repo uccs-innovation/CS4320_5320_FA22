@@ -6,25 +6,25 @@
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
              xmlns:ViewModels="clr-namespace:StudyN.ViewModels"
              xmlns:local="clr-namespace:StudyN.Views"
-             Title="My Day"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             Title="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM d, yyyy}'}"
              IconImageSource="grid"
              x:Class="StudyN.Views.HomePage">
     <!-- Binding Context -->
     <ContentPage.BindingContext>
         <ViewModels:HomePageViewModel />
     </ContentPage.BindingContext>
-    
-    
-    <ContentPage.ToolbarItems>
-       
-    </ContentPage.ToolbarItems>
 
-    <StackLayout x:Name="ParentStack" Orientation="Vertical" Spacing="0">
-        <ListView ItemsSource="{Binding TaskList}">
+
+    <ContentPage.ToolbarItems>
+
+    </ContentPage.ToolbarItems>
+    <ListView ItemsSource="{Binding ApptList}">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>
-                    <Grid Padding="10">
+                    <Grid Padding="5"
+                          >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -33,47 +33,30 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        
                         <Label Grid.Column="1"
-                           Text="{Binding Name}"
-                           FontAttributes="Bold" />
+                           Text="{Binding Subject}"
+                           FontAttributes="Bold"/>
+                        <Label
+                            Grid.Row="1"
+                           Grid.Column="1"
+                            FontAttributes="Italic"
+                           VerticalOptions="End">
+
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0:h\:mm tt} - {1:h\:mm tt} ">
+                                    <Binding Path="Start" />
+                                    <Binding Path="End" />
+
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+
 
                     </Grid>
                 </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>
-        </ListView>
+    </ListView>
 
-    <!-- DataGrid -->
-    <dxg:DataGridView x:Name="Grid"      
-                      ItemsSource="{Binding ApptList}"
-                      ColumnHeaderHeight="0">
-        
-        <!--Set the Columns to use.-->
-        <dxg:DataGridView.Columns>
-            <dxg:TextColumn FieldName="Subject" Caption="" IsGrouped="True"/>
-            <dxg:TextColumn FieldName="Subject" Caption="Work on " />
-            <dxg:DateColumn FieldName="Start" Caption="Due" DisplayFormat="ddd, h:mm tt" />
-        </dxg:DataGridView.Columns>
-        <!--Customize the appearance of group row.-->
-        <dxg:DataGridView.GroupRowStyle>
-            <dxg:GroupRowStyle FontSize="16" />
-        </dxg:DataGridView.GroupRowStyle>
-        <!--Customize the appearance of grid cells.-->
-        <dxg:DataGridView.CellStyle>
-            <dxg:CellStyle Padding="10" FontSize="24"/>
-        </dxg:DataGridView.CellStyle>
-        <!--Customize the appearance of column headers.-->
-        <dxg:DataGridView.ColumnHeaderStyle>
-            <dxg:ColumnHeaderStyle BackgroundColor="#EFEFEF" FontAttributes="Bold" />
-        </dxg:DataGridView.ColumnHeaderStyle>
-        <dxg:DataGridView.TotalSummaries>
-            <dxg:GridColumnSummary FieldName="Percent" Type="Custom" 
-                                   DisplayFormat="Total Completion: {0}%"/>
-        </dxg:DataGridView.TotalSummaries>
-        <dxg:DataGridView.TotalSummaryStyle>
-            <dxg:TotalSummaryStyle FontSize="16"/>
-        </dxg:DataGridView.TotalSummaryStyle>
-    </dxg:DataGridView>
-    </StackLayout>
+    
 </ContentPage>
