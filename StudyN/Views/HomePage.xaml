@@ -27,7 +27,8 @@
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
             <dxg:TextColumn FieldName="Subject" Caption="" IsGrouped="True"/>
-            <dxg:DateColumn FieldName="Start" Caption="Due" DisplayFormat="h:mm tt"/>
+            <dxg:TextColumn FieldName="Subject" Caption="Work on " />
+            <dxg:DateColumn FieldName="Start" Caption="Due" DisplayFormat="h:mm tt" />
         </dxg:DataGridView.Columns>
         <!--Customize the appearance of group row.-->
         <dxg:DataGridView.GroupRowStyle>
