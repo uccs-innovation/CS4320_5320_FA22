@@ -217,7 +217,7 @@ namespace StudyN.Views
                     {
                         int room = rnd.Next(1000, 2000);
                         CalendarManager calendarManager = new CalendarManager();
-                        calendarManager.CreateAppointment(id, name, start, duration, room);
+                      //  calendarManager.CreateAppointment(id, name, start, duration, room);
                         start = new DateTime();
                         end = new DateTime();
                         duration = new TimeSpan();
