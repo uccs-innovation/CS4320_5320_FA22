@@ -26,7 +26,7 @@
         <Tab Title="Categories" Icon="popup">
             <ShellContent ContentTemplate="{DataTemplate local:CategoriesPage}"/>
         </Tab>
-        <Tab Title="Settings" Icon="info">
+        <Tab Title="Settings" Icon="settings">
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
         <Tab Title="About us" Icon="info">

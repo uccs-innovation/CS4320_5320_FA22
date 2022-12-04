@@ -8,7 +8,6 @@ namespace StudyN.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SettingsPage : ContentPage
     {
-        string dirString = "";
         public SettingsPage()
         {
             InitializeComponent();
@@ -23,16 +22,6 @@ namespace StudyN.Views
                 mergedDictionaries.Clear();
                 mergedDictionaries.Add(new Dictionary2());
             }
-        }
-
-        private void Entry_DirPath(object sender, TextChangedEventArgs e)
-        {
-            dirString = e.NewTextValue;
-        }
-
-        private void Button_ClickedLoad(object sender, EventArgs e)
-        {
-            GlobalTaskData.TaskManager.LoadFilesIntoListsTest(dirString);
         }
 
         private void Button_ClickedLight(object sender, EventArgs e)
