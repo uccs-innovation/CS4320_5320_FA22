@@ -280,7 +280,6 @@ namespace StudyN.Models
         /// <param name="category"></param>
         public void AutoGenCategoryPalette(AppointmentCategory category)
         {
-            //category.Color = Color.FromArgb("#000000");
             category.PickerXPosition = rnd.NextDouble();
             category.PickerYPosition = rnd.NextDouble();
             // create a color picker like the one on the add category page
