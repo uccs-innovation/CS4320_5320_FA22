@@ -41,11 +41,11 @@ namespace StudyN.Models
                 
                 TimeSpan difference = this.taskitemtime.stop - this.taskitemtime.start;
                 this.taskitemtime.span = difference;
-                taskitem.CompletionProgress += GlobalTaskData.TaskManager.SumTimes(difference.Hours, difference.Minutes);
+                taskitem.TimeWorked += GlobalTaskData.TaskManager.SumTimes(difference.Hours, difference.Minutes);
                 // make sure minutes don't go above 60
-                if (taskitem.GetCompletionProgressMinutes() >= 60)
+                if (taskitem.GetMinutesWorked() >= 60)
                 {
-                    taskitem.CompletionProgress = GlobalTaskData.TaskManager.SumTimes((int)taskitem.CompletionProgress, taskitem.GetCompletionProgressMinutes());
+                    taskitem.TimeWorked = GlobalTaskData.TaskManager.SumTimes((int)taskitem.TimeWorked, taskitem.GetMinutesWorked());
                 }
                 AddNewTimeTaskItemListOfTimes();
 
@@ -55,8 +55,8 @@ namespace StudyN.Models
                                                     taskitem.Description,
                                                     taskitem.DueTime,
                                                     taskitem.Priority,
-                                                    taskitem.CompletionProgress,
-                                                    taskitem.TotalTimeNeeded,
+                                                    taskitem.TimeWorked,
+                                                    taskitem.TimeEstimated,
                                                     taskitem.TimeList);
                 this.TaskidBeingTimed = Guid.Empty;
             } catch(NullReferenceException) {

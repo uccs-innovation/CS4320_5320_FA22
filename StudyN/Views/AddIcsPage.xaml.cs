@@ -1,4 +1,3 @@
-
 /*
  * 
  * WHAT IS HAPPENING HERE??:
@@ -18,6 +17,7 @@
 
 namespace StudyN.Views;
 
+using System.Globalization;
 using System.Net;
 using Android.Media;
 using Android.Service.Autofill;
@@ -33,8 +33,10 @@ public partial class AddIcsPage : ContentPage
     static readonly HttpClient client = new HttpClient();
 
     //initialize page
-    public AddIcsPage() {
-		InitializeComponent();	}
+    public AddIcsPage()
+    {
+        InitializeComponent();
+    }
 
     /*
      * handle submit button pushed and take in string as link
@@ -42,16 +44,13 @@ public partial class AddIcsPage : ContentPage
      * if successful, run to class to convert massive ass string to appointments
      * else, jump ship
     */
-	private async void Submit_Button(object sender, EventArgs e) { 
+    private async void Submit_Button(object sender, EventArgs e)
+    {
         Console.WriteLine(link);
-        if (!string.IsNullOrEmpty(link)) {
-            try {
-                //var content = client.GetStringAsync(link);
-                //Result = content.Result;
-
-                //Uri uri = new Uri(link);
-                //await Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
-
+        if (!string.IsNullOrEmpty(link))
+        {
+            try
+            {
                 //convert string in link to https ping, and return response back to a string
                 using HttpResponseMessage response = await client.GetAsync(link);
                 response.EnsureSuccessStatusCode();
@@ -61,31 +60,49 @@ public partial class AddIcsPage : ContentPage
                 //cal class to convert
                 GetAppointFromString convert = new GetAppointFromString(responseBody);
 
-                //go to calanders page to show off new appointments
-                //await Shell.Current.GoToAsync(nameof(CalendarPage));
+                // Tell user import was complete
+                await DisplayAlert("Import Complete",
+                    "Calendar successfully imported.",
+                    "Ok");
             }
-            catch (HttpRequestException ex) {
+            catch (Exception ex)
+            {
                 //what went wrong
                 Console.WriteLine("\nException Caught!\n");
                 Console.WriteLine("Message :{0} ", ex.Message);
 
-                //jump ship (so no breaky)
-                await Shell.Current.GoToAsync(nameof(SettingsPage));
+                // Tell user link was invalid
+                await DisplayAlert("Unable to Import",
+                    "Entered link was invalid. \n" +
+                    "Please enter a valid link.",
+                    "Ok");
             }
+        }
+        else
+        {
+            // Tell user to enter a link
+            await DisplayAlert("Unable to Import",
+                    "Please enter a valid link.",
+                    "Ok");
         }
     }
 
     //this takes in the string into a string
-    private void Entry_TextChanged(object sender, TextChangedEventArgs e) {
-        link = e.NewTextValue;    }
+    private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        link = e.NewTextValue;
+    }
 
-    private void Entry_DirPath(object sender, TextChangedEventArgs e) {
-        dirString = e.NewTextValue;    }
+    private void Entry_DirPath(object sender, TextChangedEventArgs e)
+    {
+        dirString = e.NewTextValue;
+    }
 
     static Random rnd = new Random();
 
     //break massive string to individual appointments
-    class GetAppointFromString {
+    class GetAppointFromString
+    {
         private string line;
         private int id;
         private string name;
@@ -93,12 +110,12 @@ public partial class AddIcsPage : ContentPage
         private DateTime end = new DateTime();
         private DateTime zdate = new DateTime();
         private TimeSpan duration = new TimeSpan();
-        //private TimeSpan duration;
-
 
         //constructor that takes string and calls convert to break it
-        public GetAppointFromString(string r) {
-            convert(r);        }
+        public GetAppointFromString(string r)
+        {
+            convert(r);
+        }
 
         /*
          * parse through string to find event start
@@ -136,89 +153,59 @@ public partial class AddIcsPage : ContentPage
                 }
                 if (line.Contains("DTSTART"))
                 {
-                    //set some variables
-                    int year = 0;
-                    int month = 0;
-                    int day = 0;
-                    int hour = 0;
-                    int minute = 0;
-                    int second = 0;
-
                     //find what kind of dstart
                     int last = line.LastIndexOf(":");
                     line = line.Substring(last + 1);
 
                     //get date
-                    string temp = line.Substring(0, 4);
-                    year = Convert.ToInt32(temp);
-                    line = line.Substring(4);
-                    temp = line.Substring(0, 2);
-                    month = Convert.ToInt32(temp);
-                    line = line.Substring(2);
-                    temp = line.Substring(0, 2);
-                    day = Convert.ToInt32(temp);
+                    string date = line.Substring(0, 8);
 
-                    if (line.Contains('T'))
+                    if (line.Contains('Z'))
                     {
-                        line = line.Substring(3);
-
                         //get time
-                        temp = line.Substring(0, 2);
-                        hour = Convert.ToInt32(temp);
-                        line = line.Substring(2);
-                        temp = line.Substring(0, 2);
-                        minute = Convert.ToInt32(temp);
-                        line = line.Substring(2);
-                        temp = line.Substring(0, 2);
-                        second = Convert.ToInt32(temp);
+                        string time = line.Substring(10, 6);
+                        if (time.Contains('Z'))
+                        {
+                            time = "0" + line.Substring(10, 5);
+                        }
 
                         //insert into datetime
-                        start = new DateTime(year, month, day, hour, minute, second);
+                        DateTime.TryParseExact(date + time, "yyyyMMddHHmmss", null, DateTimeStyles.None, out start);
                     }
                     else
                     {
                         //insert into datetime
-                        start = new DateTime(year, month, day);
+                        DateTime.TryParseExact(date, "yyyyMMdd", null, DateTimeStyles.None, out start);
                     }
                 }
 
                 if (line.Contains("DTEND"))
                 {
-                    //set some variables
-                    int year = 0;
-                    int month = 0;
-                    int day = 0;
-                    int hour = 0;
-                    int minute = 0;
-                    int second = 0;
-
                     int last = line.LastIndexOf(":");
-                    line = line.Substring(last);
+                    line = line.Substring(last + 1);
+
+                    Console.WriteLine(line);
 
                     //get date
-                    string temp = line.Substring(0, 4);
-                    year = Convert.ToInt32(temp);
-                    line = line.Substring(4);
-                    temp = line.Substring(0, 2);
-                    month = Convert.ToInt32(temp);
-                    line = line.Substring(2);
-                    temp = line.Substring(0, 2);
-                    day = Convert.ToInt32(temp);
+                    string date = line.Substring(0, 8);
 
-                    line = line.Substring(3);
+                    if (line.Contains('Z'))
+                    {
+                        //get time
+                        string time = line.Substring(10, 6);
+                        if (time.Contains('Z'))
+                        {
+                            time = "0" + line.Substring(10, 5);
+                        }
 
-                    //get time
-                    temp = line.Substring(0, 2);
-                    hour = Convert.ToInt32(temp);
-                    line = line.Substring(2);
-                    temp = line.Substring(0, 2);
-                    minute = Convert.ToInt32(temp);
-                    line = line.Substring(2);
-                    temp = line.Substring(0, 2);
-                    second = Convert.ToInt32(temp);
-
-                    //insert into datetime
-                    end = new DateTime(year, month, day, hour, minute, second);
+                        //insert into datetime
+                        DateTime.TryParseExact(date + time, "yyyyMMddHHmmss", null, DateTimeStyles.None, out end);
+                    }
+                    else
+                    {
+                        //insert into datetime
+                        DateTime.TryParseExact(date, "yyyyMMdd", null, DateTimeStyles.None, out end);
+                    }
                 }
 
                 //set duration, to 0 if no end date
@@ -227,13 +214,17 @@ public partial class AddIcsPage : ContentPage
 
                 if (line.Contains("END:VEVENT"))
                 {
-                    int room = rnd.Next(1000, 2000);
+                    int room = 0;
+                    if (id == 0)
+                    {
+                        id = rnd.Next(1000, 999999);  //random id if not given a uid
+                    }
                     CalendarManager calendarManager = new CalendarManager();
                     Guid taskId = new Guid();
                     calendarManager.CreateAppointment(id, name, start, duration, room, taskId);
+                    id = 0;
                     start = new DateTime();
                     end = new DateTime();
-                    duration = new TimeSpan();
                 }
 
                 //read another line
@@ -244,7 +235,7 @@ public partial class AddIcsPage : ContentPage
 
     async private void Browse_Clicked(object sender, EventArgs e)
     {
-        if (!string.IsNullOrEmpty(dirString))
+        try
         {
             string jsonfiletext;
             string[] file = FileManager.loadFile(dirString);
@@ -256,6 +247,11 @@ public partial class AddIcsPage : ContentPage
 
                 //cal class to convert
                 GetAppointFromString convert = new GetAppointFromString(jsonfiletext);
+
+                // Tell user file was file
+                await DisplayAlert("Import Complete",
+                    "File was successfully imported.",
+                    "Ok");
             }
             else
             {
@@ -263,9 +259,18 @@ public partial class AddIcsPage : ContentPage
                 Console.WriteLine("\nException Caught!\n");
                 Console.WriteLine("No files to be read in matching input");
 
-                //jump ship (so no breaky)
-                await Shell.Current.GoToAsync(nameof(SettingsPage));
+                // Tell user file was not found
+                await DisplayAlert("Unable to Import",
+                    "File was not found at that directory.",
+                    "Ok");
             }
+        }
+        catch
+        {
+            // Tell user dir was not inputted
+            await DisplayAlert("Unable to Import",
+                "Please enter a valid directory.",
+                "Ok");
         }
     }
 }
