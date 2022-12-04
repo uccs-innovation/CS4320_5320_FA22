@@ -16,8 +16,7 @@ using DevExpress.Data.Mask;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-
-
+using Maui.ColorPicker;
 
 namespace StudyN.Models
 {
@@ -281,9 +280,18 @@ namespace StudyN.Models
         /// <param name="category"></param>
         public void AutoGenCategoryPalette(AppointmentCategory category)
         {
-            category.Color = Color.FromArgb("#000000");
-            category.PickerXPosition = 0.98f;
-            category.PickerYPosition = 0.98f;
+            //category.Color = Color.FromArgb("#000000");
+            category.PickerXPosition = rnd.NextDouble();
+            category.PickerYPosition = rnd.NextDouble();
+            // create a color picker like the one on the add category page
+            ColorPicker colorPicker = new ColorPicker();
+            colorPicker.ColorFlowDirection = ColorFlowDirection.Horizontal;
+            colorPicker.ColorSpectrumStyle = ColorSpectrumStyle.TintToHueToShadeStyle;
+            colorPicker.PointerRingBorderUnits = 0.3;
+            colorPicker.PointerRingDiameterUnits = 0.7;
+            colorPicker.PointerRingPositionXUnits = category.PickerXPosition;
+            colorPicker.PointerRingPositionYUnits = category.PickerYPosition;
+            category.Color = colorPicker.PickedColor;
         }
 
         /// <summary>
