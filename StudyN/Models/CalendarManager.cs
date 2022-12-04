@@ -276,6 +276,17 @@ namespace StudyN.Models
         }
 
         /// <summary>
+        /// This function gives the auto generated categories their color
+        /// </summary>
+        /// <param name="category"></param>
+        public void AutoGenCategoryPalette(AppointmentCategory category)
+        {
+            category.Color = Color.FromArgb("#000000");
+            category.PickerXPosition = 0.98f;
+            category.PickerYPosition = 0.98f;
+        }
+
+        /// <summary>
         /// Save sleep time
         /// </summary>
         /// <param name="startTime"></param>
