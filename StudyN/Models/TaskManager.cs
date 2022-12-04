@@ -35,6 +35,7 @@ namespace StudyN.Models
                                             priority,
                                             CompletionProgress,
                                             TotalTimeNeeded,
+                                            DateTime.Now,
                                             recurId);
 
             //This will add the tasks to the list
@@ -418,7 +419,6 @@ namespace StudyN.Models
 
         public ObservableCollection<TaskItem> TaskList { get; private set; }
         private ObservableCollection<TaskItem> CompletedTasks { get; set; }
-
         public ObservableCollection<TaskItem> TaskListTest { get; private set; }
 
         //This constructor will create the normal TaskList and the list for
@@ -428,6 +428,26 @@ namespace StudyN.Models
             TaskList = new ObservableCollection<TaskItem>();
             CompletedTasks = new ObservableCollection<TaskItem>();
             TaskListTest = new ObservableCollection<TaskItem>();
+        } 
+
+        //Method checks what task was added to the list last
+        public TaskItem GetLastTask()
+        {
+            //Set to arbitrary task
+            TaskItem latestTask = TaskList.Last();
+
+            //Checking each item in the current task list
+            foreach (TaskItem task in TaskList)
+            {
+                /* Check if the time span was just added
+                and saves it as the latest Task */
+                if (task.DateNow >= latestTask.DateNow)
+                {
+                    latestTask = task;
+                }
+            }
+            //return latest added task
+            return latestTask;
         }
 
     }

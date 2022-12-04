@@ -112,7 +112,9 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
-            <dxsch:DayView x:Name="dayView"                           
+            <dxsch:DayView x:Name="dayView"
+                           WorkDays="EveryDay"
+                           WorkTime="0:00:00 - 23:59:59"
                            Tap="OnCalendarTap"
                            LongPress="OnCalendarHold">
                 <dxsch:DayView.DataStorage>
@@ -153,6 +155,8 @@
             </dxsch:DayView>
             
             <dxsch:WeekView x:Name="weekView"
+                            WorkDays="EveryDay"
+                            WorkTime="0:00:00 - 23:59:59"
                             Tap="OnCalendarTap"
                             LongPress="OnCalendarHold">
             </dxsch:WeekView>

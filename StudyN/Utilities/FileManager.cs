@@ -164,7 +164,8 @@ namespace StudyN.Utilities
             var indent = new JsonSerializerOptions { WriteIndented = true };
             AppointmentCategory category = GlobalAppointmentData.CalendarManager.GetAppointmentCategory(catId);
             SerializedAppointmentCategory serializer = new SerializedAppointmentCategory();
-            serializer.Id = catId;
+            serializer.Id = category.Id;
+            serializer.UniqueId = catId;
             serializer.Caption = category.Caption;
             serializer.Color = category.Color.ToHex();
             serializer.PickerXPosition = category.PickerXPosition;
