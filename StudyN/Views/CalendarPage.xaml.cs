@@ -24,7 +24,7 @@ namespace StudyN.Views
         readonly CalendarDataView _calendarDataView;
         public CalendarPage()
         {
-            InitializeComponent();
+            InitializeComponent(); 
             ViewModel = new CalendarViewModel();
             BindingContext = _calendarDataView = new CalendarDataView(); //Use to pull data of CalendarData under Models
             dailyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 255);
@@ -35,6 +35,17 @@ namespace StudyN.Views
             // Reuse data storage between all the views
             weekView.DataStorage = dayView.DataStorage;
             monthView.DataStorage = dayView.DataStorage;
+
+            // set Calendar properties                        
+            dayView.ShowWorkTimeOnly = false; // Visible Time can only be set if this is false
+            weekView.ShowWorkTimeOnly = false;
+
+            //dayView.VisibleTime = TimeSpanRange.Day;            
+            TimeSpanRange visibleTimeSpanRange = new TimeSpanRange(TimeSpan.FromHours(4), TimeSpan.FromHours(18)); // show 4am to 6pm
+            dayView.VisibleTime = visibleTimeSpanRange;
+            weekView.VisibleTime = TimeSpanRange.Day;
+            
+            Console.WriteLine("***** Just set dayView.VisibleTime = " + dayView.VisibleTime.ToString());
         }
 
         CalendarViewModel ViewModel { get; }
@@ -84,6 +95,10 @@ namespace StudyN.Views
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
             CalendarDataView.LoadDataForNotification(notes.ToList());
             base.OnAppearing();
+            Console.WriteLine("*****dayView.VisibleTime=" + dayView.VisibleTime.ToString());            
+            Console.WriteLine("*****dayView.ActualVisibleTime=" + dayView.ActualVisibleTime.ToString());
+            Console.WriteLine("*****dayView.WorkTime=" + dayView.WorkTime.ToString());
+            Console.WriteLine("*****dayView.ShowWorkTimeOnly=" + dayView.ShowWorkTimeOnly.ToString());
         }
 
         private void ShowAppointmentEditPage(AppointmentItem appointment)
@@ -107,7 +122,7 @@ namespace StudyN.Views
         }
 
         private void HandelSleepTime()
-        {
+        {            
             if(File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
             {
                 // Make the work time start at the end and end at the start of sleep time
@@ -139,7 +154,7 @@ namespace StudyN.Views
                     weekView.CellStyle.WorkTimeBackgroundColor = sleepColor;
                     weekView.CellStyle.BackgroundColor = workColor;
                 }
-                
+               
             }
             else
             {
