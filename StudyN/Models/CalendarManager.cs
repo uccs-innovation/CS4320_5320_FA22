@@ -442,20 +442,26 @@ namespace StudyN.Models
             string[] categoryFileList = FileManager.LoadCategoryFileNames();
             foreach (string file in categoryFileList)
             {
-                jsonFileText = File.ReadAllText(file);
-                SerializedAppointmentCategory deserializer = JsonConvert.DeserializeObject<SerializedAppointmentCategory>(jsonFileText);
-                AppointmentCategory category = new AppointmentCategory();
-                category.Id = deserializer.Id;
-                category.UniqueId = deserializer.UniqueId;
-                category.Caption = deserializer.Caption;
-                category.Color = Color.FromArgb(deserializer.Color);
-                category.PickerXPosition = deserializer.PickerXPosition;
-                category.PickerYPosition = deserializer.PickerYPosition;
-                AppointmentCategories.Add(category);
-                // if new id is higher than current catId make catId new id
-                if(deserializer.Id > catId)
+                try
                 {
-                    catId = deserializer.Id;
+                    jsonFileText = File.ReadAllText(file);
+                    SerializedAppointmentCategory deserializer = JsonConvert.DeserializeObject<SerializedAppointmentCategory>(jsonFileText);
+                    AppointmentCategory category = new AppointmentCategory();
+                    category.Id = deserializer.Id;
+                    category.UniqueId = deserializer.UniqueId;
+                    category.Caption = deserializer.Caption;
+                    category.Color = Color.FromArgb(deserializer.Color);
+                    category.PickerXPosition = deserializer.PickerXPosition;
+                    category.PickerYPosition = deserializer.PickerYPosition;
+                    AppointmentCategories.Add(category);
+                    // if new id is higher than current catId make catId new id
+                    if (deserializer.Id > catId)
+                    {
+                        catId = deserializer.Id;
+                    }
+                } catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             }
         }
