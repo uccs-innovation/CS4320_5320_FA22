@@ -84,7 +84,8 @@ public class AutoScheduler : StudynSubscriber
                 {
                     minuteMap[i].id = appt.UniqueId; 
                     minuteMap[i].from = "appts";
-                    minuteMap[i].name = appt.Subject; 
+                    minuteMap[i].name = appt.Subject;
+                    minuteMap[i].labelId = (int)appt.LabelId;
                 }
             }
         }
@@ -128,7 +129,7 @@ public class AutoScheduler : StudynSubscriber
                 if( !mapConflict(offset, offset + blockContainer.blockSize) ) 
                 {
                     //match every minute in this span to the block container (aka task). Then create the task block
-                    for(int i = offset; i < offset + blockContainer.blockSize; i++) { minuteMap[i].id = blockContainer.task.TaskId; minuteMap[i].from = "autoScheduler"; minuteMap[i].name = blockContainer.task.Name; }
+                    for(int i = offset; i < offset + blockContainer.blockSize; i++) { minuteMap[i].id = blockContainer.task.TaskId; minuteMap[i].from = "autoScheduler"; minuteMap[i].name = blockContainer.task.Name; minuteMap[i].labelId = blockContainer.task.Category; }
 
                     blockContainer.blocks[ blockContainer.mappedBlocks ] = new Block(blockContainer.task.TaskId, new Guid(), offset, offset + blockContainer.blockSize);
                     blockContainer.mappedBlocks++;
@@ -155,6 +156,7 @@ public class AutoScheduler : StudynSubscriber
                     minuteMap[offset].id = blockContainer.task.TaskId;
                     minuteMap[offset].from = "autoScheduler";
                     minuteMap[offset].name = blockContainer.task.Name;
+                    minuteMap[offset].labelId = blockContainer.task.Category;
                     blockContainer.remainder = blockContainer.remainder - 1;
                 }
                 offset--;
@@ -194,6 +196,7 @@ public class AutoScheduler : StudynSubscriber
                     minuteMap[i].id = id;
                     minuteMap[i].from = "sleeptime";
                     minuteMap[i].name = "Sleep";
+                    minuteMap[i].labelId = 0;
                 }
             }
             if (!overflowing) { 
@@ -217,6 +220,7 @@ public class AutoScheduler : StudynSubscriber
                     minuteMap[j].id = null;
                     minuteMap[j].from = "";
                     minuteMap[j].name = "";
+                    minuteMap[j].labelId = 0;
                 }
 
                 int offset = 0;
@@ -268,6 +272,7 @@ public class AutoScheduler : StudynSubscriber
                     minuteMap[j].id = bc.task.TaskId;
                     minuteMap[j].from = "autoScheduler";
                     minuteMap[j].name = bc.task.Name;
+                    minuteMap[j].labelId = bc.task.Category;
                 }
             }
         }
@@ -302,6 +307,7 @@ public class AutoScheduler : StudynSubscriber
                     appt.Start = baseTime.AddMinutes(guidStart);
                     appt.End = baseTime.AddMinutes(i - 1); //The previous index was the last index with the previous guid
                     appt.Subject = minuteMap[i - 1].name;
+                    appt.LabelId = minuteMap[i - 1].labelId;
                     appt.UniqueId = (Guid)minuteMap[i - 1].id;
                     appt.From = minuteMap[i - 1].from;
                     coalescedAppointments.Add(appt);
@@ -326,7 +332,7 @@ public class AutoScheduler : StudynSubscriber
                 {
                     Console.WriteLine("appt.Start: " + appt.Start.ToString());
                     Console.WriteLine("appt.End: " + appt.End.ToString());
-                    GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+                    GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, (int)appt.LabelId, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
                 }
             }
         }
@@ -476,8 +482,9 @@ internal class minuteSnapshot
 {   
     public Guid? id;
     public string name;
+    public int labelId;
     public string from; //Where it is from. IE cretaed by autoScheduler? From calendar? ics file?
-    public minuteSnapshot() { id = null; from = ""; name = ""; }
+    public minuteSnapshot() { id = null; from = ""; name = ""; labelId = 0; }
 }
 
 internal class BlockContainer

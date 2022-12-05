@@ -140,6 +140,7 @@ namespace StudyN.Models
                                             string appointmentTitle,
                                             DateTime start,
                                             TimeSpan duration,
+                                            int label,
                                             int room,
                                             Guid taskId, //recurId = new Guid(),
                                             string from = "",
@@ -153,7 +154,7 @@ namespace StudyN.Models
                 Start = start,
                 End = start.Add(duration),
                 Subject = appointmentTitle,
-                LabelId = AppointmentCategories[rnd.Next(0, AppointmentCategories.Count - 1)].Id,
+                LabelId = label,
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
                 Description = string.Empty,
@@ -281,10 +282,19 @@ namespace StudyN.Models
                     // go through the appointments with the category
                     foreach (Appointment appointment in Appointments)
                     {
-                        if (appointment.LabelId == category)
+                        if ((int)appointment.LabelId == category.Id)
                         {
                             // Make appointment uncategorized
                             appointment.LabelId = Uncategorized.Id;
+                        }
+                    }
+                    // go through the tasks with the category
+                    foreach (TaskItem task in GlobalTaskData.TaskManager.TaskList)
+                    {
+                        if (task.Category == category.Id)
+                        {
+                            // Make task uncategorized
+                            task.Category = Uncategorized.Id;
                         }
                     }
                     // Remove category
