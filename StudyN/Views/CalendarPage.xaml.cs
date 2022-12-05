@@ -40,10 +40,18 @@ namespace StudyN.Views
             dayView.ShowWorkTimeOnly = false; // Visible Time can only be set if this is false
             weekView.ShowWorkTimeOnly = false;
 
-            //dayView.VisibleTime = TimeSpanRange.Day;            
-            TimeSpanRange visibleTimeSpanRange = new TimeSpanRange(TimeSpan.FromHours(4), TimeSpan.FromHours(18)); // show 4am to 6pm
+            // dayView.VisibleTime = TimeSpanRange.Day; // this works, but time gets cut off... following is workaround
+            // NOTE from estepanek:
+            // Even after I moved the tabs to a flyout and made room at the footer area,
+            // an hour and a half of the scheduler was still cut off, so the following adds
+            // two extra hours in the TimeSpanRange for VisibleTime to compensate for that
+            // set to show 12am to 2am the next day, but some will get cut off and will
+            // only be able to scroll to approximately 12:30am
+            // This is probably due to the application header bar potentially moving the 
+            // DevExpress Scheduler down and consequently off the screen
+            TimeSpanRange visibleTimeSpanRange = new TimeSpanRange(TimeSpan.FromHours(0), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(2))); 
             dayView.VisibleTime = visibleTimeSpanRange;
-            weekView.VisibleTime = TimeSpanRange.Day;
+            weekView.VisibleTime = visibleTimeSpanRange;
             
             Console.WriteLine("***** Just set dayView.VisibleTime = " + dayView.VisibleTime.ToString());
         }
