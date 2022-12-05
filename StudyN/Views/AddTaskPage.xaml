@@ -183,7 +183,7 @@
                         Minimum="0"
                         Value="0"
                         ThumbColor="Blue"
-                        ValueChanged="HandelCategoryValueChanged"
+                        ValueChanged="HandleCategoryValueChanged"
                         x:Name="category" />
                 <Label x:Name="displayCategory"
                        Text="StudyN Time"
