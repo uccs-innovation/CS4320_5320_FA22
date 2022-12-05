@@ -274,6 +274,7 @@ public partial class AddTaskPage : ContentPage
                 this.description.Text,
                 dateTime,
                 (int)this.priority.Value,
+                0,
                 timeWorked,
                 timeEstimated);
 
@@ -307,6 +308,7 @@ public partial class AddTaskPage : ContentPage
                     this.description.Text,
                     dateTime,
                     (int)this.priority.Value,
+                    0,
                     timeWorked,
                     timeEstimated);
         }

@@ -19,6 +19,7 @@ namespace StudyN.Models
                                string description,
                                DateTime dueTime,
                                int priority,
+                               int category,
                                double timeWorked,
                                double timeEstimated,
                                Guid recurId = new Guid())
@@ -32,6 +33,7 @@ namespace StudyN.Models
             TaskItem newTask = new TaskItem(name,
                                             description,
                                             dueTime,
+                                            category,
                                             priority,
                                             timeWorked,
                                             timeEstimated,
@@ -80,6 +82,7 @@ namespace StudyN.Models
                                 string description,
                                 DateTime dueTime,
                                 int priority,
+                                int category,
                                 double timeWorked,
                                 double timeEstimated,
                                 List<TaskItemTime> TimeList = null,
@@ -98,6 +101,7 @@ namespace StudyN.Models
             task.Description = description;
             task.DueTime = dueTime;
             task.Priority = priority;
+            task.Category = category;
             task.TimeWorked = timeWorked;
             task.TimeEstimated = timeEstimated;
             task.TimeList = TimeList;
@@ -168,6 +172,7 @@ namespace StudyN.Models
                                         ParentTask.Description,
                                         dueTime,
                                         ParentTask.Priority,
+                                        ParentTask.Category,
                                         ParentTask.TimeWorked,
                                         ParentTask.TimeEstimated,
                                         ParentTask.RecurId);
@@ -197,6 +202,7 @@ namespace StudyN.Models
                                         ParentTask.Description,
                                         dueTime,
                                         ParentTask.Priority,
+                                        ParentTask.Category,
                                         ParentTask.TimeWorked,
                                         ParentTask.TimeEstimated,
                                         ParentTask.RecurId);
@@ -245,23 +251,29 @@ namespace StudyN.Models
             string[] taskfilelist = FileManager.LoadTaskFileNames();
             foreach (string file in taskfilelist)
             {
-                jsonfiletext = File.ReadAllText(file);
-                //Console.WriteLine(jsonfiletext);
-                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext); 
-                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
-                TaskList.Add(task);
+                try { 
+                    jsonfiletext = File.ReadAllText(file);
+                    //Console.WriteLine(jsonfiletext);
+                    TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext); 
+                    //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                    TaskList.Add(task);
 
-                if (task.TimeList != null)
-                {
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("Writing out task times");
-                    foreach (TaskItemTime tasktime in task.TimeList)
+                    if (task.TimeList != null)
                     {
-                        Console.WriteLine("Time Start" + tasktime.start);
-                        Console.WriteLine("TimeStop" + tasktime.stop);
-                        Console.WriteLine("Timespanned" + tasktime.span);
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("Writing out task times");
+                        foreach (TaskItemTime tasktime in task.TimeList)
+                        {
+                            Console.WriteLine("Time Start" + tasktime.start);
+                            Console.WriteLine("TimeStop" + tasktime.stop);
+                            Console.WriteLine("Timespanned" + tasktime.span);
+                        }
                     }
+                }catch (Exception ex)
+                {
+                    // when files get loaded that don't have all information needed
+                    Console.WriteLine(ex.Message);
                 }
             }
 
