@@ -16,8 +16,7 @@ using DevExpress.Data.Mask;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-
-
+using Android.Content.PM;
 
 namespace StudyN.Models
 {
@@ -100,6 +99,28 @@ namespace StudyN.Models
             }
             // else return null
             return null;
+        }
+
+        /// <summary>
+        /// Use the integer id to get index of the appointment category
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public int GetAppointmentCategoriesIdex(int id)
+        {
+            int i = 0;
+            // go through categories
+            foreach (AppointmentCategory category in AppointmentCategories)
+            {
+                // if the category is found return it's index
+                if (category.Id == id)
+                {
+                    return i;
+                }
+                i++;
+            }
+            // else return null
+            return 0;
         }
 
         void CreateAppointmentStatuses()

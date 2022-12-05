@@ -17,6 +17,7 @@ using DevExpress.Maui.DataGrid;
 public partial class AddTaskPage : ContentPage
 {
     bool editingExistingTask;
+    bool noCategories = false;
     public AddTaskPage()
     {
         InitializeComponent();
@@ -50,6 +51,7 @@ public partial class AddTaskPage : ContentPage
             SetValues();            
         }
 
+        SetCategorySliderVisible();
         SetRecurrenceComboBoxVisible();
 
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
@@ -239,6 +241,15 @@ public partial class AddTaskPage : ContentPage
         displayLabel.Text = String.Format("Priority: " + value);
     }
 
+    //This function will be used by the category slider when its value has changed to set and keep track of the new value
+    void HandleCategoryValueChanged(object sender, ValueChangedEventArgs args)
+    {
+        //Gets value from category list
+        int value = (int)args.NewValue;
+        category.ThumbColor = GlobalAppointmentData.CalendarManager.AppointmentCategories[value].Color;
+        displayCategory.Text = String.Format(GlobalAppointmentData.CalendarManager.AppointmentCategories[value].Caption);
+    }
+
     //This function will be used by the add task button to either create a new task or save the changes to an existing one
     private async void HandleAddTaskButton(object sender, EventArgs e)
     {
@@ -263,6 +274,18 @@ public partial class AddTaskPage : ContentPage
                                         time.Time.Value.Minute,
                                         time.Time.Value.Second);
 
+        //Gets the category id from category selected from slider
+        int categoryId;
+        if (!noCategories)
+        {
+            categoryId = GlobalAppointmentData.CalendarManager.AppointmentCategories[(int)this.category.Value].Id;
+        }
+        else
+        {
+            categoryId = 0;
+        }
+
+
         TaskItem task;
         //Check to see if we are currently editing or adding a task
         if (editingExistingTask)
@@ -274,7 +297,7 @@ public partial class AddTaskPage : ContentPage
                 this.description.Text,
                 dateTime,
                 (int)this.priority.Value,
-                0,
+                categoryId,
                 timeWorked,
                 timeEstimated);
 
@@ -308,7 +331,7 @@ public partial class AddTaskPage : ContentPage
                     this.description.Text,
                     dateTime,
                     (int)this.priority.Value,
-                    0,
+                    categoryId,
                     timeWorked,
                     timeEstimated);
         }
@@ -364,6 +387,16 @@ public partial class AddTaskPage : ContentPage
         this.hWorked.Value = (int)GlobalTaskData.ToEdit.TimeWorked;
         this.mWorked.Value = GlobalTaskData.ToEdit.GetMinutesWorked();
 
+        //If the category isn't uncategorized than find the index to use
+        if(GlobalTaskData.ToEdit.Category > 0)
+        {
+            this.category.Value = GlobalAppointmentData.CalendarManager.GetAppointmentCategoriesIdex(GlobalTaskData.ToEdit.Category);
+        }
+        else
+        {
+            this.category.Value = 0;
+        }
+
         if(GlobalTaskData.ToEdit.IsRecur)
         {
             reccurenceDateLayout.IsVisible = true;
@@ -407,6 +440,25 @@ public partial class AddTaskPage : ContentPage
         else
         {
             reccurenceDateLayout.IsVisible = false;
+        }
+    }
+
+    private void SetCategorySliderVisible()
+    {
+        if(GlobalAppointmentData.CalendarManager.AppointmentCategories.Count > 0)
+        {
+            // if there are categories the category slider is visible
+            category.IsVisible = true;
+            category.Maximum = GlobalAppointmentData.CalendarManager.AppointmentCategories.Count - 1;
+            category.ThumbColor = GlobalAppointmentData.CalendarManager.AppointmentCategories[(int)this.category.Value].Color;
+            displayCategory.Text = String.Format(GlobalAppointmentData.CalendarManager.AppointmentCategories[(int)this.category.Value].Caption);
+        }
+        else
+        {
+            // else the slider isn't visible
+            category.IsVisible = false;
+            displayCategory.Text = String.Format("There are no categories");
+            noCategories = true;
         }
     }
 
