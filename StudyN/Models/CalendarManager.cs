@@ -280,17 +280,9 @@ namespace StudyN.Models
         /// <param name="category"></param>
         public void AutoGenCategoryPalette(AppointmentCategory category)
         {
-            category.PickerXPosition = rnd.NextDouble();
-            category.PickerYPosition = rnd.NextDouble();
-            // create a color picker like the one on the add category page
-            ColorPicker colorPicker = new ColorPicker();
-            colorPicker.ColorFlowDirection = ColorFlowDirection.Horizontal;
-            colorPicker.ColorSpectrumStyle = ColorSpectrumStyle.TintToHueToShadeStyle;
-            colorPicker.PointerRingBorderUnits = 0.3;
-            colorPicker.PointerRingDiameterUnits = 0.7;
-            colorPicker.PointerRingPositionXUnits = category.PickerXPosition;
-            colorPicker.PointerRingPositionYUnits = category.PickerYPosition;
-            category.Color = colorPicker.PickedColor;
+            category.Color = Color.FromArgb("#000000");
+            category.PickerXPosition = 0.98;
+            category.PickerYPosition = 0.98;
         }
 
         /// <summary>
