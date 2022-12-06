@@ -75,6 +75,7 @@ namespace StudyN.Views
             private string line;
             private int id;
             private string name;
+            private int category;
             private DateTime start = new DateTime();
             private DateTime end = new DateTime();
             private DateTime zdate = new DateTime();
@@ -168,6 +169,22 @@ namespace StudyN.Views
                             //insert into datetime
                             start = new DateTime(year, month, day);
                         }
+                    }
+
+                    if (line.Contains("ORGANIZER;CN="))
+                    {
+                        // get category
+                        line = line.Substring(12);
+                        int last = line.LastIndexOf(":");
+                        int length = (last - 12) - 13;
+                        string catString = line.Substring(0, length);
+                        AppointmentCategory cat = GlobalAppointmentData.CalendarManager.AutoGenerateCategory(catString);
+                        category = cat.Id;
+                    }
+                    else
+                    {
+                        // make it uncategorized
+                        category = 0;
                     }
 
                     if (line.Contains("DTEND"))
