@@ -18,6 +18,8 @@ public partial class AddTaskPage : ContentPage
 {
     bool editingExistingTask;
     bool noCategories = false;
+    // localized category list for category slider
+    ObservableCollection<AppointmentCategory> appointmentCategories { get => GlobalAppointmentData.CalendarManager.AppointmentCategories; }
     public AddTaskPage()
     {
         InitializeComponent();
@@ -246,8 +248,8 @@ public partial class AddTaskPage : ContentPage
     {
         //Gets value from category list
         int value = (int)args.NewValue;
-        category.ThumbColor = GlobalAppointmentData.CalendarManager.AppointmentCategories[value].Color;
-        displayCategory.Text = String.Format(GlobalAppointmentData.CalendarManager.AppointmentCategories[value].Caption);
+        category.ThumbColor = appointmentCategories[value].Color;
+        displayCategory.Text = String.Format(appointmentCategories[value].Caption);
     }
 
     //This function will be used by the add task button to either create a new task or save the changes to an existing one
@@ -278,7 +280,7 @@ public partial class AddTaskPage : ContentPage
         int categoryId;
         if (!noCategories)
         {
-            categoryId = GlobalAppointmentData.CalendarManager.AppointmentCategories[(int)this.category.Value].Id;
+            categoryId = appointmentCategories[(int)this.category.Value].Id;
         }
         else
         {
@@ -445,13 +447,13 @@ public partial class AddTaskPage : ContentPage
 
     private void SetCategorySliderVisible()
     {
-        if(GlobalAppointmentData.CalendarManager.AppointmentCategories.Count > 0)
+        if(appointmentCategories.Count > 0)
         {
             // if there are categories the category slider is visible
             category.IsVisible = true;
-            category.Maximum = GlobalAppointmentData.CalendarManager.AppointmentCategories.Count - 1;
-            category.ThumbColor = GlobalAppointmentData.CalendarManager.AppointmentCategories[(int)this.category.Value].Color;
-            displayCategory.Text = String.Format(GlobalAppointmentData.CalendarManager.AppointmentCategories[(int)this.category.Value].Caption);
+            category.Maximum = appointmentCategories.Count - 1;
+            category.ThumbColor = appointmentCategories[(int)this.category.Value].Color;
+            displayCategory.Text = String.Format(appointmentCategories[(int)this.category.Value].Caption);
         }
         else
         {
