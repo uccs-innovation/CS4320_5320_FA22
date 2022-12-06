@@ -275,6 +275,33 @@ namespace StudyN.Models
         }
 
         /// <summary>
+        /// Auto generates a category from a string for imported files
+        /// </summary>
+        /// <param name="caption"></param>
+        /// <returns></returns>
+        public AppointmentCategory AutoGenerateCategory(string caption)
+        {
+            // if the category exists return that category instead
+            foreach(AppointmentCategory cat in AppointmentCategories)
+            {
+                if(cat.Caption == caption)
+                {
+                    return cat;
+                }
+            }
+            // otherwise auto generate a category
+            AppointmentCategory category = new AppointmentCategory();
+            category.Caption = caption;
+            category.Id = catId;
+            category.UniqueId = Guid.NewGuid();
+            AutoGenCategoryPalette(category);
+            AppointmentCategories.Add(category);
+            EventBus.PublishEvent(
+                        new StudynEvent(category.UniqueId, StudynEvent.StudynEventType.CategoryAdd));
+            return category;
+        }
+
+        /// <summary>
         /// This function gives the auto generated categories their color
         /// </summary>
         /// <param name="category"></param>
