@@ -292,10 +292,11 @@ namespace StudyN.Models
             // otherwise auto generate a category
             AppointmentCategory category = new AppointmentCategory();
             category.Caption = caption;
-            category.Id = catId;
+            category.Id = catId + 1;
             category.UniqueId = Guid.NewGuid();
             AutoGenCategoryPalette(category);
             AppointmentCategories.Add(category);
+            catId++;
             EventBus.PublishEvent(
                         new StudynEvent(category.UniqueId, StudynEvent.StudynEventType.CategoryAdd));
             return category;
