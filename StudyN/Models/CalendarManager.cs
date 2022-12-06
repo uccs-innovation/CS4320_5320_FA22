@@ -16,8 +16,7 @@ using DevExpress.Data.Mask;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-
-
+using Maui.ColorPicker;
 
 namespace StudyN.Models
 {
@@ -273,6 +272,17 @@ namespace StudyN.Models
                     return;
                 }
             }
+        }
+
+        /// <summary>
+        /// This function gives the auto generated categories their color
+        /// </summary>
+        /// <param name="category"></param>
+        public void AutoGenCategoryPalette(AppointmentCategory category)
+        {
+            category.Color = Color.FromArgb("#000000");
+            category.PickerXPosition = 0.98;
+            category.PickerYPosition = 0.98;
         }
 
         /// <summary>
