@@ -26,6 +26,7 @@ namespace StudyN.Views
         public TaskPage()
         {
             InitializeComponent();
+            BindingContext = new TaskDataViewModel();
 
             Console.WriteLine("TaskPage initialized");
 
