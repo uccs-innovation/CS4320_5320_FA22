@@ -33,31 +33,32 @@ namespace StudyN.Models
         public string endDate = "";
         void GenerateCalendarTaskss()
         {
-            using var sr = new StringReader(text);
-            int count = 0;
-            string line = "";
-            while ((line = sr.ReadLine()) != null)
-            {
-                count++;
-                if (line.Contains("SUMMARY") == true)
+            if(text != null) { 
+                using var sr = new StringReader(text);
+                int count = 0;
+                string line = "";
+                while ((line = sr.ReadLine()) != null)
                 {
-                    eventName = line;
-                }
-                if (line.Contains("DESCRIPTION") == true)
-                {
-                    eventType = line;
-                }
-                if (line.Contains("DTSTART;VALUE=DATE") == true)
-                {
-                    startDate = line;
-                }
-                if (line.Contains("DTEND;VALUE=DATE") == true)
-                {
-                    endDate = line;
-                }
-                if (line.Contains("END") == true)
-                {
-                    CalendarTasks.Add(
+                    count++;
+                    if (line.Contains("SUMMARY") == true)
+                    {
+                        eventName = line;
+                    }
+                    if (line.Contains("DESCRIPTION") == true)
+                    {
+                        eventType = line;
+                    }
+                    if (line.Contains("DTSTART;VALUE=DATE") == true)
+                    {
+                        startDate = line;
+                    }
+                    if (line.Contains("DTEND;VALUE=DATE") == true)
+                    {
+                        endDate = line;
+                    }
+                    if (line.Contains("END") == true)
+                    {
+                        CalendarTasks.Add(
                             new CalendarTask(eventName)
                             {
                                 Parent = this,
@@ -72,7 +73,8 @@ namespace StudyN.Models
 
                             }
                         );
-                    id++;
+                        id++;
+                    }
                 }
             }
 
