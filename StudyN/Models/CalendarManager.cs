@@ -16,8 +16,7 @@ using DevExpress.Data.Mask;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-
-
+using Maui.ColorPicker;
 
 namespace StudyN.Models
 {
@@ -276,6 +275,45 @@ namespace StudyN.Models
         }
 
         /// <summary>
+        /// Auto generates a category from a string for imported files
+        /// </summary>
+        /// <param name="caption"></param>
+        /// <returns></returns>
+        public AppointmentCategory AutoGenerateCategory(string caption)
+        {
+            // if the category exists return that category instead
+            foreach(AppointmentCategory cat in AppointmentCategories)
+            {
+                if(String.Equals(cat.Caption, caption))
+                {
+                    return cat;
+                }
+            }
+            // otherwise auto generate a category
+            AppointmentCategory category = new AppointmentCategory();
+            category.Caption = caption;
+            category.Id = catId + 1;
+            category.UniqueId = Guid.NewGuid();
+            AutoGenCategoryPalette(category);
+            AppointmentCategories.Add(category);
+            catId++;
+            EventBus.PublishEvent(
+                        new StudynEvent(category.UniqueId, StudynEvent.StudynEventType.CategoryAdd));
+            return category;
+        }
+
+        /// <summary>
+        /// This function gives the auto generated categories their color
+        /// </summary>
+        /// <param name="category"></param>
+        public void AutoGenCategoryPalette(AppointmentCategory category)
+        {
+            category.Color = Color.FromArgb("#000000");
+            category.PickerXPosition = 0.98;
+            category.PickerYPosition = 0.98;
+        }
+
+        /// <summary>
         /// Save sleep time
         /// </summary>
         /// <param name="startTime"></param>
@@ -424,20 +462,26 @@ namespace StudyN.Models
             string[] categoryFileList = FileManager.LoadCategoryFileNames();
             foreach (string file in categoryFileList)
             {
-                jsonFileText = File.ReadAllText(file);
-                //SerializedAppointmentCategory deserializer = JsonConvert.DeserializeObject<SerializedAppointmentCategory>(jsonFileText);
-                AppointmentCategory category = new AppointmentCategory();
-                //category.Id = deserializer.Id;
-                //category.UniqueId = deserializer.UniqueId;
-                //category.Caption = deserializer.Caption;
-                //category.Color = Color.FromArgb(deserializer.Color);
-                //category.PickerXPosition = deserializer.PickerXPosition;
-                //category.PickerYPosition = deserializer.PickerYPosition;
-                AppointmentCategories.Add(category);
-                //if new id is higher than current catId make catId new id
-                //if(deserializer.Id > catId)
+                try
                 {
-                //    catId = deserializer.Id;
+                    jsonFileText = File.ReadAllText(file);
+                    SerializedAppointmentCategory deserializer = JsonConvert.DeserializeObject<SerializedAppointmentCategory>(jsonFileText);
+                    AppointmentCategory category = new AppointmentCategory();
+                    category.Id = deserializer.Id;
+                    category.UniqueId = deserializer.UniqueId;
+                    category.Caption = deserializer.Caption;
+                    category.Color = Color.FromArgb(deserializer.Color);
+                    category.PickerXPosition = deserializer.PickerXPosition;
+                    category.PickerYPosition = deserializer.PickerYPosition;
+                    AppointmentCategories.Add(category);
+                    // if new id is higher than current catId make catId new id
+                    if (deserializer.Id > catId)
+                    {
+                        catId = deserializer.Id;
+                    }
+                } catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             }
         }

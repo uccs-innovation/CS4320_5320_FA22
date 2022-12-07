@@ -24,7 +24,7 @@ namespace StudyN.Views
         readonly CalendarDataView _calendarDataView;
         public CalendarPage()
         {
-            InitializeComponent();
+            InitializeComponent(); 
             ViewModel = new CalendarViewModel();
             BindingContext = _calendarDataView = new CalendarDataView(); //Use to pull data of CalendarData under Models
             dailyButton.BackgroundColor = Color.FromRgba(255, 255, 255, 255);
@@ -35,6 +35,25 @@ namespace StudyN.Views
             // Reuse data storage between all the views
             weekView.DataStorage = dayView.DataStorage;
             monthView.DataStorage = dayView.DataStorage;
+
+            // set Calendar properties                        
+            dayView.ShowWorkTimeOnly = false; // Visible Time can only be set if this is false
+            weekView.ShowWorkTimeOnly = false;
+
+            // dayView.VisibleTime = TimeSpanRange.Day; // this works, but time gets cut off... following is workaround
+            // NOTE from estepanek:
+            // Even after I moved the tabs to a flyout and made room at the footer area,
+            // an hour and a half of the scheduler was still cut off, so the following adds
+            // two extra hours in the TimeSpanRange for VisibleTime to compensate for that
+            // set to show 12am to 2am the next day, but some will get cut off and will
+            // only be able to scroll to approximately 12:30am
+            // This is probably due to the application header bar potentially moving the 
+            // DevExpress Scheduler down and consequently off the screen
+            TimeSpanRange visibleTimeSpanRange = new TimeSpanRange(TimeSpan.FromHours(0), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(2))); 
+            dayView.VisibleTime = visibleTimeSpanRange;
+            weekView.VisibleTime = visibleTimeSpanRange;
+            
+            Console.WriteLine("***** Just set dayView.VisibleTime = " + dayView.VisibleTime.ToString());
         }
 
         CalendarViewModel ViewModel { get; }
@@ -84,6 +103,10 @@ namespace StudyN.Views
             var notes = SchedulerStorage.GetAppointments(new DateTimeRange(DateTime.Now, DateTime.Now.AddDays(7)));
             CalendarDataView.LoadDataForNotification(notes.ToList());
             base.OnAppearing();
+            Console.WriteLine("*****dayView.VisibleTime=" + dayView.VisibleTime.ToString());            
+            Console.WriteLine("*****dayView.ActualVisibleTime=" + dayView.ActualVisibleTime.ToString());
+            Console.WriteLine("*****dayView.WorkTime=" + dayView.WorkTime.ToString());
+            Console.WriteLine("*****dayView.ShowWorkTimeOnly=" + dayView.ShowWorkTimeOnly.ToString());
         }
 
         private void ShowAppointmentEditPage(AppointmentItem appointment)
@@ -107,7 +130,7 @@ namespace StudyN.Views
         }
 
         private void HandelSleepTime()
-        {
+        {            
             if(File.Exists(FileSystem.AppDataDirectory + "/sleepTime.json"))
             {
                 // Make the work time start at the end and end at the start of sleep time
@@ -139,7 +162,7 @@ namespace StudyN.Views
                     weekView.CellStyle.WorkTimeBackgroundColor = sleepColor;
                     weekView.CellStyle.BackgroundColor = workColor;
                 }
-                
+               
             }
             else
             {

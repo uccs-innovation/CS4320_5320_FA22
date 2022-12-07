@@ -9,7 +9,6 @@ using Microsoft.Maui.Animations;
 using StudyN.Models;
 using StudyN.Utilities;
 using StudyN.ViewModels;
-using static Android.Util.EventLogTags;
 using static Android.Provider.Settings;
 using Android.Renderscripts;
 using DevExpress.CodeParser;
@@ -246,16 +245,16 @@ public partial class AddTaskPage : ContentPage
         // Make sure we aren't storing nulls
         name.Text = name.Text == null ? "Unnamed Task" : name.Text;
         description.Text = description.Text == null ? "" : description.Text;
-        int hoursLogged = hSpent.Value == null ? 0 : (int)hSpent.Value;
-        int minutesLogged = mSpent.Value == null ? 0 : (int)mSpent.Value;
-        int totalHours = hComplete.Value == null ? 0 : (int)hComplete.Value;
-        int totalMinutes = mComplete.Value == null ? 0 : (int)mComplete.Value;
+        int hoursWorked = hWorked.Value == null ? 0 : (int)hWorked.Value;
+        int minutesWorked = mWorked.Value == null ? 0 : (int)mWorked.Value;
+        int hoursEstimated = hEstimated.Value == null ? 0 : (int)hEstimated.Value;
+        int minutesEstimated = mEstimated.Value == null ? 0 : (int)mEstimated.Value;
         date.Date = date.Date == null ? DateTime.Now.AddYears(1) : date.Date;
         time.Time = time.Time == null ? DateTime.Now.AddYears(1) : time.Time;
 
         // Turn logged time and total time into time doubles
-        double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
-        double totalTime = GlobalTaskData.TaskManager.SumTimes(totalHours, totalMinutes);
+        double timeWorked = GlobalTaskData.TaskManager.SumTimes(hoursWorked, minutesWorked);
+        double timeEstimated = GlobalTaskData.TaskManager.SumTimes(hoursEstimated, minutesEstimated);
 
         DateTime dateTime = new DateTime(date.Date.Value.Year,
                                         date.Date.Value.Month,
@@ -275,8 +274,8 @@ public partial class AddTaskPage : ContentPage
                 this.description.Text,
                 dateTime,
                 (int)this.priority.Value,
-                timeLogged,
-                totalTime);
+                timeWorked,
+                timeEstimated);
 
             if (GlobalTaskData.ToEdit.IsRecur)
             {
@@ -308,8 +307,8 @@ public partial class AddTaskPage : ContentPage
                     this.description.Text,
                     dateTime,
                     (int)this.priority.Value,
-                    timeLogged,
-                    totalTime);
+                    timeWorked,
+                    timeEstimated);
         }
 
         // Handles recurrence after everything is added into the task
@@ -358,10 +357,10 @@ public partial class AddTaskPage : ContentPage
         this.date.Date = (GlobalTaskData.ToEdit.DueTime.Date);
         this.time.Time = GlobalTaskData.ToEdit.DueTime;
         this.priority.Value = (GlobalTaskData.ToEdit.Priority);
-        this.hComplete.Value = (int)GlobalTaskData.ToEdit.TotalTimeNeeded;
-        this.mComplete.Value = GlobalTaskData.ToEdit.GetTotalMinutesNeeded();
-        this.hSpent.Value = (int)GlobalTaskData.ToEdit.CompletionProgress;
-        this.mSpent.Value = GlobalTaskData.ToEdit.GetCompletionProgressMinutes();
+        this.hEstimated.Value = (int)GlobalTaskData.ToEdit.TimeEstimated;
+        this.mEstimated.Value = GlobalTaskData.ToEdit.GetMinutesEstimated();
+        this.hWorked.Value = (int)GlobalTaskData.ToEdit.TimeWorked;
+        this.mWorked.Value = GlobalTaskData.ToEdit.GetMinutesWorked();
 
         if(GlobalTaskData.ToEdit.IsRecur)
         {

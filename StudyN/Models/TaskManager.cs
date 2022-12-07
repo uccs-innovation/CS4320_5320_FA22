@@ -19,8 +19,8 @@ namespace StudyN.Models
                                string description,
                                DateTime dueTime,
                                int priority,
-                               double CompletionProgress,
-                               double TotalTimeNeeded,
+                               double timeWorked,
+                               double timeEstimated,
                                Guid recurId = new Guid())
         {
             if(recurId == Guid.Empty)
@@ -33,8 +33,9 @@ namespace StudyN.Models
                                             description,
                                             dueTime,
                                             priority,
-                                            CompletionProgress,
-                                            TotalTimeNeeded,
+                                            timeWorked,
+                                            timeEstimated,
+                                            DateTime.Now,
                                             recurId);
 
             //This will add the tasks to the list
@@ -79,8 +80,8 @@ namespace StudyN.Models
                                 string description,
                                 DateTime dueTime,
                                 int priority,
-                                double CompletionProgress,
-                                double TotalTimeNeeded,
+                                double timeWorked,
+                                double timeEstimated,
                                 List<TaskItemTime> TimeList = null,
                                 bool updateFile = true)
         {
@@ -97,8 +98,8 @@ namespace StudyN.Models
             task.Description = description;
             task.DueTime = dueTime;
             task.Priority = priority;
-            task.CompletionProgress = CompletionProgress;
-            task.TotalTimeNeeded = TotalTimeNeeded;
+            task.TimeWorked = timeWorked;
+            task.TimeEstimated = timeEstimated;
             task.TimeList = TimeList;
 
             // Publish task edit event
@@ -167,8 +168,8 @@ namespace StudyN.Models
                                         ParentTask.Description,
                                         dueTime,
                                         ParentTask.Priority,
-                                        ParentTask.CompletionProgress,
-                                        ParentTask.TotalTimeNeeded,
+                                        ParentTask.TimeWorked,
+                                        ParentTask.TimeEstimated,
                                         ParentTask.RecurId);
                 task.IsRecur = true;
                 // Create a deepcopy
@@ -196,8 +197,8 @@ namespace StudyN.Models
                                         ParentTask.Description,
                                         dueTime,
                                         ParentTask.Priority,
-                                        ParentTask.CompletionProgress,
-                                        ParentTask.TotalTimeNeeded,
+                                        ParentTask.TimeWorked,
+                                        ParentTask.TimeEstimated,
                                         ParentTask.RecurId);
                 task.IsRecur = true;
                 // Create a deepcopy
@@ -418,7 +419,6 @@ namespace StudyN.Models
 
         public ObservableCollection<TaskItem> TaskList { get; private set; }
         private ObservableCollection<TaskItem> CompletedTasks { get; set; }
-
         public ObservableCollection<TaskItem> TaskListTest { get; private set; }
 
         //This constructor will create the normal TaskList and the list for
@@ -428,6 +428,26 @@ namespace StudyN.Models
             TaskList = new ObservableCollection<TaskItem>();
             CompletedTasks = new ObservableCollection<TaskItem>();
             TaskListTest = new ObservableCollection<TaskItem>();
+        } 
+
+        //Method checks what task was added to the list last
+        public TaskItem GetLastTask()
+        {
+            //Set to arbitrary task
+            TaskItem latestTask = TaskList.Last();
+
+            //Checking each item in the current task list
+            foreach (TaskItem task in TaskList)
+            {
+                /* Check if the time span was just added
+                and saves it as the latest Task */
+                if (task.DateNow >= latestTask.DateNow)
+                {
+                    latestTask = task;
+                }
+            }
+            //return latest added task
+            return latestTask;
         }
 
     }

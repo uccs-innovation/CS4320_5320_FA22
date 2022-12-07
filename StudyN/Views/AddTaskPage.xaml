@@ -2,11 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyN.Views.AddTaskPage"
-             xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
              xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
-             xmlns:dxee="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:ViewModels="clr-namespace:StudyN.ViewModels"
-             xmlns:local="clr-namespace:StudyN.Views"
              Title="{Binding Title}">
 
     <!-- Binding Context -->
@@ -114,7 +111,7 @@
                 IsLabelFloating="False"
                 PlaceholderText="0h"
                 Margin="1"
-                x:Name="hComplete"/>
+                x:Name="hEstimated"/>
             <dxe:NumericEdit
                 AllowNullValue="True"
                 DisplayFormat="n0"
@@ -125,7 +122,7 @@
                 IsLabelFloating="False"
                 PlaceholderText="0m"
                 Margin="1"
-                x:Name="mComplete"/>
+                x:Name="mEstimated"/>
 
             <!--Actual Time to Complete Task, row 4-->
             <dxe:NumericEdit 
@@ -133,22 +130,22 @@
                 DisplayFormat="n0"
                 Grid.Row="4"
                 Grid.ColumnSpan="1"
-                LabelText="Actual Hours"
+                LabelText="Worked Hours"
                 IsLabelFloating="False"
                 PlaceholderText="0h"
                 Margin="1"
-                x:Name="hSpent"/>
+                x:Name="hWorked"/>
             <dxe:NumericEdit
                 AllowNullValue="True"
                 DisplayFormat="n0"
                 Grid.Row="4"
                 Grid.ColumnSpan="1"
                 Grid.Column="1"
-                LabelText="Actual Minutes"
+                LabelText="Worked Minutes"
                 PlaceholderText="0m"
                 IsLabelFloating="False"
                 Margin="1"
-                x:Name="mSpent"/>
+                x:Name="mWorked"/>
 
             <!--Priority Slider and Label-->
             <StackLayout Grid.Row="5"

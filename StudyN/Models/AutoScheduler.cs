@@ -102,8 +102,8 @@ public class AutoScheduler : StudynSubscriber
                 BlockContainer blockContainer = new BlockContainer();
                 blockContainer.task = task;
                 blockContainer.blockSize = 60; //60 minute block size. Could change this based on task data. IE different task categories could have different block sizes
-                blockContainer.blocks = new Block[(int)(task.TotalTimeNeeded*60 / blockContainer.blockSize)];
-                blockContainer.remainder = (int)(task.TotalTimeNeeded*60) % blockContainer.blockSize;
+                blockContainer.blocks = new Block[(int)(task.TimeEstimated*60 / blockContainer.blockSize)];
+                blockContainer.remainder = (int)(task.TimeEstimated*60) % blockContainer.blockSize;
                 blockContainers.Add(blockContainer);
             }
 ;       }
@@ -355,7 +355,7 @@ public class AutoScheduler : StudynSubscriber
         //progresses represents a percent
         //IE 85 = 85% complete
 
-        double remainingMinutesNeeded = task.TotalTimeNeeded * 60; //completionProgress seems to be bugged, so currently not using. BUT WE SHOULD USE THE ABOVE LINE IDEALLY
+        double remainingMinutesNeeded = task.TimeEstimated * 60; //completionProgress seems to be bugged, so currently not using. BUT WE SHOULD USE THE ABOVE LINE IDEALLY
 
 
         //Amount of days between (now + estimated time remaining to complete task), and task due date

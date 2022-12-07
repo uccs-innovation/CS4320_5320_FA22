@@ -3,13 +3,6 @@
              Title="{Binding Title}"
              IconImageSource="info"
              NavigationPage.HasNavigationBar="False"
-             xmlns:dxco="clr-namespace:DevExpress.Maui.Controls;assembly=DevExpress.Maui.Controls"
-             xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
-             xmlns:dxcv="clr-namespace:DevExpress.Maui.CollectionView;assembly=DevExpress.Maui.CollectionView"
-             xmlns:dxsch="clr-namespace:DevExpress.Maui.Scheduler;assembly=DevExpress.Maui.Scheduler"
-             xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
-             xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
-             xmlns:dxdf="clr-namespace:DevExpress.Maui.DataForm;assembly=DevExpress.Maui.Editors"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              ios:Page.UseSafeArea="true"
              x:Class="StudyN.Views.SettingsPage">
@@ -50,50 +43,6 @@
                 </StackLayout>
             </Frame>
 
-            <!-- frame for font -->
-            <Frame 
-                BorderColor="{DynamicResource Primary}"
-                CornerRadius="5"
-                Padding="8"
-                BackgroundColor="{DynamicResource NormalBackgroundColor}">
-                <StackLayout Spacing="3">
-                    <Label 
-                        Text="Font"
-                        FontSize="12" 
-                        TextColor="{DynamicResource NormalHeaderText}"
-                        FontAttributes="Bold"/>
-                    <BoxView 
-                        Color="{DynamicResource Primary}"
-                        HeightRequest="2"
-                        HorizontalOptions="Fill" />
-
-                    <!-- put stuff here -->
-                    <Label Text="Put stuff here"/>
-                </StackLayout>
-            </Frame>
-
-            <!-- frame for idk -->
-            <Frame 
-                BorderColor="{DynamicResource Primary}"
-                CornerRadius="5"
-                Padding="8"
-                BackgroundColor="{DynamicResource NormalBackgroundColor}">
-                <StackLayout Spacing="3">
-                    <Label 
-                        Text="STUFF"
-                        FontSize="12" 
-                        TextColor="{DynamicResource NormalHeaderText}"
-                        FontAttributes="Bold"/>
-                    <BoxView 
-                        Color="{DynamicResource Primary}"
-                        HeightRequest="2"
-                        HorizontalOptions="Fill" />
-
-                    <!-- put stuff here -->
-                    <Label Text="Put stuff here"/>
-                </StackLayout>
-            </Frame>
-
             <!-- frame for import cal -->
             <Frame 
                 BorderColor="{DynamicResource Primary}"
@@ -119,28 +68,6 @@
                 </StackLayout>
             </Frame>
 
-            <Frame 
-                BorderColor="{DynamicResource Primary}"
-                CornerRadius="5"
-                Padding="8"
-                BackgroundColor="{DynamicResource NormalBackgroundColor}">
-                <StackLayout Spacing="3">
-                    <Button
-                        Text="Load File"
-                        Style="{StaticResource PrimaryButton}"
-                        Clicked="Button_ClickedLoad"/>
-                    <Entry
-                        Grid.ColumnSpan="1"
-                        Placeholder="Enter path to a directory"
-                        ClearButtonVisibility="WhileEditing"
-                        ReturnType="Go"
-                        Keyboard="Url"
-                        IsSpellCheckEnabled="false"
-                        IsTextPredictionEnabled="false"
-                        MaxLength="200"
-                        TextChanged="Entry_DirPath"/>
-                </StackLayout>
-            </Frame>
             <!-- Frame for giving sleep time -->
             <Frame
                 BorderColor="{DynamicResource Primary}"
