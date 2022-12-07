@@ -8,7 +8,7 @@
         
         <VerticalStackLayout Padding="20">
 
-            <Image Source="logo.png" VerticalOptions="Start">
+            <Image Source="splashscreen.png" VerticalOptions="Start">
             </Image>
             <Label
              Text="Version: 1.00"
