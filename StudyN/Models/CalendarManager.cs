@@ -284,7 +284,7 @@ namespace StudyN.Models
             // if the category exists return that category instead
             foreach(AppointmentCategory cat in AppointmentCategories)
             {
-                if(cat.Caption == caption)
+                if(String.Equals(cat.Caption, caption))
                 {
                     return cat;
                 }
