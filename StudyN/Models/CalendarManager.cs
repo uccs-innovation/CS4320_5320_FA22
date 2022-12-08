@@ -136,14 +136,14 @@ namespace StudyN.Models
             }
         }
 
-        public Appointment CreateAppointment(int appointmentId,
+        /*public Appointment CreateAppointment(int appointmentId,
                                             string appointmentTitle,
                                             DateTime start,
                                             TimeSpan duration,
                                             int label,
                                             int room,
                                             Guid taskId, //recurId = new Guid(),
-                                            string from = "",
+                                            string from,
                                             bool autoScheduled = false)
         {
             Guid guid = new Guid();
@@ -172,8 +172,42 @@ namespace StudyN.Models
 
             if (appt.From != "autoScheduler")
             {
-                EventBus.PublishEvent(
-                            new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
+               // EventBus.PublishEvent(
+                      //      new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
+            }
+
+            return appt;
+        }*/
+
+        public Appointment CreateAppointment(Appointment toUse)
+        {
+            Guid guid = new Guid();
+            guid = Guid.NewGuid();
+
+            Appointment appt = new()
+            {
+                //Id = appointmentId,
+                Start = toUse.Start,
+                End = toUse.End,
+                Subject = toUse.Subject,
+                LabelId = toUse.LabelId,
+                StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
+                Description = string.Empty,
+                UniqueId = toUse.UniqueId,
+                From = toUse.From,
+            };
+
+
+            Console.WriteLine("THIS IS THE SUBJECT: ");
+
+            Appointments.Add(appt);
+
+            // Publish appointment add event
+
+            if (appt.From != "autoScheduler")
+            {
+                // EventBus.PublishEvent(
+                //      new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
             }
 
             return appt;
