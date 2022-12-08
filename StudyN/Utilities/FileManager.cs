@@ -65,7 +65,6 @@ namespace StudyN.Utilities
             else if (taskEvent.EventType == StudynEventType.AppointmentAdd)
             {
                 ApptAdded(taskEvent.Id);
-                return;
             }
         }
 
@@ -98,10 +97,6 @@ namespace StudyN.Utilities
             string jsonString = JsonSerializer.Serialize(appt, indent);
 
             Console.WriteLine(fileName);
-            File.WriteAllText(fileName, jsonString);
-            // output, might be taken out later
-            //Console.WriteLine("Tasks Added:");
-            //Console.WriteLine("    " + taskId.ToString());
             
         }
 
@@ -254,11 +249,6 @@ namespace StudyN.Utilities
             string[] files = { };
             if (Directory.Exists(APPT_DIR))
             {
-                Console.WriteLine("file:");
-                Console.WriteLine("file:");
-                Console.WriteLine("file:");
-                Console.WriteLine("file:");
-                Console.WriteLine("file:");
                 files = Directory.GetFiles(APPT_DIR);
             }
 
