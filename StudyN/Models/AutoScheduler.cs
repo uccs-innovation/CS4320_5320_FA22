@@ -79,13 +79,14 @@ public class AutoScheduler : StudynSubscriber
             {
                 if(start < baseTime) { start = baseTime; } //If appointment is going on right now, treat it as if it starts right now
                 int offset = (int)(start - baseTime).TotalMinutes;
-                int span = (int)(end - start).TotalMinutes; 
+                int span = (int)(end - start).TotalMinutes;
+                int label = int.Parse(appt.LabelId.ToString());
                 for(int i = offset; i < offset + span; i++)
                 {
                     minuteMap[i].id = appt.UniqueId; 
                     minuteMap[i].from = "appts";
                     minuteMap[i].name = appt.Subject;
-                    minuteMap[i].labelId = (int)appt.LabelId;
+                    minuteMap[i].labelId = label;
                 }
             }
         }
@@ -330,9 +331,10 @@ public class AutoScheduler : StudynSubscriber
                 // make sure sleep time isn't being added to calendar
                 if (appt.Subject != "Sleep")
                 {
+                    int label = int.Parse(appt.LabelId.ToString());
                     Console.WriteLine("appt.Start: " + appt.Start.ToString());
                     Console.WriteLine("appt.End: " + appt.End.ToString());
-                    GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, (int)appt.LabelId, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
+                    GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, label, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
                 }
             }
         }

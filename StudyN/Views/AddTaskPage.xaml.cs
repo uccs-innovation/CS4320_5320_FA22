@@ -41,7 +41,7 @@ public partial class AddTaskPage : ContentPage
             editingExistingTask = true;
             //CreateDummyTaskTimeLogData();
             TimeListLog.ItemsSource = GlobalTaskData.ToEdit.TimeList;
-            this.displayLabel.Text = String.Format("Priority: " + GlobalTaskData.ToEdit.Priority);
+            this.displayLabel.Text = String.Format("" + GlobalTaskData.ToEdit.Priority);
         }
         else
         {
@@ -240,7 +240,7 @@ public partial class AddTaskPage : ContentPage
     {
         //Stroring the new value and setting the sliders label correctly
         int value = (int)args.NewValue;
-        displayLabel.Text = String.Format("Priority: " + value);
+        displayLabel.Text = String.Format("" + value);
     }
 
     //This function will be used by the category slider when its value has changed to set and keep track of the new value
