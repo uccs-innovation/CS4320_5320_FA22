@@ -324,21 +324,22 @@ public class AutoScheduler : StudynSubscriber
     private void AddToCalendar(List<Appointment> appts)
     {
         Console.WriteLine("autoScheduler adding to calendar");
-        foreach(Appointment appt in appts)
+        foreach (Appointment appt in appts)
         {
-            if (appt.From.Equals("autoScheduler"))
+            if (appt.From == "autoScheduler")
             {
                 // make sure sleep time isn't being added to calendar
-                if (!appt.Subject.Equals("Sleep"))
+                if (appt.Subject != "Sleep")
                 {
                     int label = int.Parse(appt.LabelId.ToString());
                     Console.WriteLine("appt.Start: " + appt.Start.ToString());
                     Console.WriteLine("appt.End: " + appt.End.ToString());
-                    GlobalAppointmentData.CalendarManager.CreateAppointment(appt); //idk what "room" is for CreateAppointment() method
+                    GlobalAppointmentData.CalendarManager.CreateAppointment(-1, appt.Subject, appt.Start, appt.End - appt.Start, label, -1, appt.UniqueId, "autoScheduler"); //idk what "room" is for CreateAppointment() method
                 }
             }
         }
     }
+
 
     private IOrderedEnumerable<TaskItem> sortByWeight(List<TaskItem> tasksToMap)
     {
