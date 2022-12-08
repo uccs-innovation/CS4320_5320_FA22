@@ -333,7 +333,6 @@ namespace StudyN.Utilities
 
         public static void ApptEdited(Guid taskId)
         {
-            Console.WriteLine("YYYYYYYYYYYYYYYY11981911561616516YYYyadfadfadsfsfasdf");
             ApptDeleted(taskId);
             ApptAdded(taskId);
             //Unneeded. Mainly just writes out files in directory for testing purposes. 
