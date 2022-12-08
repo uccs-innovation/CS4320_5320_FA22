@@ -50,7 +50,7 @@
         <!--Set the Columns to use.-->
         <dxg:DataGridView.Columns>
             <dxg:TextColumn FieldName="Name" Caption="Task"/>
-            <dxg:TextColumn FieldName="TotalTimeNeeded" Caption="Task" IsGrouped="False" IsVisible="False" x:Name="TimeNeededFilter"/>
+            <dxg:TextColumn FieldName="TimeEstimated" Caption="Task" IsGrouped="False" IsVisible="False" x:Name="TimeNeededFilter"/>
             <dxg:DateColumn FieldName="DueTime" Caption="Due" DisplayFormat="h:mm tt" IsGrouped="True" x:Name="DueDateFilter"/>
             <dxg:TextColumn FieldName="Percent" Caption="Percent" DisplayFormat="P0" />
         </dxg:DataGridView.Columns>
