@@ -11,6 +11,7 @@ using DevExpress.XtraRichEdit.Layout;
 using DevExpress.XtraRichEdit.Model.History;
 using StudyN.Models;
 using StudyN.Utilities;
+using StudyN.Views;
 using static StudyN.Utilities.StudynEvent;
 
 public class AutoScheduler : StudynSubscriber
@@ -380,7 +381,7 @@ public class AutoScheduler : StudynSubscriber
         else //Item is NOT possible to complete before deadline. Give it negative weight so it will be scheduled past its deadline, and be detected as unscheduable.
         {
             //taskPastDue = true;
-            //pastDueTasks.Add(task);
+            pastDueTasks.Add(task);
             weight = null;
         }
 
@@ -422,6 +423,8 @@ public class AutoScheduler : StudynSubscriber
                 Console.WriteLine("Minute: " + i + "  Name:" + minuteMap[i].name);
             }
         }
+
+        GiveWarningOnIncompletableTask();
     }
 
     private void refreshData()
@@ -479,6 +482,23 @@ public class AutoScheduler : StudynSubscriber
         }
     }
 
+    //throw warning message for each task that cannot be completed on time
+    async private void GiveWarningOnIncompletableTask()
+    {
+        foreach (TaskItem task in pastDueTasks)
+        {
+            //pop up to ask if user would like to edit task that cannot be implemented 
+            await App.Current.MainPage.DisplayAlert("Warning", "The following task cannot be scheduled properly: "
+                + task.Name, "OK");
+            /*if (answer)
+            {
+                // TaskItem we need to edit...
+                GlobalTaskData.ToEdit = task;
+                // Get it in here
+                await Shell.Current.GoToAsync(nameof(AddTaskPage));
+            }*/
+        }
+    }
 }
 
 internal class minuteSnapshot

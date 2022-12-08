@@ -218,6 +218,7 @@ namespace StudyN.Models
                 cat.PickerYPosition = y;
                 cat.UniqueId = id;
                 catId++;
+
             }
 
             // Adds category to category list
@@ -308,6 +309,7 @@ namespace StudyN.Models
                 }
             }
         }
+
 
         /// <summary>
         /// Auto generates a category from a string for imported files
@@ -517,6 +519,7 @@ namespace StudyN.Models
                 } catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+
                 }
             }
         }

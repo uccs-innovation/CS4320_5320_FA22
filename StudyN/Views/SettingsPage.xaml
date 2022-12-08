@@ -8,7 +8,10 @@
              x:Class="StudyN.Views.SettingsPage">
     <ContentPage.Content>
         <StackLayout VerticalOptions="Start" Margin="0,10,0,10" Spacing="5">
+
             
+
+
             <!-- frame for themes -->
             <Frame 
                 BorderColor="{DynamicResource Primary}"
@@ -35,6 +38,8 @@
                         Text="Dark Mode"
                         Style="{StaticResource PrimaryButton}"
                         Clicked="Button_ClickedDark"/>
+                    
+                    
                 </StackLayout>
             </Frame>
 
