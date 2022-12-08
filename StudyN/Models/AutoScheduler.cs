@@ -422,6 +422,8 @@ public class AutoScheduler : StudynSubscriber
                 Console.WriteLine("Minute: " + i + "  Name:" + minuteMap[i].name);
             }
         }
+
+        GlobalAppointmentData.CalendarManager.AutoAppointments = appts;
     }
 
     private void refreshData()
