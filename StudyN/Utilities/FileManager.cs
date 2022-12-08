@@ -330,5 +330,30 @@ namespace StudyN.Utilities
 
             return files;
         }
+
+        public static void ApptEdited(Guid taskId)
+        {
+            Console.WriteLine("YYYYYYYYYYYYYYYY11981911561616516YYYyadfadfadsfsfasdf");
+            ApptDeleted(taskId);
+            ApptAdded(taskId);
+            //Unneeded. Mainly just writes out files in directory for testing purposes. 
+            //LoadFileNames();
+        }
+
+        //This function will take a task and delete the associated file
+        public static void ApptDeleted(Guid apptId)
+        {
+
+            //Creating the file name
+            string fileName = APPT_DIR + GlobalAppointmentData.CalendarManager.GetAppointment(apptId).Subject + ".json";
+
+            //If the file exists, delete
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+                //Console.WriteLine("    " + taskId.ToString());
+            }
+
+        }
     }
 }

@@ -147,6 +147,7 @@ namespace StudyN.Models
                                             bool autoScheduled = false)
         {
             Guid guid = new Guid();
+            guid = Guid.NewGuid();
 
             Appointment appt = new()
             {
@@ -563,7 +564,7 @@ namespace StudyN.Models
 
 
                 Guid guid = new Guid();
-
+                guid = Guid.NewGuid();
                 Appointment apptt = new()
                 {
                     //Id = appointmentId,
