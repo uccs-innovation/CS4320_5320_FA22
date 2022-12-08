@@ -18,8 +18,6 @@ public partial class AddTaskPage : ContentPage
 {
     bool editingExistingTask;
     bool noCategories = false;
-    // localized category list for category slider
-    ObservableCollection<AppointmentCategory> appointmentCategories { get => GlobalAppointmentData.CalendarManager.AppointmentCategories; }
     public AddTaskPage()
     {
         InitializeComponent();
@@ -53,7 +51,7 @@ public partial class AddTaskPage : ContentPage
             SetValues();            
         }
 
-        SetCategorySliderVisible();
+        SetCategoryComboBoxVisible();
         SetRecurrenceComboBoxVisible();
 
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
@@ -243,6 +241,7 @@ public partial class AddTaskPage : ContentPage
         displayLabel.Text = String.Format("" + value);
     }
 
+    /*
     //This function will be used by the category slider when its value has changed to set and keep track of the new value
     void HandleCategoryValueChanged(object sender, ValueChangedEventArgs args)
     {
@@ -251,6 +250,7 @@ public partial class AddTaskPage : ContentPage
         category.ThumbColor = appointmentCategories[value].Color;
         displayCategory.Text = String.Format(appointmentCategories[value].Caption);
     }
+    */
 
     //This function will be used by the add task button to either create a new task or save the changes to an existing one
     private async void HandleAddTaskButton(object sender, EventArgs e)
@@ -280,7 +280,7 @@ public partial class AddTaskPage : ContentPage
         int categoryId;
         if (!noCategories)
         {
-            categoryId = appointmentCategories[(int)this.category.Value].Id;
+            categoryId = GlobalAppointmentData.CalendarManager.AppointmentCategories[this.CategoryComboBox.SelectedIndex].Id;
         }
         else
         {
@@ -392,11 +392,11 @@ public partial class AddTaskPage : ContentPage
         //If the category isn't uncategorized than find the index to use
         if(GlobalTaskData.ToEdit.Category > 0)
         {
-            this.category.Value = GlobalAppointmentData.CalendarManager.GetAppointmentCategoriesIdex(GlobalTaskData.ToEdit.Category);
+            this.CategoryComboBox.SelectedIndex = GlobalAppointmentData.CalendarManager.GetAppointmentCategoriesIdex(GlobalTaskData.ToEdit.Category);
         }
         else
         {
-            this.category.Value = 0;
+            this.CategoryComboBox.SelectedIndex = 0;
         }
 
         if(GlobalTaskData.ToEdit.IsRecur)
@@ -445,6 +445,24 @@ public partial class AddTaskPage : ContentPage
         }
     }
 
+    private void SetCategoryComboBoxVisible()
+    {
+        if(GlobalAppointmentData.CalendarManager.AppointmentCategories.Count > 0)
+        {
+            // make combo box visible if there are categories
+            CategoryComboBox.IsVisible = true;
+            CategoryLabel.Text = String.Format("Category:");
+        }
+        else
+        {
+            // else make the combo box disappears and display there are no categories
+            CategoryComboBox.IsVisible = false;
+            CategoryLabel.Text = String.Format("There are no Categories");
+            noCategories = true;
+        }
+    }
+
+    /*
     private void SetCategorySliderVisible()
     {
         if(appointmentCategories.Count > 0)
@@ -463,8 +481,9 @@ public partial class AddTaskPage : ContentPage
             noCategories = true;
         }
     }
-
-    private void RecurrenceComboBoxChanged(Object sender, EventArgs e)
+    */
+    
+        private void RecurrenceComboBoxChanged(Object sender, EventArgs e)
     {
         SetRecurrenceComboBoxVisible();
     }

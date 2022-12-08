@@ -170,25 +170,21 @@
                        VerticalOptions="Center" />
             </StackLayout>
             
-            <!--Category Slider and Label-->
-            <StackLayout Grid.Row="6"
-                         Grid.ColumnSpan="5"
-                         Padding="0, -10">
-                <Label x:Name="rotatingCategory"
-                       Text="Category"
-                       FontSize="18"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center" />
-                <Slider Maximum="7"
-                        Minimum="0"
-                        Value="0"
-                        ThumbColor="Blue"
-                        ValueChanged="HandleCategoryValueChanged"
-                        x:Name="category" />
-                <Label x:Name="displayCategory"
-                       Text="StudyN Time"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center" />
+            <!--Category Combo Box and Label-->
+            <StackLayout Orientation="Vertical"
+                         Grid.Row="6"
+                         Grid.ColumnSpan="2">
+                <StackLayout Orientation="Horizontal">
+                    <Label x:Name="CategoryLabel"
+                           Text="Category:"
+                           HorizontalOptions="Start"
+                           VerticalOptions="Center"
+                           FontSize="16" />
+                    <dxe:ComboBoxEdit x:Name="CategoryComboBox"
+                                      HorizontalOptions="EndAndExpand"
+                                      SelectedIndex="0"
+                                      ItemsSource="{Binding categoryStrings}" />
+                </StackLayout>
             </StackLayout>
 
 
