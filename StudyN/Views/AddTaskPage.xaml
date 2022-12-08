@@ -5,12 +5,7 @@
              xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
              xmlns:ViewModels="clr-namespace:StudyN.ViewModels"
              Title="{Binding Title}">
-
-    <!-- Binding Context -->
-    <ContentPage.BindingContext>
-        <ViewModels:TaskDataViewModel />
-    </ContentPage.BindingContext>
-
+    
     <ContentPage.ToolbarItems>
 
         <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" IconImageSource="whitesave"
@@ -44,6 +39,7 @@
                 <RowDefinition Height="Auto"/><!--Estimate Hours       3-->
                 <RowDefinition Height="Auto"/><!--Actual Hours         4-->
                 <RowDefinition Height="Auto"/><!--Priority slider      5-->
+                <RowDefinition Height="Auto"/><!--Category slider      6-->
                 <RowDefinition Height="Auto"/><!--Recurrence Layout    7-->
                 <RowDefinition Height="Auto"/><!--Task Tracker Button  8-->
                 <RowDefinition Height="Auto"/><!--Log Label            9-->
@@ -168,11 +164,28 @@
                        HorizontalOptions="Center"
                        VerticalOptions="Center" />
             </StackLayout>
+            
+            <!--Category Combo Box and Label-->
+            <StackLayout Orientation="Vertical"
+                         Grid.Row="6"
+                         Grid.ColumnSpan="2">
+                <StackLayout Orientation="Horizontal">
+                    <Label x:Name="CategoryLabel"
+                           Text="Category:"
+                           HorizontalOptions="Start"
+                           VerticalOptions="Center"
+                           FontSize="16" />
+                    <dxe:ComboBoxEdit x:Name="CategoryComboBox"
+                                      HorizontalOptions="EndAndExpand"
+                                      SelectedIndex="0"
+                                      ItemsSource="{Binding categoryStrings}" />
+                </StackLayout>
+            </StackLayout>
 
 
             <!--Recurrance -->
             <StackLayout Orientation="Vertical"
-                         Grid.Row="6"
+                         Grid.Row="7"
                          Grid.ColumnSpan="2">
                 <StackLayout Orientation="Horizontal">
                     <Label x:Name="RecurrenceLabel"
@@ -214,7 +227,7 @@
             <Button
                 x:Name="TimerButton"
                 Text="{Binding IsStartOrStop}"
-                Grid.Row="7"
+                Grid.Row="8"
                 Grid.ColumnSpan="2"
                 CornerRadius="7"
                 Margin="1"
@@ -227,7 +240,7 @@
                 Text="Task Time Log"
                 HorizontalOptions="Start"
                 VerticalOptions="Center" 
-                Grid.Row="8"
+                Grid.Row="9"
                 Grid.ColumnSpan="1"
                 FontAttributes="Bold"    
                 FontSize="16" />
@@ -236,7 +249,7 @@
             <Label 
                 x:Name="LogStart"
                 Text="  Start Time" 
-                Grid.Row="9"
+                Grid.Row="10"
                 Grid.ColumnSpan="2" 
                 HorizontalTextAlignment="Start"
                 VerticalTextAlignment="Center"
@@ -245,7 +258,7 @@
             <Label
                 x:Name="LogStop"
                 Text="Stop Time"                
-                Grid.Row="9"
+                Grid.Row="10"
                 Grid.ColumnSpan="2"
                 HorizontalTextAlignment="Center"
                 VerticalTextAlignment="Center"
@@ -254,7 +267,7 @@
             <Label
                 x:Name="LogDuration"
                 Text="Duration     "                 
-                Grid.Row="9"
+                Grid.Row="10"
                 Grid.ColumnSpan="2"                
                 HorizontalTextAlignment="End"
                 VerticalTextAlignment="Center"
@@ -265,7 +278,7 @@
             <CollectionView ItemsSource="{Binding TimeList}"
                             x:Name="TimeListLog"
                             ItemsLayout="VerticalList"                            
-                            Grid.Row="10"
+                            Grid.Row="11"
                             Grid.ColumnSpan="2"
                             BackgroundColor="WhiteSmoke"
                             VerticalScrollBarVisibility="Always"
