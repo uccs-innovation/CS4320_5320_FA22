@@ -559,7 +559,26 @@ namespace StudyN.Models
 
                 //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
 
-                Appointments.Add(appt);
+                //CreateAppointment(appt.Id, appt.Subject, appt.Start, appt.End, appt.Location);
+
+
+                Guid guid = new Guid();
+
+                Appointment apptt = new()
+                {
+                    //Id = appointmentId,
+                    Start = appt.Start,
+                    End = appt.End,
+                    Subject = appt.Subject,
+                    LabelId = AppointmentCategories[rnd.Next(0, AppointmentCategories.Count - 1)].Id,
+                    StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
+                    Location = appt.Location,
+                    Description = appt.Description,
+                    UniqueId = guid,
+                    From = appt.From,
+                };
+
+                Appointments.Add(apptt);
             }
 
 
