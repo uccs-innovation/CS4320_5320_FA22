@@ -3,12 +3,12 @@ using StudyN.Models;
 
 namespace StudyN.ViewModels
 {
-    public class TaskChartsViewModel
+    public class TaskAnalyticsViewModel
     {
         public ObservableCollection<TaskData> TasksTimeWorked { get; }
         public ObservableCollection<TaskData> TasksTimeNeeded { get; }
 
-        public TaskChartsViewModel()
+        public TaskAnalyticsViewModel()
         {
             TasksTimeWorked = new ObservableCollection<TaskData>();
             TasksTimeNeeded = new ObservableCollection<TaskData>();
