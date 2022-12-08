@@ -283,33 +283,49 @@ namespace StudyN.Models
             string[] completedfiles = FileManager.LoadCompletedFileNames();
             foreach (string file in completedfiles)
             {
-                jsonfiletext = File.ReadAllText(file);
-                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+                try
+                {
+                    jsonfiletext = File.ReadAllText(file);
+                    TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
 
-                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
-                CompletedTasks.Add(task);
+                    //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                    CompletedTasks.Add(task);
+                }
+                catch (Exception ex)
+                {
+                    // when files get loaded that don't have all information needed
+                    Console.WriteLine(ex.Message);
+                }
             }
 
             //gets test tasks
             string[] testFile = FileManager.LoadTaskFileNames();
             foreach (string file in testFile)
             {
-                jsonfiletext = File.ReadAllText(file);
-                //Console.WriteLine(jsonfiletext);
-                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
-                TaskListTest.Add(task);
-
-                if (task.TimeList != null)
+                try
                 {
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("Writing out task times");
-                    foreach (TaskItemTime tasktime in task.TimeList)
+                    jsonfiletext = File.ReadAllText(file);
+                    //Console.WriteLine(jsonfiletext);
+                    TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+                    TaskListTest.Add(task);
+
+                    if (task.TimeList != null)
                     {
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("Writing out task times");
+                        foreach (TaskItemTime tasktime in task.TimeList)
+                        {
                         Console.WriteLine("Time Start" + tasktime.start);
                         Console.WriteLine("TimeStop" + tasktime.stop);
                         Console.WriteLine("Timespanned" + tasktime.span);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    // when files get loaded that don't have all information needed
+                    Console.WriteLine(ex.Message);
                 }
             }
         }
@@ -322,23 +338,30 @@ namespace StudyN.Models
             string[] taskfilelist = FileManager.LoadTaskFileTest(dirName);
             foreach (string file in taskfilelist)
             {
-                jsonfiletext = File.ReadAllText(file);
-                //Console.WriteLine(jsonfiletext);
-                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
-                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
-                TaskList.Add(task);
+                try {
+                    jsonfiletext = File.ReadAllText(file);
+                    //Console.WriteLine(jsonfiletext);
+                    TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+                    //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                    TaskList.Add(task);
 
-                if (task.TimeList != null)
-                {
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("Writing out task times");
-                    foreach (TaskItemTime tasktime in task.TimeList)
+                    if (task.TimeList != null)
                     {
-                        Console.WriteLine("Time Start" + tasktime.start);
-                        Console.WriteLine("TimeStop" + tasktime.stop);
-                        Console.WriteLine("Timespanned" + tasktime.span);
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("Writing out task times");
+                        foreach (TaskItemTime tasktime in task.TimeList)
+                        {
+                            Console.WriteLine("Time Start" + tasktime.start);
+                            Console.WriteLine("TimeStop" + tasktime.stop);
+                            Console.WriteLine("Timespanned" + tasktime.span);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    // when files get loaded that don't have all information needed
+                    Console.WriteLine(ex.Message);
                 }
             }
 
@@ -346,33 +369,46 @@ namespace StudyN.Models
             string[] completedfiles = FileManager.LoadCompletedFileNames();
             foreach (string file in completedfiles)
             {
-                jsonfiletext = File.ReadAllText(file);
-                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+                try { 
+                    jsonfiletext = File.ReadAllText(file);
+                    TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
 
-                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
-                CompletedTasks.Add(task);
+                    //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                    CompletedTasks.Add(task);
+                }catch (Exception ex)
+                {
+                    // when files get loaded that don't have all information needed
+                    Console.WriteLine(ex.Message);
+                }
             }
 
             //gets test tasks
             string[] testFile = FileManager.LoadTaskFileTest(dirName);
             foreach (string file in testFile)
             {
-                jsonfiletext = File.ReadAllText(file);
-                //Console.WriteLine(jsonfiletext);
-                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
-                TaskListTest.Add(task);
+                try {
+                    jsonfiletext = File.ReadAllText(file);
+                    //Console.WriteLine(jsonfiletext);
+                    TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+                    TaskListTest.Add(task);
 
-                if (task.TimeList != null)
-                {
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("Writing out task times");
-                    foreach (TaskItemTime tasktime in task.TimeList)
+                    if (task.TimeList != null)
                     {
-                        Console.WriteLine("Time Start" + tasktime.start);
-                        Console.WriteLine("TimeStop" + tasktime.stop);
-                        Console.WriteLine("Timespanned" + tasktime.span);
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("Writing out task times");
+                        foreach (TaskItemTime tasktime in task.TimeList)
+                        {
+                            Console.WriteLine("Time Start" + tasktime.start);
+                            Console.WriteLine("TimeStop" + tasktime.stop);
+                            Console.WriteLine("Timespanned" + tasktime.span);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    // when files get loaded that don't have all information needed
+                    Console.WriteLine(ex.Message);
                 }
             }
         }
