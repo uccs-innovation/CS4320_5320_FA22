@@ -5,12 +5,7 @@
              xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
              xmlns:ViewModels="clr-namespace:StudyN.ViewModels"
              Title="{Binding Title}">
-
-    <!-- Binding Context -->
-    <ContentPage.BindingContext>
-        <ViewModels:TaskDataViewModel />
-    </ContentPage.BindingContext>
-
+    
     <ContentPage.ToolbarItems>
 
         <ToolbarItem Text="Save" Clicked="HandleAddTaskButton" IconImageSource="whitesave"

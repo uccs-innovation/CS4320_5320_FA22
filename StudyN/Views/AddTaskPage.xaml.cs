@@ -20,6 +20,7 @@ public partial class AddTaskPage : ContentPage
     bool noCategories = false;
     public AddTaskPage()
     {
+        BindingContext = new AddTaskViewModel();
         InitializeComponent();
         //autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList, GlobalAppointmentData.CalendarManager.Appointments);
         AutoScheduler autoScheduler = new AutoScheduler();
@@ -33,7 +34,6 @@ public partial class AddTaskPage : ContentPage
             //If we are editing, we need to set the title and load in the values of the task
             Title = "Edit Task";
             LoadValues();
-            BindingContext = new EditTaskViewModel();
             completeButton.IsEnabled = true;
             trashButton.IsEnabled = true;
             editingExistingTask = true;

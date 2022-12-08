@@ -7,7 +7,7 @@ namespace StudyN.ViewModels;
 public class AddTaskViewModel : BaseViewModel
 {
     public ObservableCollection<AppointmentCategory> appointmentCategories { get => GlobalAppointmentData.CalendarManager.AppointmentCategories; }
-    public List<string> categoryStrings;
+    public List<string> categoryStrings { get; }
     public AddTaskViewModel()
 	{
         //intitailize category strings with appointment category captions
