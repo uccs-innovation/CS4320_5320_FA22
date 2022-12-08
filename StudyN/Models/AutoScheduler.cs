@@ -324,7 +324,7 @@ public class AutoScheduler : StudynSubscriber
     private void AddToCalendar(List<Appointment> appts)
     {
         Console.WriteLine("autoScheduler adding to calendar");
-        foreach(Appointment appt in appts)
+        foreach (Appointment appt in appts)
         {
             if (appt.From == "autoScheduler")
             {
@@ -339,6 +339,7 @@ public class AutoScheduler : StudynSubscriber
             }
         }
     }
+
 
     private IOrderedEnumerable<TaskItem> sortByWeight(List<TaskItem> tasksToMap)
     {

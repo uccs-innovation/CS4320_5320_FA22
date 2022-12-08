@@ -143,10 +143,11 @@ namespace StudyN.Models
                                             int label,
                                             int room,
                                             Guid taskId, //recurId = new Guid(),
-                                            string from = "",
+                                            string from,
                                             bool autoScheduled = false)
         {
             Guid guid = new Guid();
+            guid = Guid.NewGuid();
 
             Appointment appt = new()
             {
@@ -171,12 +172,14 @@ namespace StudyN.Models
 
             if (appt.From != "autoScheduler")
             {
-                EventBus.PublishEvent(
-                            new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
+               // EventBus.PublishEvent(
+                      //      new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
             }
 
             return appt;
         }
+
+        
 
         /// <summary>
         /// Function for creating a new category and adding it to category list
@@ -559,7 +562,26 @@ namespace StudyN.Models
 
                 //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
 
-                Appointments.Add(appt);
+                //CreateAppointment(appt.Id, appt.Subject, appt.Start, appt.End, appt.Location);
+
+
+                Guid guid = new Guid();
+                guid = Guid.NewGuid();
+                Appointment apptt = new()
+                {
+                    //Id = appointmentId,
+                    Start = appt.Start,
+                    End = appt.End,
+                    Subject = appt.Subject,
+                    LabelId = AppointmentCategories[rnd.Next(0, AppointmentCategories.Count - 1)].Id,
+                    StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
+                    Location = appt.Location,
+                    Description = appt.Description,
+                    UniqueId = guid,
+                    From = appt.From,
+                };
+
+                Appointments.Add(apptt);
             }
 
 
