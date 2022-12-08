@@ -127,23 +127,7 @@ namespace StudyN.Views
                 Navigation.PushAsync(appointmentEditPage);
             }
         }
-        private void OnCounterClicked(object sender, EventArgs e)
-        {
-            var request = new NotificationRequest
-            {
-                NotificationId = 1337,
-                Title = "Assignment 1 ",
-                Subtitle = "SE",
-                Description = "is due in 15 min",
-                BadgeNumber = 42,
-                Schedule = new NotificationRequestSchedule
-                {
-                    NotifyTime = DateTime.Now.AddSeconds(5),
-                    NotifyRepeatInterval = TimeSpan.FromDays(1),
-                }
-            };
-            LocalNotificationCenter.Current.Show(request);
-        }
+       
 
 
 

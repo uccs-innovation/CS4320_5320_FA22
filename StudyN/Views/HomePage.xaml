@@ -166,12 +166,7 @@
             Spacing="25"
             Padding="30,0"
             VerticalOptions="Center">
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you called"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
+           
         </VerticalStackLayout>
 
         <dxg:DataGridView x:Name ="myList" ItemsSource="{Binding CalendarEvents}"
