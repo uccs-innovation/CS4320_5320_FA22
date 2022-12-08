@@ -64,7 +64,7 @@ namespace StudyN.Views
                     Console.WriteLine("\nException Caught!\n");
                     Console.WriteLine("Message :{0} ", ex.Message);
 
-                    // if the user doesnt give any value and still clicks of submit
+                    // if the user enters the wrong/invalid link
                     await DisplayAlert("Unable to Import",
                         "Entered link was invalid. \n" +
                         "Please enter a valid link.",
@@ -74,8 +74,9 @@ namespace StudyN.Views
 
             else
                 {
-                    // if the user enters the wrong/invalid link
-                    await DisplayAlert("Unable to Import",
+                // if the user doesnt give any value and still clicks of submit
+                
+                await DisplayAlert("Unable to Import",
                             "Make sure you have access to this link.",
                             "Ok");
                 }
