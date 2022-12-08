@@ -164,7 +164,8 @@ namespace StudyN.Utilities
             var indent = new JsonSerializerOptions { WriteIndented = true };
             AppointmentCategory category = GlobalAppointmentData.CalendarManager.GetAppointmentCategory(catId);
             SerializedAppointmentCategory serializer = new SerializedAppointmentCategory();
-            serializer.Id = catId;
+            serializer.Id = category.Id;
+            serializer.UniqueId = catId;
             serializer.Caption = category.Caption;
             serializer.Color = category.Color.ToHex();
             serializer.PickerXPosition = category.PickerXPosition;
@@ -328,6 +329,30 @@ namespace StudyN.Utilities
             }
 
             return files;
+        }
+
+        public static void ApptEdited(Guid taskId)
+        {
+            ApptDeleted(taskId);
+            ApptAdded(taskId);
+            //Unneeded. Mainly just writes out files in directory for testing purposes. 
+            //LoadFileNames();
+        }
+
+        //This function will take a task and delete the associated file
+        public static void ApptDeleted(Guid apptId)
+        {
+
+            //Creating the file name
+            string fileName = APPT_DIR + GlobalAppointmentData.CalendarManager.GetAppointment(apptId).Subject + ".json";
+
+            //If the file exists, delete
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+                //Console.WriteLine("    " + taskId.ToString());
+            }
+
         }
     }
 }

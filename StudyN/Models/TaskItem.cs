@@ -8,16 +8,20 @@ namespace StudyN.Models
                         string description,
                         DateTime dueTime,
                         int priority,
-                        double completionProgress,
-                        double totalTimeNeeded,
+                        int category,
+                        double timeWorked,
+                        double timeEstimated,
+                        DateTime dateNow,
                         Guid recurId)
         {
             this.Name = name;
             this.Description = description;
             this.DueTime = dueTime;
             this.Priority = priority;
-            this.CompletionProgress = completionProgress;
-            this.TotalTimeNeeded = totalTimeNeeded;
+            this.Category = category;
+            this.TimeWorked = timeWorked;
+            this.TimeEstimated = timeEstimated;
+            this.DateNow = dateNow; //for timespan to check latest task added
             this.RecurId = recurId;
         }
 
@@ -26,10 +30,12 @@ namespace StudyN.Models
         public string Name { get; set; }
         public string Description { get; set; } = "";
         public DateTime DueTime { get; set; }
-        public double CompletionProgress { get; set; } = 0;
-        public double TotalTimeNeeded { get; set; } = 0;
+        public double TimeWorked { get; set; } = 0;
+        public double TimeEstimated { get; set; } = 0;
         public int Priority { get; set; } = 3;
+        public int Category { get; set; }
         public bool BeingTimed { get; set; } = false;
+        public DateTime DateNow { get;} 
         public List<TaskItemTime> TimeList { get; set; } = new List<TaskItemTime>();
 
 
@@ -47,9 +53,9 @@ namespace StudyN.Models
         {
             get
             {
-                if (TotalTimeNeeded != 0)
+                if (TimeEstimated != 0)
                 {
-                    double percentage = CompletionProgress / TotalTimeNeeded;
+                    double percentage = TimeWorked / TimeEstimated;
                     if (percentage == Double.NaN)
                         return 0;
                     else
@@ -65,9 +71,9 @@ namespace StudyN.Models
         /// Gets the minutes from Completion Progress
         /// </summary>
         /// <returns></returns>
-        public int GetCompletionProgressMinutes()
+        public int GetMinutesWorked()
         {
-            double minutesRemain = CompletionProgress % 1;
+            double minutesRemain = TimeWorked % 1;
             minutesRemain *= 60;
             return (int)minutesRemain;
         }
@@ -76,9 +82,9 @@ namespace StudyN.Models
         /// Gets the minutes from Total Time Needed
         /// </summary>
         /// <returns></returns>
-        public int GetTotalMinutesNeeded()
+        public int GetMinutesEstimated()
         {
-            double minutesRemain = TotalTimeNeeded % 1;
+            double minutesRemain = TimeEstimated % 1;
             minutesRemain *= 60;
             return (int)minutesRemain;
         }

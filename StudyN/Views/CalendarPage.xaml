@@ -10,7 +10,7 @@
              x:Class="StudyN.Views.CalendarPage">
     
     <Shell.TitleView>
-        <StackLayout
+        <StackLayout           
             Orientation="Horizontal"
             HorizontalOptions="Center"
             Spacing="5">
@@ -113,6 +113,7 @@
     <ContentPage.Content>
         <StackLayout>
             <dxsch:DayView x:Name="dayView"                           
+                           WorkDays="EveryDay"                                                      
                            Tap="OnCalendarTap"
                            LongPress="OnCalendarHold">
                 <dxsch:DayView.DataStorage>
@@ -152,7 +153,8 @@
                 </dxsch:DayView.DataStorage>
             </dxsch:DayView>
             
-            <dxsch:WeekView x:Name="weekView"
+            <dxsch:WeekView x:Name="weekView"                            
+                            WorkDays="EveryDay"                                                                                
                             Tap="OnCalendarTap"
                             LongPress="OnCalendarHold">
             </dxsch:WeekView>

@@ -28,6 +28,7 @@ namespace StudyN.Views
         public TaskPage()
         {
             InitializeComponent();
+            BindingContext = new TaskDataViewModel();
 
             Console.WriteLine("TaskPage initialized");
 
@@ -399,8 +400,8 @@ namespace StudyN.Views
             {
                 // Gets hours worked and needed for TaskItem in row
                 TaskItem row = (TaskItem)dataGrid.GetItem(i);
-                totalHoursWorked = totalHoursWorked + row.CompletionProgress;
-                totalHoursNeeded = totalHoursNeeded + row.TotalTimeNeeded;
+                totalHoursWorked = totalHoursWorked + row.TimeWorked;
+                totalHoursNeeded = totalHoursNeeded + row.TimeEstimated;
             }
 
             // Runs if there are assignments with hours needed to complete

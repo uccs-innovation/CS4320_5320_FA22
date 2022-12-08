@@ -6,7 +6,11 @@
          Style="{StaticResource ShellStyle}"
          xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
          ios:Page.UseSafeArea="true"
-        x:Class="StudyN.Views.MainPage">
+        x:Class="StudyN.Views.MainPage"
+        FlyoutBehavior="Flyout" 
+        FlyoutHeaderBehavior="Fixed" 
+        FlyoutVerticalScrollMode="Auto"> 
+<!--    
     <TabBar>
         <Tab Title="Home" Icon="icons8home">
             <ShellContent ContentTemplate="{DataTemplate local:HomePage}" />
@@ -18,27 +22,62 @@
         <Tab Title="Tasks" Icon="grid">
             <ShellContent ContentTemplate="{DataTemplate local:TaskPage}"/>
         </Tab>
-        
+
         <Tab Title="Analytics" Icon="charts">
             <ShellContent ContentTemplate="{DataTemplate local:AnalyticsPage}" />
         </Tab>
-        
+
         <Tab Title="Categories" Icon="popup">
             <ShellContent ContentTemplate="{DataTemplate local:CategoriesPage}"/>
         </Tab>
-        <Tab Title="Settings" Icon="info">
+        <Tab Title="Settings" Icon="settings">
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
         <Tab Title="About us" Icon="info">
             <ShellContent ContentTemplate="{DataTemplate local:AboutUs}" />
         </Tab>
+        
+        
         <ShellContent Route="HomePage">
             <local:HomePage/>
         </ShellContent>
 
-        
+
 
 
     </TabBar>
+ replacing tabs with flyout-->
+
+    <FlyoutItem Title="Home" Icon="icons8home">
+        <ShellContent ContentTemplate="{DataTemplate local:HomePage}" />
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Calendar" Icon="scheduler">
+        <ShellContent ContentTemplate="{DataTemplate local:CalendarPage}" />
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Tasks" Icon="grid">
+        <ShellContent ContentTemplate="{DataTemplate local:TaskPage}"/>
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Analytics" Icon="charts">
+        <ShellContent ContentTemplate="{DataTemplate local:AnalyticsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Categories" Icon="popup">
+        <ShellContent ContentTemplate="{DataTemplate local:CategoriesPage}"/>
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Settings" Icon="info">
+        <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
+    </FlyoutItem>
+    
+    <FlyoutItem Title="About us" Icon="info">
+        <ShellContent ContentTemplate="{DataTemplate local:AboutUs}" />
+    </FlyoutItem>
+
+    <ShellContent Route="HomePage">
+        <local:HomePage/>
+    </ShellContent>
 
 </Shell>

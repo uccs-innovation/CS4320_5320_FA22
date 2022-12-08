@@ -9,7 +9,6 @@ using Microsoft.Maui.Animations;
 using StudyN.Models;
 using StudyN.Utilities;
 using StudyN.ViewModels;
-using static Android.Util.EventLogTags;
 using static Android.Provider.Settings;
 using Android.Renderscripts;
 using DevExpress.CodeParser;
@@ -18,8 +17,10 @@ using DevExpress.Maui.DataGrid;
 public partial class AddTaskPage : ContentPage
 {
     bool editingExistingTask;
+    bool noCategories = false;
     public AddTaskPage()
     {
+        BindingContext = new AddTaskViewModel();
         InitializeComponent();
         //autoScheduler = new AutoScheduler(GlobalTaskData.TaskManager.TaskList, GlobalAppointmentData.CalendarManager.Appointments);
         AutoScheduler autoScheduler = new AutoScheduler();
@@ -33,13 +34,12 @@ public partial class AddTaskPage : ContentPage
             //If we are editing, we need to set the title and load in the values of the task
             Title = "Edit Task";
             LoadValues();
-            BindingContext = new EditTaskViewModel();
             completeButton.IsEnabled = true;
             trashButton.IsEnabled = true;
             editingExistingTask = true;
             //CreateDummyTaskTimeLogData();
             TimeListLog.ItemsSource = GlobalTaskData.ToEdit.TimeList;
-            this.displayLabel.Text = String.Format("Priority: " + GlobalTaskData.ToEdit.Priority);
+            this.displayLabel.Text = String.Format("" + GlobalTaskData.ToEdit.Priority);
         }
         else
         {
@@ -51,6 +51,7 @@ public partial class AddTaskPage : ContentPage
             SetValues();            
         }
 
+        SetCategoryComboBoxVisible();
         SetRecurrenceComboBoxVisible();
 
         //If we are editing a task, the delete and edit buttons will be visable. If not, then invisable
@@ -237,8 +238,19 @@ public partial class AddTaskPage : ContentPage
     {
         //Stroring the new value and setting the sliders label correctly
         int value = (int)args.NewValue;
-        displayLabel.Text = String.Format("Priority: " + value);
+        displayLabel.Text = String.Format("" + value);
     }
+
+    /*
+    //This function will be used by the category slider when its value has changed to set and keep track of the new value
+    void HandleCategoryValueChanged(object sender, ValueChangedEventArgs args)
+    {
+        //Gets value from category list
+        int value = (int)args.NewValue;
+        category.ThumbColor = appointmentCategories[value].Color;
+        displayCategory.Text = String.Format(appointmentCategories[value].Caption);
+    }
+    */
 
     //This function will be used by the add task button to either create a new task or save the changes to an existing one
     private async void HandleAddTaskButton(object sender, EventArgs e)
@@ -246,16 +258,16 @@ public partial class AddTaskPage : ContentPage
         // Make sure we aren't storing nulls
         name.Text = name.Text == null ? "Unnamed Task" : name.Text;
         description.Text = description.Text == null ? "" : description.Text;
-        int hoursLogged = hSpent.Value == null ? 0 : (int)hSpent.Value;
-        int minutesLogged = mSpent.Value == null ? 0 : (int)mSpent.Value;
-        int totalHours = hComplete.Value == null ? 0 : (int)hComplete.Value;
-        int totalMinutes = mComplete.Value == null ? 0 : (int)mComplete.Value;
+        int hoursWorked = hWorked.Value == null ? 0 : (int)hWorked.Value;
+        int minutesWorked = mWorked.Value == null ? 0 : (int)mWorked.Value;
+        int hoursEstimated = hEstimated.Value == null ? 0 : (int)hEstimated.Value;
+        int minutesEstimated = mEstimated.Value == null ? 0 : (int)mEstimated.Value;
         date.Date = date.Date == null ? DateTime.Now.AddYears(1) : date.Date;
         time.Time = time.Time == null ? DateTime.Now.AddYears(1) : time.Time;
 
         // Turn logged time and total time into time doubles
-        double timeLogged = GlobalTaskData.TaskManager.SumTimes(hoursLogged, minutesLogged);
-        double totalTime = GlobalTaskData.TaskManager.SumTimes(totalHours, totalMinutes);
+        double timeWorked = GlobalTaskData.TaskManager.SumTimes(hoursWorked, minutesWorked);
+        double timeEstimated = GlobalTaskData.TaskManager.SumTimes(hoursEstimated, minutesEstimated);
 
         DateTime dateTime = new DateTime(date.Date.Value.Year,
                                         date.Date.Value.Month,
@@ -263,6 +275,18 @@ public partial class AddTaskPage : ContentPage
                                         time.Time.Value.Hour,
                                         time.Time.Value.Minute,
                                         time.Time.Value.Second);
+
+        //Gets the category id from category selected from slider
+        int categoryId;
+        if (!noCategories)
+        {
+            categoryId = GlobalAppointmentData.CalendarManager.AppointmentCategories[this.CategoryComboBox.SelectedIndex].Id;
+        }
+        else
+        {
+            categoryId = 0;
+        }
+
 
         TaskItem task;
         //Check to see if we are currently editing or adding a task
@@ -275,8 +299,9 @@ public partial class AddTaskPage : ContentPage
                 this.description.Text,
                 dateTime,
                 (int)this.priority.Value,
-                timeLogged,
-                totalTime);
+                categoryId,
+                timeWorked,
+                timeEstimated);
 
             if (GlobalTaskData.ToEdit.IsRecur)
             {
@@ -308,8 +333,9 @@ public partial class AddTaskPage : ContentPage
                     this.description.Text,
                     dateTime,
                     (int)this.priority.Value,
-                    timeLogged,
-                    totalTime);
+                    categoryId,
+                    timeWorked,
+                    timeEstimated);
         }
 
         // Handles recurrence after everything is added into the task
@@ -358,10 +384,20 @@ public partial class AddTaskPage : ContentPage
         this.date.Date = (GlobalTaskData.ToEdit.DueTime.Date);
         this.time.Time = GlobalTaskData.ToEdit.DueTime;
         this.priority.Value = (GlobalTaskData.ToEdit.Priority);
-        this.hComplete.Value = (int)GlobalTaskData.ToEdit.TotalTimeNeeded;
-        this.mComplete.Value = GlobalTaskData.ToEdit.GetTotalMinutesNeeded();
-        this.hSpent.Value = (int)GlobalTaskData.ToEdit.CompletionProgress;
-        this.mSpent.Value = GlobalTaskData.ToEdit.GetCompletionProgressMinutes();
+        this.hEstimated.Value = (int)GlobalTaskData.ToEdit.TimeEstimated;
+        this.mEstimated.Value = GlobalTaskData.ToEdit.GetMinutesEstimated();
+        this.hWorked.Value = (int)GlobalTaskData.ToEdit.TimeWorked;
+        this.mWorked.Value = GlobalTaskData.ToEdit.GetMinutesWorked();
+
+        //If the category isn't uncategorized than find the index to use
+        if(GlobalTaskData.ToEdit.Category > 0)
+        {
+            this.CategoryComboBox.SelectedIndex = GlobalAppointmentData.CalendarManager.GetAppointmentCategoriesIdex(GlobalTaskData.ToEdit.Category);
+        }
+        else
+        {
+            this.CategoryComboBox.SelectedIndex = 0;
+        }
 
         if(GlobalTaskData.ToEdit.IsRecur)
         {
@@ -409,7 +445,45 @@ public partial class AddTaskPage : ContentPage
         }
     }
 
-    private void RecurrenceComboBoxChanged(Object sender, EventArgs e)
+    private void SetCategoryComboBoxVisible()
+    {
+        if(GlobalAppointmentData.CalendarManager.AppointmentCategories.Count > 0)
+        {
+            // make combo box visible if there are categories
+            CategoryComboBox.IsVisible = true;
+            CategoryLabel.Text = String.Format("Category:");
+        }
+        else
+        {
+            // else make the combo box disappears and display there are no categories
+            CategoryComboBox.IsVisible = false;
+            CategoryLabel.Text = String.Format("There are no Categories");
+            noCategories = true;
+        }
+    }
+
+    /*
+    private void SetCategorySliderVisible()
+    {
+        if(appointmentCategories.Count > 0)
+        {
+            // if there are categories the category slider is visible
+            category.IsVisible = true;
+            category.Maximum = appointmentCategories.Count - 1;
+            category.ThumbColor = appointmentCategories[(int)this.category.Value].Color;
+            displayCategory.Text = String.Format(appointmentCategories[(int)this.category.Value].Caption);
+        }
+        else
+        {
+            // else the slider isn't visible
+            category.IsVisible = false;
+            displayCategory.Text = String.Format("There are no categories");
+            noCategories = true;
+        }
+    }
+    */
+    
+        private void RecurrenceComboBoxChanged(Object sender, EventArgs e)
     {
         SetRecurrenceComboBoxVisible();
     }

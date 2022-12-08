@@ -16,8 +16,7 @@ using DevExpress.Data.Mask;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-
-
+using Android.Content.PM;
 
 namespace StudyN.Models
 {
@@ -39,17 +38,14 @@ namespace StudyN.Models
         public static double[] AppointmentCategoryX = { 0.65f, 0.35f, 0.9f, 0.15f, 0.52f, 0.1f, 0.98f, 0.8f};
 
         // Uncategorized category
-
-
-
         public static AppointmentCategory Uncategorized = new()
         {
-            Id = Guid.NewGuid(),
+            Id = 0,
             Caption = "Uncategorized",
             Color = Color.FromArgb("#D9D9D9"),
             PickerXPosition = 0.5f,
-            PickerYPosition = 1.0f
-
+            PickerYPosition = 1.0f,
+            UniqueId = Guid.NewGuid()
         };
                                                                                       
         public static string[] AppointmentStatusTitles = { "Free", "Busy", "Blocked", "Tentative", "Flexible" };
@@ -68,6 +64,8 @@ namespace StudyN.Models
 
         static Random rnd = new Random();
 
+        // keeps the current highest category id
+        int catId = 1;
 
         public void CreateAppointmentCategories()
         {
@@ -75,14 +73,16 @@ namespace StudyN.Models
             for (int i = 0; i < count; i++)
             {
                 AppointmentCategory cat = new AppointmentCategory();
-                cat.Id = Guid.NewGuid();
+                cat.Id = catId;
                 cat.Caption = AppointmentCategoryTitles[i];
                 cat.Color = AppointmentCategoryColors[i];
                 cat.PickerXPosition = AppointmentCategoryX[i];
                 cat.PickerYPosition = 0.5f;
+                cat.UniqueId = Guid.NewGuid();
+                catId++;
                 AppointmentCategories.Add(cat);
                 EventBus.PublishEvent(
-                            new StudynEvent(cat.Id, StudynEvent.StudynEventType.CategoryAdd));
+                            new StudynEvent(cat.UniqueId, StudynEvent.StudynEventType.CategoryAdd));
             }
         }
 
@@ -92,13 +92,35 @@ namespace StudyN.Models
             foreach (AppointmentCategory category in AppointmentCategories)
             {
                 // if the category is found return it
-                if (category.Id == id)
+                if (category.UniqueId == id)
                 {
                     return category;
                 }
             }
             // else return null
             return null;
+        }
+
+        /// <summary>
+        /// Use the integer id to get index of the appointment category
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public int GetAppointmentCategoriesIdex(int id)
+        {
+            int i = 0;
+            // go through categories
+            foreach (AppointmentCategory category in AppointmentCategories)
+            {
+                // if the category is found return it's index
+                if (category.Id == id)
+                {
+                    return i;
+                }
+                i++;
+            }
+            // else return null
+            return 0;
         }
 
         void CreateAppointmentStatuses()
@@ -118,12 +140,14 @@ namespace StudyN.Models
                                             string appointmentTitle,
                                             DateTime start,
                                             TimeSpan duration,
+                                            int label,
                                             int room,
                                             Guid taskId, //recurId = new Guid(),
-                                            string from = "",
+                                            string from,
                                             bool autoScheduled = false)
         {
             Guid guid = new Guid();
+            guid = Guid.NewGuid();
 
             Appointment appt = new()
             {
@@ -131,7 +155,7 @@ namespace StudyN.Models
                 Start = start,
                 End = start.Add(duration),
                 Subject = appointmentTitle,
-                LabelId = AppointmentCategories[rnd.Next(0, 5)].Id,
+                LabelId = label,
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
                 Description = string.Empty,
@@ -148,12 +172,14 @@ namespace StudyN.Models
 
             if (appt.From != "autoScheduler")
             {
-                EventBus.PublishEvent(
-                            new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
+               // EventBus.PublishEvent(
+                      //      new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
             }
 
             return appt;
         }
+
+        
 
         /// <summary>
         /// Function for creating a new category and adding it to category list
@@ -167,21 +193,38 @@ namespace StudyN.Models
                                                    double x, double y,
                                                    Guid id = new Guid())
         {
-            // Makes a new category
-            AppointmentCategory cat = new()
+            if(id == Guid.Empty)
             {
-                Id = id,
-                Caption = categoryName,
-                Color = categoryColor,
-                PickerXPosition = x,
-                PickerYPosition = y
-            };
+                id = Guid.NewGuid();
+            }
+            // Makes a new category
+            AppointmentCategory cat = new AppointmentCategory();
+            if(AppointmentCategories.Count == 0)
+            {
+                cat.Id = 1;
+                cat.Caption = categoryName;
+                cat.Color = categoryColor;
+                cat.PickerXPosition = x;
+                cat.PickerYPosition = y;
+                cat.UniqueId = id;
+                catId = 1;
+            }
+            else
+            {
+                cat.Id = catId + 1;
+                cat.Caption = categoryName;
+                cat.Color = categoryColor;
+                cat.PickerXPosition = x;
+                cat.PickerYPosition = y;
+                cat.UniqueId = id;
+                catId++;
+            }
 
             // Adds category to category list
             AppointmentCategories.Add(cat);
 
             EventBus.PublishEvent(
-                        new StudynEvent(cat.Id, StudynEvent.StudynEventType.CategoryAdd));
+                        new StudynEvent(cat.UniqueId, StudynEvent.StudynEventType.CategoryAdd));
 
             return cat;
 
@@ -204,7 +247,7 @@ namespace StudyN.Models
 
             foreach (AppointmentCategory category in AppointmentCategories)
             {
-                if (category.Id == id)
+                if (category.UniqueId == id)
                 {
                     cat = category;
                 }
@@ -237,15 +280,24 @@ namespace StudyN.Models
             // Search for category
             foreach (AppointmentCategory category in AppointmentCategories)
             {
-                if (category.Id == id)
+                if (category.UniqueId == id)
                 {
                     // go through the appointments with the category
                     foreach (Appointment appointment in Appointments)
                     {
-                        if (appointment.LabelId == category)
+                        if ((int)appointment.LabelId == category.Id)
                         {
                             // Make appointment uncategorized
-                            appointment.LabelId = Uncategorized;
+                            appointment.LabelId = Uncategorized.Id;
+                        }
+                    }
+                    // go through the tasks with the category
+                    foreach (TaskItem task in GlobalTaskData.TaskManager.TaskList)
+                    {
+                        if (task.Category == category.Id)
+                        {
+                            // Make task uncategorized
+                            task.Category = Uncategorized.Id;
                         }
                     }
                     // Remove category
@@ -255,6 +307,45 @@ namespace StudyN.Models
                     return;
                 }
             }
+        }
+
+        /// <summary>
+        /// Auto generates a category from a string for imported files
+        /// </summary>
+        /// <param name="caption"></param>
+        /// <returns></returns>
+        public AppointmentCategory AutoGenerateCategory(string caption)
+        {
+            // if the category exists return that category instead
+            foreach(AppointmentCategory cat in AppointmentCategories)
+            {
+                if(String.Equals(cat.Caption, caption))
+                {
+                    return cat;
+                }
+            }
+            // otherwise auto generate a category
+            AppointmentCategory category = new AppointmentCategory();
+            category.Caption = caption;
+            category.Id = catId + 1;
+            category.UniqueId = Guid.NewGuid();
+            AutoGenCategoryPalette(category);
+            AppointmentCategories.Add(category);
+            catId++;
+            EventBus.PublishEvent(
+                        new StudynEvent(category.UniqueId, StudynEvent.StudynEventType.CategoryAdd));
+            return category;
+        }
+
+        /// <summary>
+        /// This function gives the auto generated categories their color
+        /// </summary>
+        /// <param name="category"></param>
+        public void AutoGenCategoryPalette(AppointmentCategory category)
+        {
+            category.Color = Color.FromArgb("#000000");
+            category.PickerXPosition = 0.98;
+            category.PickerYPosition = 0.98;
         }
 
         /// <summary>
@@ -406,15 +497,27 @@ namespace StudyN.Models
             string[] categoryFileList = FileManager.LoadCategoryFileNames();
             foreach (string file in categoryFileList)
             {
-                jsonFileText = File.ReadAllText(file);
-                SerializedAppointmentCategory deserializer = JsonConvert.DeserializeObject<SerializedAppointmentCategory>(jsonFileText);
-                AppointmentCategory category = new AppointmentCategory();
-                category.Id = deserializer.Id;
-                category.Caption = deserializer.Caption;
-                category.Color = Color.FromArgb(deserializer.Color);
-                category.PickerXPosition = deserializer.PickerXPosition;
-                category.PickerYPosition = deserializer.PickerYPosition;
-                AppointmentCategories.Add(category);
+                try
+                {
+                    jsonFileText = File.ReadAllText(file);
+                    SerializedAppointmentCategory deserializer = JsonConvert.DeserializeObject<SerializedAppointmentCategory>(jsonFileText);
+                    AppointmentCategory category = new AppointmentCategory();
+                    category.Id = deserializer.Id;
+                    category.UniqueId = deserializer.UniqueId;
+                    category.Caption = deserializer.Caption;
+                    category.Color = Color.FromArgb(deserializer.Color);
+                    category.PickerXPosition = deserializer.PickerXPosition;
+                    category.PickerYPosition = deserializer.PickerYPosition;
+                    AppointmentCategories.Add(category);
+                    // if new id is higher than current catId make catId new id
+                    if (deserializer.Id > catId)
+                    {
+                        catId = deserializer.Id;
+                    }
+                } catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
 
@@ -462,7 +565,26 @@ namespace StudyN.Models
 
                 //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
 
-                Appointments.Add(appt);
+                //CreateAppointment(appt.Id, appt.Subject, appt.Start, appt.End, appt.Location);
+
+
+                Guid guid = new Guid();
+                guid = Guid.NewGuid();
+                Appointment apptt = new()
+                {
+                    //Id = appointmentId,
+                    Start = appt.Start,
+                    End = appt.End,
+                    Subject = appt.Subject,
+                    LabelId = AppointmentCategories[rnd.Next(0, AppointmentCategories.Count - 1)].Id,
+                    StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
+                    Location = appt.Location,
+                    Description = appt.Description,
+                    UniqueId = guid,
+                    From = appt.From,
+                };
+
+                Appointments.Add(apptt);
             }
 
 

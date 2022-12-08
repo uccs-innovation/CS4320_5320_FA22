@@ -8,10 +8,6 @@
              IconImageSource="grid"
              x:Class="StudyN.Views.TaskPage">
 
-    <!-- Binding Context -->
-    <ContentPage.BindingContext>
-        <ViewModels:TaskDataViewModel />
-    </ContentPage.BindingContext>
     <!-- Toolbar -->
     <ContentPage.ToolbarItems>
         <!-- Standard Options -->

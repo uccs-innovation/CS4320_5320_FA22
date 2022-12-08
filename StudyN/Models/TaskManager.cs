@@ -19,8 +19,9 @@ namespace StudyN.Models
                                string description,
                                DateTime dueTime,
                                int priority,
-                               double CompletionProgress,
-                               double TotalTimeNeeded,
+                               int category,
+                               double timeWorked,
+                               double timeEstimated,
                                Guid recurId = new Guid())
         {
             if(recurId == Guid.Empty)
@@ -32,9 +33,11 @@ namespace StudyN.Models
             TaskItem newTask = new TaskItem(name,
                                             description,
                                             dueTime,
+                                            category,
                                             priority,
-                                            CompletionProgress,
-                                            TotalTimeNeeded,
+                                            timeWorked,
+                                            timeEstimated,
+                                            DateTime.Now,
                                             recurId);
 
             //This will add the tasks to the list
@@ -79,8 +82,9 @@ namespace StudyN.Models
                                 string description,
                                 DateTime dueTime,
                                 int priority,
-                                double CompletionProgress,
-                                double TotalTimeNeeded,
+                                int category,
+                                double timeWorked,
+                                double timeEstimated,
                                 List<TaskItemTime> TimeList = null,
                                 bool updateFile = true)
         {
@@ -97,8 +101,9 @@ namespace StudyN.Models
             task.Description = description;
             task.DueTime = dueTime;
             task.Priority = priority;
-            task.CompletionProgress = CompletionProgress;
-            task.TotalTimeNeeded = TotalTimeNeeded;
+            task.Category = category;
+            task.TimeWorked = timeWorked;
+            task.TimeEstimated = timeEstimated;
             task.TimeList = TimeList;
 
             // Publish task edit event
@@ -167,8 +172,9 @@ namespace StudyN.Models
                                         ParentTask.Description,
                                         dueTime,
                                         ParentTask.Priority,
-                                        ParentTask.CompletionProgress,
-                                        ParentTask.TotalTimeNeeded,
+                                        ParentTask.Category,
+                                        ParentTask.TimeWorked,
+                                        ParentTask.TimeEstimated,
                                         ParentTask.RecurId);
                 task.IsRecur = true;
                 // Create a deepcopy
@@ -196,8 +202,9 @@ namespace StudyN.Models
                                         ParentTask.Description,
                                         dueTime,
                                         ParentTask.Priority,
-                                        ParentTask.CompletionProgress,
-                                        ParentTask.TotalTimeNeeded,
+                                        ParentTask.Category,
+                                        ParentTask.TimeWorked,
+                                        ParentTask.TimeEstimated,
                                         ParentTask.RecurId);
                 task.IsRecur = true;
                 // Create a deepcopy
@@ -244,23 +251,29 @@ namespace StudyN.Models
             string[] taskfilelist = FileManager.LoadTaskFileNames();
             foreach (string file in taskfilelist)
             {
-                jsonfiletext = File.ReadAllText(file);
-                //Console.WriteLine(jsonfiletext);
-                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext); 
-                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
-                TaskList.Add(task);
+                try { 
+                    jsonfiletext = File.ReadAllText(file);
+                    //Console.WriteLine(jsonfiletext);
+                    TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext); 
+                    //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                    TaskList.Add(task);
 
-                if (task.TimeList != null)
-                {
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("Writing out task times");
-                    foreach (TaskItemTime tasktime in task.TimeList)
+                    if (task.TimeList != null)
                     {
-                        Console.WriteLine("Time Start" + tasktime.start);
-                        Console.WriteLine("TimeStop" + tasktime.stop);
-                        Console.WriteLine("Timespanned" + tasktime.span);
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("Writing out task times");
+                        foreach (TaskItemTime tasktime in task.TimeList)
+                        {
+                            Console.WriteLine("Time Start" + tasktime.start);
+                            Console.WriteLine("TimeStop" + tasktime.stop);
+                            Console.WriteLine("Timespanned" + tasktime.span);
+                        }
                     }
+                }catch (Exception ex)
+                {
+                    // when files get loaded that don't have all information needed
+                    Console.WriteLine(ex.Message);
                 }
             }
 
@@ -270,33 +283,49 @@ namespace StudyN.Models
             string[] completedfiles = FileManager.LoadCompletedFileNames();
             foreach (string file in completedfiles)
             {
-                jsonfiletext = File.ReadAllText(file);
-                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+                try
+                {
+                    jsonfiletext = File.ReadAllText(file);
+                    TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
 
-                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
-                CompletedTasks.Add(task);
+                    //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                    CompletedTasks.Add(task);
+                }
+                catch (Exception ex)
+                {
+                    // when files get loaded that don't have all information needed
+                    Console.WriteLine(ex.Message);
+                }
             }
 
             //gets test tasks
             string[] testFile = FileManager.LoadTaskFileNames();
             foreach (string file in testFile)
             {
-                jsonfiletext = File.ReadAllText(file);
-                //Console.WriteLine(jsonfiletext);
-                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
-                TaskListTest.Add(task);
-
-                if (task.TimeList != null)
+                try
                 {
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("Writing out task times");
-                    foreach (TaskItemTime tasktime in task.TimeList)
+                    jsonfiletext = File.ReadAllText(file);
+                    //Console.WriteLine(jsonfiletext);
+                    TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+                    TaskListTest.Add(task);
+
+                    if (task.TimeList != null)
                     {
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("Writing out task times");
+                        foreach (TaskItemTime tasktime in task.TimeList)
+                        {
                         Console.WriteLine("Time Start" + tasktime.start);
                         Console.WriteLine("TimeStop" + tasktime.stop);
                         Console.WriteLine("Timespanned" + tasktime.span);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    // when files get loaded that don't have all information needed
+                    Console.WriteLine(ex.Message);
                 }
             }
         }
@@ -309,23 +338,30 @@ namespace StudyN.Models
             string[] taskfilelist = FileManager.LoadTaskFileTest(dirName);
             foreach (string file in taskfilelist)
             {
-                jsonfiletext = File.ReadAllText(file);
-                //Console.WriteLine(jsonfiletext);
-                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
-                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
-                TaskList.Add(task);
+                try {
+                    jsonfiletext = File.ReadAllText(file);
+                    //Console.WriteLine(jsonfiletext);
+                    TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+                    //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                    TaskList.Add(task);
 
-                if (task.TimeList != null)
-                {
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("Writing out task times");
-                    foreach (TaskItemTime tasktime in task.TimeList)
+                    if (task.TimeList != null)
                     {
-                        Console.WriteLine("Time Start" + tasktime.start);
-                        Console.WriteLine("TimeStop" + tasktime.stop);
-                        Console.WriteLine("Timespanned" + tasktime.span);
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("Writing out task times");
+                        foreach (TaskItemTime tasktime in task.TimeList)
+                        {
+                            Console.WriteLine("Time Start" + tasktime.start);
+                            Console.WriteLine("TimeStop" + tasktime.stop);
+                            Console.WriteLine("Timespanned" + tasktime.span);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    // when files get loaded that don't have all information needed
+                    Console.WriteLine(ex.Message);
                 }
             }
 
@@ -333,33 +369,46 @@ namespace StudyN.Models
             string[] completedfiles = FileManager.LoadCompletedFileNames();
             foreach (string file in completedfiles)
             {
-                jsonfiletext = File.ReadAllText(file);
-                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+                try { 
+                    jsonfiletext = File.ReadAllText(file);
+                    TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
 
-                //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
-                CompletedTasks.Add(task);
+                    //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
+                    CompletedTasks.Add(task);
+                }catch (Exception ex)
+                {
+                    // when files get loaded that don't have all information needed
+                    Console.WriteLine(ex.Message);
+                }
             }
 
             //gets test tasks
             string[] testFile = FileManager.LoadTaskFileTest(dirName);
             foreach (string file in testFile)
             {
-                jsonfiletext = File.ReadAllText(file);
-                //Console.WriteLine(jsonfiletext);
-                TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
-                TaskListTest.Add(task);
+                try {
+                    jsonfiletext = File.ReadAllText(file);
+                    //Console.WriteLine(jsonfiletext);
+                    TaskItem task = JsonConvert.DeserializeObject<TaskItem>(jsonfiletext);
+                    TaskListTest.Add(task);
 
-                if (task.TimeList != null)
-                {
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("--------------------------------");
-                    Console.WriteLine("Writing out task times");
-                    foreach (TaskItemTime tasktime in task.TimeList)
+                    if (task.TimeList != null)
                     {
-                        Console.WriteLine("Time Start" + tasktime.start);
-                        Console.WriteLine("TimeStop" + tasktime.stop);
-                        Console.WriteLine("Timespanned" + tasktime.span);
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine("Writing out task times");
+                        foreach (TaskItemTime tasktime in task.TimeList)
+                        {
+                            Console.WriteLine("Time Start" + tasktime.start);
+                            Console.WriteLine("TimeStop" + tasktime.stop);
+                            Console.WriteLine("Timespanned" + tasktime.span);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    // when files get loaded that don't have all information needed
+                    Console.WriteLine(ex.Message);
                 }
             }
         }
@@ -418,7 +467,6 @@ namespace StudyN.Models
 
         public ObservableCollection<TaskItem> TaskList { get; private set; }
         private ObservableCollection<TaskItem> CompletedTasks { get; set; }
-
         public ObservableCollection<TaskItem> TaskListTest { get; private set; }
 
         //This constructor will create the normal TaskList and the list for
@@ -428,6 +476,26 @@ namespace StudyN.Models
             TaskList = new ObservableCollection<TaskItem>();
             CompletedTasks = new ObservableCollection<TaskItem>();
             TaskListTest = new ObservableCollection<TaskItem>();
+        } 
+
+        //Method checks what task was added to the list last
+        public TaskItem GetLastTask()
+        {
+            //Set to arbitrary task
+            TaskItem latestTask = TaskList.Last();
+
+            //Checking each item in the current task list
+            foreach (TaskItem task in TaskList)
+            {
+                /* Check if the time span was just added
+                and saves it as the latest Task */
+                if (task.DateNow >= latestTask.DateNow)
+                {
+                    latestTask = task;
+                }
+            }
+            //return latest added task
+            return latestTask;
         }
 
     }

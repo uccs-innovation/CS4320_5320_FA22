@@ -6,7 +6,8 @@
              xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
              xmlns:dxee="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:local="clr-namespace:StudyN.Views"
-             Title="Sleep Time">
+             Title="Sleep Time"
+             Shell.TabBarIsVisible="False">
     <!-- Save Button -->
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Save"
