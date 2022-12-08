@@ -20,8 +20,11 @@ using StudyN.Utilities;
 using StudyN.ViewModels;
 using System.Net;
 using System;
+using System.IO;
 using System.Globalization;
 using DevExpress.DataAccess.Native.Sql.MasterDetail;
+using DevExpress.XtraMap.Native;
+using System.Collections.ObjectModel;
 
 namespace StudyN.Views
 {
@@ -85,6 +88,9 @@ namespace StudyN.Views
             private string line;
             private int id;
             private string name;
+            //private vector<string> catName;
+            //private string[] catNames;
+            private ObservableCollection<string> catNames;
             private string descript;
             private DateTime start = new DateTime();
             private TimeSpan startTime = new TimeSpan();
@@ -98,7 +104,7 @@ namespace StudyN.Views
             //constructor that takes string and calls convert to break it
             public GetAppointFromString(string r)
             {
-                convert(r);
+                ConvertICStoTasks(r);
             }
 
             /*
@@ -107,7 +113,7 @@ namespace StudyN.Views
              * create appointment from compatable pieces
              * repeat with next event
             */
-            private void convert(string response)
+            private void ConvertICStoTasks(string response)
             {
                 //use stringreader to convert big string into 
                 using var sr = new StringReader(response);
@@ -121,6 +127,35 @@ namespace StudyN.Views
                     {
                         line = line.Substring(8);
                         name = line;
+                        //int squareExists = line.IndexOf('[');
+                        //int ex = 0;
+                        //if (squareExists != -1)
+                        //{
+                        //    int squareLast = line.IndexOf("]");
+                        //    squareExists++;
+                        //    //squareLast--;
+                        //    line = line.Substring((squareExists));
+                        //    line = line.Substring(0, (squareLast - squareExists));
+                        //    //line = line.Substring((squareExists + 1), (squareLast - 1));
+                        //    if (catNames == null)
+                        //    {
+                        //        catNames.Add(line);
+                        //    }
+                        //    else
+                        //    {
+                        //        for (int i = 0; i < catNames.Count; i++)
+                        //        {
+                        //            if (catNames[i] == line)
+                        //            {
+                        //                ex++;
+                        //            }
+                        //        }
+                        //        if (ex == 0)
+                        //        {
+                        //            catNames.Add(line);
+                        //        }
+                        //    }
+                        //}
                     }
                     if (line.Contains("DESCRIPTION") == true)
                     {
@@ -229,6 +264,10 @@ namespace StudyN.Views
                 //give success if so and tell user that they need to edit values
                 SuccessMessage();
                 WarningMessage();
+
+
+                //ask user if they want to make a category from detected square brackets
+                //BracketMessage();
             }
 
             //function to tell user to edit tasks
@@ -241,6 +280,22 @@ namespace StudyN.Views
             async private static void SuccessMessage()
             {
                 await App.Current.MainPage.DisplayAlert("Success", "ICS file successfully imported", "OK");
+            }
+
+            async private void BracketMessage()
+            {
+                bool yOrNo;
+
+                //ask user if yes or no
+                for (int i = 0; i < catNames.Count; i++)
+                {
+                    yOrNo = await App.Current.MainPage.DisplayAlert("Create Category?", "A string inside square brackets was detected in"
+                                + " the title of an imported task.\n Would you like to create a category: " + catNames[i], "YES", "NO");
+                    if (yOrNo)
+                    {
+                        //CreateCategory(catNames[i]);
+                    }
+                }
             }
         }
 
