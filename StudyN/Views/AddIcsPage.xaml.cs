@@ -1,4 +1,3 @@
-
 /*
  * 
  * WHAT IS HAPPENING HERE??:
@@ -48,18 +47,43 @@ namespace StudyN.Views
             Console.WriteLine(link);
             if (!string.IsNullOrEmpty(link))
             {
-                HttpResponseMessage response = await client.GetAsync(link);
-                var content1 = client.GetStringAsync(link);
-                content = content1.Result;
-                Console.WriteLine(content1.Result);
-                await Shell.Current.GoToAsync(nameof(DisplayIntegratedCalPage));
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(link);
+                    var content1 = client.GetStringAsync(link);
+                    content = content1.Result;
+                    Console.WriteLine(content1.Result);
+                    await DisplayAlert("This ics file is being imported", link, "OK");
+                    await Shell.Current.GoToAsync(nameof(DisplayIntegratedCalPage));
 
+                }
+
+                catch (Exception ex)
+                {
+                    //the error occured
+                    Console.WriteLine("\nException Caught!\n");
+                    Console.WriteLine("Message :{0} ", ex.Message);
+
+                    // if the user doesnt give any value and still clicks of submit
+                    await DisplayAlert("Unable to Import",
+                        "Entered link was invalid. \n" +
+                        "Please enter a valid link.",
+                        "Ok");
+                }
             }
-        }
+
+            else
+                {
+                    // if the user enters the wrong/invalid link
+                    await DisplayAlert("Unable to Import",
+                            "Make sure you have access to this link.",
+                            "Ok");
+                }
+            }
 
 
 
-        private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+            private void Entry_TextChanged(object sender, TextChangedEventArgs e)
         {
             link = e.NewTextValue;
         }
@@ -217,7 +241,7 @@ namespace StudyN.Views
                     {
                         int room = rnd.Next(1000, 2000);
                         CalendarManager calendarManager = new CalendarManager();
-                      //  calendarManager.CreateAppointment(id, name, start, duration, room);
+                        //  calendarManager.CreateAppointment(id, name, start, duration, room);
                         start = new DateTime();
                         end = new DateTime();
                         duration = new TimeSpan();
