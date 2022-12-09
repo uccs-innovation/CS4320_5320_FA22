@@ -244,11 +244,11 @@ namespace StudyN.Views
                         //calendarManager.CreateAppointment(id, name, start, duration, room);
                         if (end.Equals(zdate))
                         {
-                            GlobalTaskData.TaskManager.AddTask(name, descript, start, 3, 0, 0);
+                            GlobalTaskData.TaskManager.AddTask(name, descript, start, 3, 0, 0, 0);
                         }
                         else
                         {
-                            GlobalTaskData.TaskManager.AddTask(name, descript, end, 3, 0, 0);
+                            GlobalTaskData.TaskManager.AddTask(name, descript, end, 3, 0, 0, 0);
                         }
                         
 
@@ -273,8 +273,9 @@ namespace StudyN.Views
             //function to tell user to edit tasks
             async private static void WarningMessage()
             {
-                await App.Current.MainPage.DisplayAlert("Warning", "All pulled tasks hold an estimated time of 0 and a priority of 3.\n"
-                    + "Please change values in the task page.", "OK");
+                await App.Current.MainPage.DisplayAlert("Warning", "All pulled tasks hold an estimated time of 0, " +
+                    "are assigned to no category, and a priority of 3.\n" +
+                    "Please change values in the task page.", "OK");
             }
 
             async private static void SuccessMessage()
