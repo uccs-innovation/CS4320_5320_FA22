@@ -8,7 +8,7 @@
     <ContentPage.BindingContext>
         <local:TaskAnalyticsViewModel/>
     </ContentPage.BindingContext>
-    <dxc:ChartView x:Name="TaskAnalytics">
+    <dxc:ChartView x:Name="TaskAnalytics" AxisXNavigationMode="Scrolling">
         <dxc:ChartView.Series>
             <dxc:StackedBarSeries>
                 <dxc:StackedBarSeries.Data>
