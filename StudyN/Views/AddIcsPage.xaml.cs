@@ -83,14 +83,14 @@ namespace StudyN.Views
         class GetAppointFromString
         {
             CultureInfo enUS = new CultureInfo("en-US");
-            Color color;
+            //Color color;
             //Color.FromArgb("#000000")
             private string line;
             private int id;
             private string name;
             //private vector<string> catName;
             //private string[] catNames;
-            private ObservableCollection<string> catNames;
+            //private ObservableCollection<string> catNames;
             private string descript;
             private DateTime start = new DateTime();
             private TimeSpan startTime = new TimeSpan();
