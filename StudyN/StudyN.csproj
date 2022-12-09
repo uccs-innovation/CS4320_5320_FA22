@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0-android</TargetFrameworks>
@@ -26,8 +26,7 @@
 		<MauiIcon Include="Resources\appicon.jpg" Color="#FFFFFF" />
 		
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splashscreen.jpg" Color="#FFFFFF" />
-		
+		<MauiSplashScreen Include="Resources\Splash\splashscreen.svg" />
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 
@@ -38,10 +37,11 @@
 	<ItemGroup>
 	  <None Remove="Platforms\Android\google-services.json" />
 	  <None Remove="Platforms\Android\private_key.json" />
+	  <None Remove="Platforms\Android\Resources\drawable\maui_splash.xml" />
 	  <None Remove="private_key.json" />
 	  <None Remove="Resources\Images\image2vector.svg" />
-	  <None Remove="Resources\Images\logo.png" />
 	  <None Remove="Resources\Images\plus_button.png" />
+	  <None Remove="Resources\Images\splashscreen.png" />
 	</ItemGroup>
 
 	<ItemGroup>		
