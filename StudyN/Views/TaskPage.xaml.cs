@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Android.Gms.Tasks;
 using Android.Widget;
 using DevExpress.Maui.DataGrid;
+using Microsoft.Maui.Controls.Internals;
 using StudyN.Models;
 using StudyN.ViewModels;
 
@@ -15,6 +16,7 @@ namespace StudyN.Views
 
         bool isLongPressMenuVisible = true;
         ToolbarItem addToolbarItem;
+        ToolbarItem filterToolbarItem;
         ToolbarItem cancelToolbarItem;
         ToolbarItem trashToolbarItem;
         ToolbarItem completeToolbarItem;
@@ -40,6 +42,9 @@ namespace StudyN.Views
                     case "Add":
                         addToolbarItem = item;
                         break;
+                    case "Filter":
+                        filterToolbarItem = item;
+                        break;
                     case "Trash":
                         trashToolbarItem = item;
                         break;
@@ -59,7 +64,6 @@ namespace StudyN.Views
 
             //Ensuring that the long press menu is not yet viable
             ShowLongPressMenu(false);
-
         }
 
         protected override void OnAppearing()
@@ -94,6 +98,26 @@ namespace StudyN.Views
             {
                 Console.WriteLine(execption.Message);
             }
+        }
+
+        private void FilterButtonClick(object sender, EventArgs e)
+        {
+            DataGrid.BeginUpdate();
+            if (DueDateFilter.IsGrouped)
+            {
+                TimeNeededFilter.IsGrouped = true;
+                TimeNeededFilter.IsVisible = true;
+                DueDateFilter.IsGrouped = false;
+                DueDateFilter.IsVisible = false;
+            }
+            else
+            {
+                DueDateFilter.IsGrouped = true;
+                DueDateFilter.IsVisible = true;
+                TimeNeededFilter.IsVisible = false;
+                TimeNeededFilter.IsGrouped = false;
+            }
+            DataGrid.EndUpdate();
         }
 
         //This function will be used by the trash button to delete selected tasks
@@ -338,6 +362,7 @@ namespace StudyN.Views
                 //add task button
                 ToolbarItems.Clear();
                 ToolbarItems.Add(addToolbarItem);
+                ToolbarItems.Add(filterToolbarItem);
             }
             ToolbarItems.Add(chartToolbarItem);
         }
@@ -355,6 +380,7 @@ namespace StudyN.Views
             }
             
         }
+
 
         // Method to calculate percent completion for all tasks in the Data Grid
         private void CalculateTotalPercent(object sender, CustomSummaryEventArgs e)

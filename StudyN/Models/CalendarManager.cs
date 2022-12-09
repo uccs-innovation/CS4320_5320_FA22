@@ -16,7 +16,7 @@ using DevExpress.Data.Mask;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Maui.ColorPicker;
+using Android.Content.PM;
 
 namespace StudyN.Models
 {
@@ -101,6 +101,28 @@ namespace StudyN.Models
             return null;
         }
 
+        /// <summary>
+        /// Use the integer id to get index of the appointment category
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public int GetAppointmentCategoriesIdex(int id)
+        {
+            int i = 0;
+            // go through categories
+            foreach (AppointmentCategory category in AppointmentCategories)
+            {
+                // if the category is found return it's index
+                if (category.Id == id)
+                {
+                    return i;
+                }
+                i++;
+            }
+            // else return null
+            return 0;
+        }
+
         void CreateAppointmentStatuses()
         {
             int count = AppointmentStatusTitles.Length;
@@ -118,12 +140,14 @@ namespace StudyN.Models
                                             string appointmentTitle,
                                             DateTime start,
                                             TimeSpan duration,
+                                            int label,
                                             int room,
                                             Guid taskId, //recurId = new Guid(),
-                                            string from = "",
+                                            string from,
                                             bool autoScheduled = false)
         {
             Guid guid = new Guid();
+            guid = Guid.NewGuid();
 
             Appointment appt = new()
             {
@@ -131,7 +155,7 @@ namespace StudyN.Models
                 Start = start,
                 End = start.Add(duration),
                 Subject = appointmentTitle,
-                LabelId = AppointmentCategories[rnd.Next(0, AppointmentCategories.Count - 1)].Id,
+                LabelId = label,
                 StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
                 Location = string.Format("{0}", room),
                 Description = string.Empty,
@@ -148,12 +172,14 @@ namespace StudyN.Models
 
             if (appt.From != "autoScheduler")
             {
-                EventBus.PublishEvent(
-                            new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
+               // EventBus.PublishEvent(
+                      //      new StudynEvent(guid, StudynEvent.StudynEventType.AppointmentAdd));
             }
 
             return appt;
         }
+
+        
 
         /// <summary>
         /// Function for creating a new category and adding it to category list
@@ -259,10 +285,19 @@ namespace StudyN.Models
                     // go through the appointments with the category
                     foreach (Appointment appointment in Appointments)
                     {
-                        if (appointment.LabelId == category)
+                        if ((int)appointment.LabelId == category.Id)
                         {
                             // Make appointment uncategorized
                             appointment.LabelId = Uncategorized.Id;
+                        }
+                    }
+                    // go through the tasks with the category
+                    foreach (TaskItem task in GlobalTaskData.TaskManager.TaskList)
+                    {
+                        if (task.Category == category.Id)
+                        {
+                            // Make task uncategorized
+                            task.Category = Uncategorized.Id;
                         }
                     }
                     // Remove category
@@ -488,6 +523,8 @@ namespace StudyN.Models
 
 
         public ObservableCollection<Appointment> Appointments { get; private set; }
+
+        public ObservableCollection<Appointment> AutoAppointments { get; set; }
         public ObservableCollection<AppointmentCategory> AppointmentCategories { get; private set; }
         public ObservableCollection<AppointmentStatus> AppointmentStatuses { get; private set; }
         public SleepTime SleepTime { get; private set; }
@@ -496,6 +533,7 @@ namespace StudyN.Models
         public CalendarManager()
         {
             Appointments = new ObservableCollection<Appointment>();
+            AutoAppointments = new ObservableCollection<Appointment>();
             AppointmentCategories = new ObservableCollection<AppointmentCategory>();
             AppointmentStatuses = new ObservableCollection<AppointmentStatus>();
             SleepTime = new SleepTime();
@@ -527,7 +565,26 @@ namespace StudyN.Models
 
                 //TaskItem task = JsonSerializer.Deserialize<TaskItem>(jsonfiletext)!;
 
-                Appointments.Add(appt);
+                //CreateAppointment(appt.Id, appt.Subject, appt.Start, appt.End, appt.Location);
+
+
+                Guid guid = new Guid();
+                guid = Guid.NewGuid();
+                Appointment apptt = new()
+                {
+                    //Id = appointmentId,
+                    Start = appt.Start,
+                    End = appt.End,
+                    Subject = appt.Subject,
+                    LabelId = AppointmentCategories[rnd.Next(0, AppointmentCategories.Count - 1)].Id,
+                    StatusId = AppointmentStatuses[rnd.Next(0, 5)].Id,
+                    Location = appt.Location,
+                    Description = appt.Description,
+                    UniqueId = guid,
+                    From = appt.From,
+                };
+
+                Appointments.Add(apptt);
             }
 
 
@@ -548,6 +605,8 @@ namespace StudyN.Models
             //If not found in either list, return null
             return null;
         }
+
+
     }
 }
 
