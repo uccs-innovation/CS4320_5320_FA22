@@ -55,6 +55,7 @@ namespace StudyN.Models
                                                     taskitem.Description,
                                                     taskitem.DueTime,
                                                     taskitem.Priority,
+                                                    taskitem.Category,
                                                     taskitem.TimeWorked,
                                                     taskitem.TimeEstimated,
                                                     taskitem.TimeList);

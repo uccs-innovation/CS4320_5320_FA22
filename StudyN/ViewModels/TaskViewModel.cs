@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using DevExpress.Maui.DataGrid;
 using StudyN.Models;
 
 namespace StudyN.ViewModels
@@ -11,7 +12,7 @@ namespace StudyN.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<CalendarTask> CalendarTasks { get => data.CalendarTasks; }
         public ObservableCollection<TaskItem> TaskList { get => GlobalTaskData.TaskManager.TaskList; }
-
+            
         public TaskDataViewModel()
         {
             data = new CalendarTasksData();

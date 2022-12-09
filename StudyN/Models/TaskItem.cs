@@ -8,6 +8,7 @@ namespace StudyN.Models
                         string description,
                         DateTime dueTime,
                         int priority,
+                        int category,
                         double timeWorked,
                         double timeEstimated,
                         DateTime dateNow,
@@ -17,6 +18,7 @@ namespace StudyN.Models
             this.Description = description;
             this.DueTime = dueTime;
             this.Priority = priority;
+            this.Category = category;
             this.TimeWorked = timeWorked;
             this.TimeEstimated = timeEstimated;
             this.DateNow = dateNow; //for timespan to check latest task added
@@ -31,6 +33,7 @@ namespace StudyN.Models
         public double TimeWorked { get; set; } = 0;
         public double TimeEstimated { get; set; } = 0;
         public int Priority { get; set; } = 3;
+        public int Category { get; set; }
         public bool BeingTimed { get; set; } = false;
         public DateTime DateNow { get;} 
         public List<TaskItemTime> TimeList { get; set; } = new List<TaskItemTime>();
