@@ -283,21 +283,21 @@ namespace StudyN.Views
                 await App.Current.MainPage.DisplayAlert("Success", "ICS file successfully imported", "OK");
             }
 
-            async private void BracketMessage()
-            {
-                bool yOrNo;
+            //async private void BracketMessage()
+            //{
+            //    bool yOrNo;
 
-                //ask user if yes or no
-                for (int i = 0; i < catNames.Count; i++)
-                {
-                    yOrNo = await App.Current.MainPage.DisplayAlert("Create Category?", "A string inside square brackets was detected in"
-                                + " the title of an imported task.\n Would you like to create a category: " + catNames[i], "YES", "NO");
-                    if (yOrNo)
-                    {
-                        //CreateCategory(catNames[i]);
-                    }
-                }
-            }
+            //    //ask user if yes or no
+            //    for (int i = 0; i < catNames.Count; i++)
+            //    {
+            //        yOrNo = await App.Current.MainPage.DisplayAlert("Create Category?", "A string inside square brackets was detected in"
+            //                    + " the title of an imported task.\n Would you like to create a category: " + catNames[i], "YES", "NO");
+            //        if (yOrNo)
+            //        {
+            //            //CreateCategory(catNames[i]);
+            //        }
+            //    }
+            //}
         }
 
         
