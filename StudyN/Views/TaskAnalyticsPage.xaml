@@ -9,6 +9,13 @@
         <local:TaskAnalyticsViewModel/>
     </ContentPage.BindingContext>
     <dxc:ChartView x:Name="TaskAnalytics" AxisXNavigationMode="Scrolling">
+        <dxc:ChartView.AxisX>
+            <dxc:QualitativeAxisX>
+                <dxc:QualitativeAxisX.Range>
+                    <dxc:QualitativeRange VisualMax="{Binding MaxVisualTaskName}"/>
+                </dxc:QualitativeAxisX.Range>
+            </dxc:QualitativeAxisX>
+        </dxc:ChartView.AxisX>
         <dxc:ChartView.Series>
             <dxc:StackedBarSeries>
                 <dxc:StackedBarSeries.Data>
