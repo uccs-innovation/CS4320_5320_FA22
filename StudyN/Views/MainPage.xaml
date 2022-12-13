@@ -68,7 +68,7 @@
         <ShellContent ContentTemplate="{DataTemplate local:CategoriesPage}"/>
     </FlyoutItem>
     
-    <FlyoutItem Title="Settings" Icon="info">
+    <FlyoutItem Title="Settings" Icon="settings">
         <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
     </FlyoutItem>
     

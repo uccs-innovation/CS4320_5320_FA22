@@ -1,4 +1,5 @@
 using DevExpress.Maui.Charts;
+using DevExpress.Maui.Scheduler;
 using StudyN.ViewModels;
 using System.ComponentModel;
 using System.Drawing.Imaging;
@@ -31,6 +32,12 @@ namespace StudyN.Views
                 EventBreakdown.Series[0].VisibleInLegend = true;
                 EventBreakdown.Hint.Enabled = false;
             }
+        }
+
+        private void TaskAnalyticsButtonClicked(object sender, System.EventArgs e)
+        {
+            TaskAnalyticsPage taskAnalytics = new();
+            Navigation.PushAsync(taskAnalytics);
         }
     }
 }

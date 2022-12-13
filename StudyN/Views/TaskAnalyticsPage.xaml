@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
+             x:Class="StudyN.Views.TaskAnalyticsPage"
+             xmlns:local="clr-namespace:StudyN.ViewModels"
+             Title="Task Completion">
+    <ContentPage.BindingContext>
+        <local:TaskAnalyticsViewModel/>
+    </ContentPage.BindingContext>
+    <dxc:ChartView x:Name="TaskAnalytics" AxisXNavigationMode="Scrolling">
+        <dxc:ChartView.AxisX>
+            <dxc:QualitativeAxisX>
+                <dxc:QualitativeAxisX.Range>
+                    <dxc:QualitativeRange VisualMax="{Binding MaxVisualTaskName}"/>
+                </dxc:QualitativeAxisX.Range>
+            </dxc:QualitativeAxisX>
+        </dxc:ChartView.AxisX>
+        <dxc:ChartView.Series>
+            <dxc:StackedBarSeries>
+                <dxc:StackedBarSeries.Data>
+                    <dxc:SeriesDataAdapter DataSource="{Binding TasksTimeWorked}"
+                                            ArgumentDataMember="TaskName">
+                        <dxc:ValueDataMember Type="Value" Member="Time"/>
+                    </dxc:SeriesDataAdapter>
+                </dxc:StackedBarSeries.Data>
+            </dxc:StackedBarSeries>
+            <dxc:StackedBarSeries>
+                <dxc:StackedBarSeries.Data>
+                    <dxc:SeriesDataAdapter DataSource="{Binding TasksTimeNeeded}"
+                                            ArgumentDataMember="TaskName">
+                        <dxc:ValueDataMember Type="Value" Member="Time"/>
+                    </dxc:SeriesDataAdapter>
+                </dxc:StackedBarSeries.Data>
+            </dxc:StackedBarSeries>
+        </dxc:ChartView.Series>
+    </dxc:ChartView>
+</ContentPage>

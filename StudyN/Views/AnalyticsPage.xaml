@@ -5,6 +5,13 @@
              x:Class="StudyN.Views.AnalyticsPage"
              Title="{Binding Title}"
              IconImageSource="charts">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Chart"
+                     Clicked="TaskAnalyticsButtonClicked"
+                     IconImageSource="charts" />
+    </ContentPage.ToolbarItems>
+
     <ContentPage.Content>
         <Grid>
             <dxc:PieChartView x:Name="EventBreakdown">

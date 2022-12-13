@@ -1,9 +1,5 @@
 using DevExpress.Maui.Scheduler;
 using StudyN.ViewModels;
-using StudyN.Common;
-using System.ComponentModel;
-using System;
-using System.Threading.Tasks;
 using DevExpress.Maui.DataGrid;
 using DevExpress.Maui.Charts;
 using StudyN.Models;
